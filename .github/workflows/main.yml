@@ -51,7 +51,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }} # ✅ FIXED
-          key: ${{ secrets.OCI_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             set -e
 
