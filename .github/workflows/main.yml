@@ -7,13 +7,22 @@
     script: |
       set -e
 
-      IMAGE_NAME="worknggupta/fleetbharat-ui"
+      # ✅ Only IMAGE from secret
+      IMAGE_NAME="${{ secrets.DOCKER_IMAGE_NAME_UI }}"
+
+      # ✅ Hardcoded values (as per your requirement)
       CONTAINER_NAME="fleetbharat-ui"
       PORT="3000"
 
       echo "🔍 Debug..."
       echo "IMAGE_NAME=$IMAGE_NAME"
       echo "CONTAINER_NAME=$CONTAINER_NAME"
+
+      # ❌ Stop if image missing
+      if [ -z "$IMAGE_NAME" ]; then
+        echo "❌ IMAGE_NAME is empty"
+        exit 1
+      fi
 
       echo "🧹 Cleanup docker cache..."
       docker system prune -af || true
@@ -26,7 +35,7 @@
         docker rm -f ${CONTAINER_NAME}-new || true
         docker rm -f $CONTAINER_NAME || true
         docker system prune -af || true
-        docker pull $IMAGE_NAME:latest
+        docker pull $IMAGE_NAME:latest || exit 1
       fi
 
       echo "🚀 Start NEW container for test..."
