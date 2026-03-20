@@ -5,6 +5,7 @@ on:
     branches: [main]
 
 env:
+  IMAGE_NAME: worknggupta/fleetbharat-ui
   CONTAINER_NAME: fleetbharat-ui
   PORT: 3000
 
@@ -31,20 +32,20 @@ jobs:
             --build-arg NEXT_PUBLIC_GOOGLE_MAPS_KEY="${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_KEY }}" \
             --build-arg NEXT_PUBLIC_VTS_API_BASE_URL="${{ secrets.NEXT_PUBLIC_VTS_API_BASE_URL }}" \
             --build-arg NEXT_PUBLIC_JAVA_API_BASE_URL="${{ secrets.NEXT_PUBLIC_JAVA_API_BASE_URL }}" \
-            -t ${{ secrets.DOCKER_IMAGE_NAME_UI }}:${{ github.sha }} .
+            -t $IMAGE_NAME:${{ github.sha }} .
 
       # 4. Tag Image
       - name: Tag Image
         run: |
-          docker tag ${{ secrets.DOCKER_IMAGE_NAME_UI }}:${{ github.sha }} ${{ secrets.DOCKER_IMAGE_NAME_UI }}:latest
+          docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:latest
 
       # 5. Push Image
       - name: Push Image
         run: |
-          docker push ${{ secrets.DOCKER_IMAGE_NAME_UI }}:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_IMAGE_NAME_UI }}:latest
+          docker push $IMAGE_NAME:${{ github.sha }}
+          docker push $IMAGE_NAME:latest
 
-      # 6. Deploy via SSH
+      # 6. Deploy via SSH (Oracle/EC2)
       - name: Deploy to Server
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -52,10 +53,6 @@ jobs:
           username: ${{ secrets.OCI_USER }}
           key: ${{ secrets.OCI_SSH_KEY }}
           script: |
-            IMAGE_NAME=${{ secrets.DOCKER_IMAGE_NAME_UI }}
-            CONTAINER_NAME=fleetbharat-ui
-            PORT=3000
-
             set -e
 
             echo "🧹 Cleanup docker cache..."
@@ -65,7 +62,7 @@ jobs:
 
             echo "⬇️ Pull latest image..."
             if ! docker pull $IMAGE_NAME:latest; then
-              echo "⚠️ Pull failed. Retrying..."
+              echo "⚠️ Pull failed. Retrying after cleanup..."
               docker rm -f ${CONTAINER_NAME}-new || true
               docker rm -f $CONTAINER_NAME || true
               docker system prune -af || true
@@ -80,14 +77,14 @@ jobs:
               -e NODE_ENV=production \
               $IMAGE_NAME:latest
 
-            echo "⏳ Waiting..."
+            echo "⏳ Waiting for container startup..."
             sleep 10
 
             echo "🔍 Health check..."
             if docker exec ${CONTAINER_NAME}-new sh -c "(command -v curl >/dev/null && curl -fs http://localhost:3000) || (command -v wget >/dev/null && wget -qO- http://localhost:3000)" >/dev/null; then
               echo "✅ Health check passed!"
             else
-              echo "❌ Health check failed!"
+              echo "❌ Health check failed! Rolling back..."
               docker logs ${CONTAINER_NAME}-new --tail 50 || true
               docker rm -f ${CONTAINER_NAME}-new || true
               exit 1
