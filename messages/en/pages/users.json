@@ -1,0 +1,150 @@
+{
+  "pages": {
+    "users": {
+      "list": {
+        "title": "User List",
+        "subtitle": "Manage system access, identities, and security policies.",
+        "breadcrumbs": {
+          "users": "Users",
+          "current": "User List"
+        },
+        "addButton": "New User",
+        "export": "Export",
+        "filter": "Filters",
+        "searchPlaceholder": "Search across all fields...",
+        "table": {
+          "fullName": "Full Name",
+          "email": "Email",
+          "role": "Role",
+          "account": "Account",
+          "status": "Status",
+          "twoFa": "2FA",
+          "lastLogin": "Last Login"
+        },
+        "twoFa": {
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
+        "filters": {
+          "title": "Advanced Filters",
+          "resetAll": "Reset all ✕",
+          "close": "Close",
+          "roles": "Roles",
+          "searchRoles": "Search roles",
+          "status": "Status",
+          "searchStatus": "Search status"
+        },
+        "metrics": {
+          "totalUsers": "Total Users",
+          "active": "Active",
+          "suspendedLocked": "Suspended/Locked",
+          "twoFactorEnabled": "2FA Enabled"
+        },
+        "delete": {
+          "title": "Delete User",
+          "message": "Are you sure you want to delete user \"{name}\"? This action cannot be undone.",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        },
+        "toast": {
+          "deleted": "User deleted successfully!",
+          "deleteFailed": "Failed to delete user",
+          "deleteError": "An error occurred while deleting.",
+          "fetchFailed": "Failed to fetch users",
+          "exportSoon": "Export functionality coming soon!",
+          "filtersReset": "Filters reset"
+        }
+      },
+      "detail": {
+        "loading": {
+          "userData": "Loading user data...",
+          "permissions": "Loading permissions..."
+        },
+        "title": {
+          "edit": "Edit User",
+          "create": "Create User"
+        },
+        "subtitle": "Manage user identity, access scope, and security settings.",
+        "buttons": {
+          "cancel": "Cancel",
+          "saving": "Saving...",
+          "update": "Update User",
+          "create": "Create User",
+          "sendLink": "Send Link"
+        },
+        "tabs": {
+          "profile": "Profile",
+          "access": "Access & Roles",
+          "security": "Security"
+        },
+        "sections": {
+          "personalInfo": "Personal Information",
+          "personalInfoSubtitle": "Basic identity details used for login and display.",
+          "accessRoles": "Access & Roles",
+          "accessRolesSubtitle": "Define user permissions and account associations.",
+          "securitySettings": "Security Settings",
+          "securitySettingsSubtitle": "Manage authentication security and account status."
+        },
+        "fields": {
+          "profilePicture": "Profile Picture",
+          "uploadPhoto": "Upload Photo",
+          "remove": "Remove",
+          "firstName": "First Name",
+          "lastName": "Last Name",
+          "username": "Username",
+          "password": "Password",
+          "email": "Email Address",
+          "phone": "Phone Number",
+          "location": "Location",
+          "accountAssociation": "Account Association",
+          "selectAccount": "Select Account",
+          "roleAssignment": "Role Assignment",
+          "selectRole": "Select Role",
+          "primaryDomain": "Primary Domain"
+        },
+        "permission": {
+          "title": "Permission Matrix",
+          "subtitle": "Role permissions are shown below. You can grant additional permissions specific to this user.",
+          "resource": "RESOURCE",
+          "read": "READ",
+          "write": "WRITE",
+          "delete": "DELETE",
+          "export": "EXPORT",
+          "additional": "ADDITIONAL",
+          "none": "No permissions available for this role",
+          "note": "Role permissions (Read, Write, Delete, Export) are inherited from the selected role and cannot be modified. Use the \"Additional\" column to grant extra permissions specific to this user beyond their role."
+        },
+        "security": {
+          "accountStatus": "Account Status",
+          "accountStatusSubtitle": "Disable user access without deleting data.",
+          "active": "Active",
+          "inactive": "Inactive",
+          "mfa": "Multi-Factor Authentication",
+          "mfaSubtitle": "Require 2FA for login.",
+          "passwordReset": "Password Reset",
+          "passwordResetSubtitle": "Send a password reset email to the user."
+        },
+        "toast": {
+          "rolePermissionsFailed": "Failed to load role permissions",
+          "uploadValidImage": "Please upload a valid image file",
+          "uploadSize": "Image size should be less than 5MB",
+          "avatarUploaded": "Avatar uploaded successfully!",
+          "avatarRemoved": "Avatar removed",
+          "fetchUserFailed": "Failed to fetch user data",
+          "loadUserFailed": "Failed to load user data",
+          "fillRequired": "Please fill all required fields",
+          "selectAccount": "Please select an account",
+          "selectRole": "Please select a role",
+          "passwordMin": "Password must be minimum 6 characters",
+          "updated": "User updated successfully!",
+          "updateFailed": "Failed to update user",
+          "created": "User created successfully!",
+          "createFailed": "Failed to create user",
+          "saveFailed": "Failed to save user",
+          "loadAccountsFailed": "Failed to load accounts",
+          "passwordResetSent": "Password reset email sent!"
+        }
+      }
+    }
+  }
+}

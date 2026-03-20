@@ -1,0 +1,75 @@
+{
+  "pages": {
+    "accounts": {
+      "list": {
+        "title": "Account List",
+        "subtitle": "Manage identities, taxonomies, and global parameters.",
+        "breadcrumbs": {
+          "accounts": "Accounts",
+          "current": "Account List"
+        },
+        "addButton": "Add Account",
+        "searchPlaceholder": "Search accounts...",
+        "table": {
+          "no": "NO",
+          "code": "CODE",
+          "instance": "INSTANCE",
+          "contact": "CONTACT",
+          "location": "LOCATION",
+          "status": "STATUS"
+        },
+        "metrics": {
+          "total": "TOTAL",
+          "active": "ACTIVE",
+          "pending": "PENDING",
+          "inactive": "INACTIVE"
+        },
+        "delete": {
+          "title": "Delete Account",
+          "message": "Are you sure you want to delete \"{instance}\"? This action cannot be undone.",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        },
+        "toast": {
+          "loadFailed": "Failed to load accounts",
+          "deleteFailed": "Failed to delete account"
+        }
+      },
+      "detail": {
+        "title": {
+          "create": "Add New Account",
+          "edit": "Edit Account"
+        },
+        "loading": "Loading account details...",
+        "sections": {
+          "accountDetails": "Account Details",
+          "addressDetails": "Address Details",
+          "businessProfile": "Business Profile Details",
+          "userPermission": "User Permission & Access Details"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "submit": "Submit"
+        },
+        "toast": {
+          "accountNameRequired": "Account Name is required!",
+          "categoryRequired": "Category is required!",
+          "primaryDomainRequired": "Primary Domain is required!",
+          "businessEmailRequired": "Business Email is required!",
+          "businessAddressRequired": "Business Address is required!",
+          "businessTimeZoneRequired": "Business Time Zone is required!",
+          "countryRequired": "Country is required!",
+          "stateRequired": "State is required!",
+          "cityRequired": "City is required!",
+          "createdSuccess": "Account created successfully!",
+          "updatedSuccess": "Account updated successfully!",
+          "alreadyExists": "Account already exists!",
+          "genericError": "Something went wrong!",
+          "submitError": "An error occurred while submitting the form.",
+          "fetchAccountFailed": "Failed to fetch account details!",
+          "fetchAccountError": "An error occurred while fetching account details."
+        }
+      }
+    }
+  }
+}

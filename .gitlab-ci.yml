@@ -1,0 +1,116 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  IMAGE_NAME: "worknggupta/fleetbharat-ui"
+  CONTAINER_NAME: "fleetbharat-ui"
+  PORT: "3000"
+
+build_and_push:
+  stage: build
+  image: docker:24
+  services:
+    - docker:24-dind
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+  script:
+    - echo "✅ Login to DockerHub..."
+    - test -n "$DOCKERHUB_USERNAME"
+    - test -n "$DOCKERHUB_PASSWORD"
+    - docker logout || true
+    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+    - echo "✅ Build docker image..."
+    - |
+      docker build \
+        --build-arg NEXT_PUBLIC_API_BASE_URL="$NEXT_PUBLIC_API_BASE_URL" \
+        --build-arg NEXT_PUBLIC_APP_ENV="$NEXT_PUBLIC_APP_ENV" \
+        --build-arg NEXT_PUBLIC_GOOGLE_MAPS_KEY="$NEXT_PUBLIC_GOOGLE_MAPS_KEY" \
+        --build-arg NEXT_PUBLIC_VTS_API_BASE_URL="$NEXT_PUBLIC_VTS_API_BASE_URL" \
+        --build-arg NEXT_PUBLIC_JAVA_API_BASE_URL="$NEXT_PUBLIC_JAVA_API_BASE_URL" \
+        -t "$IMAGE_NAME:$CI_COMMIT_SHORT_SHA" .
+
+    - echo "✅ Tag docker image..."
+    - docker tag "$IMAGE_NAME:$CI_COMMIT_SHORT_SHA" "$IMAGE_NAME:latest"
+
+    - echo "✅ Push docker image..."
+    - docker push "$IMAGE_NAME:$CI_COMMIT_SHORT_SHA"
+    - docker push "$IMAGE_NAME:latest"
+
+deploy_ec2:
+  stage: deploy
+  image: alpine:latest
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+  before_script:
+    - apk add --no-cache openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$EC2_SSH_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts
+
+  script:
+    - echo "✅ Deploying to EC2 with Health Check + Rollback..."
+    - |
+      ssh "$EC2_USER@$EC2_HOST" "
+      set -e
+
+      echo '🧹 Cleanup docker cache...'
+      docker system prune -af || true
+      docker volume prune -f || true
+      docker builder prune -af || true
+      df -h || true
+
+      echo '⬇️ Pull latest image...'
+      if ! docker pull $IMAGE_NAME:latest; then
+        echo '⚠️ Pull failed (likely low disk). Switching to low-space deploy mode...'
+        docker rm -f ${CONTAINER_NAME}-new >/dev/null 2>&1 || true
+        docker rm -f $CONTAINER_NAME >/dev/null 2>&1 || true
+        docker system prune -af || true
+        docker volume prune -f || true
+        docker builder prune -af || true
+        df -h || true
+        docker pull $IMAGE_NAME:latest
+      fi
+
+      echo '🚀 Start NEW container for test...'
+      docker rm -f ${CONTAINER_NAME}-new >/dev/null 2>&1 || true
+
+      docker run -d \
+        --name ${CONTAINER_NAME}-new \
+        --restart always \
+        -e NODE_ENV=production \
+        $IMAGE_NAME:latest
+
+      echo '⏳ Waiting for container startup...'
+      sleep 10
+
+      echo '🔍 Health check inside container...'
+      if docker exec ${CONTAINER_NAME}-new sh -c \"(command -v curl >/dev/null 2>&1 && curl -fs http://localhost:3000) || (command -v wget >/dev/null 2>&1 && wget -qO- http://localhost:3000)\" >/dev/null; then
+        echo '✅ Health check passed!'
+      else
+        echo '❌ Health check failed! Rolling back...'
+        docker logs ${CONTAINER_NAME}-new --tail 50 || true
+        docker rm -f ${CONTAINER_NAME}-new || true
+        exit 1
+      fi
+
+      echo '🔁 Replace old container...'
+      docker rm -f $CONTAINER_NAME >/dev/null 2>&1 || true
+
+      docker run -d \
+        --name $CONTAINER_NAME \
+        -p $PORT:3000 \
+        --restart always \
+        -e NODE_ENV=production \
+        $IMAGE_NAME:latest
+
+      docker rm -f ${CONTAINER_NAME}-new >/dev/null 2>&1 || true
+
+      echo '✅ Deployment successful!'
+      "

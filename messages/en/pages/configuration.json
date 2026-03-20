@@ -1,0 +1,122 @@
+{
+  "pages": {
+    "configuration": {
+      "list": {
+        "title": "Configuration",
+        "subtitle": "Global settings for account management.",
+        "breadcrumbs": {
+          "accounts": "Accounts",
+          "current": "Configuration"
+        },
+        "addButton": "New Configuration",
+        "loading": "Loading configurations...",
+        "searchPlaceholder": "Search across all fields...",
+        "table": {
+          "id": "ID",
+          "account": "ACCOUNT",
+          "mapProvider": "MAP PROVIDER",
+          "dateFormat": "DATE FORMAT",
+          "language": "LANGUAGE",
+          "lastUpdated": "LAST UPDATED"
+        },
+        "delete": {
+          "title": "Delete Configuration",
+          "message": "Are you sure you want to delete configuration for \"{account}\"? This action cannot be undone.",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        },
+        "toast": {
+          "deleted": "Configuration deleted successfully!",
+          "deleteFailed": "Failed to delete: {message}",
+          "deleteError": "Error deleting configuration"
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "Edit Configuration",
+          "create": "New Configuration"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "saving": "Saving...",
+          "update": "Update Configuration",
+          "create": "Save Configuration",
+          "addMoreLanguages": "Add More Languages"
+        },
+        "loading": {
+          "edit": "Loading configuration..."
+        },
+        "sections": {
+          "mapConfiguration": "Map Configuration",
+          "internationalization": "Internationalization & Unit Configuration",
+          "languageConfiguration": "Language Configuration"
+        },
+        "fields": {
+          "accountId": "Account ID",
+          "selectAccount": "Select Account",
+          "mapProvider": "Map Provider",
+          "licenseKey": "License Key",
+          "licenseKeyPlaceholder": "Enter License Key",
+          "addressKey": "Address Key",
+          "addressKeyPlaceholder": "Enter Address Key",
+          "dateFormat": "Date Format",
+          "timeFormat": "Time Format",
+          "distanceUnit": "Distance Unit",
+          "speedUnit": "Speed Unit",
+          "fuelUnit": "Fuel Unit",
+          "temperature": "Temperature",
+          "addressDisplay": "Address Display",
+          "defaultLanguage": "Default Language",
+          "additionalLanguage": "Additional Language {index}",
+          "selectLanguage": "Select Language"
+        },
+        "options": {
+          "mapProvider": {
+            "googleMaps": "Google Maps",
+            "hereMaps": "Here Maps",
+            "openStreetMap": "OpenStreetMap"
+          },
+          "timeFormat": {
+            "h12": "12 Hour (AM/PM)",
+            "h24": "24 Hour"
+          },
+          "distanceUnit": {
+            "km": "Kilometers",
+            "mile": "Miles"
+          },
+          "speedUnit": {
+            "kmh": "Km/h",
+            "mph": "Mph"
+          },
+          "fuelUnit": {
+            "litre": "Litre",
+            "gallon": "Gallon"
+          },
+          "temperature": {
+            "celsius": "Celsius",
+            "fahrenheit": "Fahrenheit"
+          },
+          "addressDisplay": {
+            "show": "Show Address",
+            "hide": "Hide Address"
+          },
+          "language": {
+            "en": "English",
+            "es": "Spanish",
+            "fr": "French",
+            "de": "German",
+            "hi": "Hindi"
+          }
+        },
+        "toast": {
+          "accountRequired": "Please enter a valid Account ID",
+          "updated": "Configuration updated successfully!",
+          "created": "Configuration created successfully!",
+          "saveFailed": "Failed to save: {message}",
+          "saveError": "An error occurred while saving",
+          "loadFailed": "Failed to load configuration"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "pages": {
+    "users": {
+      "list": {
+        "title": "यूजर सूची",
+        "subtitle": "सिस्टम एक्सेस, पहचान और सुरक्षा नीतियों का प्रबंधन करें।",
+        "breadcrumbs": {
+          "users": "यूजर्स",
+          "current": "यूजर सूची"
+        },
+        "addButton": "नया यूजर",
+        "export": "एक्सपोर्ट",
+        "filter": "फिल्टर्स",
+        "searchPlaceholder": "सभी फ़ील्ड में खोजें...",
+        "table": {
+          "fullName": "पूरा नाम",
+          "email": "ईमेल",
+          "role": "भूमिका",
+          "account": "अकाउंट",
+          "status": "स्थिति",
+          "twoFa": "2FA",
+          "lastLogin": "अंतिम लॉगिन"
+        },
+        "twoFa": {
+          "enabled": "सक्षम",
+          "disabled": "अक्षम"
+        },
+        "filters": {
+          "title": "उन्नत फिल्टर्स",
+          "resetAll": "सभी रीसेट करें ✕",
+          "close": "बंद करें",
+          "roles": "भूमिकाएं",
+          "searchRoles": "भूमिकाएं खोजें",
+          "status": "स्थिति",
+          "searchStatus": "स्थिति खोजें"
+        },
+        "metrics": {
+          "totalUsers": "कुल यूजर्स",
+          "active": "सक्रिय",
+          "suspendedLocked": "निलंबित/लॉक्ड",
+          "twoFactorEnabled": "2FA सक्षम"
+        },
+        "delete": {
+          "title": "यूजर हटाएं",
+          "message": "क्या आप यूजर \"{name}\" को हटाना चाहते हैं? यह कार्रवाई वापस नहीं हो सकती।",
+          "confirm": "हटाएं",
+          "cancel": "रद्द करें"
+        },
+        "toast": {
+          "deleted": "यूजर सफलतापूर्वक हटाया गया!",
+          "deleteFailed": "यूजर हटाने में विफल",
+          "deleteError": "हटाने के दौरान त्रुटि हुई।",
+          "fetchFailed": "यूजर्स प्राप्त करने में विफल",
+          "exportSoon": "एक्सपोर्ट सुविधा जल्द आ रही है!",
+          "filtersReset": "फिल्टर्स रीसेट किए गए"
+        }
+      },
+      "detail": {
+        "loading": {
+          "userData": "यूजर डेटा लोड हो रहा है...",
+          "permissions": "अनुमतियां लोड हो रही हैं..."
+        },
+        "title": {
+          "edit": "यूजर संपादित करें",
+          "create": "यूजर बनाएं"
+        },
+        "subtitle": "यूजर पहचान, एक्सेस स्कोप और सुरक्षा सेटिंग्स प्रबंधित करें।",
+        "buttons": {
+          "cancel": "रद्द करें",
+          "saving": "सेव हो रहा है...",
+          "update": "यूजर अपडेट करें",
+          "create": "यूजर बनाएं",
+          "sendLink": "लिंक भेजें"
+        },
+        "tabs": {
+          "profile": "प्रोफाइल",
+          "access": "एक्सेस और भूमिकाएं",
+          "security": "सुरक्षा"
+        },
+        "sections": {
+          "personalInfo": "व्यक्तिगत जानकारी",
+          "personalInfoSubtitle": "लॉगिन और डिस्प्ले के लिए बुनियादी पहचान विवरण।",
+          "accessRoles": "एक्सेस और भूमिकाएं",
+          "accessRolesSubtitle": "यूजर अनुमतियां और अकाउंट एसोसिएशन निर्धारित करें।",
+          "securitySettings": "सुरक्षा सेटिंग्स",
+          "securitySettingsSubtitle": "प्रमाणीकरण सुरक्षा और अकाउंट स्थिति प्रबंधित करें।"
+        },
+        "fields": {
+          "profilePicture": "प्रोफाइल तस्वीर",
+          "uploadPhoto": "तस्वीर अपलोड करें",
+          "remove": "हटाएं",
+          "firstName": "पहला नाम",
+          "lastName": "अंतिम नाम",
+          "username": "यूजरनेम",
+          "password": "पासवर्ड",
+          "email": "ईमेल पता",
+          "phone": "फोन नंबर",
+          "location": "स्थान",
+          "accountAssociation": "अकाउंट एसोसिएशन",
+          "selectAccount": "अकाउंट चुनें",
+          "roleAssignment": "भूमिका असाइनमेंट",
+          "selectRole": "भूमिका चुनें",
+          "primaryDomain": "प्राथमिक डोमेन"
+        },
+        "permission": {
+          "title": "अनुमति मैट्रिक्स",
+          "subtitle": "भूमिका अनुमतियां नीचे दिखाई गई हैं। आप इस यूजर के लिए अतिरिक्त अनुमतियां दे सकते हैं।",
+          "resource": "रिसोर्स",
+          "read": "रीड",
+          "write": "राइट",
+          "delete": "डिलीट",
+          "export": "एक्सपोर्ट",
+          "additional": "अतिरिक्त",
+          "none": "इस भूमिका के लिए कोई अनुमति उपलब्ध नहीं",
+          "note": "भूमिका अनुमतियां (Read, Write, Delete, Export) चुनी गई भूमिका से विरासत में मिलती हैं और बदली नहीं जा सकतीं। \"Additional\" कॉलम का उपयोग करके इस यूजर को अतिरिक्त अनुमतियां दें।"
+        },
+        "security": {
+          "accountStatus": "अकाउंट स्थिति",
+          "accountStatusSubtitle": "डेटा हटाए बिना यूजर एक्सेस अक्षम करें।",
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय",
+          "mfa": "मल्टी-फैक्टर ऑथेंटिकेशन",
+          "mfaSubtitle": "लॉगिन के लिए 2FA आवश्यक करें।",
+          "passwordReset": "पासवर्ड रीसेट",
+          "passwordResetSubtitle": "यूजर को पासवर्ड रीसेट ईमेल भेजें।"
+        },
+        "toast": {
+          "rolePermissionsFailed": "भूमिका अनुमतियां लोड करने में विफल",
+          "uploadValidImage": "कृपया मान्य इमेज फ़ाइल अपलोड करें",
+          "uploadSize": "इमेज का आकार 5MB से कम होना चाहिए",
+          "avatarUploaded": "अवतार सफलतापूर्वक अपलोड हुआ!",
+          "avatarRemoved": "अवतार हटाया गया",
+          "fetchUserFailed": "यूजर डेटा प्राप्त करने में विफल",
+          "loadUserFailed": "यूजर डेटा लोड करने में विफल",
+          "fillRequired": "कृपया सभी आवश्यक फ़ील्ड भरें",
+          "selectAccount": "कृपया एक अकाउंट चुनें",
+          "selectRole": "कृपया एक भूमिका चुनें",
+          "passwordMin": "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए",
+          "updated": "यूजर सफलतापूर्वक अपडेट हुआ!",
+          "updateFailed": "यूजर अपडेट करने में विफल",
+          "created": "यूजर सफलतापूर्वक बनाया गया!",
+          "createFailed": "यूजर बनाने में विफल",
+          "saveFailed": "यूजर सेव करने में विफल",
+          "loadAccountsFailed": "अकाउंट्स लोड करने में विफल",
+          "passwordResetSent": "पासवर्ड रीसेट ईमेल भेज दिया गया!"
+        }
+      }
+    }
+  }
+}

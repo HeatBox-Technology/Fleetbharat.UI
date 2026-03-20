@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+* {
+  font-family: "Inter", sans-serif;
+}
+
+:root {
+  --primary: 239 68% 55%; /* Default blue */
+  --primary-foreground: 0 0% 100%; /* White text on primary */
+  --background: 0 0% 100%; /* White bg */
+  --foreground: 0 0% 10%; /* Dark text */
+  --card: 0 0% 100%; /* Card white */
+  --card-foreground: 0 0% 10%;
+  --border: 0 0% 90%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+}
+
+/* 🌙 Dark Mode Variables */
+.dark {
+  --primary: 239 84% 67%; /* Brighter primary in dark */
+  --primary-foreground: 0 0% 98%;
+  --background: 240 10% 8%; /* Dark bg */
+  --foreground: 0 0% 98%; /* Light text */
+  --card: 240 10% 12%; /* Dark card */
+  --card-foreground: 0 0% 98%;
+  --border: 240 10% 20%;
+  --muted: 240 10% 15%;
+  --muted-foreground: 0 0% 65%;
+}
+
+/* 🌍 Apply dark mode globally to body and html */
+html,
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+/* Ensure all cards and containers respect theme */
+.dark * {
+  border-color: hsl(var(--border));
+}
+
+/* 🧱 Utility classes */
+.bg-primary {
+  background-color: hsl(var(--primary));
+}
+.text-primary {
+  color: hsl(var(--primary));
+}
+.border-primary {
+  border-color: hsl(var(--primary));
+}
+.text-primary-foreground {
+  color: hsl(var(--primary-foreground));
+}
+
+.bg-background {
+  background-color: hsl(var(--background));
+}
+.text-foreground {
+  color: hsl(var(--foreground));
+}
+/* .bg-card { background-color: hsl(var(--card)); } */
+.text-card-foreground {
+  color: hsl(var(--card-foreground));
+}
+.border-border {
+  border-color: hsl(var(--border));
+}
+.bg-muted {
+  background-color: hsl(var(--muted));
+}
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground));
+}

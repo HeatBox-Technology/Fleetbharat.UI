@@ -1,0 +1,105 @@
+{
+  "pages": {
+    "driver": {
+      "list": {
+        "title": "कर्मचारी रजिस्ट्री",
+        "subtitle": "ड्राइवर जोड़ें और प्रबंधित करें",
+        "breadcrumbs": {
+          "fleet": "फ्लीट",
+          "current": "ड्राइवर"
+        },
+        "addButton": "ड्राइवर जोड़ें",
+        "export": "एक्सपोर्ट",
+        "loading": "ड्राइवर लोड हो रहे हैं...",
+        "searchPlaceholder": "ड्राइवर खोजें...",
+        "metrics": {
+          "totalDrivers": "कुल ड्राइवर",
+          "activeDrivers": "सक्रिय ड्राइवर",
+          "inactiveDrivers": "निष्क्रिय ड्राइवर",
+          "licenseExpiringSoon": "जल्द समाप्त होने वाले लाइसेंस"
+        },
+        "table": {
+          "driverId": "ड्राइवर आईडी",
+          "driverName": "ड्राइवर नाम",
+          "mobile": "मोबाइल",
+          "licenceNo": "लाइसेंस नंबर",
+          "licenceExpiry": "लाइसेंस समाप्ति",
+          "status": "स्थिति"
+        },
+        "labels": {
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय"
+        },
+        "deleteDialog": {
+          "title": "ड्राइवर हटाएँ",
+          "message": "क्या आप ड्राइवर \"{name}\" को हटाना चाहते हैं? यह क्रिया वापस नहीं होगी।",
+          "confirm": "हटाएँ",
+          "cancel": "रद्द करें"
+        },
+        "toast": {
+          "deleted": "ड्राइवर सफलतापूर्वक हटाया गया!",
+          "deleteFailed": "हटाने में विफल",
+          "deleteError": "ड्राइवर हटाने में त्रुटि",
+          "exportSuccess": "ड्राइवर सफलतापूर्वक एक्सपोर्ट हुए",
+          "exportFailed": "ड्राइवर एक्सपोर्ट करने में विफल"
+        }
+      },
+      "detail": {
+        "loading": "ड्राइवर डेटा लोड हो रहा है...",
+        "title": {
+          "create": "नया ड्राइवर",
+          "edit": "ड्राइवर संपादित करें"
+        },
+        "section": {
+          "title": "कर्मचारी पहचान",
+          "createDescription": "ड्राइवर की व्यक्तिगत और संपर्क जानकारी भरें।",
+          "editDescription": "ड्राइवर की व्यक्तिगत और संपर्क जानकारी अपडेट करें।"
+        },
+        "fields": {
+          "driverCode": "ड्राइवर कोड",
+          "organisation": "संगठन",
+          "selectAccount": "अकाउंट चुनें",
+          "firstName": "पहला नाम",
+          "firstNamePlaceholder": "जैसे: विक्रम",
+          "lastName": "अंतिम नाम",
+          "lastNamePlaceholder": "जैसे: राठौड़",
+          "mobile": "मोबाइल (E.164)",
+          "mobilePlaceholder": "+00 0000000000",
+          "emergencyContact": "आपातकालीन संपर्क",
+          "emergencyPlaceholder": "आपातकालीन मोबाइल नंबर",
+          "licenceNo": "लाइसेंस नंबर",
+          "licenceNoPlaceholder": "जैसे: DL-90021-X",
+          "licenceExpiry": "लाइसेंस समाप्ति",
+          "bloodGroup": "ब्लड ग्रुप",
+          "bloodGroupPlaceholder": "जैसे: O+"
+        },
+        "status": {
+          "title": "ड्राइवर स्थिति",
+          "description": "निष्क्रिय ड्राइवर को नई ट्रिप में असाइन नहीं किया जा सकता।"
+        },
+        "buttons": {
+          "cancel": "रद्द करें",
+          "update": "ड्राइवर अपडेट करें",
+          "create": "ड्राइवर बनाएं",
+          "updating": "अपडेट हो रहा है...",
+          "creating": "बन रहा है..."
+        },
+        "validation": {
+          "firstNameRequired": "कृपया पहला नाम दर्ज करें",
+          "mobileRequired": "कृपया मोबाइल नंबर दर्ज करें",
+          "licenceNoRequired": "कृपया लाइसेंस नंबर दर्ज करें",
+          "licenceExpiryRequired": "कृपया लाइसेंस समाप्ति तिथि चुनें",
+          "organisationRequired": "कृपया संगठन चुनें"
+        },
+        "toast": {
+          "fetchFailed": "ड्राइवर डेटा प्राप्त करने में विफल",
+          "loadError": "ड्राइवर डेटा लोड करने में त्रुटि",
+          "updated": "ड्राइवर सफलतापूर्वक अपडेट हुआ!",
+          "created": "ड्राइवर सफलतापूर्वक बनाया गया!",
+          "failed": "विफल",
+          "saveError": "ड्राइवर सेव करते समय त्रुटि हुई"
+        }
+      }
+    }
+  }
+}

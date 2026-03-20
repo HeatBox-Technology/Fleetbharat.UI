@@ -1,0 +1,79 @@
+{
+  "pages": {
+    "managePlans": {
+      "list": {
+        "title": "Manage Plans",
+        "subtitle": "Design global pricing blueprints for multi-tenant account categories.",
+        "breadcrumbs": {
+          "billing": "Billing",
+          "current": "Manage Plans"
+        },
+        "addButton": "Create Plan",
+        "searchPlaceholder": "Search across all fields...",
+        "table": {
+          "no": "NO",
+          "planName": "PLAN NAME",
+          "category": "CATEGORY",
+          "pricing": "PRICING",
+          "status": "STATUS"
+        },
+        "toast": {
+          "deleteFailed": "Failed to delete plan",
+          "fetchFailed": "Failed to fetch plans",
+          "genericError": "Something went wrong."
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "Edit Plan",
+          "create": "Create New Plan"
+        },
+        "subtitle": "Configure pricing, features, and subscription details.",
+        "buttons": {
+          "cancel": "Cancel",
+          "saving": "Saving...",
+          "update": "Update Plan",
+          "create": "Create Plan"
+        },
+        "status": {
+          "loading": "Loading...",
+          "updated": "Plan updated successfully!",
+          "created": "Plan created successfully!",
+          "saveFailed": "Failed to save plan",
+          "saveError": "An error occurred while saving the plan",
+          "dropdownFailed": "Failed to load dropdown data",
+          "planLoadFailed": "Failed to load plan details"
+        },
+        "sections": {
+          "structuralDefinitions": "Structural Definitions",
+          "structuralDefinitionsSubtitle": "Fundamental identity and tenant-scope attributes.",
+          "financialDefinitionLayer": "Financial Definition Layer",
+          "financialDefinitionLayerSubtitle": "Define setup and recurring billing parameters.",
+          "entitlementModuleMatrix": "Entitlement Module Matrix",
+          "entitlementModuleMatrixSubtitle": "Enable modules and capabilities included in this plan.",
+          "usageAndScalability": "Usage & Scalability Constraints",
+          "usageAndScalabilitySubtitle": "Set operational limits and resource boundaries.",
+          "dedicatedSupport": "Dedicated Support Line",
+          "dedicatedSupportSubtitle": "Define a specific support channel for this plan tier.",
+          "adminGuard": "Admin Guard Settings",
+          "blueprint": "PLAN BLUEPRINT",
+          "blueprintSubtitle": "Live configuration summary."
+        },
+        "labels": {
+          "category": "Category:",
+          "cycle": "Cycle:",
+          "currency": "Currency:",
+          "usersLimit": "Users Limit:",
+          "activeFeatures": "Active Features:",
+          "setupFee": "SETUP FEE",
+          "contractTerm": "CONTRACT TERM",
+          "recurringCharges": "Recurring Charges (Year 2+)",
+          "amc": "AMC:",
+          "platform": "Platform:",
+          "na": "N/A",
+          "unlimited": "Unlimited"
+        }
+      }
+    }
+  }
+}

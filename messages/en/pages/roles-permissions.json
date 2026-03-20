@@ -1,0 +1,92 @@
+{
+  "pages": {
+    "rolesPermissions": {
+      "list": {
+        "title": "Roles & Permissions",
+        "subtitle": "Define fine-grained access controls for different user types.",
+        "breadcrumbs": {
+          "users": "Users",
+          "current": "Roles & Permissions"
+        },
+        "addButton": "New Role",
+        "export": "Export",
+        "searchPlaceholder": "Search across all fields...",
+        "table": {
+          "no": "NO",
+          "account": "Account",
+          "role": "Role",
+          "description": "Description",
+          "createdAt": "Created At"
+        },
+        "metrics": {
+          "totalRoles": "Total Roles",
+          "systemRoles": "System Roles",
+          "customRoles": "Custom Roles"
+        },
+        "delete": {
+          "title": "Delete Role",
+          "message": "Are you sure you want to delete role \"{name}\"? This action cannot be undone.",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        },
+        "toast": {
+          "deleteFailed": "Failed to delete role",
+          "deleteError": "An error occurred while deleting.",
+          "exportSuccess": "Roles exported successfully!",
+          "exportFailed": "Failed to export roles"
+        }
+      },
+      "detail": {
+        "loading": "Loading role data...",
+        "title": {
+          "edit": "Update Role",
+          "create": "Create New Role"
+        },
+        "subtitle": "Define access levels and capabilities for specific accounts.",
+        "buttons": {
+          "cancel": "Cancel",
+          "saving": "Saving...",
+          "updating": "Updating...",
+          "saveRole": "Save Role",
+          "updateRole": "Update Role"
+        },
+        "sections": {
+          "roleInformation": "Role Information",
+          "roleInformationSubtitle": "Basic details about the role and its scope.",
+          "permissionMatrix": "Permission Matrix",
+          "permissionMatrixSubtitle": "Select the resources and actions this role allows."
+        },
+        "fields": {
+          "account": "Account",
+          "selectAccount": "Select Account",
+          "roleName": "Role Name",
+          "roleNamePlaceholder": "e.g. Regional Manager",
+          "description": "Description",
+          "descriptionPlaceholder": "Briefly describe the role's purpose"
+        },
+        "permission": {
+          "resource": "RESOURCE",
+          "read": "READ",
+          "write": "WRITE",
+          "update": "UPDATE",
+          "delete": "DELETE",
+          "export": "EXPORT",
+          "all": "ALL"
+        },
+        "toast": {
+          "fetchRoleFailed": "Failed to fetch role data",
+          "loadRoleFailed": "Failed to load role data",
+          "fillRequired": "Please fill in all required fields",
+          "updatedSuccess": "Role and permissions updated successfully!",
+          "updatePermissionsFailed": "Failed to update permissions",
+          "updateRoleFailed": "Failed to update role",
+          "createdSuccess": "Role created successfully!",
+          "createFailed": "Role creation failure!",
+          "saveFailed": "Failed to save role",
+          "fetchFormsFailed": "Failed to fetch forms",
+          "fetchFormsError": "Something went wrong while fetching forms"
+        }
+      }
+    }
+  }
+}

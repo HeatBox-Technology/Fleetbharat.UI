@@ -1,0 +1,101 @@
+{
+  "pages": {
+    "vehicles": {
+      "list": {
+        "title": "वाहन",
+        "subtitle": "संगठन के वाहनों और एसेट पहचान को प्रोविजन और प्रबंधित करें।",
+        "breadcrumbs": {
+          "fleet": "फ्लीट",
+          "current": "वाहन"
+        },
+        "addButton": "वाहन जोड़ें",
+        "export": "एक्सपोर्ट",
+        "searchPlaceholder": "वाहन खोजें...",
+        "deleteTitle": "वाहन हटाएं",
+        "deleteMessage": "क्या आप \"{registration}\" को रजिस्ट्री से हटाना चाहते हैं? यह कार्रवाई वापस नहीं हो सकती।",
+        "confirmDelete": "हटाएं",
+        "cancel": "रद्द करें",
+        "table": {
+          "registration": "रजिस्ट्रेशन",
+          "vin": "VIN / चेसिस",
+          "status": "स्थिति",
+          "lastUpdated": "अंतिम अपडेट"
+        },
+        "metrics": {
+          "totalFleetSize": "कुल फ्लीट आकार",
+          "inService": "सेवा में",
+          "offRoadOutOfService": "ऑफ-रोड / सेवा से बाहर",
+          "activeAccounts": "सक्रिय अकाउंट"
+        },
+        "fallback": {
+          "unknown": "अज्ञात",
+          "vendor": "वेंडर #{id}"
+        },
+        "toast": {
+          "loadError": "वाहन लोड करते समय त्रुटि हुई",
+          "removed": "वाहन सफलतापूर्वक हटाया गया",
+          "deleteFailed": "वाहन हटाने में विफल",
+          "deleteError": "हटाने के दौरान त्रुटि हुई।",
+          "exportSoon": "एक्सपोर्ट जल्द आएगा!",
+          "exportSuccess": "वाहन सफलतापूर्वक एक्सपोर्ट हुए",
+          "exportFailed": "वाहनों का एक्सपोर्ट विफल रहा"
+        }
+      },
+      "detail": {
+        "loading": {
+          "edit": "वाहन डेटा लोड हो रहा है...",
+          "create": "फॉर्म तैयार किया जा रहा है..."
+        },
+        "title": {
+          "edit": "वाहन संपादित करें",
+          "create": "वाहन प्रोविजन करें"
+        },
+        "subtitle": {
+          "edit": "इस एसेट की रजिस्ट्री एंट्री अपडेट करें।",
+          "create": "एसेट पहचान और रजिस्ट्री"
+        },
+        "buttons": {
+          "discard": "रद्द करें",
+          "saving": "सेव हो रहा है...",
+          "update": "रजिस्ट्री एंट्री अपडेट करें",
+          "create": "रजिस्ट्री एंट्री सेव करें"
+        },
+        "sections": {
+          "identification": "वाहन पहचान",
+          "classification": "वर्गीकरण",
+          "classificationSubtitle": "मैप आइकन और थ्रेसहोल्ड टाइप से लिए जाते हैं।",
+          "operationalStatus": "ऑपरेशनल स्थिति"
+        },
+        "fields": {
+          "account": "अकाउंट",
+          "selectAccount": "अकाउंट चुनें",
+          "registration": "रजिस्ट्रेशन नंबर",
+          "registrationPlaceholder": "उदा. HR-26-BY-1234",
+          "registrationHint": "केवल अक्षर और अंक रखें; सेपरेटर के रूप में space, hyphen, slash या dot उपयोग कर सकते हैं",
+          "vin": "VIN / चेसिस नंबर",
+          "vinPlaceholder": "17-अक्षर VIN",
+          "vinHint": "VIN ठीक 17 अक्षरों का होना चाहिए",
+          "vehicleType": "वाहन प्रकार",
+          "selectType": "प्रकार चुनें"
+        },
+        "status": {
+          "title": "ऑपरेशनल लाइफसाइकल स्थिति",
+          "subtitle": "यह लाइव ट्रैकिंग में एसेट की दृश्यता तय करती है।",
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय"
+        },
+        "toast": {
+          "notFound": "वाहन नहीं मिला",
+          "loadFailed": "डेटा लोड करने में विफल",
+          "selectAccount": "कृपया अकाउंट चुनें",
+          "registrationRequired": "रजिस्ट्रेशन नंबर आवश्यक है",
+          "invalidRegistration": "रजिस्ट्रेशन नंबर में केवल अक्षर, अंक, space, hyphen, slash या dot ही होने चाहिए",
+          "selectVehicleType": "कृपया वाहन प्रकार चुनें",
+          "saved": "वाहन सफलतापूर्वक सेव हुआ!",
+          "operationFailed": "ऑपरेशन विफल",
+          "errorOccurred": "एक त्रुटि हुई"
+        }
+      }
+    }
+  }
+}

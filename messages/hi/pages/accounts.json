@@ -1,0 +1,75 @@
+{
+  "pages": {
+    "accounts": {
+      "list": {
+        "title": "अकाउंट सूची",
+        "subtitle": "पहचान, टैक्सोनॉमी और ग्लोबल पैरामीटर्स को प्रबंधित करें।",
+        "breadcrumbs": {
+          "accounts": "अकाउंट्स",
+          "current": "अकाउंट सूची"
+        },
+        "addButton": "अकाउंट जोड़ें",
+        "searchPlaceholder": "अकाउंट खोजें...",
+        "table": {
+          "no": "क्रमांक",
+          "code": "कोड",
+          "instance": "इंस्टेंस",
+          "contact": "संपर्क",
+          "location": "स्थान",
+          "status": "स्थिति"
+        },
+        "metrics": {
+          "total": "कुल",
+          "active": "सक्रिय",
+          "pending": "लंबित",
+          "inactive": "निष्क्रिय"
+        },
+        "delete": {
+          "title": "अकाउंट हटाएं",
+          "message": "क्या आप \"{instance}\" को हटाना चाहते हैं? यह कार्रवाई वापस नहीं हो सकती।",
+          "confirm": "हटाएं",
+          "cancel": "रद्द करें"
+        },
+        "toast": {
+          "loadFailed": "अकाउंट्स लोड करने में विफल",
+          "deleteFailed": "अकाउंट हटाने में विफल"
+        }
+      },
+      "detail": {
+        "title": {
+          "create": "नया अकाउंट जोड़ें",
+          "edit": "अकाउंट संपादित करें"
+        },
+        "loading": "अकाउंट विवरण लोड हो रहा है...",
+        "sections": {
+          "accountDetails": "अकाउंट विवरण",
+          "addressDetails": "पता विवरण",
+          "businessProfile": "बिजनेस प्रोफाइल विवरण",
+          "userPermission": "यूजर अनुमति और एक्सेस विवरण"
+        },
+        "buttons": {
+          "cancel": "रद्द करें",
+          "submit": "सबमिट करें"
+        },
+        "toast": {
+          "accountNameRequired": "अकाउंट नाम आवश्यक है!",
+          "categoryRequired": "कैटेगरी आवश्यक है!",
+          "primaryDomainRequired": "प्राथमिक डोमेन आवश्यक है!",
+          "businessEmailRequired": "बिजनेस ईमेल आवश्यक है!",
+          "businessAddressRequired": "बिजनेस पता आवश्यक है!",
+          "businessTimeZoneRequired": "बिजनेस टाइम ज़ोन आवश्यक है!",
+          "countryRequired": "देश आवश्यक है!",
+          "stateRequired": "राज्य आवश्यक है!",
+          "cityRequired": "शहर आवश्यक है!",
+          "createdSuccess": "अकाउंट सफलतापूर्वक बनाया गया!",
+          "updatedSuccess": "अकाउंट सफलतापूर्वक अपडेट हुआ!",
+          "alreadyExists": "अकाउंट पहले से मौजूद है!",
+          "genericError": "कुछ गलत हो गया!",
+          "submitError": "फॉर्म सबमिट करते समय त्रुटि हुई।",
+          "fetchAccountFailed": "अकाउंट विवरण प्राप्त करने में विफल!",
+          "fetchAccountError": "अकाउंट विवरण प्राप्त करते समय त्रुटि हुई।"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "pages": {
+    "rolesPermissions": {
+      "list": {
+        "title": "रोल्स और परमिशन्स",
+        "subtitle": "विभिन्न यूजर प्रकारों के लिए सूक्ष्म एक्सेस नियंत्रण निर्धारित करें।",
+        "breadcrumbs": {
+          "users": "यूजर्स",
+          "current": "रोल्स और परमिशन्स"
+        },
+        "addButton": "नई भूमिका",
+        "export": "एक्सपोर्ट",
+        "searchPlaceholder": "सभी फ़ील्ड में खोजें...",
+        "table": {
+          "no": "क्रमांक",
+          "account": "अकाउंट",
+          "role": "भूमिका",
+          "description": "विवरण",
+          "createdAt": "बनने की तारीख"
+        },
+        "metrics": {
+          "totalRoles": "कुल भूमिकाएं",
+          "systemRoles": "सिस्टम भूमिकाएं",
+          "customRoles": "कस्टम भूमिकाएं"
+        },
+        "delete": {
+          "title": "भूमिका हटाएं",
+          "message": "क्या आप भूमिका \"{name}\" को हटाना चाहते हैं? यह कार्रवाई वापस नहीं हो सकती।",
+          "confirm": "हटाएं",
+          "cancel": "रद्द करें"
+        },
+        "toast": {
+          "deleteFailed": "भूमिका हटाने में विफल",
+          "deleteError": "हटाने के दौरान त्रुटि हुई।",
+          "exportSuccess": "भूमिकाएं सफलतापूर्वक एक्सपोर्ट हुईं!",
+          "exportFailed": "भूमिकाएं एक्सपोर्ट करने में विफल"
+        }
+      },
+      "detail": {
+        "loading": "रोल डेटा लोड हो रहा है...",
+        "title": {
+          "edit": "भूमिका अपडेट करें",
+          "create": "नई भूमिका बनाएं"
+        },
+        "subtitle": "विशिष्ट अकाउंट्स के लिए एक्सेस स्तर और क्षमताएं निर्धारित करें।",
+        "buttons": {
+          "cancel": "रद्द करें",
+          "saving": "सेव हो रहा है...",
+          "updating": "अपडेट हो रहा है...",
+          "saveRole": "भूमिका सेव करें",
+          "updateRole": "भूमिका अपडेट करें"
+        },
+        "sections": {
+          "roleInformation": "भूमिका जानकारी",
+          "roleInformationSubtitle": "भूमिका और उसके दायरे की बुनियादी जानकारी।",
+          "permissionMatrix": "परमिशन मैट्रिक्स",
+          "permissionMatrixSubtitle": "इस भूमिका द्वारा अनुमत रिसोर्स और क्रियाएं चुनें।"
+        },
+        "fields": {
+          "account": "अकाउंट",
+          "selectAccount": "अकाउंट चुनें",
+          "roleName": "भूमिका नाम",
+          "roleNamePlaceholder": "उदा. Regional Manager",
+          "description": "विवरण",
+          "descriptionPlaceholder": "भूमिका का उद्देश्य संक्षेप में लिखें"
+        },
+        "permission": {
+          "resource": "रिसोर्स",
+          "read": "रीड",
+          "write": "राइट",
+          "update": "अपडेट",
+          "delete": "डिलीट",
+          "export": "एक्सपोर्ट",
+          "all": "सभी"
+        },
+        "toast": {
+          "fetchRoleFailed": "रोल डेटा प्राप्त करने में विफल",
+          "loadRoleFailed": "रोल डेटा लोड करने में विफल",
+          "fillRequired": "कृपया सभी आवश्यक फ़ील्ड भरें",
+          "updatedSuccess": "भूमिका और परमिशन्स सफलतापूर्वक अपडेट हुए!",
+          "updatePermissionsFailed": "परमिशन्स अपडेट करने में विफल",
+          "updateRoleFailed": "भूमिका अपडेट करने में विफल",
+          "createdSuccess": "भूमिका सफलतापूर्वक बनाई गई!",
+          "createFailed": "भूमिका बनाना विफल रहा!",
+          "saveFailed": "भूमिका सेव करने में विफल",
+          "fetchFormsFailed": "फॉर्म प्राप्त करने में विफल",
+          "fetchFormsError": "फॉर्म प्राप्त करते समय कुछ गलत हुआ"
+        }
+      }
+    }
+  }
+}

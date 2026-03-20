@@ -1,0 +1,133 @@
+{
+  "pages": {
+    "routeMaster": {
+      "list": {
+        "title": "रूट मास्टर",
+        "subtitle": "जियोफेंस पॉइंट्स और स्टॉप्स के साथ पुन: उपयोग योग्य रूट टेम्पलेट कॉन्फ़िगर करें।",
+        "breadcrumbs": {
+          "fleet": "फ्लीट",
+          "current": "रूट मास्टर"
+        },
+        "addButton": "रूट जोड़ें",
+        "loading": "रूट मास्टर्स लोड हो रहे हैं...",
+        "searchPlaceholder": "रूट खोजें...",
+        "metrics": {
+          "totalRoutes": "कुल रूट्स",
+          "activeRoutes": "सक्रिय रूट्स",
+          "inactiveRoutes": "निष्क्रिय रूट्स"
+        },
+        "filters": {
+          "selectAccount": "अकाउंट चुनें",
+          "selectedAccount": "चयनित अकाउंट ({id})"
+        },
+        "table": {
+          "no": "क्रमांक",
+          "routeName": "रूट नाम",
+          "account": "अकाउंट",
+          "startPoint": "प्रारंभ बिंदु",
+          "endPoint": "अंतिम बिंदु",
+          "stops": "स्टॉप्स",
+          "geofence": "जियोफेंस",
+          "status": "स्थिति",
+          "createdOn": "निर्माण तिथि"
+        },
+        "labels": {
+          "yes": "हाँ",
+          "no": "नहीं",
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय"
+        },
+        "deleteDialog": {
+          "title": "रूट हटाएँ",
+          "message": "क्या आप \"{name}\" को हटाना चाहते हैं?",
+          "confirm": "हटाएँ",
+          "cancel": "रद्द करें"
+        },
+        "toast": {
+          "fetchFailed": "रूट मास्टर सूची प्राप्त करने में विफल",
+          "deleted": "रूट सफलतापूर्वक हटाया गया",
+          "deleteFailed": "रूट हटाने में विफल",
+          "deleteError": "रूट हटाते समय त्रुटि"
+        }
+      },
+      "detail": {
+        "createTitle": "रूट बनाएं",
+        "editTitle": "रूट संपादित करें",
+        "subtitle": "जियोफेंस और स्टॉप पॉइंट्स के साथ रूट मास्टर कॉन्फ़िगर करें।",
+        "loadingDetails": "रूट विवरण लोड हो रहा है...",
+        "noReadPermission": "आपको यह पेज देखने की अनुमति नहीं है।",
+        "breadcrumbs": {
+          "fleet": "फ्लीट",
+          "master": "रूट मास्टर",
+          "create": "बनाएं",
+          "edit": "संपादित करें"
+        },
+        "buttons": {
+          "cancel": "रद्द करें",
+          "saving": "सेव हो रहा है...",
+          "createRoute": "रूट बनाएं",
+          "updateRoute": "रूट अपडेट करें",
+          "loadingRoute": "रूट लोड हो रहा है...",
+          "viewRoute": "रूट देखें"
+        },
+        "fields": {
+          "account": "अकाउंट",
+          "selectAccount": "अकाउंट चुनें",
+          "selectedAccount": "चयनित अकाउंट ({id})",
+          "routeName": "रूट नाम",
+          "routeNamePlaceholder": "रूट नाम दर्ज करें",
+          "geofenceRelated": "जियोफेंस संबंधित",
+          "yes": "हाँ",
+          "no": "नहीं",
+          "startPoint": "प्रारंभ बिंदु",
+          "addGeofence": "जियोफेंस जोड़ें",
+          "selectStartGeofence": "प्रारंभ जियोफेंस चुनें",
+          "stopLabel": "स्टॉप {number}",
+          "selectStopGeofence": "स्टॉप जियोफेंस चुनें",
+          "addStop": "स्टॉप जोड़ें",
+          "endPoint": "अंतिम बिंदु",
+          "selectEndGeofence": "अंतिम जियोफेंस चुनें",
+          "status": "स्थिति",
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय",
+          "geofenceFallback": "जियोफेंस {id}"
+        },
+        "section": {
+          "routePreview": "रूट प्रीव्यू",
+          "mapsLoadFailed": "Google Maps लोड करने में विफल।",
+          "loadingMap": "मैप लोड हो रहा है..."
+        },
+        "table": {
+          "startGeofence": "प्रारंभ जियोफेंस",
+          "endGeofence": "अंतिम जियोफेंस",
+          "distance": "दूरी (कि.मी.)",
+          "time": "समय (मिनट)",
+          "totalDistance": "कुल दूरी:",
+          "totalTime": "कुल समय:"
+        },
+        "toast": {
+          "notFound": "रूट नहीं मिला",
+          "fetchFailed": "रूट विवरण प्राप्त करने में विफल",
+          "geofenceDropdownFailed": "जियोफेंस ड्रॉपडाउन लोड करने में विफल",
+          "mapsNotLoaded": "Google Maps अभी लोड नहीं हुआ है",
+          "selectStartEndGeofence": "कृपया प्रारंभ और अंतिम जियोफेंस चुनें",
+          "selectAtLeastStartEnd": "कृपया कम से कम प्रारंभ और अंतिम बिंदु चुनें",
+          "resolveGeofenceFailed": "जियोफेंस {id} resolve करने में विफल",
+          "encodedPathUnavailable": "मैप response से रूट polyline नहीं मिला",
+          "previewFailed": "रूट प्रीव्यू करने में विफल",
+          "selectAccount": "कृपया अकाउंट चुनें",
+          "enterRouteName": "कृपया रूट नाम दर्ज करें",
+          "startEndMustDiffer": "प्रारंभ और अंतिम जियोफेंस अलग होने चाहिए",
+          "selectGeofenceForEachStop": "कृपया हर स्टॉप के लिए जियोफेंस चुनें",
+          "noUpdatePermission": "आपको रूट अपडेट करने की अनुमति नहीं है",
+          "noAddPermission": "आपको रूट जोड़ने की अनुमति नहीं है",
+          "routePathMissing": "रूट पाथ उपलब्ध नहीं है। पहले रूट प्रीव्यू करें।",
+          "updated": "रूट सफलतापूर्वक अपडेट हुआ",
+          "created": "रूट सफलतापूर्वक बनाया गया",
+          "saveFailed": "रूट सेव करने में विफल",
+          "saveError": "रूट सेव करते समय त्रुटि"
+        }
+      }
+    }
+  }
+}

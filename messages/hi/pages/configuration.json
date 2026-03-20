@@ -1,0 +1,122 @@
+{
+  "pages": {
+    "configuration": {
+      "list": {
+        "title": "कॉन्फ़िगरेशन",
+        "subtitle": "अकाउंट प्रबंधन के लिए ग्लोबल सेटिंग्स।",
+        "breadcrumbs": {
+          "accounts": "अकाउंट्स",
+          "current": "कॉन्फ़िगरेशन"
+        },
+        "addButton": "नई कॉन्फ़िगरेशन",
+        "loading": "कॉन्फ़िगरेशन लोड हो रही हैं...",
+        "searchPlaceholder": "सभी फ़ील्ड में खोजें...",
+        "table": {
+          "id": "आईडी",
+          "account": "अकाउंट",
+          "mapProvider": "मैप प्रोवाइडर",
+          "dateFormat": "तारीख फ़ॉर्मेट",
+          "language": "भाषा",
+          "lastUpdated": "अंतिम अपडेट"
+        },
+        "delete": {
+          "title": "कॉन्फ़िगरेशन हटाएं",
+          "message": "क्या आप \"{account}\" के लिए कॉन्फ़िगरेशन हटाना चाहते हैं? यह कार्रवाई वापस नहीं हो सकती।",
+          "confirm": "हटाएं",
+          "cancel": "रद्द करें"
+        },
+        "toast": {
+          "deleted": "कॉन्फ़िगरेशन सफलतापूर्वक हटाई गई!",
+          "deleteFailed": "हटाने में विफल: {message}",
+          "deleteError": "कॉन्फ़िगरेशन हटाने में त्रुटि"
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "कॉन्फ़िगरेशन संपादित करें",
+          "create": "नई कॉन्फ़िगरेशन"
+        },
+        "buttons": {
+          "cancel": "रद्द करें",
+          "saving": "सेव हो रहा है...",
+          "update": "कॉन्फ़िगरेशन अपडेट करें",
+          "create": "कॉन्फ़िगरेशन सेव करें",
+          "addMoreLanguages": "और भाषाएं जोड़ें"
+        },
+        "loading": {
+          "edit": "कॉन्फ़िगरेशन लोड हो रही है..."
+        },
+        "sections": {
+          "mapConfiguration": "मैप कॉन्फ़िगरेशन",
+          "internationalization": "इंटरनेशनलाइजेशन और यूनिट कॉन्फ़िगरेशन",
+          "languageConfiguration": "भाषा कॉन्फ़िगरेशन"
+        },
+        "fields": {
+          "accountId": "अकाउंट आईडी",
+          "selectAccount": "अकाउंट चुनें",
+          "mapProvider": "मैप प्रोवाइडर",
+          "licenseKey": "लाइसेंस की",
+          "licenseKeyPlaceholder": "लाइसेंस की दर्ज करें",
+          "addressKey": "एड्रेस की",
+          "addressKeyPlaceholder": "एड्रेस की दर्ज करें",
+          "dateFormat": "तारीख फ़ॉर्मेट",
+          "timeFormat": "समय फ़ॉर्मेट",
+          "distanceUnit": "दूरी इकाई",
+          "speedUnit": "गति इकाई",
+          "fuelUnit": "ईंधन इकाई",
+          "temperature": "तापमान",
+          "addressDisplay": "एड्रेस डिस्प्ले",
+          "defaultLanguage": "डिफ़ॉल्ट भाषा",
+          "additionalLanguage": "अतिरिक्त भाषा {index}",
+          "selectLanguage": "भाषा चुनें"
+        },
+        "options": {
+          "mapProvider": {
+            "googleMaps": "गूगल मैप्स",
+            "hereMaps": "हियर मैप्स",
+            "openStreetMap": "ओपनस्ट्रीटमैप"
+          },
+          "timeFormat": {
+            "h12": "12 घंटे (AM/PM)",
+            "h24": "24 घंटे"
+          },
+          "distanceUnit": {
+            "km": "किलोमीटर",
+            "mile": "माइल"
+          },
+          "speedUnit": {
+            "kmh": "किमी/घंटा",
+            "mph": "मील/घंटा"
+          },
+          "fuelUnit": {
+            "litre": "लीटर",
+            "gallon": "गैलन"
+          },
+          "temperature": {
+            "celsius": "सेल्सियस",
+            "fahrenheit": "फारेनहाइट"
+          },
+          "addressDisplay": {
+            "show": "एड्रेस दिखाएं",
+            "hide": "एड्रेस छुपाएं"
+          },
+          "language": {
+            "en": "अंग्रेज़ी",
+            "es": "स्पेनिश",
+            "fr": "फ्रेंच",
+            "de": "जर्मन",
+            "hi": "हिंदी"
+          }
+        },
+        "toast": {
+          "accountRequired": "कृपया मान्य अकाउंट आईडी दर्ज करें",
+          "updated": "कॉन्फ़िगरेशन सफलतापूर्वक अपडेट हुई!",
+          "created": "कॉन्फ़िगरेशन सफलतापूर्वक बनाई गई!",
+          "saveFailed": "सेव करने में विफल: {message}",
+          "saveError": "सेव करते समय त्रुटि हुई",
+          "loadFailed": "कॉन्फ़िगरेशन लोड करने में विफल"
+        }
+      }
+    }
+  }
+}

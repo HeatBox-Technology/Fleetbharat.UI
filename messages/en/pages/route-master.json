@@ -1,0 +1,133 @@
+{
+  "pages": {
+    "routeMaster": {
+      "list": {
+        "title": "Route Master",
+        "subtitle": "Configure reusable route templates using geofence points and stops.",
+        "breadcrumbs": {
+          "fleet": "Fleet",
+          "current": "Route Master"
+        },
+        "addButton": "Add Route",
+        "loading": "Loading route masters...",
+        "searchPlaceholder": "Search routes...",
+        "metrics": {
+          "totalRoutes": "TOTAL ROUTES",
+          "activeRoutes": "ACTIVE ROUTES",
+          "inactiveRoutes": "INACTIVE ROUTES"
+        },
+        "filters": {
+          "selectAccount": "Select Account",
+          "selectedAccount": "Selected Account ({id})"
+        },
+        "table": {
+          "no": "NO",
+          "routeName": "ROUTE NAME",
+          "account": "ACCOUNT",
+          "startPoint": "START POINT",
+          "endPoint": "END POINT",
+          "stops": "STOPS",
+          "geofence": "GEOFENCE",
+          "status": "STATUS",
+          "createdOn": "CREATED ON"
+        },
+        "labels": {
+          "yes": "Yes",
+          "no": "No",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "deleteDialog": {
+          "title": "Delete Route",
+          "message": "Are you sure you want to delete \"{name}\"?",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        },
+        "toast": {
+          "fetchFailed": "Failed to fetch route master list",
+          "deleted": "Route deleted successfully",
+          "deleteFailed": "Failed to delete route",
+          "deleteError": "Error deleting route"
+        }
+      },
+      "detail": {
+        "createTitle": "Create Route",
+        "editTitle": "Edit Route",
+        "subtitle": "Configure route master with geofences and stop points.",
+        "loadingDetails": "Loading route details...",
+        "noReadPermission": "You do not have permission to view this page.",
+        "breadcrumbs": {
+          "fleet": "Fleet",
+          "master": "Route Master",
+          "create": "Create",
+          "edit": "Edit"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "saving": "Saving...",
+          "createRoute": "Create Route",
+          "updateRoute": "Update Route",
+          "loadingRoute": "Loading Route...",
+          "viewRoute": "View Route"
+        },
+        "fields": {
+          "account": "Account",
+          "selectAccount": "Select Account",
+          "selectedAccount": "Selected Account ({id})",
+          "routeName": "Route Name",
+          "routeNamePlaceholder": "Enter route name",
+          "geofenceRelated": "Geofence Related",
+          "yes": "Yes",
+          "no": "No",
+          "startPoint": "Start Point",
+          "addGeofence": "Add Geofence",
+          "selectStartGeofence": "Select Start Geofence",
+          "stopLabel": "Stop {number}",
+          "selectStopGeofence": "Select Stop Geofence",
+          "addStop": "Add Stop",
+          "endPoint": "End Point",
+          "selectEndGeofence": "Select End Geofence",
+          "status": "Status",
+          "active": "Active",
+          "inactive": "Inactive",
+          "geofenceFallback": "Geofence {id}"
+        },
+        "section": {
+          "routePreview": "Route Preview",
+          "mapsLoadFailed": "Failed to load Google Maps.",
+          "loadingMap": "Loading map..."
+        },
+        "table": {
+          "startGeofence": "Start Geofence",
+          "endGeofence": "End Geofence",
+          "distance": "Distance (Km)",
+          "time": "Time (Min)",
+          "totalDistance": "Total Distance:",
+          "totalTime": "Total Time:"
+        },
+        "toast": {
+          "notFound": "Route not found",
+          "fetchFailed": "Failed to fetch route details",
+          "geofenceDropdownFailed": "Failed to load geofence dropdown",
+          "mapsNotLoaded": "Google Maps is not loaded yet",
+          "selectStartEndGeofence": "Please select start and end geofence",
+          "selectAtLeastStartEnd": "Please select at least start and end points",
+          "resolveGeofenceFailed": "Failed to resolve geofence {id}",
+          "encodedPathUnavailable": "Could not derive route polyline from map response",
+          "previewFailed": "Failed to preview route",
+          "selectAccount": "Please select account",
+          "enterRouteName": "Please enter route name",
+          "startEndMustDiffer": "Start and end geofence must be different",
+          "selectGeofenceForEachStop": "Please select geofence for each stop",
+          "noUpdatePermission": "You do not have permission to update route",
+          "noAddPermission": "You do not have permission to add route",
+          "routePathMissing": "Route path is missing. Please preview route first.",
+          "updated": "Route updated successfully",
+          "created": "Route created successfully",
+          "saveFailed": "Failed to save route",
+          "saveError": "Error while saving route"
+        }
+      }
+    }
+  }
+}

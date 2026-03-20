@@ -1,0 +1,155 @@
+{
+  "pages": {
+    "tripMaster": {
+      "list": {
+        "title": "ट्रिप मास्टर",
+        "subtitle": "ट्रिप शेड्यूल और रूटिंग टेम्पलेट्स प्रबंधित करें।",
+        "breadcrumbs": {
+          "fleet": "फ्लीट",
+          "current": "ट्रिप मास्टर"
+        },
+        "addButton": "ट्रिप जोड़ें",
+        "searchPlaceholder": "ट्रिप खोजें...",
+        "metrics": {
+          "totalTrips": "कुल ट्रिप्स",
+          "activeTrips": "सक्रिय ट्रिप्स",
+          "inTransit": "यात्रा में"
+        },
+        "table": {
+          "no": "क्रमांक",
+          "tripName": "ट्रिप नाम",
+          "route": "रूट",
+          "vehicle": "वाहन",
+          "driver": "ड्राइवर",
+          "cycle": "साइकिल",
+          "status": "स्थिति",
+          "startTime": "प्रारंभ समय"
+        },
+        "labels": {
+          "cycle": {
+            "weekly": "साप्ताहिक",
+            "monthly": "मासिक",
+            "oneOff": "वन-ऑफ"
+          },
+          "status": {
+            "active": "सक्रिय",
+            "pending": "लंबित",
+            "inTransit": "यात्रा में",
+            "completed": "पूर्ण"
+          }
+        },
+        "deleteDialog": {
+          "title": "ट्रिप प्लान हटाएँ",
+          "message": "क्या आप वाकई {name} हटाना चाहते हैं?",
+          "confirm": "हटाएँ",
+          "cancel": "रद्द करें"
+        }
+      },
+      "detail": {
+        "title": "मिशन आर्किटेक्ट",
+        "subtitle": "ट्रिप मास्टर कॉन्फ़िगरेशन",
+        "breadcrumbs": {
+          "fleet": "फ्लीट",
+          "master": "ट्रिप मास्टर",
+          "create": "बनाएं",
+          "edit": "संपादित करें"
+        },
+        "buttons": {
+          "discard": "रद्द करें",
+          "cancel": "रद्द करें",
+          "deployMission": "मिशन तैनात करें",
+          "remove": "हटाएँ",
+          "prev": "पिछला",
+          "next": "अगला",
+          "addStop": "स्टॉप जोड़ें",
+          "addNumber": "नंबर जोड़ें",
+          "deploying": "तैनात हो रहा है...",
+          "deployMasterMission": "मास्टर मिशन तैनात करें"
+        },
+        "sections": {
+          "missionIdentity": "मिशन पहचान",
+          "fleetStrategy": "फ्लीट रणनीति",
+          "tripCycleTimeline": "ट्रिप साइकिल और टाइमलाइन",
+          "timelineRoute": "टाइमलाइन और रूट",
+          "notifications": "नोटिफिकेशन",
+          "liveMapPreview": "लाइव मैप प्रीव्यू",
+          "missionSummary": "मिशन सारांश"
+        },
+        "fields": {
+          "tripName": "ट्रिप नाम",
+          "tripNamePlaceholder": "जैसे: Metro Daily Supply",
+          "assignedOperator": "नियुक्त ऑपरेटर",
+          "selectDriver": "ड्राइवर चुनें",
+          "account": "अकाउंट",
+          "selectAccount": "अकाउंट चुनें",
+          "vehicle": "वाहन",
+          "selectVehicle": "वाहन चुनें",
+          "vehicleType": "वाहन प्रकार",
+          "selectVehicleType": "वाहन प्रकार चुनें",
+          "consignee": "कंसाइनी",
+          "consigneePlaceholder": "जैसे: Sharma Traders",
+          "vehicleAssignment": "वाहन असाइनमेंट",
+          "vehicleTypePageInfo": "व्हीकल टाइप पेज {page}/{total}",
+          "noVehicleTypes": "कोई व्हीकल टाइप नहीं मिला",
+          "tripType": "ट्रिप प्रकार",
+          "weeklyRotation": "साप्ताहिक रोटेशन",
+          "departureEtd": "प्रस्थान ETD",
+          "expectedArrival": "अपेक्षित आगमन",
+          "selectMasterPipeline": "मास्टर पाइपलाइन चुनें",
+          "selectSourceGeofence": "स्रोत जियोफेंस चुनें",
+          "selectDestinationGeofence": "गंतव्य जियोफेंस चुनें",
+          "selectStopGeofence": "स्टॉप जियोफेंस चुनें",
+          "customRouteName": "कस्टम रूट नाम",
+          "customRoutePlaceholder": "कस्टम रूट दर्ज करें",
+          "sourcePlaceholder": "स्रोत स्थान दर्ज करें",
+          "destinationPlaceholder": "गंतव्य स्थान दर्ज करें",
+          "stopPlaceholder": "स्टॉप स्थान दर्ज करें"
+        },
+        "notifications": {
+          "enableOtp": "OTP नोटिफिकेशन सक्षम करें",
+          "otpHelp": "OTP सक्षम होने पर नीचे कई मोबाइल नंबर जोड़ें।",
+          "mobilePlaceholder": "मोबाइल नंबर दर्ज करें",
+          "removeNumberAria": "नंबर हटाएँ"
+        },
+        "summary": {
+          "trip": "ट्रिप",
+          "driver": "ड्राइवर",
+          "account": "अकाउंट",
+          "vehicle": "वाहन",
+          "assignment": "असाइनमेंट",
+          "vehicleType": "वाहन प्रकार",
+          "cycle": "साइकिल",
+          "routeMode": "रूट मोड",
+          "route": "रूट"
+        },
+        "vehicleClass": {
+          "truck": "ट्रक",
+          "truckSub": "फ्रेट टाइटन",
+          "traveller": "ट्रैवलर",
+          "travellerSub": "ट्रांजिट क्रू वैन",
+          "bus": "बस",
+          "busSub": "शटल प्राइम"
+        },
+        "scheduling": {
+          "masterRoute": "मास्टर रूट",
+          "fixedPath": "स्थिर पथ",
+          "weekly": "साप्ताहिक",
+          "repeatingCycle": "दोहराव चक्र",
+          "customRoute": "कस्टम रूट",
+          "onDemand": "मांग पर",
+          "oneOff": "वन-ऑफ",
+          "scheduled": "निर्धारित"
+        },
+        "labels": {
+          "weeklyCycle": "साप्ताहिक साइकिल",
+          "customRoute": "कस्टम रूट",
+          "oneOffScheduled": "वन-ऑफ शेड्यूल",
+          "defaultMapQuery": "दिल्ली",
+          "sourceLocation": "स्रोत स्थान",
+          "destinationLocation": "गंतव्य स्थान",
+          "stop": "स्टॉप {number}"
+        }
+      }
+    }
+  }
+}

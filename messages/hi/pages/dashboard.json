@@ -1,0 +1,64 @@
+{
+  "pages": {
+    "dashboard": {
+      "metrics": {
+        "totalCustomers": "कुल ग्राहक",
+        "dealersDistributors": "डीलर्स और डिस्ट्रीब्यूटर्स",
+        "totalDevices": "कुल डिवाइस",
+        "activeSubscriptions": "सक्रिय सब्सक्रिप्शन्स"
+      },
+      "sections": {
+        "revenueSummary": "राजस्व सारांश",
+        "deviceStatus": "डिवाइस स्थिति",
+        "recentAlerts": "हाल की अलर्ट्स",
+        "serverHealth": "सर्वर स्वास्थ्य"
+      },
+      "revenue": {
+        "months": {
+          "jan": "जन",
+          "feb": "फ़र",
+          "mar": "मार्च",
+          "apr": "अप्रै",
+          "may": "मई",
+          "jun": "जून",
+          "jul": "जुल"
+        }
+      },
+      "deviceStatus": {
+        "installed": "इंस्टॉल्ड",
+        "available": "उपलब्ध",
+        "faulty": "खराब",
+        "returned": "रिटर्न"
+      },
+      "alerts": {
+        "cpuHigh": {
+          "title": "Server-01 पर CPU उपयोग बहुत अधिक",
+          "time": "2 मिनट पहले",
+          "severity": "गंभीर"
+        },
+        "dbLimit": {
+          "title": "डेटाबेस कनेक्शन लिमिट पास आ रही है",
+          "time": "15 मिनट पहले",
+          "severity": "चेतावनी"
+        },
+        "devicesOffline": {
+          "title": "15 डिवाइस ऑफलाइन रिपोर्ट हुए",
+          "time": "30 मिनट पहले",
+          "severity": "सूचनात्मक"
+        }
+      },
+      "serverHealth": {
+        "status": {
+          "operational": "सामान्य",
+          "outage": "सेवा बाधित"
+        },
+        "services": {
+          "apiServer": "API सर्वर",
+          "databaseCluster": "डेटाबेस क्लस्टर",
+          "telemetryIngestion": "टेलीमेट्री इनजेशन",
+          "forwardingService": "फॉरवर्डिंग सेवा"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "pages": {
+    "invoices": {
+      "list": {
+        "title": "इनवॉइस",
+        "subtitle": "फाइनेंशियल लेजर और बिलिंग साइकिल ऑटोमेशन कंट्रोल।",
+        "breadcrumbs": {
+          "billing": "बिलिंग",
+          "current": "इनवॉइस"
+        },
+        "addButton": "इनवॉइस जोड़ें",
+        "exportButton": "एक्सपोर्ट",
+        "exportingButton": "एक्सपोर्ट हो रहा है...",
+        "searchPlaceholder": "इनवॉइस खोजें...",
+        "table": {
+          "no": "क्रमांक",
+          "invoiceNumber": "इनवॉइस #",
+          "account": "अकाउंट",
+          "amount": "राशि",
+          "invoiceDate": "इनवॉइस तिथि",
+          "dueDate": "देय तिथि",
+          "status": "स्थिति"
+        },
+        "labels": {
+          "pending": "लंबित",
+          "defaultFileName": "invoices-export.xlsx"
+        },
+        "toast": {
+          "exportFailed": "एक्सपोर्ट विफल",
+          "exportInvalidData": "एक्सपोर्ट फ़ाइल डेटा अमान्य है",
+          "exportSuccess": "इनवॉइस सफलतापूर्वक एक्सपोर्ट हुए",
+          "exportCatchFailed": "इनवॉइस एक्सपोर्ट करने में विफल",
+          "fetchFailed": "इनवॉइस प्राप्त करने में विफल"
+        }
+      },
+      "detail": {
+        "title": {
+          "add": "इनवॉइस जोड़ें",
+          "edit": "इनवॉइस"
+        },
+        "subtitle": "मैनुअल बिलिंग इनवॉइस बनाएं।",
+        "breadcrumbs": {
+          "billing": "बिलिंग",
+          "current": "इनवॉइस"
+        },
+        "fields": {
+          "account": "अकाउंट",
+          "subscription": "सब्सक्रिप्शन",
+          "amount": "राशि",
+          "currency": "मुद्रा",
+          "invoiceDate": "इनवॉइस तिथि",
+          "dueDate": "देय तिथि"
+        },
+        "buttons": {
+          "cancel": "रद्द करें",
+          "saving": "सेव हो रहा है...",
+          "submit": "इनवॉइस बनाएं"
+        },
+        "toast": {
+          "editNotEnabled": "इनवॉइस संपादन अभी सक्षम नहीं है।",
+          "selectAccountSubscription": "कृपया अकाउंट और सब्सक्रिप्शन चुनें",
+          "selectCurrency": "कृपया मुद्रा चुनें",
+          "amountGreaterThanZero": "राशि 0 से अधिक होनी चाहिए",
+          "validDates": "कृपया मान्य इनवॉइस और देय तिथियां दें",
+          "createdSuccess": "इनवॉइस सफलतापूर्वक बना",
+          "createFailed": "इनवॉइस बनाने में विफल",
+          "dropdownFailed": "ड्रॉपडाउन डेटा लोड करने में विफल"
+        }
+      }
+    }
+  }
+}

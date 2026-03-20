@@ -1,0 +1,110 @@
+{
+  "pages": {
+    "devices": {
+      "list": {
+        "title": "डिवाइस",
+        "subtitle": "डिवाइस पहचान, कनेक्टिविटी और प्रोविजनिंग स्थिति की पूरी ट्रेसबिलिटी।",
+        "breadcrumbs": {
+          "fleet": "फ्लीट",
+          "current": "डिवाइस"
+        },
+        "addButton": "डिवाइस जोड़ें",
+        "fields": {
+          "selectAccount": "अकाउंट चुनें"
+        },
+        "table": {
+          "deviceIdentity": "डिवाइस पहचान",
+          "category": "कैटेगरी",
+          "type": "प्रकार",
+          "status": "स्थिति",
+          "lastUpdated": "अंतिम अपडेट"
+        },
+        "status": {
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय",
+          "inService": "सेवा में",
+          "outOfService": "सेवा से बाहर"
+        },
+        "metrics": {
+          "totalDevices": "कुल डिवाइस",
+          "inService": "सेवा में",
+          "outOfService": "सेवा से बाहर"
+        },
+        "fallback": {
+          "defaultCategory": "GPS",
+          "defaultType": "Tracker",
+          "notAvailable": "N/A"
+        },
+        "loading": "डिवाइस लोड हो रहे हैं...",
+        "searchPlaceholder": "डिवाइस खोजें...",
+        "deleteTitle": "डिवाइस हटाएं",
+        "deleteMessage": "क्या आप \"{device}\" डिवाइस को रजिस्ट्री से हटाना चाहते हैं? यह कार्रवाई वापस नहीं हो सकती।",
+        "confirmDelete": "हटाएं",
+        "cancel": "रद्द करें",
+        "toast": {
+          "loadError": "डिवाइस लोड करते समय त्रुटि हुई",
+          "removed": "डिवाइस सफलतापूर्वक हटाया गया",
+          "deleteFailed": "डिवाइस हटाने में विफल।",
+          "deleteError": "हटाने के दौरान त्रुटि हुई।"
+        }
+      },
+      "detail": {
+        "loading": {
+          "edit": "डिवाइस डेटा लोड हो रहा है...",
+          "create": "फॉर्म तैयार किया जा रहा है..."
+        },
+        "title": {
+          "edit": "डिवाइस संपादित करें",
+          "create": "डिवाइस प्रोविजन करें"
+        },
+        "subtitle": {
+          "edit": "इस डिवाइस की रजिस्ट्री एंट्री अपडेट करें।",
+          "create": "ग्लोबल एसेट कोरिलेशन और डिवाइस रजिस्ट्री"
+        },
+        "buttons": {
+          "discard": "रद्द करें",
+          "saving": "सेव हो रहा है...",
+          "update": "रजिस्ट्री एंट्री अपडेट करें",
+          "create": "रजिस्ट्री एंट्री सेव करें"
+        },
+        "sections": {
+          "accountContext": "अकाउंट संदर्भ",
+          "accountContextSubtitle": "यह डिवाइस किस अकाउंट से संबंधित है चुनें।",
+          "identityLifecycle": "पहचान और लाइफसाइकल",
+          "identityLifecycleSubtitle": "हार्डवेयर पहचान और वर्गीकरण विवरण।",
+          "preview": "डिवाइस पहचान प्रीव्यू",
+          "previewSubtitle": "ऊपर के फ़ील्ड्स से स्वतः जनरेट।"
+        },
+        "fields": {
+          "account": "अकाउंट",
+          "selectAccount": "अकाउंट चुनें",
+          "manufacturer": "मैन्युफैक्चरर",
+          "selectManufacturer": "मैन्युफैक्चरर चुनें",
+          "deviceType": "डिवाइस प्रकार",
+          "selectDeviceType": "डिवाइस प्रकार चुनें",
+          "deviceNo": "डिवाइस नंबर",
+          "deviceNoPlaceholder": "उदा. DEV-001",
+          "serial": "IMEI / सीरियल",
+          "serialPlaceholder": "हार्डवेयर पहचान कोड"
+        },
+        "preview": {
+          "deviceType": "डिवाइस प्रकार",
+          "manufacturer": "मैन्युफैक्चरर",
+          "deviceNo": "डिवाइस नंबर",
+          "serial": "IMEI / सीरियल",
+          "empty": "—"
+        },
+        "toast": {
+          "loadFailed": "डिवाइस डेटा लोड करने में विफल",
+          "selectAccount": "कृपया अकाउंट चुनें",
+          "selectManufacturer": "कृपया मैन्युफैक्चरर चुनें",
+          "selectDeviceType": "कृपया डिवाइस प्रकार चुनें",
+          "serialRequired": "IMEI / सीरियल नंबर आवश्यक है",
+          "saved": "डिवाइस सफलतापूर्वक सेव हुआ",
+          "operationFailed": "ऑपरेशन विफल",
+          "errorOccurred": "एक त्रुटि हुई"
+        }
+      }
+    }
+  }
+}

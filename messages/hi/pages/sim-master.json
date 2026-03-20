@@ -1,0 +1,104 @@
+{
+  "pages": {
+    "simMaster": {
+      "list": {
+        "title": "SIM मास्टर",
+        "subtitle": "ग्लोबल SIM इन्वेंट्री, कैरियर कॉन्ट्रैक्ट और MSISDN मैपिंग को प्रबंधित करें।",
+        "breadcrumbs": {
+          "fleet": "फ्लीट",
+          "current": "SIM मास्टर"
+        },
+        "addButton": "SIM जोड़ें",
+        "export": "एक्सपोर्ट",
+        "searchPlaceholder": "ICCID या MSISDN से खोजें...",
+        "table": {
+          "iccid": "ICCID पहचान",
+          "msisdn": "लाइन नंबर (MSISDN)",
+          "status": "कनेक्टिविटी स्थिति",
+          "contractExpiry": "कॉन्ट्रैक्ट समाप्ति",
+          "lastUpdated": "अंतिम अपडेट"
+        },
+        "metrics": {
+          "totalSims": "कुल SIM",
+          "enabled": "सक्षम",
+          "disabled": "अक्षम",
+          "activeCarriers": "सक्रिय कैरियर्स"
+        },
+        "delete": {
+          "title": "SIM हटाएं",
+          "message": "क्या आप SIM \"{iccid}\" को रजिस्ट्री से हटाना चाहते हैं? यह कार्रवाई वापस नहीं हो सकती।",
+          "confirm": "हटाएं",
+          "cancel": "रद्द करें"
+        },
+        "toast": {
+          "loadError": "SIM लोड करते समय त्रुटि हुई",
+          "removed": "SIM रजिस्ट्री से हटा दिया गया!",
+          "deleteFailed": "SIM हटाने में विफल",
+          "deleteError": "हटाने के दौरान त्रुटि हुई।",
+          "exportSoon": "एक्सपोर्ट जल्द आएगा!"
+        }
+      },
+      "detail": {
+        "loading": {
+          "edit": "SIM डेटा लोड हो रहा है...",
+          "create": "फॉर्म तैयार किया जा रहा है..."
+        },
+        "title": {
+          "edit": "SIM कार्ड संपादित करें",
+          "create": "SIM कार्ड रजिस्टर करें"
+        },
+        "subtitle": {
+          "edit": "SIM रजिस्ट्री एंट्री अपडेट करें।",
+          "create": "सब्सक्राइबर आइडेंटिटी मॉड्यूल"
+        },
+        "buttons": {
+          "discard": "रद्द करें",
+          "saving": "सेव हो रहा है...",
+          "update": "SIM फ़ाइल अपडेट करें",
+          "create": "SIM फ़ाइल सेव करें"
+        },
+        "sections": {
+          "hardwareIdentity": "हार्डवेयर पहचान",
+          "carrierDetails": "कैरियर विवरण",
+          "carrierDetailsSubtitle": "नेटवर्क प्रोवाइडर और कॉन्ट्रैक्ट जानकारी।",
+          "provisioningStatus": "प्रोविजनिंग स्थिति"
+        },
+        "fields": {
+          "accountContext": "अकाउंट संदर्भ",
+          "selectAccount": "अकाउंट चुनें",
+          "iccid": "ICCID पहचान",
+          "iccidPlaceholder": "89...",
+          "msisdn": "MSISDN नंबर",
+          "msisdnPlaceholder": "+00 ...",
+          "imsi": "IMSI कोड",
+          "imsiPlaceholder": "संख्यात्मक आईडी",
+          "networkProvider": "नेटवर्क प्रोवाइडर",
+          "selectCarrier": "कैरियर चुनें",
+          "activatedOn": "सक्रिय तिथि",
+          "contractExpiry": "कॉन्ट्रैक्ट समाप्ति"
+        },
+        "status": {
+          "title": "कनेक्टिविटी प्रोविजनिंग स्थिति",
+          "subtitle": "केवल सक्षम SIM ही हार्डवेयर से जोड़ी जा सकती हैं।",
+          "enabled": "सक्षम",
+          "disabled": "अक्षम"
+        },
+        "validation": {
+          "iccidRange": "ICCID केवल 19-20 अंकों का होना चाहिए ({count} दर्ज)",
+          "imsiLength": "IMSI ठीक 15 अंकों का होना चाहिए ({count}/15)"
+        },
+        "toast": {
+          "notFound": "SIM नहीं मिला",
+          "loadFailed": "डेटा लोड करने में विफल",
+          "selectAccount": "कृपया अकाउंट चुनें",
+          "iccidRequired": "ICCID आवश्यक है",
+          "iccidRange": "ICCID केवल 19 या 20 अंकों का होना चाहिए",
+          "selectProvider": "कृपया नेटवर्क प्रोवाइडर चुनें",
+          "saved": "SIM सफलतापूर्वक सेव हुआ!",
+          "operationFailed": "ऑपरेशन विफल",
+          "errorOccurred": "एक त्रुटि हुई"
+        }
+      }
+    }
+  }
+}

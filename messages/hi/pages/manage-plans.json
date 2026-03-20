@@ -1,0 +1,79 @@
+{
+  "pages": {
+    "managePlans": {
+      "list": {
+        "title": "प्लान प्रबंधन",
+        "subtitle": "मल्टी-टेनेंट अकाउंट श्रेणियों के लिए ग्लोबल प्राइसिंग ब्लूप्रिंट डिज़ाइन करें।",
+        "breadcrumbs": {
+          "billing": "बिलिंग",
+          "current": "प्लान प्रबंधन"
+        },
+        "addButton": "प्लान बनाएं",
+        "searchPlaceholder": "सभी फ़ील्ड में खोजें...",
+        "table": {
+          "no": "क्रमांक",
+          "planName": "प्लान नाम",
+          "category": "श्रेणी",
+          "pricing": "प्राइसिंग",
+          "status": "स्थिति"
+        },
+        "toast": {
+          "deleteFailed": "प्लान हटाने में विफल",
+          "fetchFailed": "प्लान प्राप्त करने में विफल",
+          "genericError": "कुछ गलत हो गया।"
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "प्लान संपादित करें",
+          "create": "नया प्लान बनाएं"
+        },
+        "subtitle": "प्राइसिंग, फीचर्स और सब्सक्रिप्शन विवरण कॉन्फ़िगर करें।",
+        "buttons": {
+          "cancel": "रद्द करें",
+          "saving": "सेव हो रहा है...",
+          "update": "प्लान अपडेट करें",
+          "create": "प्लान बनाएं"
+        },
+        "status": {
+          "loading": "लोड हो रहा है...",
+          "updated": "प्लान सफलतापूर्वक अपडेट हुआ!",
+          "created": "प्लान सफलतापूर्वक बनाया गया!",
+          "saveFailed": "प्लान सेव करने में विफल",
+          "saveError": "प्लान सेव करते समय त्रुटि हुई",
+          "dropdownFailed": "ड्रॉपडाउन डेटा लोड करने में विफल",
+          "planLoadFailed": "प्लान विवरण लोड करने में विफल"
+        },
+        "sections": {
+          "structuralDefinitions": "स्ट्रक्चरल डेफिनिशन्स",
+          "structuralDefinitionsSubtitle": "मूल पहचान और टेनेंट-स्कोप विशेषताएं।",
+          "financialDefinitionLayer": "फाइनेंशियल डेफिनिशन लेयर",
+          "financialDefinitionLayerSubtitle": "सेटअप और रिकरिंग बिलिंग पैरामीटर्स निर्धारित करें।",
+          "entitlementModuleMatrix": "एंटाइटलमेंट मॉड्यूल मैट्रिक्स",
+          "entitlementModuleMatrixSubtitle": "इस प्लान में शामिल मॉड्यूल और क्षमताएं सक्षम करें।",
+          "usageAndScalability": "उपयोग और स्केलेबिलिटी सीमाएं",
+          "usageAndScalabilitySubtitle": "ऑपरेशनल लिमिट्स और रिसोर्स सीमाएं तय करें।",
+          "dedicatedSupport": "समर्पित सपोर्ट लाइन",
+          "dedicatedSupportSubtitle": "इस प्लान स्तर के लिए विशेष सपोर्ट चैनल तय करें।",
+          "adminGuard": "एडमिन गार्ड सेटिंग्स",
+          "blueprint": "प्लान ब्लूप्रिंट",
+          "blueprintSubtitle": "लाइव कॉन्फ़िगरेशन सारांश।"
+        },
+        "labels": {
+          "category": "श्रेणी:",
+          "cycle": "चक्र:",
+          "currency": "मुद्रा:",
+          "usersLimit": "यूजर सीमा:",
+          "activeFeatures": "सक्रिय फीचर्स:",
+          "setupFee": "सेटअप शुल्क",
+          "contractTerm": "कॉन्ट्रैक्ट अवधि",
+          "recurringCharges": "रिकरिंग शुल्क (वर्ष 2+)",
+          "amc": "AMC:",
+          "platform": "प्लेटफ़ॉर्म:",
+          "na": "N/A",
+          "unlimited": "असीमित"
+        }
+      }
+    }
+  }
+}

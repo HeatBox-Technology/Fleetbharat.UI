@@ -1,0 +1,106 @@
+{
+  "pages": {
+    "formmaster": {
+      "list": {
+        "title": "फॉर्म मास्टर",
+        "subtitle": "एप्लिकेशन फॉर्म, मॉड्यूल, रूट और दृश्यता प्रबंधित करें।",
+        "breadcrumbs": {
+          "configurations": "कॉन्फ़िगरेशन",
+          "current": "फॉर्म मास्टर"
+        },
+        "addButton": "फॉर्म जोड़ें",
+        "loading": "फॉर्म लोड हो रहे हैं...",
+        "searchPlaceholder": "नाम, कोड या मॉड्यूल से फॉर्म खोजें...",
+        "table": {
+          "no": "क्रमांक",
+          "formCode": "फॉर्म कोड",
+          "formName": "फॉर्म नाम",
+          "module": "मॉड्यूल",
+          "pageUrl": "पेज URL",
+          "status": "स्थिति"
+        },
+        "status": {
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय"
+        },
+        "delete": {
+          "title": "फॉर्म हटाएं",
+          "message": "क्या आप \"{name}\" को हटाना चाहते हैं? यह कार्रवाई वापस नहीं हो सकती।",
+          "confirm": "हटाएं",
+          "cancel": "रद्द करें"
+        },
+        "toast": {
+          "fetchFailed": "फॉर्म प्राप्त करने में विफल",
+          "deleted": "फॉर्म सफलतापूर्वक हटाया गया",
+          "deleteFailed": "फॉर्म हटाने में विफल"
+        }
+      },
+      "detail": {
+        "loading": "फॉर्म विवरण लोड हो रहा है...",
+        "title": {
+          "edit": "फॉर्म संपादित करें",
+          "create": "नया फॉर्म बनाएं"
+        },
+        "section": {
+          "title": "फॉर्म जानकारी",
+          "subtitle": "फॉर्म कोड, रूट, मॉड्यूल और दृश्यता विकल्प कॉन्फ़िगर करें।"
+        },
+        "fields": {
+          "formCode": "फॉर्म कोड",
+          "formCodePlaceholder": "उदा. USER-001",
+          "formName": "फॉर्म नाम",
+          "formNamePlaceholder": "उदा. Roles & Permissions",
+          "moduleName": "मॉड्यूल नाम",
+          "moduleNamePlaceholder": "उदा. User-Management",
+          "pageUrl": "पेज URL",
+          "pageUrlPlaceholder": "उदा. /users/roles-permissions",
+          "iconName": "आइकन नाम",
+          "iconNamePlaceholder": "उदा. Shield",
+          "sortOrder": "क्रम क्रमांक",
+          "sortOrderPlaceholder": "0",
+          "formModuleId": "फॉर्म मॉड्यूल आईडी",
+          "formModuleIdPlaceholder": "0",
+          "filterConfigJson": "फ़िल्टर कॉन्फ़िग JSON",
+          "filterConfigJsonPlaceholder": "उदा. JSON ऑब्जेक्ट स्ट्रिंग"
+        },
+        "toggles": {
+          "isMenu": {
+            "title": "मेनू में दिखाएं",
+            "description": "इसे सक्षम करने पर यह फॉर्म मेनू में दिखाई देगा।"
+          },
+          "isBulk": {
+            "title": "बल्क अपलोड सक्षम",
+            "description": "यदि यह फॉर्म बल्क अपलोड सपोर्ट करता है तो सक्षम करें।"
+          },
+          "isVisible": {
+            "title": "दृश्यमान",
+            "description": "UI लेयर्स में फॉर्म की दृश्यता टॉगल करें।"
+          },
+          "isActive": {
+            "title": "सक्रिय",
+            "description": "निष्क्रिय फॉर्म को अक्षम माना जाएगा।"
+          }
+        },
+        "buttons": {
+          "cancel": "रद्द करें",
+          "creating": "बनाया जा रहा है...",
+          "updating": "अपडेट हो रहा है...",
+          "create": "फॉर्म बनाएं",
+          "update": "फॉर्म अपडेट करें"
+        },
+        "toast": {
+          "fetchFailed": "फॉर्म प्राप्त करने में विफल",
+          "fetchDetailsFailed": "फॉर्म विवरण प्राप्त करने में विफल",
+          "formCodeRequired": "फॉर्म कोड आवश्यक है",
+          "formNameRequired": "फॉर्म नाम आवश्यक है",
+          "moduleNameRequired": "मॉड्यूल नाम आवश्यक है",
+          "pageUrlRequired": "पेज URL आवश्यक है",
+          "filterConfigInvalid": "फ़िल्टर कॉन्फ़िग JSON वैध JSON होना चाहिए",
+          "created": "फॉर्म सफलतापूर्वक बनाया गया",
+          "updated": "फॉर्म सफलतापूर्वक अपडेट हुआ",
+          "saveFailed": "फॉर्म सेव करने में विफल"
+        }
+      }
+    }
+  }
+}

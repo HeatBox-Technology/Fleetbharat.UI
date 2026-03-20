@@ -1,0 +1,96 @@
+{
+  "pages": {
+    "whiteLabel": {
+      "list": {
+        "title": "व्हाइट लेबल",
+        "subtitle": "पहचान, टैक्सोनॉमी और ग्लोबल पैरामीटर्स को प्रबंधित करें।",
+        "breadcrumbs": {
+          "accounts": "अकाउंट्स",
+          "current": "व्हाइट लेबल"
+        },
+        "addButton": "ब्रांडिंग प्रोविजन करें",
+        "loading": "व्हाइट लेबल लोड हो रहे हैं...",
+        "searchPlaceholder": "सभी फ़ील्ड में खोजें...",
+        "table": {
+          "account": "अकाउंट",
+          "domain": "डोमेन",
+          "theme": "थीम",
+          "status": "स्थिति"
+        },
+        "delete": {
+          "title": "व्हाइट लेबल हटाएं",
+          "message": "क्या आप \"{account}\" के लिए व्हाइट लेबल हटाना चाहते हैं? यह कार्रवाई वापस नहीं हो सकती।",
+          "confirm": "हटाएं",
+          "cancel": "रद्द करें"
+        },
+        "toast": {
+          "deleted": "व्हाइट लेबल सफलतापूर्वक हटाया गया!",
+          "deleteFailed": "व्हाइट लेबल हटाने में विफल",
+          "deleteError": "हटाने के दौरान त्रुटि हुई।"
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "ब्रांडिंग संपादित करें",
+          "create": "ब्रांडिंग प्रोविजन करें"
+        },
+        "buttons": {
+          "cancel": "रद्द करें",
+          "saving": "सेव हो रहा है...",
+          "update": "व्हाइटलेबल अपडेट करें",
+          "activate": "व्हाइटलेबल सक्रिय करें"
+        },
+        "loading": "लोड हो रहा है...",
+        "sections": {
+          "coreInstanceMapping": "कोर इंस्टेंस मैपिंग",
+          "visualIdentitySystems": "विजुअल आइडेंटिटी सिस्टम्स",
+          "identityBlueprint": "आईडेंटिटी ब्लूप्रिंट"
+        },
+        "labels": {
+          "account": "अकाउंट",
+          "selectAccount": "अकाउंट चुनें",
+          "customEntryFqdn": "कस्टम एंट्री FQDN",
+          "customEntryFqdnPlaceholder": "portal.partner.com",
+          "brandName": "ब्रांड नाम",
+          "brandNamePlaceholder": "ब्रांड नाम दर्ज करें",
+          "logoUrl": "लोगो URL",
+          "logoUrlPlaceholder": "https://cdn.example.com/logo.png",
+          "primaryLogo": "प्राइमरी लोगो",
+          "appLogo": "ऐप लोगो",
+          "mobileLogo": "मोबाइल लोगो",
+          "favicon": "फेविकॉन",
+          "logoDark": "डार्क लोगो",
+          "logoLight": "लाइट लोगो",
+          "uploadedUrlPlaceholder": "अपलोड की गई URL यहां दिखाई देगी",
+          "noImagePreview": "इमेज प्रीव्यू उपलब्ध नहीं",
+          "primaryColor": "प्राथमिक रंग",
+          "secondaryColor": "द्वितीयक रंग",
+          "activeStatus": "सक्रिय स्थिति",
+          "fqdn": "FQDN:",
+          "accountCaps": "अकाउंट:",
+          "statusCaps": "स्थिति:",
+          "colorPreview": "रंग पूर्वावलोकन"
+        },
+        "summary": {
+          "subtitle": "रीब्रांडेड पोर्टल का दृश्य सारांश।",
+          "notSet": "सेट नहीं",
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय"
+        },
+        "modes": {
+          "updated": "अपडेट हुआ",
+          "created": "बनाया गया"
+        },
+        "toast": {
+          "selectAccount": "कृपया लक्षित अकाउंट चुनें",
+          "enterFqdn": "कृपया कस्टम FQDN दर्ज करें",
+          "logoUploadFailed": "लोगो अपलोड विफल",
+          "loadFailed": "व्हाइट लेबल डेटा लोड करने में विफल",
+          "saved": "व्हाइट लेबल {mode} सफलतापूर्वक!",
+          "saveFailed": "विफल: {message}",
+          "saveError": "सेव करते समय त्रुटि हुई"
+        }
+      }
+    }
+  }
+}

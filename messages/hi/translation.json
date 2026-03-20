@@ -1,0 +1,333 @@
+{
+  "common": {
+    "appName": "Agentix",
+    "loading": "लोड हो रहा है...",
+    "save": "सेव करें",
+    "cancel": "रद्द करें",
+    "create": "बनाएं",
+    "update": "अपडेट करें",
+    "delete": "हटाएं"
+  },
+  "permissions": {
+    "noRead": "आपको यह पेज देखने की अनुमति नहीं है।",
+    "noWrite": "आपको नया रिकॉर्ड बनाने की अनुमति नहीं है।",
+    "noUpdate": "आपको रिकॉर्ड अपडेट करने की अनुमति नहीं है।",
+    "noDelete": "आपको रिकॉर्ड हटाने की अनुमति नहीं है।"
+  },
+  "pages": {
+    "devicemap": {
+      "list": {
+        "noReadPermission": "आपको यह पेज देखने की अनुमति नहीं है।",
+        "title": "व्हीकल डिवाइस मैपिंग",
+        "subtitle": "मैप किए गए डिवाइस और असाइनमेंट हेल्थ प्रबंधित करें।",
+        "breadcrumbs": {
+          "fleet": "फ्लीट",
+          "current": "व्हीकल डिवाइस मैपिंग"
+        },
+        "addButton": "डिवाइस असाइन करें",
+        "allAccounts": "सभी अकाउंट",
+        "loading": "डिवाइस मैपिंग लोड हो रही है...",
+        "searchPlaceholder": "डिवाइस मैप खोजें...",
+        "deleteTitle": "मैपिंग हटाएं",
+        "deleteMessage": "क्या आप \"{name}\" की मैपिंग हटाना चाहते हैं?",
+        "confirmDelete": "हटाएं",
+        "cancel": "रद्द करें",
+        "table": {
+          "no": "क्रम",
+          "vehicle": "वाहन",
+          "device": "डिवाइस",
+          "status": "स्थिति",
+          "assignedOn": "असाइन तिथि"
+        },
+        "metrics": {
+          "totalAssignments": "कुल असाइनमेंट",
+          "active": "सक्रिय",
+          "withIssues": "समस्या वाले"
+        },
+        "status": {
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय"
+        },
+        "toast": {
+          "fetchFailed": "डिवाइस मैपिंग लाने में विफल",
+          "deleted": "डिवाइस मैपिंग सफलतापूर्वक हटाई गई",
+          "deleteFailed": "डिवाइस मैपिंग हटाने में विफल",
+          "deleteError": "डिवाइस मैपिंग हटाने में त्रुटि"
+        }
+      },
+      "detail": {
+        "loadingDetails": "डिवाइस मैप डिटेल लोड हो रही है...",
+        "noReadPermission": "आपको डिवाइस मैपिंग देखने की अनुमति नहीं है।",
+        "createTitle": "डिवाइस असाइन करें",
+        "editTitle": "डिवाइस मैप संपादित करें",
+        "section": {
+          "parameters": "डिवाइस असाइनमेंट पैरामीटर्स",
+          "editDescription": "इस वाहन की मैपिंग डिटेल अपडेट करें।",
+          "createDescription": "नई वाहन-डिवाइस मैपिंग बनाएं।",
+          "statusTitle": "मैपिंग स्थिति",
+          "statusDescription": "निष्क्रिय मैपिंग सक्रिय असाइनमेंट से बाहर रहेंगी।"
+        },
+        "fields": {
+          "account": "अकाउंट",
+          "selectAccount": "अकाउंट चुनें",
+          "vehicle": "वाहन",
+          "selectVehicle": "वाहन चुनें",
+          "deviceType": "डिवाइस प्रकार",
+          "selectDeviceType": "डिवाइस प्रकार चुनें",
+          "hardware": "हार्डवेयर",
+          "selectHardware": "हार्डवेयर चुनें",
+          "sim": "सिम",
+          "selectSim": "सिम चुनें",
+          "simNumber": "सिम नंबर",
+          "simNumberPlaceholder": "सिम नंबर दर्ज करें",
+          "installationDate": "इंस्टॉलेशन तिथि",
+          "remarks": "टिप्पणी",
+          "remarksPlaceholder": "वैकल्पिक नोट जोड़ें..."
+        },
+        "buttons": {
+          "cancel": "रद्द करें",
+          "updating": "अपडेट हो रहा है...",
+          "creating": "बन रहा है...",
+          "update": "मैपिंग अपडेट करें",
+          "create": "मैपिंग बनाएं"
+        },
+        "toast": {
+          "dropdownFailed": "ड्रॉपडाउन डेटा लोड करने में विफल",
+          "notFound": "डिवाइस मैप डिटेल नहीं मिली",
+          "fetchFailed": "डिवाइस मैप डिटेल लाने में विफल",
+          "noUpdatePermission": "आपको डिवाइस मैपिंग अपडेट करने की अनुमति नहीं है",
+          "noAddPermission": "आपको डिवाइस मैपिंग जोड़ने की अनुमति नहीं है",
+          "selectAccount": "कृपया अकाउंट चुनें",
+          "selectVehicle": "कृपया वाहन चुनें",
+          "selectDeviceType": "कृपया डिवाइस प्रकार चुनें",
+          "selectHardware": "कृपया हार्डवेयर चुनें",
+          "updated": "डिवाइस मैप सफलतापूर्वक अपडेट हुआ!",
+          "created": "डिवाइस मैप सफलतापूर्वक बना!",
+          "saveFailed": "सेव विफल",
+          "saveError": "डिवाइस मैप सेव करते समय त्रुटि हुई"
+        }
+      }
+    },
+    "vehicleGeofence": {
+      "list": {
+        "noReadPermission": "आपको यह पेज देखने की अनुमति नहीं है।",
+        "title": "व्हीकल जियोफेंस",
+        "subtitle": "वाहन और जियोफेंस असाइनमेंट मैपिंग प्रबंधित करें।",
+        "breadcrumbs": {
+          "fleet": "फ्लीट",
+          "current": "व्हीकल जियोफेंस"
+        },
+        "addButton": "जियोफेंस असाइन करें",
+        "allAccounts": "सभी अकाउंट",
+        "loading": "असाइनमेंट लोड हो रहे हैं...",
+        "searchPlaceholder": "असाइनमेंट खोजें...",
+        "deleteTitle": "असाइनमेंट हटाएं",
+        "deleteMessage": "क्या आप \"{name}\" का असाइनमेंट हटाना चाहते हैं?",
+        "confirmDelete": "हटाएं",
+        "cancel": "रद्द करें",
+        "table": {
+          "no": "क्रम",
+          "vehicle": "वाहन",
+          "geofence": "जियोफेंस",
+          "geometry": "ज्यामिति",
+          "remarks": "टिप्पणी",
+          "status": "स्थिति",
+          "createdOn": "बनाने की तिथि"
+        },
+        "metrics": {
+          "totalAssignments": "कुल असाइनमेंट",
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय"
+        },
+        "status": {
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय"
+        },
+        "toast": {
+          "fetchFailed": "व्हीकल जियोफेंस असाइनमेंट लाने में विफल",
+          "deleted": "असाइनमेंट सफलतापूर्वक हटाया गया",
+          "deleteFailed": "असाइनमेंट हटाने में विफल",
+          "deleteError": "असाइनमेंट हटाने में त्रुटि"
+        }
+      },
+      "detail": {
+        "loadingDetails": "असाइनमेंट डिटेल लोड हो रही है...",
+        "noReadPermission": "आपको यह पेज देखने की अनुमति नहीं है।",
+        "createTitle": "व्हीकल जियोफेंस असाइनमेंट बनाएं",
+        "editTitle": "व्हीकल जियोफेंस असाइनमेंट संपादित करें",
+        "section": {
+          "assignmentParameters": "असाइनमेंट पैरामीटर्स",
+          "editDescription": "इस व्हीकल जियोफेंस मैपिंग की डिटेल अपडेट करें।",
+          "createDescription": "नई व्हीकल और जियोफेंस असाइनमेंट बनाएं।",
+          "statusTitle": "असाइनमेंट स्थिति",
+          "statusDescription": "निष्क्रिय असाइनमेंट सक्रिय मैपिंग ऑपरेशन से बाहर रहेंगे।"
+        },
+        "fields": {
+          "account": "अकाउंट",
+          "selectAccount": "अकाउंट चुनें",
+          "vehicle": "वाहन",
+          "selectVehicle": "वाहन चुनें",
+          "geofence": "जियोफेंस",
+          "selectGeofence": "जियोफेंस चुनें",
+          "remarks": "टिप्पणी",
+          "remarksPlaceholder": "टिप्पणी जोड़ें..."
+        },
+        "buttons": {
+          "cancel": "रद्द करें",
+          "updating": "अपडेट हो रहा है...",
+          "creating": "बन रहा है...",
+          "update": "असाइनमेंट अपडेट करें",
+          "create": "असाइनमेंट बनाएं"
+        },
+        "toast": {
+          "loadDropdownFailed": "ड्रॉपडाउन डेटा लोड करने में विफल",
+          "notFound": "असाइनमेंट नहीं मिला",
+          "fetchFailed": "असाइनमेंट डिटेल लाने में विफल",
+          "noUpdatePermission": "आपको व्हीकल जियोफेंस अपडेट करने की अनुमति नहीं है",
+          "noAddPermission": "आपको व्हीकल जियोफेंस जोड़ने की अनुमति नहीं है",
+          "selectAccount": "कृपया अकाउंट चुनें",
+          "selectVehicle": "कृपया वाहन चुनें",
+          "selectGeofence": "कृपया जियोफेंस चुनें",
+          "updated": "असाइनमेंट सफलतापूर्वक अपडेट हुआ",
+          "created": "असाइनमेंट सफलतापूर्वक बना",
+          "saveFailed": "असाइनमेंट सेव करने में विफल",
+          "saveError": "असाइनमेंट सेव करने में त्रुटि"
+        }
+      }
+    },
+    "routeMaster": {
+      "detail": {
+        "loadingDetails": "रूट डिटेल लोड हो रही है...",
+        "noReadPermission": "आपको यह पेज देखने की अनुमति नहीं है।",
+        "createTitle": "रूट बनाएं",
+        "editTitle": "रूट संपादित करें",
+        "subtitle": "रूट स्टॉप कॉन्फ़िगर करें, मैप प्रीव्यू देखें और मेट्रिक्स सेव करें।",
+        "breadcrumbs": {
+          "fleet": "फ्लीट",
+          "master": "रूट मास्टर",
+          "create": "बनाएं",
+          "edit": "संपादित करें"
+        },
+        "buttons": {
+          "saving": "सेव हो रहा है...",
+          "createRoute": "रूट बनाएं",
+          "updateRoute": "रूट अपडेट करें",
+          "loadingRoute": "रूट लोड हो रहा है...",
+          "viewRoute": "रूट देखें"
+        },
+        "fields": {
+          "account": "अकाउंट",
+          "selectAccount": "अकाउंट चुनें",
+          "selectedAccount": "चयनित अकाउंट ({id})",
+          "routeName": "रूट नाम",
+          "routeNamePlaceholder": "रूट नाम दर्ज करें",
+          "geofenceRelated": "जियोफेंस संबंधित",
+          "yes": "हाँ",
+          "no": "नहीं",
+          "startPoint": "प्रारंभ बिंदु (जियोफेंस)",
+          "addGeofence": "जियोफेंस जोड़ें",
+          "selectStartGeofence": "प्रारंभ जियोफेंस चुनें",
+          "stopLabel": "स्टॉप {number}",
+          "selectStopGeofence": "स्टॉप जियोफेंस चुनें",
+          "addStop": "स्टॉप जोड़ें",
+          "endPoint": "अंतिम बिंदु (जियोफेंस)",
+          "selectEndGeofence": "अंतिम जियोफेंस चुनें",
+          "status": "स्थिति",
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय",
+          "geofenceFallback": "जियोफेंस {id}"
+        },
+        "section": {
+          "routePreview": "रूट प्रीव्यू",
+          "mapsLoadFailed": "Google Maps SDK लोड नहीं हुआ",
+          "loadingMap": "मैप लोड हो रहा है..."
+        },
+        "table": {
+          "startGeofence": "प्रारंभ जियोफेंस",
+          "endGeofence": "अंतिम जियोफेंस",
+          "distance": "यात्रा दूरी (किमी)",
+          "time": "यात्रा समय (मिनट)",
+          "totalDistance": "कुल दूरी:",
+          "totalTime": "कुल समय:"
+        },
+        "toast": {
+          "notFound": "रूट नहीं मिला",
+          "fetchFailed": "रूट डिटेल लाने में विफल",
+          "geofenceDropdownFailed": "जियोफेंस ड्रॉपडाउन लोड करने में विफल",
+          "mapsNotLoaded": "Google Maps SDK लोड नहीं हुआ",
+          "selectStartEndGeofence": "कृपया प्रारंभ और अंतिम जियोफेंस चुनें",
+          "selectAtLeastStartEnd": "कम से कम प्रारंभ और अंतिम जियोफेंस चुनें",
+          "resolveGeofenceFailed": "आईडी {id} के लिए जियोफेंस कोऑर्डिनेट नहीं मिल सके",
+          "encodedPathUnavailable": "चुने गए पॉइंट्स के लिए एन्कोडेड रूट पाथ उपलब्ध नहीं है",
+          "previewFailed": "चुने गए पॉइंट्स के लिए रूट प्रीव्यू बनाने में विफल",
+          "selectAccount": "कृपया अकाउंट चुनें",
+          "enterRouteName": "कृपया रूट नाम दर्ज करें",
+          "startEndMustDiffer": "प्रारंभ और अंतिम जियोफेंस अलग होने चाहिए",
+          "selectGeofenceForEachStop": "हर जोड़े गए स्टॉप के लिए जियोफेंस चुनें",
+          "noUpdatePermission": "आपको रूट मास्टर अपडेट करने की अनुमति नहीं है",
+          "noAddPermission": "आपको रूट मास्टर जोड़ने की अनुमति नहीं है",
+          "routePathMissing": "रूट पाथ खाली है। View Route क्लिक करके फिर प्रयास करें।",
+          "created": "रूट सफलतापूर्वक बना",
+          "updated": "रूट सफलतापूर्वक अपडेट हुआ",
+          "saveFailed": "रूट सेव करने में विफल",
+          "saveError": "रूट सेव करने में त्रुटि"
+        }
+      }
+    },
+    "vehicles": {
+      "detail": {
+        "loading": {
+          "edit": "वाहन डेटा लोड हो रहा है...",
+          "create": "फॉर्म तैयार किया जा रहा है..."
+        },
+        "title": {
+          "edit": "वाहन संपादित करें",
+          "create": "वाहन प्रोविजन करें"
+        },
+        "subtitle": {
+          "edit": "इस एसेट की रजिस्ट्री एंट्री अपडेट करें।",
+          "create": "एसेट पहचान और रजिस्ट्री"
+        },
+        "buttons": {
+          "discard": "रद्द करें",
+          "saving": "सेव हो रहा है...",
+          "update": "रजिस्ट्री एंट्री अपडेट करें",
+          "create": "रजिस्ट्री एंट्री सेव करें"
+        },
+        "sections": {
+          "identification": "वाहन पहचान",
+          "classification": "वर्गीकरण",
+          "classificationSubtitle": "मैप आइकन और थ्रेसहोल्ड टाइप से लिए जाते हैं।",
+          "operationalStatus": "ऑपरेशनल स्थिति"
+        },
+        "fields": {
+          "account": "अकाउंट",
+          "selectAccount": "अकाउंट चुनें",
+          "registration": "रजिस्ट्रेशन नंबर",
+          "registrationPlaceholder": "उदा. HR-26-BY-1234",
+          "vin": "VIN / चेसिस नंबर",
+          "vinPlaceholder": "17-अक्षर VIN",
+          "vinHint": "VIN ठीक 17 अक्षरों का होना चाहिए",
+          "vehicleType": "वाहन प्रकार",
+          "selectType": "प्रकार चुनें"
+        },
+        "status": {
+          "title": "ऑपरेशनल लाइफसाइकल स्थिति",
+          "subtitle": "यह लाइव ट्रैकिंग में एसेट की दृश्यता तय करती है।",
+          "active": "सक्रिय",
+          "inactive": "निष्क्रिय"
+        },
+        "toast": {
+          "notFound": "वाहन नहीं मिला",
+          "loadFailed": "डेटा लोड करने में विफल",
+          "selectAccount": "कृपया अकाउंट चुनें",
+          "registrationRequired": "रजिस्ट्रेशन नंबर आवश्यक है",
+          "selectVehicleType": "कृपया वाहन प्रकार चुनें",
+          "saved": "वाहन सफलतापूर्वक सेव हुआ!",
+          "operationFailed": "ऑपरेशन विफल",
+          "errorOccurred": "एक त्रुटि हुई"
+        }
+      }
+    }
+  }
+}
