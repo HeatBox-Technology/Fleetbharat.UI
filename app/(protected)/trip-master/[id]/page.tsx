@@ -880,10 +880,9 @@ export default function TripPlannerPage() {
                 </h4>
                 <div className="space-y-4">
                   {nodes.map((node, nodeIdx) => (
-                    <div key={node.id} className="relative pl-20">
-                      <div className="absolute left-9 top-0 bottom-0 w-px bg-slate-200" />
-                      <div className="flex items-start gap-4 mb-4 border border-slate-200 rounded-2xl bg-slate-50/40 shadow-sm p-6">
-                        <div className="flex flex-col items-center gap-2">
+                    <div key={node.id} className="relative mb-4 pl-20">
+                      <div className="absolute left-7 top-16 bottom-0 w-px bg-slate-200" />
+                      <div className="absolute left-0 top-6 flex flex-col items-center gap-2">
                           <div
                             className={cn(
                               "w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm",
@@ -913,7 +912,8 @@ export default function TripPlannerPage() {
                             <div className="w-0.5 h-8 bg-gradient-to-b from-slate-300 to-slate-200" />
                           )}
                         </div>
-                        <div className="flex-1">
+                        <div className="border border-slate-200 rounded-2xl bg-slate-50/40 shadow-sm p-6">
+                          <div className="flex-1">
                           <div className="flex items-start justify-between mb-3">
                             <div>
                               <p

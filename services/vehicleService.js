@@ -100,11 +100,23 @@ export const deleteVehicle = async (id) => {
 
 export const exportVehicles = async (accountId, search) => {
   try {
-    const res = await api.get(`/api/vehicles/export`, {
-      params: { accountId, search },
+    const query = new URLSearchParams();
+    const resolvedAccountId = Number(accountId || 0);
+    if (resolvedAccountId > 0) {
+      query.set("accountId", String(resolvedAccountId));
+    }
+    if (String(search || "").trim()) {
+      query.set("search", String(search).trim());
+    }
+
+    const queryString = query.toString();
+    const res = await api.get(
+      `/api/vehicles/export${queryString ? `?${queryString}` : ""}`,
+      {
       responseType: "blob",
       headers: { Accept: "*/*" },
-    });
+      },
+    );
 
     const contentType = res.headers?.["content-type"] || "text/csv";
     const blob = new Blob([res.data], { type: contentType });

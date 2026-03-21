@@ -1,12 +1,14 @@
 "use client";
 
-import { Building2, ChevronDown, RefreshCw } from "lucide-react";
+import { Ban, Building2, CheckCircle2, ChevronDown, MapPinned, RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import CommonTable from "@/components/CommonTable";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { MetricCard } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
 import { useTheme } from "@/context/ThemeContext";
 import type { GeofenceZone, ZoneStatus } from "@/interfaces/geofence.interface";
@@ -843,6 +845,7 @@ export default function GeofencePage() {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader isVisible={loadingZones} text="Loading geofences..." />
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-2 sm:p-0 md:p-2`}
       >
@@ -912,6 +915,33 @@ export default function GeofencePage() {
             <RefreshCw className={`h-4 w-4 ${syncingAll ? "animate-spin" : ""}`} />
             {syncingAll ? "Syncing..." : "Sync All Unsynced"}
           </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+          <MetricCard
+            icon={MapPinned}
+            label="Total Zones"
+            value={summary.totalZones}
+            iconBgColor="bg-indigo-100"
+            iconColor="text-indigo-600"
+            isDark={isDark}
+          />
+          <MetricCard
+            icon={CheckCircle2}
+            label="Enabled"
+            value={summary.enabled}
+            iconBgColor="bg-green-100"
+            iconColor="text-green-600"
+            isDark={isDark}
+          />
+          <MetricCard
+            icon={Ban}
+            label="Disabled"
+            value={summary.disabled}
+            iconBgColor="bg-rose-100"
+            iconColor="text-rose-600"
+            isDark={isDark}
+          />
         </div>
 
         <div className="w-full">

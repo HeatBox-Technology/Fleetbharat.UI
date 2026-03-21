@@ -276,8 +276,13 @@ const Vehicles: React.FC = () => {
   };
 
   const handleExport = async () => {
+    if (!selectedAccountId || selectedAccountId <= 0) {
+      toast.error(t("toast.exportFailed"));
+      return;
+    }
+
     try {
-      const response = await exportVehicles(selectedAccountId, debouncedQuery);
+      const response = await exportVehicles(selectedAccountId, searchQuery);
       if (response?.success || Number(response?.statusCode) === 200) {
         toast.success(t("toast.exportSuccess"));
       } else {

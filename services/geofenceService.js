@@ -40,6 +40,39 @@ const normalizeCoordinate = (point = {}) => ({
   longitude: Number(point?.longitude ?? point?.lng ?? 0),
 });
 
+const toClassificationCode = (value = "") =>
+  String(value || "")
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, "_");
+
+const toClassificationLabel = (value = "") =>
+  String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+
+const normalizeClassificationPayload = (payload = {}) => {
+  const rawCode = String(payload?.classificationCode || "").trim();
+  const rawLabel = String(
+    payload?.classificationLabel || payload?.classification || "",
+  ).trim();
+
+  const classificationCode = toClassificationCode(rawCode || rawLabel);
+  const classificationLabel = toClassificationLabel(rawLabel || rawCode);
+
+  if (!classificationCode && !classificationLabel) {
+    return {};
+  }
+
+  return {
+    classification: classificationCode || classificationLabel,
+    classificationCode: classificationCode || undefined,
+    classificationLabel: classificationLabel || undefined,
+  };
+};
+
 const buildGeomPayload = (payload = {}) => {
   const geometryType = String(payload?.geometryType || "").toUpperCase();
   const coordinates = Array.isArray(payload?.coordinates)
@@ -117,6 +150,7 @@ export const createGeofence = async (payload) => {
     const resolvedAccountId = Number(accountId || 0);
     const finalPayload = {
       ...payload,
+      ...normalizeClassificationPayload(payload),
       ...buildGeomPayload(payload),
       createdBy: Number(payload?.createdBy || resolvedAccountId || 0),
     };
@@ -144,6 +178,7 @@ export const updateGeofence = async (id, payload) => {
     const resolvedAccountId = Number(payload?.accountId || accountId || 0);
     const finalPayload = {
       ...payload,
+      ...normalizeClassificationPayload(payload),
       ...buildGeomPayload(payload),
       accountId: resolvedAccountId,
       updatedBy: Number(payload?.updatedBy || resolvedAccountId || 0),

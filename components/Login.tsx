@@ -1,14 +1,14 @@
 "use client";
 
+import { useColor } from "@/context/ColorContext";
+import { loginUser, verify2FA } from "@/services/authService";
+import { getUserRoleData } from "@/services/commonServie";
+import { applyWhiteLabelColors } from "@/utils/themeUtils";
 import Cookies from "js-cookie";
 import { AtSign, Eye, EyeOff, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useColor } from "@/context/ColorContext";
-import { loginUser, verify2FA } from "@/services/authService";
-import { getUserRoleData } from "@/services/commonServie";
-import { applyWhiteLabelColors } from "@/utils/themeUtils";
 
 interface LoginComponentProps {
   onSwitchToRegister: () => void;

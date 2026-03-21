@@ -1,20 +1,10 @@
 // src/features/auth/authService.js
 import api from "./apiService";
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const mobileRegex = /^\d{10}$/;
-
 export const loginUser = async (identifier, password) => {
   const trimmedIdentifier = String(identifier || "").trim();
   const payload = {
-    email: emailRegex.test(trimmedIdentifier) ? trimmedIdentifier : "",
-    mobileNo: mobileRegex.test(trimmedIdentifier) ? trimmedIdentifier : "",
-    userName:
-      !emailRegex.test(trimmedIdentifier) && !mobileRegex.test(trimmedIdentifier)
-        ? trimmedIdentifier
-        : "",
-    identifier: trimmedIdentifier,
-    loginId: trimmedIdentifier,
+    email: trimmedIdentifier,
     password,
   };
 
