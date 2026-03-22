@@ -7,16 +7,16 @@ const SearchableDropdown = dynamic(() => import("@/components/SearchableDropdown
 import TableHeader from "@/components/TableHeader";
 import CommonTable from "@/components/CommonTable";
 import { getVehicleDropdown } from "@/services/commonServie";
-import toast from "react-hot-toast";
-import axios from "axios";
+import { toast } from "react-toastify";
 import api from "@/services/apiService";
 
 const MovementReportPage = () => {
-  // State declarations
   const [organizations, setOrganizations] = useState<SearchableOption[]>([]);
-  const [selectedOrganizations, setSelectedOrganizations] = useState<SearchableOption[]>([]);
+  const [selectedOrganization, setSelectedOrganization] =
+    useState<SearchableOption | null>(null);
   const [vehicles, setVehicles] = useState<SearchableOption[]>([]);
-  const [selectedVehicles, setSelectedVehicles] = useState<SearchableOption[]>([]);
+  const [selectedVehicle, setSelectedVehicle] =
+    useState<SearchableOption | null>(null);
   const today = new Date().toISOString().slice(0, 10);
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
@@ -24,17 +24,21 @@ const MovementReportPage = () => {
   const [data, setData] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Fetch organizations (accounts) on mount
   useEffect(() => {
     const fetchOrganizations = async () => {
       try {
         const res = await api.get("/api/common/dropdowns/accounts");
         const orgOptions: SearchableOption[] = [
           { label: "All Company", value: "all" },
-          ...(res?.data || []).map((org: any) => ({ label: org.label, value: String(org.value) })),
+          ...((res?.data || []) as Array<{ label?: string; value?: string | number }>).map(
+            (org) => ({
+              label: org.label || "Unknown",
+              value: String(org.value ?? ""),
+            }),
+          ),
         ];
         setOrganizations(orgOptions);
-        setSelectedOrganizations([orgOptions[0]]);
+        setSelectedOrganization(orgOptions[0] ?? null);
       } catch (error: any) {
         toast.error(error?.response?.data?.message || "Failed to load organizations");
       }
@@ -42,30 +46,33 @@ const MovementReportPage = () => {
     fetchOrganizations();
   }, []);
 
-  // Fetch vehicles when organizations change
-  const fetchVehiclesForOrganizations = async (orgs: SearchableOption[]) => {
+  const fetchVehiclesForOrganization = async (
+    org: SearchableOption | null,
+  ) => {
     try {
-      const selectedOrgIds = orgs.filter(o => o.value !== "all").map(o => o.value);
-      let accountId = selectedOrgIds.length === 1 ? selectedOrgIds[0] : undefined;
+      const accountId =
+        org && org.value !== "all" ? String(org.value) : undefined;
       const res = await getVehicleDropdown(accountId);
+      const vehicleList = Array.isArray(res?.data) ? res.data : [];
       const vehicleOptions: SearchableOption[] = [
         { label: "All Vehicle", value: "all" },
-        ...(res?.data || []).map((v: any) => ({ label: v.label, value: String(v.value) })),
+        ...vehicleList.map((vehicle: { label?: string; value?: string | number }) => ({
+          label: vehicle.label || "Unknown",
+          value: String(vehicle.value ?? ""),
+        })),
       ];
       setVehicles(vehicleOptions);
-      setSelectedVehicles([vehicleOptions[0]]);
+      setSelectedVehicle(vehicleOptions[0] ?? null);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Failed to load vehicles");
     }
   };
 
-  // Initial fetch of vehicles for default org
   useEffect(() => {
-    if (selectedOrganizations.length > 0) {
-      fetchVehiclesForOrganizations(selectedOrganizations);
+    if (selectedOrganization) {
+      fetchVehiclesForOrganization(selectedOrganization);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedOrganizations]);
+  }, [selectedOrganization]);
 
   const columns: import("@/interfaces/table.interface").Column[] = [
     { key: "vehicleNo", label: "Vehicle", type: "text" },
@@ -93,26 +100,21 @@ const MovementReportPage = () => {
         <div className="w-full sm:w-64">
           <SearchableDropdown
             options={organizations}
-            value={selectedOrganizations}
-            onChange={(options) => {
-              const value = Array.isArray(options) ? options : options ? [options] : [];
-              setSelectedOrganizations(value);
-              fetchVehiclesForOrganizations(value);
+            value={selectedOrganization}
+            onChange={(option) => {
+              setSelectedOrganization(option);
             }}
             placeholder="All Company"
-            isMulti={true}
           />
         </div>
         <div className="w-full sm:w-64">
           <SearchableDropdown
             options={vehicles}
-            value={selectedVehicles}
-            onChange={(options) => {
-              const value = Array.isArray(options) ? options : options ? [options] : [];
-              setSelectedVehicles(value);
+            value={selectedVehicle}
+            onChange={(option) => {
+              setSelectedVehicle(option);
             }}
             placeholder="All Vehicle"
-            isMulti={true}
           />
         </div>
         <div className="w-full sm:w-48">
@@ -182,7 +184,7 @@ const MovementReportPage = () => {
       </div>
       <CommonTable
         columns={columns}
-        data={data.map(row => ({
+        data={data.map((row) => ({
           vehicleNo: row.vehicleNo ?? "NA",
           distanceKm: row.distanceKm ?? "NA",
           moving: row.moving ?? "NA",
@@ -203,5 +205,5 @@ const MovementReportPage = () => {
       />
     </div>
   );
-}
+};
 export default MovementReportPage;
