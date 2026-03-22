@@ -2,9 +2,58 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link id="app-favicon" rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Agentix</title>
+    <title>FleetBharat</title>
+    <script>
+      (function () {
+        try {
+          function resolveAssetUrl(assetPath) {
+            var path = String(assetPath || "").trim();
+            if (!path) return "";
+            if (/^https?:\/\//i.test(path)) return path;
+
+            var apiBaseUrl = "http://fleetbharat.com:8080";
+            var normalizedBase = String(apiBaseUrl || "").replace(/\/+$/, "");
+            var normalizedPath = path.startsWith("/") ? path : "/" + path;
+            return normalizedBase ? normalizedBase + normalizedPath : normalizedPath;
+          }
+
+          var userRaw = localStorage.getItem("user");
+          var whiteLabelRaw =
+            localStorage.getItem("whiteLabel") ||
+            localStorage.getItem("whiteLabelTheme");
+          var user = userRaw ? JSON.parse(userRaw) : {};
+          var whiteLabel = whiteLabelRaw ? JSON.parse(whiteLabelRaw) : {};
+
+          var brandName =
+            (whiteLabel && whiteLabel.brandName) ||
+            (user && user.whiteLabel && user.whiteLabel.brandName) ||
+            "IOT";
+          var rawLogoUrl =
+            (whiteLabel && (whiteLabel.faviconUrl || whiteLabel.faviconPath || whiteLabel.logoUrl || whiteLabel.logoPath)) ||
+            (user &&
+              user.whiteLabel &&
+              (user.whiteLabel.faviconUrl ||
+                user.whiteLabel.faviconPath ||
+                user.whiteLabel.logoUrl ||
+                user.whiteLabel.logoPath)) ||
+            "";
+          var logoUrl = resolveAssetUrl(rawLogoUrl);
+
+          document.title = brandName;
+
+          if (logoUrl) {
+            var faviconEl = document.getElementById("app-favicon");
+            if (faviconEl) {
+              faviconEl.setAttribute("href", logoUrl);
+            }
+          }
+        } catch (e) {
+          document.title = "FleetBharat";
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

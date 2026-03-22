@@ -124,15 +124,17 @@ function normalizeLiveTrackingRecord(record, fallbackVehicleNo = "", idx = 0) {
 
 function getStoredAccountId() {
   if (typeof window === "undefined") return 0;
-  const selectedAccountId = Number(localStorage.getItem("accountId") || 0);
-  if (selectedAccountId > 0) return selectedAccountId;
+
   try {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const userAccountId = Number(user?.accountId || 0);
-    return userAccountId > 0 ? userAccountId : 0;
+    if (userAccountId > 0) return userAccountId;
   } catch {
-    return 0;
+    // Ignore parse errors and fallback to selected account.
   }
+
+  const selectedAccountId = Number(localStorage.getItem("accountId") || 0);
+  return selectedAccountId > 0 ? selectedAccountId : 0;
 }
 
 export async function getLiveTrackingBatch(orgId) {

@@ -6,7 +6,7 @@ import { loadMessages } from "@/i18n/loadMessages";
 import RootClientWrapper from "./RootClientWrapper";
 
 export const metadata = {
-  title: "Agentix",
+  title: "FleetBharat",
   description: "Next.js version of your React app",
 };
 
