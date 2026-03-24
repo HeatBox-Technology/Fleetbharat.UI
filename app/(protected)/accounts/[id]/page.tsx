@@ -156,6 +156,17 @@ const EditAccount: React.FC = () => {
   const [states, setStates] = useState<State[]>([]);
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(!isCreateMode);
+  const [defaultSuperiorAccountId, setDefaultSuperiorAccountId] = useState("");
+
+  const getLoggedInAccountId = () => {
+    if (typeof window === "undefined") return "";
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      return String(user?.accountId || "").trim();
+    } catch {
+      return "";
+    }
+  };
 
   const handleInputChange = async (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -455,6 +466,11 @@ const EditAccount: React.FC = () => {
   };
 
   useEffect(() => {
+    const loggedInAccountId = getLoggedInAccountId();
+    if (loggedInAccountId) {
+      setDefaultSuperiorAccountId(loggedInAccountId);
+    }
+
     fetchCategories();
     fetchAccounts();
     fetchCountries();
@@ -468,6 +484,18 @@ const EditAccount: React.FC = () => {
       fetchAccount();
     }
   }, [id, isCreateMode]);
+
+  useEffect(() => {
+    if (!defaultSuperiorAccountId || !accounts.length || formData.superior) return;
+    const existsInList = accounts.some(
+      (account) => String(account.id) === defaultSuperiorAccountId,
+    );
+    if (!existsInList) return;
+    setFormData((prev) => ({
+      ...prev,
+      superior: defaultSuperiorAccountId,
+    }));
+  }, [accounts, defaultSuperiorAccountId, formData.superior]);
   useEffect(() => {
     if (
       formData.countryId &&

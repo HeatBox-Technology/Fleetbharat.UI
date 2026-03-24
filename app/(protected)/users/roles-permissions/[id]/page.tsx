@@ -250,8 +250,24 @@ const AddRole: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (!formData.account || !formData.roleName) {
+    const trimmedRoleName = formData.roleName.trim();
+    const hasAtLeastOnePermission = formData.permissions.some(
+      (permission) =>
+        permission.read ||
+        permission.write ||
+        permission.update ||
+        permission.delete ||
+        permission.export ||
+        permission.all,
+    );
+
+    if (!formData.account || !trimmedRoleName) {
       toast.error(t("toast.fillRequired"));
+      return;
+    }
+
+    if (!hasAtLeastOnePermission) {
+      toast.error("At least one permission is required.");
       return;
     }
 
@@ -274,9 +290,9 @@ const AddRole: React.FC = () => {
         // Update existing role - role info payload (without rights)
         const rolePayload = {
           accountId: Number(formData.account),
-          roleName: formData.roleName,
+          roleName: trimmedRoleName,
           description: formData.description,
-          roleCode: formData.roleName.toUpperCase().replace(/\s+/g, "_"),
+          roleCode: trimmedRoleName.toUpperCase().replace(/\s+/g, "_"),
           isActive: true,
         };
 
@@ -302,9 +318,9 @@ const AddRole: React.FC = () => {
         // Create new role - include rights in payload
         const payload = {
           accountId: Number(formData.account),
-          roleName: formData.roleName,
+          roleName: trimmedRoleName,
           description: formData.description,
-          roleCode: formData.roleName.toUpperCase().replace(/\s+/g, "_"),
+          roleCode: trimmedRoleName.toUpperCase().replace(/\s+/g, "_"),
           isActive: true,
           rights: rightsPayload,
         };
@@ -500,7 +516,7 @@ const AddRole: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    {t("fields.roleName")}
+                    {t("fields.roleName")} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"

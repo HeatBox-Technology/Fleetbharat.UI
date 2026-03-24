@@ -76,13 +76,17 @@ const Accounts: React.FC = () => {
   ];
 
   const [data, setData] = useState<AccountData[]>([]);
+  const isSystemRoleAccount = (row: AccountData) =>
+    String(row?.categoryName || "").toLowerCase() === "systemrole";
 
   const handleEdit = (row: AccountData) => {
+    if (isSystemRoleAccount(row)) return;
     router.push(`/accounts/${row.accountId}`);
   };
 
   // Show confirmation dialog instead of deleting directly
   const handleDelete = (row: AccountData) => {
+    if (isSystemRoleAccount(row)) return;
     setAccountToDelete(row);
     setIsDeleteDialogOpen(true);
   };
@@ -231,6 +235,8 @@ const Accounts: React.FC = () => {
             data={data}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            isEditDisabled={isSystemRoleAccount}
+            isDeleteDisabled={isSystemRoleAccount}
             showActions={true}
             searchPlaceholder={t("searchPlaceholder")}
             rowsPerPageOptions={[2, 4, 5, 10, 25, 50, 100]}
@@ -255,7 +261,10 @@ const Accounts: React.FC = () => {
           onConfirm={confirmDelete}
           title={t("delete.title")}
           message={t("delete.message", {
-            instance: accountToDelete?.instance?.main || "",
+            instance:
+              accountToDelete?.accountName ||
+              accountToDelete?.accountCode ||
+              "",
           })}
           confirmText={t("delete.confirm")}
           cancelText={t("delete.cancel")}

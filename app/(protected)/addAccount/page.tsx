@@ -109,6 +109,17 @@ const AddAccount: React.FC = () => {
   const [countries, setCountries] = useState<Country[]>([]);
   const [states, setStates] = useState<State[]>([]);
   const [cities, setCities] = useState<City[]>([]);
+  const [defaultSuperiorAccountId, setDefaultSuperiorAccountId] = useState("");
+
+  const getLoggedInAccountId = () => {
+    if (typeof window === "undefined") return "";
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      return String(user?.accountId || "").trim();
+    } catch {
+      return "";
+    }
+  };
 
   const handleInputChange = async (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -312,10 +323,27 @@ const AddAccount: React.FC = () => {
   }
 
   useEffect(() => {
+    const loggedInAccountId = getLoggedInAccountId();
+    if (loggedInAccountId) {
+      setDefaultSuperiorAccountId(loggedInAccountId);
+    }
+
     fetchCategories();
     fetchAccounts();
     fetchCountries();
   }, []);
+
+  useEffect(() => {
+    if (!defaultSuperiorAccountId || !accounts.length || formData.superior) return;
+    const existsInList = accounts.some(
+      (account) => String(account.id) === defaultSuperiorAccountId,
+    );
+    if (!existsInList) return;
+    setFormData((prev) => ({
+      ...prev,
+      superior: defaultSuperiorAccountId,
+    }));
+  }, [accounts, defaultSuperiorAccountId, formData.superior]);
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>

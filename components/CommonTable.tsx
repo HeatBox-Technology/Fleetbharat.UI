@@ -12,6 +12,8 @@ const CommonTable: React.FC<CommonTableProps> = ({
   data = [],
   onEdit,
   onDelete,
+  isEditDisabled,
+  isDeleteDisabled,
   canEdit,
   canDelete,
   onStatusToggle,
@@ -353,8 +355,12 @@ const CommonTable: React.FC<CommonTableProps> = ({
               variant === "default" ? (isDark ? "bg-gray-800" : "bg-white") : ""
             }
           >
-            {paginatedData.map((row, idx) => (
-              <tr
+            {paginatedData.map((row, idx) => {
+              const rowEditDisabled = Boolean(isEditDisabled?.(row));
+              const rowDeleteDisabled = Boolean(isDeleteDisabled?.(row));
+
+              return (
+                <tr
                 key={row.id || idx}
                 className={
                   variant === "simple"
@@ -392,8 +398,17 @@ const CommonTable: React.FC<CommonTableProps> = ({
                       )}
                       {shouldShowEditAction && (
                         <button
-                          onClick={() => onEdit?.(row)}
-                          className={`p-1 transition-opacity cursor-pointer opacity-50 hover:opacity-100 ${isDark ? "text-white" : "text-black"}`}
+                          type="button"
+                          onClick={() => {
+                            if (!rowEditDisabled) onEdit?.(row);
+                          }}
+                          disabled={rowEditDisabled}
+                          className={`p-1 transition-opacity ${
+                            rowEditDisabled
+                              ? "opacity-30 cursor-not-allowed"
+                              : "cursor-pointer opacity-50 hover:opacity-100"
+                          } ${isDark ? "text-white" : "text-black"}`}
+                          title={rowEditDisabled ? "Edit disabled" : "Edit"}
                         >
                           <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>
@@ -401,8 +416,18 @@ const CommonTable: React.FC<CommonTableProps> = ({
                       {shouldShowDeleteAction && (
                         <button
                           type="button"
-                          onClick={() => onDelete?.(row)}
-                          className="text-red-500 hover:text-red-600 p-1 transition-colors cursor-pointer"
+                          onClick={() => {
+                            if (!rowDeleteDisabled) onDelete?.(row);
+                          }}
+                          disabled={rowDeleteDisabled}
+                          className={`text-red-500 p-1 transition-colors ${
+                            rowDeleteDisabled
+                              ? "opacity-30 cursor-not-allowed"
+                              : "hover:text-red-600 cursor-pointer"
+                          }`}
+                          title={
+                            rowDeleteDisabled ? "Delete disabled" : "Delete"
+                          }
                         >
                           <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>
@@ -410,8 +435,9 @@ const CommonTable: React.FC<CommonTableProps> = ({
                     </div>
                   </td>
                 )}
-              </tr>
-            ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

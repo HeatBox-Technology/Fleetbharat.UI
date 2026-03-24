@@ -10,12 +10,17 @@ export interface ContactData {
 
 export interface AccountData {
   accountId: number;
+  categoryName?: string;
+  accountName?: string;
+  accountCode?: string;
+  phone?: string;
+  address?: string;
   no: number;
   code: string;
   instance: InstanceData;
   contact: ContactData;
   location: string;
-  status: string;
+  status: string | boolean;
 }
 
 export interface FormData {

@@ -16,6 +16,8 @@ export interface CommonTableProps {
   data: any[];
   onEdit?: (row: any) => void;
   onDelete?: (row: any) => void;
+  isEditDisabled?: (row: any) => boolean;
+  isDeleteDisabled?: (row: any) => boolean;
   canEdit?: boolean;
   canDelete?: boolean;
   onStatusToggle?: (row: any) => void;
