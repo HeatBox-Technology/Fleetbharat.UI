@@ -432,6 +432,12 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
               path: "/formmaster",
             },
             {
+              id: "dynamic-form-builder",
+              label: "Dynamic Form Builder",
+              icon: FileText,
+              path: "/dynamic-formbuilder",
+            },
+            {
               id: "white-label",
               label: "White Label",
               icon: Tag,

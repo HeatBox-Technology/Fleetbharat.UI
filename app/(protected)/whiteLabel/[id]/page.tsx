@@ -35,7 +35,7 @@ const resolveMediaUrl = (value?: string) => {
 };
 
 const DEFAULT_PRIMARY_HEX = "#4F46E5";
-const DEFAULT_SECONDARY_HEX = "#10B981";
+const DEFAULT_SECONDARY_HEX = "#FFFFFF";
 
 const normalizeHexColor = (value: unknown, fallback: string) => {
   const color = String(value || "").trim();
@@ -103,7 +103,7 @@ const ProvisionBranding: React.FC = () => {
   const [showPrimaryPicker, setShowPrimaryPicker] = useState(false);
   const [showSecondaryPicker, setShowSecondaryPicker] = useState(false);
   const [primaryRgb, setPrimaryRgb] = useState({ r: 79, g: 70, b: 229 });
-  const [secondaryRgb, setSecondaryRgb] = useState({ r: 16, g: 185, b: 129 });
+  const [secondaryRgb, setSecondaryRgb] = useState({ r: 255, g: 255, b: 255 });
   const [loading, setLoading] = useState(false);
   const [accounts, setAccounts] = useState<{ id: number; value: string }[]>([]);
   const [logoPreviewErrors, setLogoPreviewErrors] = useState<
