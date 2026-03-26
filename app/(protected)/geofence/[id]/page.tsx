@@ -319,6 +319,61 @@ export default function GeofenceDetailPage() {
     circle.setMap(null);
   }, []);
 
+  const handleEditableCircleChange = useCallback(
+    (value: { center: { lat: number; lng: number }; radius: number }) => {
+      const nextRadius = Math.max(1, Number(value.radius || 0));
+      setCenter((prev) => {
+        if (
+          prev &&
+          Math.abs(prev.lat - value.center.lat) < 1e-7 &&
+          Math.abs(prev.lng - value.center.lng) < 1e-7
+        ) {
+          return prev;
+        }
+        return value.center;
+      });
+      setRadius((prev) => (prev === nextRadius ? prev : nextRadius));
+      setShapeDrawn((prev) => (prev ? prev : true));
+    },
+    [],
+  );
+
+  const handleEditablePolygonChange = useCallback(
+    (nextPaths: { lat: number; lng: number }[]) => {
+      setPaths((prev) => {
+        if (prev.length === nextPaths.length) {
+          const same = prev.every(
+            (point, index) =>
+              Math.abs(point.lat - nextPaths[index].lat) < 1e-7 &&
+              Math.abs(point.lng - nextPaths[index].lng) < 1e-7,
+          );
+          if (same) return prev;
+        }
+        return nextPaths;
+      });
+      if (nextPaths.length > 0) {
+        const lat =
+          nextPaths.reduce((sum, point) => sum + point.lat, 0) /
+          nextPaths.length;
+        const lng =
+          nextPaths.reduce((sum, point) => sum + point.lng, 0) /
+          nextPaths.length;
+        setCenter((prev) => {
+          if (
+            prev &&
+            Math.abs(prev.lat - lat) < 1e-7 &&
+            Math.abs(prev.lng - lng) < 1e-7
+          ) {
+            return prev;
+          }
+          return { lat, lng };
+        });
+      }
+      setShapeDrawn((prev) => (prev === (nextPaths.length > 0) ? prev : nextPaths.length > 0));
+    },
+    [],
+  );
+
   // Store original shape data for cancel restoration
   const [originalShape, setOriginalShape] = useState<{
     center: { lat: number; lng: number } | null;
@@ -525,7 +580,7 @@ export default function GeofenceDetailPage() {
     );
   }
 
-  const showDrawingTool = isRedrawing && map;
+  const showDrawingTool = Boolean(map);
   const breadcrumbs = isFromRouteMaster
     ? [
         { label: t("breadcrumbs.fleet") },
@@ -821,6 +876,9 @@ export default function GeofenceDetailPage() {
                       onMapLoad={onMapLoad}
                       zoom={13}
                       center={center || DEFAULT_CENTER}
+                      editablePreviewZone={!isRedrawing && shapeDrawn}
+                      onEditableCircleChange={handleEditableCircleChange}
+                      onEditablePolygonChange={handleEditablePolygonChange}
                     />
 
                     {showDrawingTool && (
@@ -828,86 +886,21 @@ export default function GeofenceDetailPage() {
                         key={drawingKey}
                         map={map}
                         geometry={geometry}
+                        mapToolMode={mapToolMode}
                         color={color}
+                        onMapToolModeChange={setMapToolMode}
+                        onGeometryChange={setGeometry}
                         onPolygonComplete={handlePolygonComplete}
                         onCircleComplete={handleCircleComplete}
                       />
                     )}
 
-                    {isRedrawing && (
-                      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
-                        <div className="bg-amber-500 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-lg">
-                          {t("drawing.overlay", { geometry })}
-                        </div>
-                      </div>
-                    )}
                   </>
                 ) : (
                   <div className="flex items-center justify-center h-full">
                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500" />
                   </div>
                 )}
-
-                <div
-                  className={`absolute top-3 left-3 z-10 rounded-xl border p-1.5 flex gap-1 ${
-                    isDark
-                      ? "bg-gray-900/95 border-gray-700"
-                      : "bg-white/95 border-gray-200"
-                  }`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => handleActivateDrawing(undefined, "draw")}
-                    className={`px-2.5 py-1.5 rounded-md text-xs font-semibold ${
-                      mapToolMode === "draw"
-                        ? "bg-indigo-600 text-white"
-                        : isDark
-                          ? "text-gray-200 hover:bg-gray-800"
-                          : "text-gray-700 hover:bg-gray-100"
-                    }`}
-                  >
-                    Draw
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleCancelRedraw()}
-                    className={`px-2.5 py-1.5 rounded-md text-xs font-semibold ${
-                      mapToolMode === "hand"
-                        ? "bg-indigo-600 text-white"
-                        : isDark
-                          ? "text-gray-200 hover:bg-gray-800"
-                          : "text-gray-700 hover:bg-gray-100"
-                    }`}
-                  >
-                    Hand
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleActivateDrawing("circle", "circle")}
-                    className={`px-2.5 py-1.5 rounded-md text-xs font-semibold ${
-                      mapToolMode === "circle"
-                        ? "bg-indigo-600 text-white"
-                        : isDark
-                          ? "text-gray-200 hover:bg-gray-800"
-                          : "text-gray-700 hover:bg-gray-100"
-                    }`}
-                  >
-                    Circle
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleActivateDrawing("polygon", "polygon")}
-                    className={`px-2.5 py-1.5 rounded-md text-xs font-semibold ${
-                      mapToolMode === "polygon"
-                        ? "bg-indigo-600 text-white"
-                        : isDark
-                          ? "text-gray-200 hover:bg-gray-800"
-                          : "text-gray-700 hover:bg-gray-100"
-                    }`}
-                  >
-                    Polygon
-                  </button>
-                </div>
 
                 <div className="absolute bottom-4 right-3 flex flex-col gap-1">
                   <button
@@ -970,9 +963,14 @@ export default function GeofenceDetailPage() {
 
 // ─── DrawingManagerOverlay ────────────────────────────────────────────────
 interface DrawingManagerOverlayProps {
-  map: google.maps.Map;
+  map: google.maps.Map | null;
   geometry: GeometryType;
+  mapToolMode: "draw" | "hand" | "circle" | "polygon";
   color: string;
+  onMapToolModeChange: (
+    toolMode: "draw" | "hand" | "circle" | "polygon",
+  ) => void;
+  onGeometryChange: (geometry: GeometryType) => void;
   onPolygonComplete: (polygon: google.maps.Polygon) => void;
   onCircleComplete: (circle: google.maps.Circle) => void;
 }
@@ -980,7 +978,10 @@ interface DrawingManagerOverlayProps {
 function DrawingManagerOverlay({
   map,
   geometry,
+  mapToolMode,
   color,
+  onMapToolModeChange,
+  onGeometryChange,
   onPolygonComplete,
   onCircleComplete,
 }: DrawingManagerOverlayProps) {
@@ -996,12 +997,27 @@ function DrawingManagerOverlay({
       clickable: false,
     };
 
-    const dm = new google.maps.drawing.DrawingManager({
-      drawingMode:
-        geometry === "circle"
+    const drawingMode =
+      mapToolMode === "hand"
+        ? null
+        : mapToolMode === "circle"
           ? google.maps.drawing.OverlayType.CIRCLE
-          : google.maps.drawing.OverlayType.POLYGON,
-      drawingControl: false,
+          : mapToolMode === "polygon"
+            ? google.maps.drawing.OverlayType.POLYGON
+            : geometry === "circle"
+              ? google.maps.drawing.OverlayType.CIRCLE
+              : google.maps.drawing.OverlayType.POLYGON;
+
+    const dm = new google.maps.drawing.DrawingManager({
+      drawingMode,
+      drawingControl: true,
+      drawingControlOptions: {
+        position: google.maps.ControlPosition.TOP_CENTER,
+        drawingModes: [
+          google.maps.drawing.OverlayType.CIRCLE,
+          google.maps.drawing.OverlayType.POLYGON,
+        ],
+      },
       polygonOptions: shapeOptions,
       circleOptions: shapeOptions,
     });
@@ -1014,7 +1030,6 @@ function DrawingManagerOverlay({
       (polygon: google.maps.Polygon) => {
         onPolygonComplete(polygon);
         dm.setDrawingMode(null);
-        dm.setMap(null);
       },
     );
 
@@ -1024,16 +1039,42 @@ function DrawingManagerOverlay({
       (circle: google.maps.Circle) => {
         onCircleComplete(circle);
         dm.setDrawingMode(null);
-        dm.setMap(null);
+      },
+    );
+
+    const drawingModeListener = google.maps.event.addListener(
+      dm,
+      "drawingmode_changed",
+      () => {
+        const nextMode = dm.getDrawingMode();
+        if (nextMode === google.maps.drawing.OverlayType.CIRCLE) {
+          onMapToolModeChange("circle");
+          onGeometryChange("circle");
+        } else if (nextMode === google.maps.drawing.OverlayType.POLYGON) {
+          onMapToolModeChange("polygon");
+          onGeometryChange("polygon");
+        } else {
+          onMapToolModeChange("hand");
+        }
       },
     );
 
     return () => {
       google.maps.event.removeListener(polygonListener);
       google.maps.event.removeListener(circleListener);
+      google.maps.event.removeListener(drawingModeListener);
       dm.setMap(null);
     };
-  }, [map, geometry, color, onPolygonComplete, onCircleComplete]);
+  }, [
+    map,
+    geometry,
+    mapToolMode,
+    color,
+    onMapToolModeChange,
+    onGeometryChange,
+    onPolygonComplete,
+    onCircleComplete,
+  ]);
 
   return null;
 }

@@ -11,6 +11,7 @@ const LOGOUT_KEYS = [
 ];
 
 let isLogoutInProgress = false;
+export const SESSION_EXPIRED_EVENT = "fleetbharat:session-expired";
 
 const PUBLIC_AUTH_ROUTES = new Set([
   "/api/auth/login",
@@ -25,18 +26,23 @@ const isPublicAuthRoute = (url = "") => {
   return PUBLIC_AUTH_ROUTES.has(cleanUrl);
 };
 
-const handleLogout = () => {
-  if (typeof window === "undefined" || isLogoutInProgress) return;
-
-  isLogoutInProgress = true;
+const clearAuthState = () => {
   LOGOUT_KEYS.forEach((key) => {
     localStorage.removeItem(key);
   });
   Cookies.remove("authToken", { path: "/" });
+};
 
-  if (window.location.pathname !== "/") {
-    window.location.href = "/";
-  }
+const triggerSessionExpired = (statusCode) => {
+  if (typeof window === "undefined" || isLogoutInProgress) return;
+
+  isLogoutInProgress = true;
+  clearAuthState();
+  window.dispatchEvent(
+    new CustomEvent(SESSION_EXPIRED_EVENT, {
+      detail: { statusCode },
+    }),
+  );
 };
 
 const attachApiInterceptors = (instance) => {
@@ -66,8 +72,10 @@ const attachApiInterceptors = (instance) => {
     (response) => response,
     (error) => {
       const requestUrl = error?.config?.url || "";
-      if (error?.response?.status === 401 && !isPublicAuthRoute(requestUrl)) {
-        handleLogout();
+      const statusCode = error?.response?.status;
+      const isAuthExpired = statusCode === 401 || statusCode === 403;
+      if (isAuthExpired && !isPublicAuthRoute(requestUrl)) {
+        triggerSessionExpired(statusCode);
       }
       return Promise.reject(error);
     },

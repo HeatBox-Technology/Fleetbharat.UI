@@ -399,7 +399,7 @@ const Vehicles: React.FC = () => {
           />
           <MetricCard
             icon={Activity}
-            label={t("metrics.activeAccounts")}
+            label={t("metrics.activeVehicles")}
             value={summaryData.activeAccounts}
             iconBgColor="bg-blue-100"
             iconColor="text-blue-600"

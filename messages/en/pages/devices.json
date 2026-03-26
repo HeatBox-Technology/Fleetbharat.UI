@@ -78,8 +78,8 @@
         "fields": {
           "account": "Account",
           "selectAccount": "Select Account",
-          "manufacturer": "Manufacturer",
-          "selectManufacturer": "Select Manufacturer",
+          "manufacturer": "Device Manufacturer",
+          "selectManufacturer": "Select Device Manufacturer",
           "deviceType": "Device Type",
           "selectDeviceType": "Select Device Type",
           "deviceNo": "Device No.",
@@ -89,7 +89,7 @@
         },
         "preview": {
           "deviceType": "Device Type",
-          "manufacturer": "Manufacturer",
+          "manufacturer": "Device Manufacturer",
           "deviceNo": "Device No.",
           "serial": "IMEI / Serial",
           "empty": "—"
@@ -97,7 +97,7 @@
         "toast": {
           "loadFailed": "Failed to load device data",
           "selectAccount": "Please select an account",
-          "selectManufacturer": "Please select a manufacturer",
+          "selectManufacturer": "Please select a device manufacturer",
           "selectDeviceType": "Please select a device type",
           "serialRequired": "IMEI / Serial number is required",
           "serialNumericOnly": "IMEI / Serial number must contain digits only",

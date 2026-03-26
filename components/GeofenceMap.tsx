@@ -43,6 +43,12 @@ interface Props {
   showDrawingManager?: boolean;
   zoom?: number;
   center?: { lat: number; lng: number };
+  editablePreviewZone?: boolean;
+  onEditableCircleChange?: (value: {
+    center: { lat: number; lng: number };
+    radius: number;
+  }) => void;
+  onEditablePolygonChange?: (paths: { lat: number; lng: number }[]) => void;
 }
 
 const GeofenceMap: React.FC<Props> = ({
@@ -56,6 +62,9 @@ const GeofenceMap: React.FC<Props> = ({
   showDrawingManager = false,
   zoom = 11,
   center = DEFAULT_CENTER,
+  editablePreviewZone = false,
+  onEditableCircleChange,
+  onEditablePolygonChange,
 }) => {
   return (
     <GoogleMap
@@ -68,6 +77,8 @@ const GeofenceMap: React.FC<Props> = ({
         streetViewControl: false,
         fullscreenControl: false,
         zoomControl: false,
+        draggable: true,
+        gestureHandling: "greedy",
         styles: isDark ? DARK_MAP_STYLES : [],
       }}
     >
@@ -79,12 +90,51 @@ const GeofenceMap: React.FC<Props> = ({
               key={zone.id}
               center={zone.center}
               radius={zone.radius}
+              onLoad={(circle) => {
+                if (!editablePreviewZone || !onEditableCircleChange) return;
+                const emitCircle = () => {
+                  const c = circle.getCenter();
+                  if (!c) return;
+                  onEditableCircleChange({
+                    center: { lat: c.lat(), lng: c.lng() },
+                    radius: Math.round(circle.getRadius()),
+                  });
+                };
+
+                emitCircle();
+                const centerListener = google.maps.event.addListener(
+                  circle,
+                  "center_changed",
+                  emitCircle,
+                );
+                const radiusListener = google.maps.event.addListener(
+                  circle,
+                  "radius_changed",
+                  emitCircle,
+                );
+                (circle as unknown as { __fbListeners?: google.maps.MapsEventListener[] }).__fbListeners = [
+                  centerListener,
+                  radiusListener,
+                ];
+              }}
+              onUnmount={(circle) => {
+                const listeners = (
+                  circle as unknown as {
+                    __fbListeners?: google.maps.MapsEventListener[];
+                  }
+                ).__fbListeners;
+                listeners?.forEach((listener) =>
+                  google.maps.event.removeListener(listener),
+                );
+              }}
               options={{
                 fillColor: zone.color,
                 fillOpacity: 0.15,
                 strokeColor: zone.color,
                 strokeWeight: 2,
                 strokeOpacity: zone.status === "enabled" ? 1 : 0.4,
+                editable: editablePreviewZone,
+                draggable: editablePreviewZone,
               }}
             />
           );
@@ -94,12 +144,60 @@ const GeofenceMap: React.FC<Props> = ({
             <Polygon
               key={zone.id}
               paths={zone.paths}
+              onLoad={(polygon) => {
+                if (!editablePreviewZone || !onEditablePolygonChange) return;
+                const emitPolygon = () => {
+                  const nextPaths = polygon
+                    .getPath()
+                    .getArray()
+                    .map((latLng) => ({ lat: latLng.lat(), lng: latLng.lng() }));
+                  onEditablePolygonChange(nextPaths);
+                };
+
+                emitPolygon();
+                const path = polygon.getPath();
+                const setAt = google.maps.event.addListener(
+                  path,
+                  "set_at",
+                  emitPolygon,
+                );
+                const insertAt = google.maps.event.addListener(
+                  path,
+                  "insert_at",
+                  emitPolygon,
+                );
+                const removeAt = google.maps.event.addListener(
+                  path,
+                  "remove_at",
+                  emitPolygon,
+                );
+                const dragEnd = google.maps.event.addListener(
+                  polygon,
+                  "dragend",
+                  emitPolygon,
+                );
+                (polygon as unknown as {
+                  __fbListeners?: google.maps.MapsEventListener[];
+                }).__fbListeners = [setAt, insertAt, removeAt, dragEnd];
+              }}
+              onUnmount={(polygon) => {
+                const listeners = (
+                  polygon as unknown as {
+                    __fbListeners?: google.maps.MapsEventListener[];
+                  }
+                ).__fbListeners;
+                listeners?.forEach((listener) =>
+                  google.maps.event.removeListener(listener),
+                );
+              }}
               options={{
                 fillColor: zone.color,
                 fillOpacity: 0.15,
                 strokeColor: zone.color,
                 strokeWeight: 2,
                 strokeOpacity: zone.status === "enabled" ? 1 : 0.4,
+                editable: editablePreviewZone,
+                draggable: editablePreviewZone,
               }}
             />
           );

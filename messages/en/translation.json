@@ -14,6 +14,13 @@
     "noUpdate": "You do not have permission to update records.",
     "noDelete": "You do not have permission to delete records."
   },
+  "auth": {
+    "sessionExpired": {
+      "title": "Session Expired",
+      "message": "Your session has expired or you are unauthorized. Please login again to continue.",
+      "action": "Login Again"
+    }
+  },
   "pages": {
     "devicemap": {
       "list": {

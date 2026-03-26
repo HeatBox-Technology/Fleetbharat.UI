@@ -78,8 +78,8 @@
         "fields": {
           "account": "अकाउंट",
           "selectAccount": "अकाउंट चुनें",
-          "manufacturer": "मैन्युफैक्चरर",
-          "selectManufacturer": "मैन्युफैक्चरर चुनें",
+          "manufacturer": "डिवाइस निर्माता",
+          "selectManufacturer": "डिवाइस निर्माता चुनें",
           "deviceType": "डिवाइस प्रकार",
           "selectDeviceType": "डिवाइस प्रकार चुनें",
           "deviceNo": "डिवाइस नंबर",
@@ -89,7 +89,7 @@
         },
         "preview": {
           "deviceType": "डिवाइस प्रकार",
-          "manufacturer": "मैन्युफैक्चरर",
+          "manufacturer": "डिवाइस निर्माता",
           "deviceNo": "डिवाइस नंबर",
           "serial": "IMEI / सीरियल",
           "empty": "—"
@@ -97,7 +97,7 @@
         "toast": {
           "loadFailed": "डिवाइस डेटा लोड करने में विफल",
           "selectAccount": "कृपया अकाउंट चुनें",
-          "selectManufacturer": "कृपया मैन्युफैक्चरर चुनें",
+          "selectManufacturer": "कृपया डिवाइस निर्माता चुनें",
           "selectDeviceType": "कृपया डिवाइस प्रकार चुनें",
           "serialRequired": "IMEI / सीरियल नंबर आवश्यक है",
           "saved": "डिवाइस सफलतापूर्वक सेव हुआ",

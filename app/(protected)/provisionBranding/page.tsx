@@ -21,6 +21,7 @@ import {
 } from "@/interfaces/whitelabel.interface";
 import { getAllAccounts } from "@/services/commonServie";
 import { toast } from "react-toastify";
+import ProtectedPageSkeleton from "@/components/loaders/ProtectedPageSkeleton";
 
 const resolveMediaUrl = (value?: string) => {
   const path = String(value || "").trim();
@@ -436,8 +437,8 @@ const ProvisionBranding: React.FC = () => {
   if (loading && isEditMode) {
     return (
       <div className={`${isDark ? "dark" : ""} mt-10`}>
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <p className="text-foreground text-lg">{t("loading")}</p>
+        <div className="min-h-screen bg-background">
+          <ProtectedPageSkeleton />
         </div>
       </div>
     );
