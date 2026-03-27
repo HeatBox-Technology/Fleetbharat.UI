@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Card } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import ThemeCustomizer from "@/components/ThemeCustomizer";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
@@ -111,6 +112,18 @@ const CreateUser: React.FC = () => {
   const [roles, setRoles] = useState<Role[]>([]);
   const [userStatus, setUserStatus] = useState(true);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const accountOptions = accounts.map((account) => ({
+    value: account.id,
+    label: account.value,
+  }));
+  const roleOptions = roles.map((role) => ({
+    value: role.id,
+    label: role.value,
+  }));
+  const countryCodeOptions = countryCodes.map((item) => ({
+    value: item.code,
+    label: `${item.code} (${item.country})`,
+  }));
 
   // Permission Matrix States - Similar to AddRole
   const [rolePermissions, setRolePermissions] = useState<Permission[]>([]); // Base permissions from role
@@ -168,6 +181,36 @@ const CreateUser: React.FC = () => {
         [name]: normalizedValue,
       }));
     }
+  };
+
+  const handleAccountSelect = (selectedAccountId: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      accountId: selectedAccountId,
+      roleId: 0,
+    }));
+    setRolePermissions([]);
+    setAdditionalPermissions([]);
+
+    if (selectedAccountId > 0) {
+      fetchRolesForAccount(selectedAccountId);
+      return;
+    }
+    setRoles([]);
+  };
+
+  const handleRoleSelect = (selectedRoleId: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      roleId: selectedRoleId,
+    }));
+
+    if (selectedRoleId > 0 && formData.accountId > 0) {
+      fetchRolePermissions(selectedRoleId, formData.accountId);
+      return;
+    }
+    setRolePermissions([]);
+    setAdditionalPermissions([]);
   };
 
   // Fetch roles based on selected account - AddRole reference
@@ -787,21 +830,21 @@ const CreateUser: React.FC = () => {
                       Phone Number
                     </label>
                     <div className="flex gap-2">
-                      <select
-                        value={phoneCountryCode}
-                        onChange={(e) => setPhoneCountryCode(e.target.value)}
-                        className={`w-24 px-2 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg border transition-colors ${
-                          isDark
-                            ? "bg-gray-800 border-gray-700 text-foreground"
-                            : "bg-white border-gray-300 text-gray-900"
-                        } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                      >
-                        {countryCodes.map((item) => (
-                          <option key={item.code} value={item.code}>
-                            {item.code}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="w-48 shrink-0">
+                        <SearchableDropdown
+                          options={countryCodeOptions}
+                          value={
+                            countryCodeOptions.find(
+                              (option) => option.value === phoneCountryCode,
+                            ) || null
+                          }
+                          onChange={(option) =>
+                            setPhoneCountryCode(String(option?.value || "+91"))
+                          }
+                          isDark={isDark}
+                          noOptionsMessage="No code found"
+                        />
+                      </div>
                       <input
                         type="tel"
                         name="phoneNumber"
@@ -850,23 +893,20 @@ const CreateUser: React.FC = () => {
                       {t("fields.accountAssociation")}{" "}
                       <span className="text-red-500">*</span>
                     </label>
-                    <select
-                      name="accountId"
-                      value={formData.accountId}
-                      onChange={handleInputChange}
-                      className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg border transition-colors ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-foreground"
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                    >
-                      <option value="0">{t("fields.selectAccount")}</option>
-                      {accounts.map((account) => (
-                        <option key={account.id} value={account.id}>
-                          {account.value}
-                        </option>
-                      ))}
-                    </select>
+                    <SearchableDropdown
+                      options={accountOptions}
+                      value={
+                        accountOptions.find(
+                          (option) => Number(option.value) === formData.accountId,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        handleAccountSelect(Number(option?.value || 0))
+                      }
+                      placeholder={t("fields.selectAccount")}
+                      isDark={isDark}
+                      noOptionsMessage={t("fields.selectAccount")}
+                    />
                   </div>
 
                   <div>
@@ -876,24 +916,21 @@ const CreateUser: React.FC = () => {
                       {t("fields.roleAssignment")}{" "}
                       <span className="text-red-500">*</span>
                     </label>
-                    <select
-                      name="roleId"
-                      value={formData.roleId}
-                      onChange={handleInputChange}
-                      disabled={!formData.accountId || formData.accountId === 0}
-                      className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg border transition-colors ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-foreground"
-                          : "bg-white border-gray-300 text-gray-900"
-                      } ${!formData.accountId || formData.accountId === 0 ? "opacity-50 cursor-not-allowed" : ""} focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                    >
-                      <option value="0">{t("fields.selectRole")}</option>
-                      {roles.map((role) => (
-                        <option key={role.id} value={role.id}>
-                          {role.value}
-                        </option>
-                      ))}
-                    </select>
+                    <SearchableDropdown
+                      options={roleOptions}
+                      value={
+                        roleOptions.find(
+                          (option) => Number(option.value) === formData.roleId,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        handleRoleSelect(Number(option?.value || 0))
+                      }
+                      isDisabled={!formData.accountId || formData.accountId === 0}
+                      placeholder={t("fields.selectRole")}
+                      isDark={isDark}
+                      noOptionsMessage={t("fields.selectRole")}
+                    />
                   </div>
 
                   {/* Permission Matrix - AddRole Style */}

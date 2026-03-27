@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { toast } from "react-toastify";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import {
@@ -106,6 +107,10 @@ const ProvisionBranding: React.FC = () => {
   const [secondaryRgb, setSecondaryRgb] = useState({ r: 255, g: 255, b: 255 });
   const [loading, setLoading] = useState(false);
   const [accounts, setAccounts] = useState<{ id: number; value: string }[]>([]);
+  const accountOptions = accounts.map((account) => ({
+    value: account.id,
+    label: account.value,
+  }));
   const [logoPreviewErrors, setLogoPreviewErrors] = useState<
     Record<string, boolean>
   >({});
@@ -490,27 +495,23 @@ const ProvisionBranding: React.FC = () => {
                     >
                       {t("labels.account")}
                     </label>
-                    <select
-                      name="accountId"
-                      value={formData.accountId}
-                      onChange={handleInputChange}
-                      required
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                          : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                      } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                    >
-                      <option value="">{t("labels.selectAccount")}</option>
-                      {accounts &&
-                        accounts.map(
-                          (account: { id: number; value: string }) => (
-                            <option key={account.id} value={account.id}>
-                              {account.value}
-                            </option>
-                          ),
-                        )}
-                    </select>
+                    <SearchableDropdown
+                      options={accountOptions}
+                      value={
+                        accountOptions.find(
+                          (option) => Number(option.value) === Number(formData.accountId),
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          accountId: Number(option?.value || 0),
+                        }))
+                      }
+                      placeholder={t("labels.selectAccount")}
+                      isDark={isDark}
+                      noOptionsMessage={t("labels.selectAccount")}
+                    />
                   </div>
 
                   <div>

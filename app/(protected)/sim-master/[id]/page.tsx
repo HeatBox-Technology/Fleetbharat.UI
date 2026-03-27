@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Card } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import {
@@ -78,6 +79,14 @@ const ProvisionSim: React.FC = () => {
     statusKey: "active", // API field: statusKey → "active" | "inactive"
   });
   const today = new Date().toISOString().split("T")[0];
+  const accountOptions = accounts.map((account) => ({
+    value: Number(account.id),
+    label: account.value,
+  }));
+  const carrierOptions = carriers.map((carrier) => ({
+    value: Number(carrier.id),
+    label: carrier.name,
+  }));
 
   const getUserAccountIdFromStorage = () => {
     try {
@@ -186,9 +195,7 @@ const ProvisionSim: React.FC = () => {
   }, [id, isEditMode, router, t]);
 
   // ── Form change handler ────────────────────────────────────────────────
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "iccid") {
       const normalizedValue = value.replace(/\D/g, "").slice(0, 20);
@@ -372,19 +379,23 @@ const ProvisionSim: React.FC = () => {
                     {t("fields.accountContext")}{" "}
                     <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="accountId"
-                    value={formData.accountId}
-                    onChange={handleChange}
-                    className={inputClass()}
-                  >
-                    <option value="0">{t("fields.selectAccount")}</option>
-                    {accounts.map((a) => (
-                      <option key={a.id} value={a.id}>
-                        {a.value} {/* e.g. "IOTEdge (Acc-001)" */}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={accountOptions}
+                    value={
+                      accountOptions.find(
+                        (option) => Number(option.value) === formData.accountId,
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        accountId: Number(option?.value || 0),
+                      }))
+                    }
+                    placeholder={t("fields.selectAccount")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectAccount")}
+                  />
                 </div>
 
                 {/* iccid */}
@@ -464,19 +475,24 @@ const ProvisionSim: React.FC = () => {
                     {t("fields.networkProvider")}{" "}
                     <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="networkProviderId"
-                    value={formData.networkProviderId}
-                    onChange={handleChange}
-                    className={inputClass()}
-                  >
-                    <option value="0">{t("fields.selectCarrier")}</option>
-                    {carriers.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={carrierOptions}
+                    value={
+                      carrierOptions.find(
+                        (option) =>
+                          Number(option.value) === formData.networkProviderId,
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        networkProviderId: Number(option?.value || 0),
+                      }))
+                    }
+                    placeholder={t("fields.selectCarrier")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectCarrier")}
+                  />
                 </div>
 
                 {/* spacer column */}

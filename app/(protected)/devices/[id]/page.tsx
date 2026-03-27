@@ -2,6 +2,7 @@
 
 import { Card } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import { SimAccount } from "@/interfaces/sim.interface";
@@ -69,6 +70,18 @@ const ProvisionDevice: React.FC = () => {
     deviceStatus: "ACTIVE",
     isActive: true,
   });
+  const accountOptions = accounts.map((account) => ({
+    value: Number(account.id),
+    label: account.value,
+  }));
+  const manufacturerOptions = manufacturers.map((manufacturer) => ({
+    value: Number(manufacturer.id),
+    label: manufacturer.value,
+  }));
+  const deviceTypeOptions = deviceTypes.map((type) => ({
+    value: Number(type.id),
+    label: type.displayName,
+  }));
 
   const inputClass = (extra = "") =>
     `w-full px-3 py-2.5 text-sm rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500/20 ${
@@ -359,20 +372,24 @@ const ProvisionDevice: React.FC = () => {
                     {t("fields.account")}{" "}
                     <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="accountId"
-                    value={formData.accountId}
-                    onChange={handleChange}
-                    className={inputClass()}
-                    disabled={isEditMode}
-                  >
-                    <option value={0}>{t("fields.selectAccount")}</option>
-                    {accounts.map((account) => (
-                      <option key={account.id} value={account.id}>
-                        {account.value}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={accountOptions}
+                    value={
+                      accountOptions.find(
+                        (option) => Number(option.value) === formData.accountId,
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        accountId: Number(option?.value || 0),
+                      }))
+                    }
+                    placeholder={t("fields.selectAccount")}
+                    isDisabled={isEditMode}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectAccount")}
+                  />
                 </div>
               </div>
             </div>
@@ -389,19 +406,24 @@ const ProvisionDevice: React.FC = () => {
                     {t("fields.manufacturer")}{" "}
                     <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="manufacturerId"
-                    value={formData.manufacturerId}
-                    onChange={handleChange}
-                    className={inputClass()}
-                  >
-                    <option value={0}>{t("fields.selectManufacturer")}</option>
-                    {manufacturers.map((manufacturer) => (
-                      <option key={manufacturer.id} value={manufacturer.id}>
-                        {manufacturer.value}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={manufacturerOptions}
+                    value={
+                      manufacturerOptions.find(
+                        (option) =>
+                          Number(option.value) === formData.manufacturerId,
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        manufacturerId: Number(option?.value || 0),
+                      }))
+                    }
+                    placeholder={t("fields.selectManufacturer")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectManufacturer")}
+                  />
                 </div>
 
                 <div>
@@ -409,19 +431,23 @@ const ProvisionDevice: React.FC = () => {
                     {t("fields.deviceType")}{" "}
                     <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="deviceTypeId"
-                    value={formData.deviceTypeId}
-                    onChange={handleChange}
-                    className={inputClass()}
-                  >
-                    <option value={0}>{t("fields.selectDeviceType")}</option>
-                    {deviceTypes.map((type) => (
-                      <option key={type.id} value={type.id}>
-                        {type.displayName}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={deviceTypeOptions}
+                    value={
+                      deviceTypeOptions.find(
+                        (option) => Number(option.value) === formData.deviceTypeId,
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        deviceTypeId: Number(option?.value || 0),
+                      }))
+                    }
+                    placeholder={t("fields.selectDeviceType")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectDeviceType")}
+                  />
                 </div>
 
                 <div>

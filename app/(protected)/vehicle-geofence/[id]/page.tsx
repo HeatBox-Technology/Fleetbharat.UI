@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import {
@@ -62,6 +63,18 @@ const AddEditVehicleGeofence: React.FC = () => {
     remarks: "",
     isActive: true,
   });
+  const accountOptions = accounts.map((option) => ({
+    value: option.id,
+    label: option.value,
+  }));
+  const vehicleOptions = vehicles.map((option) => ({
+    value: option.id,
+    label: option.value,
+  }));
+  const geofenceOptions = geofences.map((option) => ({
+    value: option.id,
+    label: option.value,
+  }));
 
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(false);
@@ -193,7 +206,7 @@ const AddEditVehicleGeofence: React.FC = () => {
 
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      HTMLInputElement | HTMLTextAreaElement
     >,
   ) => {
     const { name, value } = e.target;
@@ -344,72 +357,72 @@ const AddEditVehicleGeofence: React.FC = () => {
                 <label className="block text-sm font-semibold text-foreground mb-2">
                   {t("fields.account")} <span className="text-red-500">*</span>
                 </label>
-                <select
-                  name="accountId"
-                  value={formData.accountId}
-                  onChange={handleChange}
-                  disabled={isEditMode || loading}
-                  className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                    isDark
-                      ? "bg-gray-800 border-gray-700 text-foreground"
-                      : "bg-white border-gray-300 text-gray-900"
-                  } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                >
-                  <option value={0}>{t("fields.selectAccount")}</option>
-                  {accounts.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.value}
-                    </option>
-                  ))}
-                </select>
+                <SearchableDropdown
+                  options={accountOptions}
+                  value={
+                    accountOptions.find(
+                      (option) => Number(option.value) === Number(formData.accountId),
+                    ) || null
+                  }
+                  onChange={(option) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      accountId: Number(option?.value || 0),
+                    }))
+                  }
+                  isDisabled={isEditMode || loading}
+                  placeholder={t("fields.selectAccount")}
+                  isDark={isDark}
+                  noOptionsMessage={t("fields.selectAccount")}
+                />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-foreground mb-2">
                   {t("fields.vehicle")} <span className="text-red-500">*</span>
                 </label>
-                <select
-                  name="vehicleId"
-                  value={formData.vehicleId}
-                  onChange={handleChange}
-                  disabled={loading}
-                  className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                    isDark
-                      ? "bg-gray-800 border-gray-700 text-foreground"
-                      : "bg-white border-gray-300 text-gray-900"
-                  } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                >
-                  <option value={0}>{t("fields.selectVehicle")}</option>
-                  {vehicles.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.value}
-                    </option>
-                  ))}
-                </select>
+                <SearchableDropdown
+                  options={vehicleOptions}
+                  value={
+                    vehicleOptions.find(
+                      (option) => Number(option.value) === Number(formData.vehicleId),
+                    ) || null
+                  }
+                  onChange={(option) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      vehicleId: Number(option?.value || 0),
+                    }))
+                  }
+                  isDisabled={loading}
+                  placeholder={t("fields.selectVehicle")}
+                  isDark={isDark}
+                  noOptionsMessage={t("fields.selectVehicle")}
+                />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-foreground mb-2">
                   {t("fields.geofence")} <span className="text-red-500">*</span>
                 </label>
-                <select
-                  name="geofenceId"
-                  value={formData.geofenceId}
-                  onChange={handleChange}
-                  disabled={loading}
-                  className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                    isDark
-                      ? "bg-gray-800 border-gray-700 text-foreground"
-                      : "bg-white border-gray-300 text-gray-900"
-                  } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                >
-                  <option value={0}>{t("fields.selectGeofence")}</option>
-                  {geofences.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.value}
-                    </option>
-                  ))}
-                </select>
+                <SearchableDropdown
+                  options={geofenceOptions}
+                  value={
+                    geofenceOptions.find(
+                      (option) => Number(option.value) === Number(formData.geofenceId),
+                    ) || null
+                  }
+                  onChange={(option) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      geofenceId: Number(option?.value || 0),
+                    }))
+                  }
+                  isDisabled={loading}
+                  placeholder={t("fields.selectGeofence")}
+                  isDark={isDark}
+                  noOptionsMessage={t("fields.selectGeofence")}
+                />
               </div>
             </div>
 

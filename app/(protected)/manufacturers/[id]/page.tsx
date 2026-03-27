@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Card } from "@/components/CommonCard";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useTheme } from "@/context/ThemeContext";
 import { useColor } from "@/context/ColorContext";
 import {
@@ -45,6 +46,10 @@ const ManufacturerForm: React.FC = () => {
     useState<OemManufacturerFormData | null>(null);
 
   const [countries, setCountries] = useState<Country[]>([]);
+  const countryOptions = countries.map((country) => ({
+    value: country.countryName,
+    label: country.countryName,
+  }));
 
   // Fetch countries for the dropdown
   useEffect(() => {
@@ -277,21 +282,23 @@ const ManufacturerForm: React.FC = () => {
                   <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
                     Origin Country
                   </label>
-                  <select
-                    name="originCountry"
-                    value={formData.originCountry}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark ? "bg-gray-800 border-gray-700 text-foreground" : "bg-white border-gray-300"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                  >
-                    <option value="">Select Country</option>
-                    {countries.map((c) => (
-                      <option key={c.countryId} value={c.countryName}>
-                        {c.countryName}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={countryOptions}
+                    value={
+                      countryOptions.find(
+                        (option) => option.value === formData.originCountry,
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        originCountry: String(option?.value || ""),
+                      }))
+                    }
+                    placeholder="Select Country"
+                    isDark={isDark}
+                    noOptionsMessage="No country found"
+                  />
                 </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>

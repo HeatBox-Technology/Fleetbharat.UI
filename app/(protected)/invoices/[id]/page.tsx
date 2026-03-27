@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "react-toastify";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useTheme } from "@/context/ThemeContext";
 import { getAccountHierarchy } from "@/services/accountService";
 import { getSubscriptions } from "@/services/subscriptionService";
@@ -51,6 +52,18 @@ const AddInvoicePage = () => {
       new Date(new Date().setDate(new Date().getDate() + 30)),
     ),
   });
+  const searchableAccountOptions = accountOptions.map((account) => ({
+    value: account.id,
+    label: account.value,
+  }));
+  const searchableSubscriptionOptions = subscriptionOptions.map((subscription) => ({
+    value: subscription.id,
+    label: subscription.name,
+  }));
+  const searchableCurrencyOptions = currencyOptions.map((currency) => ({
+    value: currency.value,
+    label: currency.value,
+  }));
 
   const getActorId = () => {
     if (typeof window === "undefined") return 1;
@@ -218,23 +231,24 @@ const AddInvoicePage = () => {
               >
                 {t("fields.account")}
               </label>
-              <select
-                name="accountId"
-                value={formData.accountId}
-                onChange={handleInputChange}
-                disabled={loadingDropdowns}
-                className={`w-full px-4 py-3 rounded-lg border ${
-                  isDark
-                    ? "bg-gray-800 border-gray-700 text-white"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
-              >
-                {accountOptions.map((account) => (
-                  <option key={account.id} value={account.id}>
-                    {account.value}
-                  </option>
-                ))}
-              </select>
+              <SearchableDropdown
+                options={searchableAccountOptions}
+                value={
+                  searchableAccountOptions.find(
+                    (option) => Number(option.value) === Number(formData.accountId),
+                  ) || null
+                }
+                onChange={(option) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    accountId: Number(option?.value || 0),
+                  }))
+                }
+                isDisabled={loadingDropdowns}
+                placeholder={t("fields.account")}
+                isDark={isDark}
+                noOptionsMessage={t("fields.account")}
+              />
             </div>
 
             <div>
@@ -245,23 +259,24 @@ const AddInvoicePage = () => {
               >
                 {t("fields.subscription")}
               </label>
-              <select
-                name="subscriptionId"
-                value={formData.subscriptionId}
-                onChange={handleInputChange}
-                disabled={loadingDropdowns}
-                className={`w-full px-4 py-3 rounded-lg border ${
-                  isDark
-                    ? "bg-gray-800 border-gray-700 text-white"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
-              >
-                {subscriptionOptions.map((subscription) => (
-                  <option key={subscription.id} value={subscription.id}>
-                    {subscription.name}
-                  </option>
-                ))}
-              </select>
+              <SearchableDropdown
+                options={searchableSubscriptionOptions}
+                value={
+                  searchableSubscriptionOptions.find(
+                    (option) => Number(option.value) === Number(formData.subscriptionId),
+                  ) || null
+                }
+                onChange={(option) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    subscriptionId: Number(option?.value || 0),
+                  }))
+                }
+                isDisabled={loadingDropdowns}
+                placeholder={t("fields.subscription")}
+                isDark={isDark}
+                noOptionsMessage={t("fields.subscription")}
+              />
             </div>
 
             <div>
@@ -295,23 +310,24 @@ const AddInvoicePage = () => {
               >
                 {t("fields.currency")}
               </label>
-              <select
-                name="currency"
-                value={formData.currency}
-                onChange={handleInputChange}
-                disabled={loadingDropdowns}
-                className={`w-full px-4 py-3 rounded-lg border ${
-                  isDark
-                    ? "bg-gray-800 border-gray-700 text-white"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
-              >
-                {currencyOptions.map((currency) => (
-                  <option key={currency.id} value={currency.value}>
-                    {currency.value}
-                  </option>
-                ))}
-              </select>
+              <SearchableDropdown
+                options={searchableCurrencyOptions}
+                value={
+                  searchableCurrencyOptions.find(
+                    (option) => String(option.value) === String(formData.currency),
+                  ) || null
+                }
+                onChange={(option) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    currency: String(option?.value || ""),
+                  }))
+                }
+                isDisabled={loadingDropdowns}
+                placeholder={t("fields.currency")}
+                isDark={isDark}
+                noOptionsMessage={t("fields.currency")}
+              />
             </div>
 
             <div>

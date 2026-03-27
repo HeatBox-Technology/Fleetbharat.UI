@@ -1,6 +1,7 @@
 "use client";
 
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import { getAllAccounts } from "@/services/commonServie";
@@ -57,6 +58,51 @@ const NewConfiguration: React.FC = () => {
   });
 
   const [additionalLanguages, setAdditionalLanguages] = useState<string[]>([]);
+  const accountOptions = accounts.map((account: { id: number; value: string }) => ({
+    value: account.id,
+    label: account.value,
+  }));
+  const mapProviderOptions = [
+    { value: "GoogleMaps", label: t("options.mapProvider.googleMaps") },
+    { value: "HereMaps", label: t("options.mapProvider.hereMaps") },
+    { value: "OpenStreetMap", label: t("options.mapProvider.openStreetMap") },
+  ];
+  const dateFormatOptions = [
+    { value: "DD/MM/YYYY", label: "DD/MM/YYYY" },
+    { value: "MM/DD/YYYY", label: "MM/DD/YYYY" },
+    { value: "YYYY-MM-DD", label: "YYYY-MM-DD" },
+  ];
+  const timeFormatOptions = [
+    { value: "12H", label: t("options.timeFormat.h12") },
+    { value: "24H", label: t("options.timeFormat.h24") },
+  ];
+  const distanceUnitOptions = [
+    { value: "KM", label: t("options.distanceUnit.km") },
+    { value: "MILE", label: t("options.distanceUnit.mile") },
+  ];
+  const speedUnitOptions = [
+    { value: "KMH", label: t("options.speedUnit.kmh") },
+    { value: "MPH", label: t("options.speedUnit.mph") },
+  ];
+  const fuelUnitOptions = [
+    { value: "LITRE", label: t("options.fuelUnit.litre") },
+    { value: "GALLON", label: t("options.fuelUnit.gallon") },
+  ];
+  const temperatureOptions = [
+    { value: "CELSIUS", label: t("options.temperature.celsius") },
+    { value: "FAHRENHEIT", label: t("options.temperature.fahrenheit") },
+  ];
+  const addressDisplayOptions = [
+    { value: "SHOW", label: t("options.addressDisplay.show") },
+    { value: "HIDE", label: t("options.addressDisplay.hide") },
+  ];
+  const languageOptions = [
+    { value: "en", label: t("options.language.en") },
+    { value: "es", label: t("options.language.es") },
+    { value: "fr", label: t("options.language.fr") },
+    { value: "de", label: t("options.language.de") },
+    { value: "hi", label: t("options.language.hi") },
+  ];
 
   const fetchConfiguration = async () => {
     try {
@@ -221,25 +267,23 @@ const NewConfiguration: React.FC = () => {
                   {t("fields.accountId")}{" "}
                   <span className="text-red-500">*</span>
                 </label>
-                <select
-                  name="accountId"
-                  value={formData.accountId}
-                  onChange={handleInputChange}
-                  required
-                  className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                    isDark
-                      ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                      : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                  } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                >
-                  <option value="">{t("fields.selectAccount")}</option>
-                  {accounts &&
-                    accounts.map((account: { id: number; value: string }) => (
-                      <option key={account.id} value={account.id}>
-                        {account.value}
-                      </option>
-                    ))}
-                </select>
+                <SearchableDropdown
+                  options={accountOptions}
+                  value={
+                    accountOptions.find(
+                      (option) => Number(option.value) === Number(formData.accountId),
+                    ) || null
+                  }
+                  onChange={(option) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      accountId: Number(option?.value || 0),
+                    }))
+                  }
+                  placeholder={t("fields.selectAccount")}
+                  isDark={isDark}
+                  noOptionsMessage={t("fields.selectAccount")}
+                />
               </div>
             </Card>
 
@@ -264,26 +308,22 @@ const NewConfiguration: React.FC = () => {
                       {t("fields.mapProvider")}
                     </label>
                     <div className="relative">
-                      <select
-                        name="mapProvider"
-                        value={formData.mapProvider}
-                        onChange={handleInputChange}
-                        className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                          isDark
-                            ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                            : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                        } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                      >
-                        <option value="GoogleMaps">
-                          {t("options.mapProvider.googleMaps")}
-                        </option>
-                        <option value="HereMaps">
-                          {t("options.mapProvider.hereMaps")}
-                        </option>
-                        <option value="OpenStreetMap">
-                          {t("options.mapProvider.openStreetMap")}
-                        </option>
-                      </select>
+                      <SearchableDropdown
+                        options={mapProviderOptions}
+                        value={
+                          mapProviderOptions.find(
+                            (option) => option.value === formData.mapProvider,
+                          ) || null
+                        }
+                        onChange={(option) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            mapProvider: String(option?.value || "GoogleMaps"),
+                          }))
+                        }
+                        isDark={isDark}
+                        noOptionsMessage={t("fields.mapProvider")}
+                      />
                     </div>
                   </div>
 
@@ -352,20 +392,22 @@ const NewConfiguration: React.FC = () => {
                     >
                       {t("fields.dateFormat")}
                     </label>
-                    <select
-                      name="dateFormat"
-                      value={formData.dateFormat}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                          : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                      } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                    >
-                      <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                      <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                      <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-                    </select>
+                    <SearchableDropdown
+                      options={dateFormatOptions}
+                      value={
+                        dateFormatOptions.find(
+                          (option) => option.value === formData.dateFormat,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          dateFormat: String(option?.value || "DD/MM/YYYY"),
+                        }))
+                      }
+                      isDark={isDark}
+                      noOptionsMessage={t("fields.dateFormat")}
+                    />
                   </div>
 
                   {/* Time Format */}
@@ -375,19 +417,22 @@ const NewConfiguration: React.FC = () => {
                     >
                       {t("fields.timeFormat")}
                     </label>
-                    <select
-                      name="timeFormat"
-                      value={formData.timeFormat}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                          : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                      } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                    >
-                      <option value="12H">{t("options.timeFormat.h12")}</option>
-                      <option value="24H">{t("options.timeFormat.h24")}</option>
-                    </select>
+                    <SearchableDropdown
+                      options={timeFormatOptions}
+                      value={
+                        timeFormatOptions.find(
+                          (option) => option.value === formData.timeFormat,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          timeFormat: String(option?.value || "12H"),
+                        }))
+                      }
+                      isDark={isDark}
+                      noOptionsMessage={t("fields.timeFormat")}
+                    />
                   </div>
 
                   {/* Distance Unit */}
@@ -397,21 +442,22 @@ const NewConfiguration: React.FC = () => {
                     >
                       {t("fields.distanceUnit")}
                     </label>
-                    <select
-                      name="distanceUnit"
-                      value={formData.distanceUnit}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                          : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                      } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                    >
-                      <option value="KM">{t("options.distanceUnit.km")}</option>
-                      <option value="MILE">
-                        {t("options.distanceUnit.mile")}
-                      </option>
-                    </select>
+                    <SearchableDropdown
+                      options={distanceUnitOptions}
+                      value={
+                        distanceUnitOptions.find(
+                          (option) => option.value === formData.distanceUnit,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          distanceUnit: String(option?.value || "KM"),
+                        }))
+                      }
+                      isDark={isDark}
+                      noOptionsMessage={t("fields.distanceUnit")}
+                    />
                   </div>
 
                   {/* Speed Unit */}
@@ -421,19 +467,22 @@ const NewConfiguration: React.FC = () => {
                     >
                       {t("fields.speedUnit")}
                     </label>
-                    <select
-                      name="speedUnit"
-                      value={formData.speedUnit}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                          : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                      } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                    >
-                      <option value="KMH">{t("options.speedUnit.kmh")}</option>
-                      <option value="MPH">{t("options.speedUnit.mph")}</option>
-                    </select>
+                    <SearchableDropdown
+                      options={speedUnitOptions}
+                      value={
+                        speedUnitOptions.find(
+                          (option) => option.value === formData.speedUnit,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          speedUnit: String(option?.value || "KMH"),
+                        }))
+                      }
+                      isDark={isDark}
+                      noOptionsMessage={t("fields.speedUnit")}
+                    />
                   </div>
 
                   {/* Fuel Unit */}
@@ -443,23 +492,22 @@ const NewConfiguration: React.FC = () => {
                     >
                       {t("fields.fuelUnit")}
                     </label>
-                    <select
-                      name="fuelUnit"
-                      value={formData.fuelUnit}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                          : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                      } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                    >
-                      <option value="LITRE">
-                        {t("options.fuelUnit.litre")}
-                      </option>
-                      <option value="GALLON">
-                        {t("options.fuelUnit.gallon")}
-                      </option>
-                    </select>
+                    <SearchableDropdown
+                      options={fuelUnitOptions}
+                      value={
+                        fuelUnitOptions.find(
+                          (option) => option.value === formData.fuelUnit,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          fuelUnit: String(option?.value || "LITRE"),
+                        }))
+                      }
+                      isDark={isDark}
+                      noOptionsMessage={t("fields.fuelUnit")}
+                    />
                   </div>
 
                   {/* Temperature */}
@@ -469,23 +517,22 @@ const NewConfiguration: React.FC = () => {
                     >
                       {t("fields.temperature")}
                     </label>
-                    <select
-                      name="temperatureUnit"
-                      value={formData.temperatureUnit}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                          : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                      } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                    >
-                      <option value="CELSIUS">
-                        {t("options.temperature.celsius")}
-                      </option>
-                      <option value="FAHRENHEIT">
-                        {t("options.temperature.fahrenheit")}
-                      </option>
-                    </select>
+                    <SearchableDropdown
+                      options={temperatureOptions}
+                      value={
+                        temperatureOptions.find(
+                          (option) => option.value === formData.temperatureUnit,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          temperatureUnit: String(option?.value || "CELSIUS"),
+                        }))
+                      }
+                      isDark={isDark}
+                      noOptionsMessage={t("fields.temperature")}
+                    />
                   </div>
 
                   {/* Address Display */}
@@ -495,23 +542,22 @@ const NewConfiguration: React.FC = () => {
                     >
                       {t("fields.addressDisplay")}
                     </label>
-                    <select
-                      name="addressDisplay"
-                      value={formData.addressDisplay}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                          : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                      } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                    >
-                      <option value="SHOW">
-                        {t("options.addressDisplay.show")}
-                      </option>
-                      <option value="HIDE">
-                        {t("options.addressDisplay.hide")}
-                      </option>
-                    </select>
+                    <SearchableDropdown
+                      options={addressDisplayOptions}
+                      value={
+                        addressDisplayOptions.find(
+                          (option) => option.value === formData.addressDisplay,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          addressDisplay: String(option?.value || "SHOW"),
+                        }))
+                      }
+                      isDark={isDark}
+                      noOptionsMessage={t("fields.addressDisplay")}
+                    />
                   </div>
                 </div>
               </div>
@@ -540,22 +586,22 @@ const NewConfiguration: React.FC = () => {
                       >
                         {t("fields.defaultLanguage")}
                       </label>
-                      <select
-                        name="defaultLanguage"
-                        value={formData.defaultLanguage}
-                        onChange={handleInputChange}
-                        className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                          isDark
-                            ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                            : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                        } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                      >
-                        <option value="en">{t("options.language.en")}</option>
-                        <option value="es">{t("options.language.es")}</option>
-                        <option value="fr">{t("options.language.fr")}</option>
-                        <option value="de">{t("options.language.de")}</option>
-                        <option value="hi">{t("options.language.hi")}</option>
-                      </select>
+                      <SearchableDropdown
+                        options={languageOptions}
+                        value={
+                          languageOptions.find(
+                            (option) => option.value === formData.defaultLanguage,
+                          ) || null
+                        }
+                        onChange={(option) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            defaultLanguage: String(option?.value || "en"),
+                          }))
+                        }
+                        isDark={isDark}
+                        noOptionsMessage={t("fields.defaultLanguage")}
+                      />
                     </div>
 
                     <button
@@ -583,24 +629,23 @@ const NewConfiguration: React.FC = () => {
                             index: index + 1,
                           })}
                         </label>
-                        <select
-                          value={lang}
-                          onChange={(e) =>
-                            handleLanguageChange(index, e.target.value)
+                        <SearchableDropdown
+                          options={languageOptions}
+                          value={
+                            languageOptions.find(
+                              (option) => option.value === lang,
+                            ) || null
                           }
-                          className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                            isDark
-                              ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                              : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                          } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                        >
-                          <option value="">{t("fields.selectLanguage")}</option>
-                          <option value="en">{t("options.language.en")}</option>
-                          <option value="es">{t("options.language.es")}</option>
-                          <option value="fr">{t("options.language.fr")}</option>
-                          <option value="de">{t("options.language.de")}</option>
-                          <option value="hi">{t("options.language.hi")}</option>
-                        </select>
+                          onChange={(option) =>
+                            handleLanguageChange(
+                              index,
+                              String(option?.value || ""),
+                            )
+                          }
+                          placeholder={t("fields.selectLanguage")}
+                          isDark={isDark}
+                          noOptionsMessage={t("fields.selectLanguage")}
+                        />
                       </div>
                       <button
                         type="button"

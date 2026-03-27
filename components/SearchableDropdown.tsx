@@ -2,6 +2,8 @@
 
 import type { CSSObjectWithLabel, GroupBase, StylesConfig } from "react-select";
 import Select from "react-select";
+import { useColor } from "@/context/ColorContext";
+import { useTheme } from "@/context/ThemeContext";
 
 export interface SearchableOption {
   label: string;
@@ -21,13 +23,29 @@ interface SearchableDropdownProps {
   noOptionsMessage?: string;
 }
 
+const hexToRgba = (hex: string, alpha: number) => {
+  if (!hex || !hex.startsWith("#")) return `rgba(99, 102, 241, ${alpha})`;
+  const normalized =
+    hex.length === 4
+      ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}`
+      : hex;
+  const r = parseInt(normalized.slice(1, 3), 16);
+  const g = parseInt(normalized.slice(3, 5), 16);
+  const b = parseInt(normalized.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+};
+
 const createStyles = (
   isDark: boolean,
+  primaryColor: string,
+  secondarySurface: string,
 ): StylesConfig<SearchableOption, false> => {
   const textColor = isDark ? "#e2e8f0" : "#0f172a";
   const borderColor = isDark ? "#334155" : "#cbd5e1";
-  const bgColor = isDark ? "#0f172a" : "#ffffff";
+  const bgColor = isDark ? "#0f172a" : secondarySurface;
   const mutedColor = isDark ? "#94a3b8" : "#64748b";
+  const focusedBg = hexToRgba(primaryColor, isDark ? 0.24 : 0.12);
+  const selectedBg = hexToRgba(primaryColor, isDark ? 0.32 : 0.2);
 
   const commonControl: CSSObjectWithLabel = {
     minHeight: 44,
@@ -42,10 +60,12 @@ const createStyles = (
     control: (base, state) => ({
       ...base,
       ...commonControl,
-      borderColor: state.isFocused ? "#06b6d4" : borderColor,
-      boxShadow: state.isFocused ? "0 0 0 3px rgba(6, 182, 212, 0.20)" : "none",
+      borderColor: state.isFocused ? primaryColor : borderColor,
+      boxShadow: state.isFocused
+        ? `0 0 0 3px ${hexToRgba(primaryColor, 0.2)}`
+        : "none",
       "&:hover": {
-        borderColor: state.isFocused ? "#06b6d4" : borderColor,
+        borderColor: state.isFocused ? primaryColor : borderColor,
       },
     }),
     valueContainer: (base) => ({
@@ -74,7 +94,7 @@ const createStyles = (
     }),
     dropdownIndicator: (base, state) => ({
       ...base,
-      color: state.isFocused ? "#06b6d4" : mutedColor,
+      color: state.isFocused ? primaryColor : mutedColor,
       padding: 8,
     }),
     clearIndicator: (base) => ({
@@ -109,13 +129,9 @@ const createStyles = (
       fontSize: 14,
       color: textColor,
       backgroundColor: state.isFocused
-        ? isDark
-          ? "#1e293b"
-          : "#eef9ff"
+        ? focusedBg
         : state.isSelected
-          ? isDark
-            ? "#164e63"
-            : "#cffafe"
+          ? selectedBg
           : "transparent",
       padding: "10px 12px",
     }),
@@ -139,6 +155,13 @@ const SearchableDropdown = ({
   isDark = false,
   noOptionsMessage = "No options found",
 }: SearchableDropdownProps) => {
+  const { selectedColor } = useColor();
+  const { isDark: isDarkFromContext } = useTheme();
+
+  const resolvedIsDark = isDark || isDarkFromContext;
+  const primaryColor = selectedColor || "#6366f1";
+  const secondarySurface = "hsl(var(--background))";
+
   const portalTarget =
     typeof window !== "undefined" ? document.body : undefined;
 
@@ -153,7 +176,7 @@ const SearchableDropdown = ({
       isClearable={isClearable}
       placeholder={placeholder}
       noOptionsMessage={() => noOptionsMessage}
-      styles={createStyles(isDark)}
+      styles={createStyles(resolvedIsDark, primaryColor, secondarySurface)}
       menuPortalTarget={portalTarget}
       menuPosition="fixed"
       menuShouldScrollIntoView={false}

@@ -36,6 +36,7 @@ import {
   FormModule,
 } from "@/interfaces/plan.interface";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 
 // Mock Theme and Color Contexts
 const useTheme = () => ({ isDark: false });
@@ -133,6 +134,35 @@ const PlansManagement = () => {
   const pricingModels = [
     "Fixed",
     "License-based",
+  ];
+  const tenantCategoryOptions = tenantCategoriesOptions.map((category) => ({
+    value: category.id,
+    label: category.displayName,
+  }));
+  const currencyOptions = currencies.map((currency) => ({
+    value: currency.id,
+    label: currency.value,
+  }));
+  const billingIntervalOptions = billingIntervals.map((interval) => ({
+    value: interval,
+    label: interval,
+  }));
+  const contractValidityOptions = contractValidities.map((validity) => ({
+    value: validity,
+    label: validity,
+  }));
+  const pricingModelOptions = pricingModels.map((model) => ({
+    value: model,
+    label: model,
+  }));
+  const planStatusOptions = [
+    { value: "Active", label: "Active" },
+    { value: "Inactive", label: "Inactive" },
+  ];
+  const tierOptions = [
+    { value: 1, label: "BASIC" },
+    { value: 2, label: "PRO" },
+    { value: 3, label: "ENTERPRISE" },
   ];
 
   // Fetch dropdown data on component mount
@@ -592,13 +622,17 @@ const PlansManagement = () => {
                     >
                       Tenant Category
                     </label>
-                    <select
-                      name="categoryID"
-                      value={formData.categoryID}
-                      onChange={(e) => {
-                        const selectedId = parseInt(e.target.value);
+                    <SearchableDropdown
+                      options={tenantCategoryOptions}
+                      value={
+                        tenantCategoryOptions.find(
+                          (option) => Number(option.value) === Number(formData.categoryID),
+                        ) || null
+                      }
+                      onChange={(option) => {
+                        const selectedId = Number(option?.value || 0);
                         const selectedCategory = tenantCategoriesOptions.find(
-                          (c) => c.id === selectedId,
+                          (category) => category.id === selectedId,
                         );
                         setFormData((prev) => ({
                           ...prev,
@@ -606,18 +640,9 @@ const PlansManagement = () => {
                           tenantCategory: selectedCategory?.name || "",
                         }));
                       }}
-                      className={`w-full px-4 py-3 rounded-lg border ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-white"
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:ring-2 focus:ring-purple-500 outline-none transition-all`}
-                    >
-                      {tenantCategoriesOptions.map((category) => (
-                        <option key={category.id} value={category.id}>
-                          {category.displayName}
-                        </option>
-                      ))}
-                    </select>
+                      isDark={isDark}
+                      noOptionsMessage="No category found"
+                    />
                   </div>
 
                   <div>
@@ -628,44 +653,34 @@ const PlansManagement = () => {
                     >
                       Settlement Currency
                     </label>
-                    <select
-                      name="currencyId"
-                      value={formData.currencyId}
-                      onChange={(e) => {
-                        const selectedId = parseInt(e.target.value);
+                    <SearchableDropdown
+                      options={currencyOptions}
+                      value={
+                        currencyOptions.find(
+                          (option) => Number(option.value) === Number(formData.currencyId),
+                        ) || null
+                      }
+                      onChange={(option) => {
+                        const selectedId = Number(option?.value || 0);
                         const selectedCurrency = currencies.find(
-                          (c) => c.id === selectedId,
+                          (currency) => currency.id === selectedId,
                         );
-                        if (selectedCurrency) {
-                          // Extract code from format "USD - US Dollar ($)"
-                          const currencyCode =
-                            selectedCurrency.value.split(" - ")[0];
-                          setFormData((prev) => ({
-                            ...prev,
-                            currencyId: selectedId,
-                            settlementCurrency: currencyCode,
-                          }));
-                        }
+                        if (!selectedCurrency) return;
+                        const currencyCode = selectedCurrency.value.split(" - ")[0];
+                        setFormData((prev) => ({
+                          ...prev,
+                          currencyId: selectedId,
+                          settlementCurrency: currencyCode,
+                        }));
                       }}
-                      disabled={loadingDropdowns}
-                      className={`w-full px-4 py-3 rounded-lg border ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-white"
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:ring-2 focus:ring-purple-500 outline-none transition-all disabled:opacity-50`}
-                    >
-                      {loadingDropdowns ? (
-                        <option>Loading currencies...</option>
-                      ) : currencies.length > 0 ? (
-                        currencies.map((currency) => (
-                          <option key={currency.id} value={currency.id}>
-                            {currency.value}
-                          </option>
-                        ))
-                      ) : (
-                        <option>No currencies available</option>
-                      )}
-                    </select>
+                      isDisabled={loadingDropdowns}
+                      isDark={isDark}
+                      noOptionsMessage={
+                        loadingDropdowns
+                          ? "Loading currencies..."
+                          : "No currencies available"
+                      }
+                    />
                   </div>
 
                   <div>
@@ -676,22 +691,22 @@ const PlansManagement = () => {
                     >
                       Billing Interval
                     </label>
-                    <select
-                      name="billingInterval"
-                      value={formData.billingInterval}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 rounded-lg border ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-white"
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:ring-2 focus:ring-purple-500 outline-none transition-all`}
-                    >
-                      {billingIntervals.map((interval) => (
-                        <option key={interval} value={interval}>
-                          {interval}
-                        </option>
-                      ))}
-                    </select>
+                    <SearchableDropdown
+                      options={billingIntervalOptions}
+                      value={
+                        billingIntervalOptions.find(
+                          (option) => option.value === formData.billingInterval,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          billingInterval: String(option?.value || prev.billingInterval),
+                        }))
+                      }
+                      isDark={isDark}
+                      noOptionsMessage="No billing interval found"
+                    />
                   </div>
 
                   <div>
@@ -702,22 +717,22 @@ const PlansManagement = () => {
                     >
                       Contract Validity
                     </label>
-                    <select
-                      name="contractValidity"
-                      value={formData.contractValidity}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 rounded-lg border ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-white"
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:ring-2 focus:ring-purple-500 outline-none transition-all`}
-                    >
-                      {contractValidities.map((validity) => (
-                        <option key={validity} value={validity}>
-                          {validity}
-                        </option>
-                      ))}
-                    </select>
+                    <SearchableDropdown
+                      options={contractValidityOptions}
+                      value={
+                        contractValidityOptions.find(
+                          (option) => option.value === formData.contractValidity,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          contractValidity: String(option?.value || prev.contractValidity),
+                        }))
+                      }
+                      isDark={isDark}
+                      noOptionsMessage="No validity found"
+                    />
                   </div>
 
                   <div>
@@ -728,22 +743,22 @@ const PlansManagement = () => {
                     >
                       Pricing Model
                     </label>
-                    <select
-                      name="pricingModel"
-                      value={formData.pricingModel}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 rounded-lg border ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-white"
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:ring-2 focus:ring-purple-500 outline-none transition-all`}
-                    >
-                      {pricingModels.map((model) => (
-                        <option key={model} value={model}>
-                          {model}
-                        </option>
-                      ))}
-                    </select>
+                    <SearchableDropdown
+                      options={pricingModelOptions}
+                      value={
+                        pricingModelOptions.find(
+                          (option) => option.value === formData.pricingModel,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          pricingModel: String(option?.value || prev.pricingModel),
+                        }))
+                      }
+                      isDark={isDark}
+                      noOptionsMessage="No pricing model found"
+                    />
                   </div>
 
                   <div>
@@ -754,19 +769,22 @@ const PlansManagement = () => {
                     >
                       Plan Status
                     </label>
-                    <select
-                      name="planStatus"
-                      value={formData.planStatus}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 rounded-lg border ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-white"
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:ring-2 focus:ring-purple-500 outline-none transition-all`}
-                    >
-                      <option value="Active">Active</option>
-                      <option value="Inactive">Inactive</option>
-                    </select>
+                    <SearchableDropdown
+                      options={planStatusOptions}
+                      value={
+                        planStatusOptions.find(
+                          (option) => option.value === formData.planStatus,
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          planStatus: String(option?.value || prev.planStatus),
+                        }))
+                      }
+                      isDark={isDark}
+                      noOptionsMessage="No status found"
+                    />
                   </div>
 
                   <div>
@@ -777,20 +795,22 @@ const PlansManagement = () => {
                     >
                       Tier
                     </label>
-                    <select
-                      name="tierId"
-                      value={formData.tierId}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 rounded-lg border ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-white"
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:ring-2 focus:ring-purple-500 outline-none transition-all`}
-                    >
-                      <option value={1}>BASIC</option>
-                      <option value={2}>PRO</option>
-                      <option value={3}>ENTERPRISE</option>
-                    </select>
+                    <SearchableDropdown
+                      options={tierOptions}
+                      value={
+                        tierOptions.find(
+                          (option) => Number(option.value) === Number(formData.tierId),
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          tierId: Number(option?.value || prev.tierId),
+                        }))
+                      }
+                      isDark={isDark}
+                      noOptionsMessage="No tier found"
+                    />
                   </div>
                 </div>
               </Card>

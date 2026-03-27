@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Card } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import { Permission, RoleFormData } from "@/interfaces/permission.interface";
@@ -40,6 +41,10 @@ const AddRole: React.FC = () => {
   });
 
   const [accounts, setAccounts] = useState([]);
+  const accountOptions = accounts.map((account: { id: number; value: string }) => ({
+    value: account.id,
+    label: account.value,
+  }));
 
   const getStoredAccountId = () => {
     if (typeof window === "undefined") return "";
@@ -487,28 +492,24 @@ const AddRole: React.FC = () => {
                   >
                     {t("fields.account")}
                   </label>
-                  <select
-                    name="account"
-                    value={formData.account}
-                    onChange={handleInputChange}
-                    required
-                    disabled={isEditMode}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground focus:border-purple-500"
-                        : "bg-white border-gray-300 text-gray-900 focus:border-purple-500"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20 ${
-                      isEditMode ? "opacity-60 cursor-not-allowed" : ""
-                    }`}
-                  >
-                    <option value="">{t("fields.selectAccount")}</option>
-                    {accounts &&
-                      accounts.map((account: { id: number; value: string }) => (
-                        <option key={account.id} value={account.id}>
-                          {account.value}
-                        </option>
-                      ))}
-                  </select>
+                  <SearchableDropdown
+                    options={accountOptions}
+                    value={
+                      accountOptions.find(
+                        (option) => String(option.value) === String(formData.account),
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        account: String(option?.value || ""),
+                      }))
+                    }
+                    placeholder={t("fields.selectAccount")}
+                    isDisabled={isEditMode}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectAccount")}
+                  />
                 </div>
 
                 {/* Role Name */}

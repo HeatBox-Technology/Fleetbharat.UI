@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Card } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import {
@@ -192,9 +193,7 @@ const ProvisionVehicle: React.FC = () => {
   }, [id, isEditMode, router, t]);
 
   // ── Form change handler ────────────────────────────────────────────────
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const numberFields = [
       "accountId",
@@ -224,6 +223,16 @@ const ProvisionVehicle: React.FC = () => {
       [name]: numberFields.includes(name) ? Number(value) : value,
     }));
   };
+
+  const accountOptions = accounts.map((account) => ({
+    value: Number(account.id),
+    label: account.value,
+  }));
+
+  const vehicleTypeOptions = vehicleTypes.map((vehicleType) => ({
+    value: Number(vehicleType.id),
+    label: vehicleType.vehicleTypeName,
+  }));
 
   // ── Submit ─────────────────────────────────────────────────────────────
   const handleSubmit = async () => {
@@ -410,19 +419,23 @@ const ProvisionVehicle: React.FC = () => {
                     {t("fields.account")}{" "}
                     <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="accountId"
-                    value={formData.accountId}
-                    onChange={handleChange}
-                    className={inputClass()}
-                  >
-                    <option value={0}>{t("fields.selectAccount")}</option>
-                    {accounts.map((a) => (
-                      <option key={a.id} value={a.id}>
-                        {a.value}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={accountOptions}
+                    value={
+                      accountOptions.find(
+                        (option) => Number(option.value) === formData.accountId,
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        accountId: Number(option?.value || 0),
+                      }))
+                    }
+                    placeholder={t("fields.selectAccount")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectAccount")}
+                  />
                 </div>
 
                 <div>
@@ -493,19 +506,24 @@ const ProvisionVehicle: React.FC = () => {
                     {t("fields.vehicleType")}{" "}
                     <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="vehicleTypeId"
-                    value={formData.vehicleTypeId}
-                    onChange={handleChange}
-                    className={inputClass()}
-                  >
-                    <option value={0}>{t("fields.selectType")}</option>
-                    {vehicleTypes.map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.vehicleTypeName}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={vehicleTypeOptions}
+                    value={
+                      vehicleTypeOptions.find(
+                        (option) =>
+                          Number(option.value) === formData.vehicleTypeId,
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        vehicleTypeId: Number(option?.value || 0),
+                      }))
+                    }
+                    placeholder={t("fields.selectType")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectType")}
+                  />
                 </div>
 
                 {/* <div>

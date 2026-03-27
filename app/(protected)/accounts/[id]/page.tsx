@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Card } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import ThemeCustomizer from "@/components/ThemeCustomizer";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
@@ -157,6 +158,34 @@ const EditAccount: React.FC = () => {
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(!isCreateMode);
   const [defaultSuperiorAccountId, setDefaultSuperiorAccountId] = useState("");
+  const superiorOptions = accounts.map((account) => ({
+    value: String(account.id),
+    label: account.value,
+  }));
+  const referrerOptions = [
+    { value: "Direct", label: "Direct" },
+    { value: "Partner Network", label: "Partner Network" },
+  ];
+  const categoryOptions = categories.map((category) => ({
+    value: String(category.categoryId),
+    label: category.labelName,
+  }));
+  const countryOptions = countries.map((country) => ({
+    value: String(country.countryId),
+    label: country.countryName,
+  }));
+  const stateOptions = states.map((state) => ({
+    value: String(state.stateId),
+    label: state.stateName,
+  }));
+  const cityOptions = cities.map((city) => ({
+    value: String(city.cityId),
+    label: city.cityName,
+  }));
+  const countryCodeOptions = countryCodes.map((item) => ({
+    value: item.code,
+    label: `${item.code} (${item.country})`,
+  }));
 
   const getLoggedInAccountId = () => {
     if (typeof window === "undefined") return "";
@@ -165,6 +194,54 @@ const EditAccount: React.FC = () => {
       return String(user?.accountId || "").trim();
     } catch {
       return "";
+    }
+  };
+  const handleCountrySelect = async (countryId: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      countryId,
+      stateId: "",
+      cityId: "",
+    }));
+    setCities([]);
+    setStates([]);
+
+    if (!countryId) return;
+    try {
+      const response = await getStatesByCountry(Number(countryId));
+      if (response && Array.isArray(response)) {
+        setStates(response);
+      }
+      const selectedCountry = countries.find(
+        (country) => country.countryId === Number(countryId),
+      );
+      if (selectedCountry?.timezoneName) {
+        setFormData((prev) => ({
+          ...prev,
+          businessTimeZone: selectedCountry.timezoneName,
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching states:", error);
+    }
+  };
+
+  const handleStateSelect = async (stateId: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      stateId,
+      cityId: "",
+    }));
+    setCities([]);
+
+    if (!stateId) return;
+    try {
+      const response = await getCitiesByState(Number(stateId));
+      if (response && Array.isArray(response)) {
+        setCities(response);
+      }
+    } catch (error) {
+      console.error("Error fetching cities:", error);
     }
   };
 
@@ -558,7 +635,7 @@ const EditAccount: React.FC = () => {
                 {t("sections.accountDetails")}
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 {/* Account Name */}
                 <div>
                   <label
@@ -587,23 +664,23 @@ const EditAccount: React.FC = () => {
                   >
                     Superior
                   </label>
-                  <select
-                    name="superior"
-                    value={formData.superior}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground"
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                  >
-                    <option value="">Select Superior Account</option>
-                    {accounts.map((account) => (
-                      <option key={account.id} value={account.id}>
-                        {account.value}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={superiorOptions}
+                    value={
+                      superiorOptions.find(
+                        (option) => option.value === String(formData.superior),
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        superior: String(option?.value || ""),
+                      }))
+                    }
+                    placeholder="Select Superior Account"
+                    isDark={isDark}
+                    noOptionsMessage="No account found"
+                  />
                 </div>
 
                 {/* Referrer */}
@@ -613,20 +690,23 @@ const EditAccount: React.FC = () => {
                   >
                     Referrer
                   </label>
-                  <select
-                    name="referrer"
-                    value={formData.referrer}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground"
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                  >
-                    <option value="">Select Referrer</option>
-                    <option value="Direct">Direct</option>
-                    <option value="Partner Network">Partner Network</option>
-                  </select>
+                  <SearchableDropdown
+                    options={referrerOptions}
+                    value={
+                      referrerOptions.find(
+                        (option) => option.value === String(formData.referrer),
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        referrer: String(option?.value || ""),
+                      }))
+                    }
+                    placeholder="Select Referrer"
+                    isDark={isDark}
+                    noOptionsMessage="No referrer found"
+                  />
                 </div>
               </div>
 
@@ -635,7 +715,7 @@ const EditAccount: React.FC = () => {
               >
                 Contact
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Contact Name */}
                 <div>
                   <label
@@ -664,23 +744,25 @@ const EditAccount: React.FC = () => {
                   >
                     Phone
                   </label>
-                  <div className="flex gap-0.5">
-                    <select
-                      name="countryCode"
-                      value={formData.countryCode}
-                      onChange={handleInputChange}
-                      className={`w-24 px-2 py-2.5 rounded-lg border transition-colors ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-foreground"
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                    >
-                      {countryCodes.map((item) => (
-                        <option key={item.code} value={item.code}>
-                          {item.code}
-                        </option>
-                      ))}
-                    </select>
+                  <div className="flex gap-2">
+                    <div className="w-48 shrink-0">
+                      <SearchableDropdown
+                        options={countryCodeOptions}
+                        value={
+                          countryCodeOptions.find(
+                            (option) => option.value === formData.countryCode,
+                          ) || null
+                        }
+                        onChange={(option) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            countryCode: String(option?.value || "+91"),
+                          }))
+                        }
+                        isDark={isDark}
+                        noOptionsMessage="No code found"
+                      />
+                    </div>
                     <input
                       type="tel"
                       name="phone"
@@ -738,23 +820,20 @@ const EditAccount: React.FC = () => {
                   >
                     Country
                   </label>
-                  <select
-                    name="countryId"
-                    value={formData.countryId}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground"
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                  >
-                    <option value="">Select Country</option>
-                    {countries.map((country) => (
-                      <option key={country.countryId} value={country.countryId}>
-                        {country.countryName}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={countryOptions}
+                    value={
+                      countryOptions.find(
+                        (option) => option.value === String(formData.countryId),
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      handleCountrySelect(String(option?.value || ""))
+                    }
+                    placeholder="Select Country"
+                    isDark={isDark}
+                    noOptionsMessage="No country found"
+                  />
                 </div>
 
                 {/* State/Province */}
@@ -764,24 +843,21 @@ const EditAccount: React.FC = () => {
                   >
                     State/Province
                   </label>
-                  <select
-                    name="stateId"
-                    value={formData.stateId}
-                    onChange={handleInputChange}
-                    disabled={!formData.countryId}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground"
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20 disabled:opacity-50 disabled:cursor-not-allowed`}
-                  >
-                    <option value="">Select State</option>
-                    {states.map((state) => (
-                      <option key={state.stateId} value={state.stateId}>
-                        {state.stateName}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={stateOptions}
+                    value={
+                      stateOptions.find(
+                        (option) => option.value === String(formData.stateId),
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      handleStateSelect(String(option?.value || ""))
+                    }
+                    isDisabled={!formData.countryId}
+                    placeholder="Select State"
+                    isDark={isDark}
+                    noOptionsMessage="No state found"
+                  />
                 </div>
 
                 {/* Town/City */}
@@ -791,24 +867,24 @@ const EditAccount: React.FC = () => {
                   >
                     Town/City
                   </label>
-                  <select
-                    name="cityId"
-                    value={formData.cityId}
-                    onChange={handleInputChange}
-                    disabled={!formData.stateId}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground"
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20 disabled:opacity-50 disabled:cursor-not-allowed`}
-                  >
-                    <option value="">Select City</option>
-                    {cities.map((city) => (
-                      <option key={city.cityId} value={city.cityId}>
-                        {city.cityName}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={cityOptions}
+                    value={
+                      cityOptions.find(
+                        (option) => option.value === String(formData.cityId),
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        cityId: String(option?.value || ""),
+                      }))
+                    }
+                    isDisabled={!formData.stateId}
+                    placeholder="Select City"
+                    isDark={isDark}
+                    noOptionsMessage="No city found"
+                  />
                 </div>
 
                 {/* Zipcode */}
@@ -874,22 +950,25 @@ const EditAccount: React.FC = () => {
                     Contact Number
                   </label>
                   <div className="flex gap-2">
-                    <select
-                      name="businessCountryCode"
-                      value={formData.businessCountryCode}
-                      onChange={handleInputChange}
-                      className={`w-24 px-2 py-2.5 rounded-lg border transition-colors ${
-                        isDark
-                          ? "bg-gray-800 border-gray-700 text-foreground"
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                    >
-                      {countryCodes.map((item) => (
-                        <option key={item.code} value={item.code}>
-                          {item.code}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="w-48 shrink-0">
+                      <SearchableDropdown
+                        options={countryCodeOptions}
+                        value={
+                          countryCodeOptions.find(
+                            (option) =>
+                              option.value === formData.businessCountryCode,
+                          ) || null
+                        }
+                        onChange={(option) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            businessCountryCode: String(option?.value || "+91"),
+                          }))
+                        }
+                        isDark={isDark}
+                        noOptionsMessage="No code found"
+                      />
+                    </div>
                     <input
                       type="tel"
                       name="contactNumber"
@@ -1101,26 +1180,23 @@ const EditAccount: React.FC = () => {
                   >
                     Category
                   </label>
-                  <select
-                    name="categoryId"
-                    value={formData.categoryId}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground"
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                  >
-                    <option value="">Select Category</option>
-                    {categories.map((category) => (
-                      <option
-                        key={category.categoryId}
-                        value={category.categoryId}
-                      >
-                        {category.labelName}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={categoryOptions}
+                    value={
+                      categoryOptions.find(
+                        (option) => option.value === String(formData.categoryId),
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        categoryId: String(option?.value || ""),
+                      }))
+                    }
+                    placeholder="Select Category"
+                    isDark={isDark}
+                    noOptionsMessage="No category found"
+                  />
                 </div>
 
                 {/* Status */}
@@ -1130,19 +1206,28 @@ const EditAccount: React.FC = () => {
                   >
                     Status
                   </label>
-                  <select
-                    name="status"
-                    value={formData.status}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground"
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
+                  <SearchableDropdown
+                    options={[
+                      { value: "Active", label: "Active" },
+                      { value: "Inactive", label: "Inactive" },
+                    ]}
+                    value={
+                      formData.status
+                        ? {
+                            value: formData.status,
+                            label: formData.status,
+                          }
+                        : null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        status: String(option?.value || "Active"),
+                      }))
+                    }
+                    isDark={isDark}
+                    noOptionsMessage="No status found"
+                  />
                 </div>
               </div>
 

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Cpu, Link2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useRouter, useParams } from "next/navigation";
@@ -133,6 +134,26 @@ const AddEditDeviceMap: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(false);
+  const accountOptions = accounts.map((option) => ({
+    value: option.id,
+    label: option.value,
+  }));
+  const vehicleOptions = vehicles.map((option) => ({
+    value: option.id,
+    label: option.value,
+  }));
+  const deviceTypeOptions = deviceTypes.map((option) => ({
+    value: option.id,
+    label: option.value,
+  }));
+  const hardwareOptions = hardware.map((option) => ({
+    value: option.id,
+    label: option.value,
+  }));
+  const simOptions = sims.map((option) => ({
+    value: option.id,
+    label: option.value,
+  }));
 
   const toOptions = (response: any): DropdownOption[] => {
     const data = Array.isArray(response?.data)
@@ -295,7 +316,7 @@ const AddEditDeviceMap: React.FC = () => {
 
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      HTMLInputElement | HTMLTextAreaElement
     >,
   ) => {
     const { name, value } = e.target;
@@ -559,115 +580,119 @@ const AddEditDeviceMap: React.FC = () => {
                   <label className="block text-sm font-semibold text-foreground mb-2">
                     {t("fields.account")} <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="accountId"
-                    value={formData.accountId}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground"
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                  >
-                    <option value={0}>{t("fields.selectAccount")}</option>
-                    {accounts.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.value}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={accountOptions}
+                    value={
+                      accountOptions.find(
+                        (option) => Number(option.value) === Number(formData.accountId),
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        accountId: Number(option?.value || 0),
+                      }))
+                    }
+                    placeholder={t("fields.selectAccount")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectAccount")}
+                  />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-foreground mb-2">
                     {t("fields.vehicle")} <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="fk_VehicleId"
-                    value={formData.fk_VehicleId}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground"
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                  >
-                    <option value={0}>{t("fields.selectVehicle")}</option>
-                    {vehicles.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.value}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={vehicleOptions}
+                    value={
+                      vehicleOptions.find(
+                        (option) => Number(option.value) === Number(formData.fk_VehicleId),
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        fk_VehicleId: Number(option?.value || 0),
+                      }))
+                    }
+                    placeholder={t("fields.selectVehicle")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectVehicle")}
+                  />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-foreground mb-2">
                     {t("fields.deviceType")} <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="fk_devicetypeid"
-                    value={formData.fk_devicetypeid}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground"
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                  >
-                    <option value={0}>{t("fields.selectDeviceType")}</option>
-                    {deviceTypes.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.value}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={deviceTypeOptions}
+                    value={
+                      deviceTypeOptions.find(
+                        (option) => Number(option.value) === Number(formData.fk_devicetypeid),
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        fk_devicetypeid: Number(option?.value || 0),
+                      }))
+                    }
+                    placeholder={t("fields.selectDeviceType")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectDeviceType")}
+                  />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-foreground mb-2">
                     {t("fields.hardware")} <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="fk_DeviceId"
-                    value={formData.fk_DeviceId}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground"
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                  >
-                    <option value={0}>{t("fields.selectHardware")}</option>
-                    {hardware.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.value}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={hardwareOptions}
+                    value={
+                      hardwareOptions.find(
+                        (option) => Number(option.value) === Number(formData.fk_DeviceId),
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        fk_DeviceId: Number(option?.value || 0),
+                      }))
+                    }
+                    placeholder={t("fields.selectHardware")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectHardware")}
+                  />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-foreground mb-2">
                     {t("fields.sim")} <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="fk_simid"
-                    value={formData.fk_simid}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground"
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                  >
-                    <option value={0}>{t("fields.selectSim")}</option>
-                    {sims.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.value}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={simOptions}
+                    value={
+                      simOptions.find(
+                        (option) => Number(option.value) === Number(formData.fk_simid),
+                      ) || null
+                    }
+                    onChange={(option) => {
+                      const simId = Number(option?.value || 0);
+                      const selectedSim =
+                        simOptions.find((item) => Number(item.value) === simId)?.label || "";
+                      setFormData((prev) => ({
+                        ...prev,
+                        fk_simid: simId,
+                        simnno: selectedSim,
+                      }));
+                    }}
+                    placeholder={t("fields.selectSim")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectSim")}
+                  />
                 </div>
 
                 <div>

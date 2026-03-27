@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import { getAllAccounts } from "@/services/commonServie";
@@ -47,6 +48,10 @@ const AddEditDriver: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(false);
   const today = new Date().toISOString().split("T")[0];
+  const accountOptions = accounts.map((account) => ({
+    value: account.id,
+    label: account.value,
+  }));
 
   const getLocalStorageAccountId = () => {
     if (typeof window === "undefined") return 0;
@@ -288,21 +293,21 @@ const AddEditDriver: React.FC = () => {
                   {t("fields.organisation")}{" "}
                   <span className="text-red-500">*</span>
                 </label>
-                <select
-                  value={organisationId}
-                  onChange={(e) => setOrganisationId(e.target.value)}
-                  disabled={loading}
-                  className={inputClass}
-                  onFocus={(e) => (e.target.style.borderColor = selectedColor)}
-                  onBlur={(e) => (e.target.style.borderColor = "")}
-                >
-                  <option value="">{t("fields.selectAccount")}</option>
-                  {accounts.map((account) => (
-                    <option key={account.id} value={account.id}>
-                      {account.value}
-                    </option>
-                  ))}
-                </select>
+                <SearchableDropdown
+                  options={accountOptions}
+                  value={
+                    accountOptions.find(
+                      (option) => Number(option.value) === Number(organisationId),
+                    ) || null
+                  }
+                  onChange={(option) =>
+                    setOrganisationId(option ? Number(option.value) : "")
+                  }
+                  placeholder={t("fields.selectAccount")}
+                  isDisabled={loading}
+                  isDark={isDark}
+                  noOptionsMessage={t("fields.selectAccount")}
+                />
               </div>
 
               {/* First Name & Last Name */}

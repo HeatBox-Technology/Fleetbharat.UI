@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { GoogleMap, MarkerF, PolylineF } from "@react-google-maps/api";
 import {
-  ArrowLeft,
   Navigation,
   Gauge,
   Phone,
@@ -21,6 +20,9 @@ import {
 } from "lucide-react";
 import { useGoogleMapsSdk } from "@/hooks/useGoogleMapsSdk";
 import { useRouter, useParams } from "next/navigation";
+import PageHeader from "@/components/PageHeader";
+import { useColor } from "@/context/ColorContext";
+import { useTheme } from "@/context/ThemeContext";
 import { getLiveTrackingBatch } from "@/services/liveTrackingService";
 import { getCarMarkerSvg } from "@/utils/carMarkerIcon";
 
@@ -185,6 +187,8 @@ function normalizeVehicleData(raw: unknown): VehicleData | null {
 }
 
 export default function LiveTracking() {
+  const { isDark } = useTheme();
+  const { selectedColor } = useColor();
   const router = useRouter();
   const params = useParams();
   const vehicleId = params?.id as string;
@@ -480,41 +484,76 @@ export default function LiveTracking() {
       ? { label: "Address", value: vehicleData.Address }
       : null,
   ].filter(Boolean) as { label: string; value: string }[];
+  const accentColor = selectedColor || "#10b981";
+  const accentSoftBg = `${accentColor}1A`;
+  const accentMediumBg = `${accentColor}33`;
 
   if (!vehicleId) {
     return (
-      <div className="flex items-center justify-center bg-gray-100 p-8">
-        <div className="text-lg font-semibold text-red-600">
-          Vehicle ID not found
+      <div className={`${isDark ? "dark" : ""}`}>
+        <div
+          className={`min-h-screen ${isDark ? "bg-background" : "bg-gray-50"} p-6`}
+        >
+          <div className="max-w-7xl mx-auto mb-6">
+            <PageHeader
+              title="Live Tracking"
+              breadcrumbs={[
+                { label: "Fleet" },
+                { label: "Track & Trace", href: "/track-trace" },
+                { label: "Vehicle" },
+              ]}
+              showButton
+              buttonText="Back to Fleet"
+              onButtonClick={() => router.push("/fleet")}
+            />
+          </div>
+          <div className="max-w-7xl mx-auto flex items-center justify-center rounded-xl bg-red-50 p-8 text-lg font-semibold text-red-600">
+            Vehicle ID not found
+          </div>
         </div>
       </div>
-    );
-  }
+  );
+}
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-gray-100 sm:p-2 md:p-2">
-      {/* Desktop Layout */}
-      <div
-        className="hidden h-full gap-3 lg:flex"
-        style={{ height: "calc(100vh - 120px)" }}
-      >
+    <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <div className={`min-h-screen ${isDark ? "bg-background" : "#fffff"} p-6`}>
+        <div className="mx-auto mb-6">
+          <PageHeader
+            title="Live Tracking"
+            breadcrumbs={[
+              { label: "Fleet" },
+              { label: "Track & Trace", href: "/fleet" },
+              { label: loading ? "Vehicle" : vehicleData?.VehicleNo || vehicleId },
+            ]}
+            showButton
+            buttonText="Back to Fleet"
+            onButtonClick={() => router.push("/fleet")}
+          />
+        </div>
+        <div className="mx-auto">
+          <div
+            className="relative w-full overflow-hidden rounded-xl sm:p-2 "
+          >
+            {/* Desktop Layout */}
+            <div
+              className="hidden h-full gap-3 lg:flex"
+            >
         {/* Left Panel - Desktop */}
         <aside className="flex w-full max-w-sm flex-col overflow-y-auto rounded-lg bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 lg:w-[360px]">
           {/* Header */}
           <div className="border-b border-gray-700/50 p-4">
-            <button
-              onClick={() => router.push("/fleet")}
-              className="mb-3 flex items-center gap-2 text-xs font-medium text-emerald-400 transition hover:text-emerald-300"
-            >
-              <ArrowLeft className="h-3 w-3" />
-              BACK TO FLEET
-            </button>
-
             <div className="flex items-start justify-between">
               <div>
                 <div className="mb-1 flex items-center gap-2">
-                  <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/50"></div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+                  <div
+                    className="h-1.5 w-1.5 animate-pulse rounded-full shadow-lg"
+                    style={{ backgroundColor: accentColor }}
+                  ></div>
+                  <span
+                    className="text-[10px] font-bold uppercase tracking-wider"
+                    style={{ color: accentColor }}
+                  >
                     Live Tracking
                   </span>
                 </div>
@@ -522,7 +561,10 @@ export default function LiveTracking() {
                   {loading ? "Loading..." : vehicleData?.VehicleNo || vehicleId}
                 </h1>
               </div>
-              <button className="rounded-lg bg-emerald-500/10 p-1.5 text-emerald-400 transition hover:bg-emerald-500/20">
+              <button
+                className="rounded-lg p-1.5 transition"
+                style={{ backgroundColor: accentSoftBg, color: accentColor }}
+              >
                 <Navigation className="h-4 w-4" />
               </button>
             </div>
@@ -535,7 +577,10 @@ export default function LiveTracking() {
                 Actual Speed
               </div>
               <div className="relative inline-flex items-baseline">
-                <span className="text-5xl font-black tabular-nums tracking-tight text-emerald-400">
+                <span
+                  className="text-5xl font-black tabular-nums tracking-tight"
+                  style={{ color: accentColor }}
+                >
                   {loading ? "--" : Math.round(vehicleData?.Speed || 0)}
                 </span>
                 <span className="ml-2 text-base font-bold text-gray-500">
@@ -545,9 +590,10 @@ export default function LiveTracking() {
               {/* Speed Bar */}
               <div className="mx-auto mt-3 h-1.5 w-48 overflow-hidden rounded-full bg-gray-700">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500 transition-all duration-500"
+                  className="h-full rounded-full transition-all duration-500"
                   style={{
                     width: `${Math.min(((vehicleData?.Speed || 0) / 120) * 100, 100)}%`,
+                    backgroundColor: accentColor,
                   }}
                 ></div>
               </div>
@@ -584,17 +630,24 @@ export default function LiveTracking() {
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div
-                className={`flex items-center gap-2 rounded-lg p-2 ${vehicleData?.Ignition ? "bg-emerald-500/10" : "bg-gray-800/50"}`}
+                className="flex items-center gap-2 rounded-lg p-2"
+                style={{
+                  backgroundColor: vehicleData?.Ignition
+                    ? accentSoftBg
+                    : "rgba(31, 41, 55, 0.5)",
+                }}
               >
                 <Zap
-                  className={`h-3.5 w-3.5 ${vehicleData?.Ignition ? "text-emerald-400" : "text-gray-500"}`}
+                  className="h-3.5 w-3.5"
+                  style={{ color: vehicleData?.Ignition ? accentColor : "#6b7280" }}
                 />
                 <div>
                   <div className="text-[9px] font-bold uppercase tracking-wider text-gray-400">
                     Ignition
                   </div>
                   <div
-                    className={`text-xs font-black ${vehicleData?.Ignition ? "text-emerald-400" : "text-gray-500"}`}
+                    className="text-xs font-black"
+                    style={{ color: vehicleData?.Ignition ? accentColor : "#6b7280" }}
                   >
                     {vehicleData?.Ignition ? "ON" : "OFF"}
                   </div>
@@ -673,7 +726,8 @@ export default function LiveTracking() {
                       {pos.lat.toFixed(5)}, {pos.lng.toFixed(5)}
                     </div>
                     <div
-                      className={`text-[10px] font-semibold ${idx === 0 ? "text-emerald-400" : "text-gray-500"}`}
+                      className="text-[10px] font-semibold"
+                      style={{ color: idx === 0 ? accentColor : "#6b7280" }}
                     >
                       {idx === 0 ? "Now" : formatDate(pos.timestamp)}
                     </div>
@@ -693,14 +747,20 @@ export default function LiveTracking() {
               <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                 Device Info
               </span>
-              <span className="rounded-full bg-emerald-500 px-2.5 py-0.5 text-[10px] font-bold text-white">
+              <span
+                className="rounded-full px-2.5 py-0.5 text-[10px] font-bold text-white"
+                style={{ backgroundColor: accentColor }}
+              >
                 {getStatus()}
               </span>
             </div>
             <div className="rounded-lg bg-gray-800/50 p-3">
               <div className="mb-2 flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10">
-                  <User className="h-4 w-4 text-emerald-400" />
+                <div
+                  className="flex h-8 w-8 items-center justify-center rounded-full"
+                  style={{ backgroundColor: accentSoftBg }}
+                >
+                  <User className="h-4 w-4" style={{ color: accentColor }} />
                 </div>
                 <div>
                   <div className="text-sm font-bold text-white">
@@ -726,7 +786,10 @@ export default function LiveTracking() {
                 <div className="text-[10px] text-gray-400">
                   Last Update: {formatDate(infoTimestamp)}
                 </div>
-                <button className="rounded-full bg-emerald-500/10 p-1.5 text-emerald-400 transition hover:bg-emerald-500/20">
+                <button
+                  className="rounded-full p-1.5 transition"
+                  style={{ backgroundColor: accentMediumBg, color: accentColor }}
+                >
                   <Phone className="h-3.5 w-3.5" />
                 </button>
               </div>
@@ -818,17 +881,6 @@ export default function LiveTracking() {
                 <span className="text-xs font-bold uppercase tracking-wider text-white">
                   Live Stream Active
                 </span>
-                <Maximize2 className="h-3.5 w-3.5 text-white" />
-              </div>
-
-              {/* Map Controls */}
-              <div className="absolute right-4 top-16 flex flex-col gap-2">
-                <button className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600 text-white shadow-lg transition hover:bg-purple-700">
-                  <Settings className="h-4 w-4" />
-                </button>
-                <button className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-700 shadow-lg transition hover:bg-gray-50">
-                  <Layers3 className="h-4 w-4" />
-                </button>
               </div>
 
               {/* Error Display */}
@@ -839,11 +891,11 @@ export default function LiveTracking() {
               )}
             </>
           )}
-        </main>
-      </div>
+            </main>
+          </div>
 
-      {/* Mobile Layout */}
-      <div className="flex h-full flex-col lg:hidden">
+          {/* Mobile Layout */}
+          <div className="flex h-full flex-col lg:hidden">
         {/* Map Section - Mobile (Full Height) */}
         <div className="relative flex-1">
           {!hasApiKey && (
@@ -921,15 +973,6 @@ export default function LiveTracking() {
                   />
                 )}
               </GoogleMap>
-
-              {/* Back Button - Mobile */}
-              <button
-                onClick={() => router.push("/fleet")}
-                className="absolute left-4 top-4 flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-gray-700 shadow-lg transition hover:bg-gray-50"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                <span className="hidden sm:inline">Fleet</span>
-              </button>
 
               {/* Live Badge - Mobile */}
               <div className="absolute right-4 top-4 flex items-center gap-2 rounded-full bg-emerald-500 px-3 py-1.5 shadow-xl">
@@ -1210,8 +1253,11 @@ export default function LiveTracking() {
               </div>
             </div>
           </div>
+          </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
   );
 }

@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Card } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
 import { useTheme } from "@/context/ThemeContext";
 import { useGoogleMapsSdk } from "@/hooks/useGoogleMapsSdk";
@@ -210,11 +211,11 @@ export default function FleetDashboard() {
   };
 
   return (
-    <div className={`${isDark ? "dark" : ""}`}>
+    <div className={`${isDark ? "dark" : ""} mt-10`}>
       <div
-        className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f3f4f6]"} p-3 md:p-4`}
+        className={`min-h-screen ${isDark ? "bg-background" : ""}`}
       >
-        <div className="mx-auto mb-4 max-w-7xl">
+        <div className="mx-auto">
           <PageHeader
             title="Fleet Intelligence"
             subtitle="Track, monitor, and manage your fleet in real time."
@@ -229,10 +230,10 @@ export default function FleetDashboard() {
           />
         </div>
 
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto">
           <header className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-end">
             <div className="flex items-center gap-2">
-              <div className="relative w-full max-w-[280px]">
+              <div className="relative w-full">
                 <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <input
                   value={searchInput}
@@ -252,7 +253,7 @@ export default function FleetDashboard() {
             </div>
           </header>
 
-          <div className="mb-4 grid grid-cols-2 gap-2 md:grid-cols-4 xl:grid-cols-7">
+          <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-7">
             {stats.map((stat) => {
               const active = filterStatus === stat.label;
               const Icon = STATUS_META[stat.label]?.icon || CircleDotDashed;
@@ -261,21 +262,26 @@ export default function FleetDashboard() {
                   key={stat.label}
                   type="button"
                   onClick={() => setFilterStatus(stat.label)}
-                  className={`rounded-2xl border px-4 py-3 text-left transition ${
-                    active
-                      ? "border-indigo-200 bg-white shadow-sm"
-                      : "border-transparent bg-[#ededf0] hover:bg-[#e8e9ed]"
-                  }`}
+                  className="text-left"
                 >
-                  <div className="mb-1 flex items-center gap-2">
-                    <Icon className="h-4 w-4 text-slate-400" />
-                    <span className="text-[12px] font-bold tracking-widest text-slate-600">
-                      {stat.label}
-                    </span>
-                  </div>
-                  <div className="text-2xl font-black text-slate-800">
-                    {stat.count}
-                  </div>
+                  <Card
+                    isDark={isDark}
+                    className={`h-full rounded-2xl border p-4 transition ${
+                      active
+                        ? "border-indigo-300 ring-2 ring-indigo-200"
+                        : "hover:border-slate-300"
+                    }`}
+                  >
+                    <div className="mb-1 flex items-center gap-2">
+                      <Icon className="h-4 w-4 text-slate-400" />
+                      <span className="text-[12px] font-bold tracking-widest text-slate-600">
+                        {stat.label}
+                      </span>
+                    </div>
+                    <div className="text-2xl font-black text-slate-800">
+                      {stat.count}
+                    </div>
+                  </Card>
                 </button>
               );
             })}

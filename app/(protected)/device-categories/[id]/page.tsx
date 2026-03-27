@@ -2,6 +2,7 @@
 
 import { Card } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import { getFormRightForPath } from "@/services/commonServie";
@@ -74,6 +75,11 @@ const AddEditDeviceCategoryPage: React.FC = () => {
 
   const [formData, setFormData] = useState<DeviceCategoryForm>(INITIAL_FORM);
   const [loading, setLoading] = useState(false);
+  const protocolOptions = [
+    { value: "TCP", label: "TCP" },
+    { value: "HTTP", label: "HTTP" },
+    { value: "MQTT", label: "MQTT" },
+  ];
 
   useEffect(() => {
     if (!isEditMode) return;
@@ -220,21 +226,24 @@ const AddEditDeviceCategoryPage: React.FC = () => {
 
               <div>
                 <label className={labelClass}>{t("fields.protocol")}</label>
-                <select
-                  name="protocol"
-                  value={formData.protocol}
-                  onChange={updateField}
-                  className={`${inputClass} ${
-                    isDark
-                      ? "bg-gray-800 border-gray-700 text-foreground"
-                      : "bg-white border-gray-300 text-gray-900"
-                  }`}
-                  disabled={loading}
-                >
-                  <option value="TCP">TCP</option>
-                  <option value="HTTP">HTTP</option>
-                  <option value="MQTT">MQTT</option>
-                </select>
+                <SearchableDropdown
+                  options={protocolOptions}
+                  value={
+                    protocolOptions.find(
+                      (option) => option.value === formData.protocol,
+                    ) || null
+                  }
+                  onChange={(option) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      protocol: String(option?.value || prev.protocol),
+                    }))
+                  }
+                  isDisabled={loading}
+                  placeholder={t("fields.protocol")}
+                  isDark={isDark}
+                  noOptionsMessage="No protocol found"
+                />
               </div>
             </div>
 

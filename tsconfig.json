@@ -29,7 +29,7 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts",
-    "app/(protected)/fleet/page.jsx"
+    "app/(protected)/formmaster/[id]/fleet/page.jsx"
   ],
   "exclude": ["node_modules"]
 }

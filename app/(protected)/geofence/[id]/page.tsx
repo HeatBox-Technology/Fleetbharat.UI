@@ -10,6 +10,7 @@ import { Save } from "lucide-react";
 import { toast } from "react-toastify";
 import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import type {
   GeofenceZone,
   GeometryType,
@@ -146,6 +147,18 @@ export default function GeofenceDetailPage() {
     null,
   );
   const [paths, setPaths] = useState<{ lat: number; lng: number }[]>([]);
+  const accountOptions = accounts.map((account) => ({
+    value: Number(account.id),
+    label: account.value,
+  }));
+  const classificationOptions = CLASSIFICATIONS.map((item) => ({
+    value: item,
+    label: item,
+  }));
+  const statusOptions = [
+    { value: "enabled", label: t("fields.enabled") },
+    { value: "disabled", label: t("fields.disabled") },
+  ];
 
   // shapeDrawn: true means we have valid shape data (either loaded or drawn)
   const [shapeDrawn, setShapeDrawn] = useState(false);
@@ -643,18 +656,18 @@ export default function GeofenceDetailPage() {
               <div className="space-y-3">
                 <div>
                   <label className={labelCls}>{t("fields.account")}</label>
-                  <select
-                    value={accountId}
-                    onChange={(e) => setAccountId(Number(e.target.value))}
-                    className={inputCls}
-                  >
-                    <option value={0}>{t("fields.selectAccount")}</option>
-                    {accounts.map((account) => (
-                      <option key={account.id} value={account.id}>
-                        {account.value}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableDropdown
+                    options={accountOptions}
+                    value={
+                      accountOptions.find(
+                        (option) => Number(option.value) === Number(accountId),
+                      ) || null
+                    }
+                    onChange={(option) => setAccountId(Number(option?.value || 0))}
+                    placeholder={t("fields.selectAccount")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.selectAccount")}
+                  />
                 </div>
                 <div>
                   <label className={labelCls}>{t("fields.uniqueCode")}</label>
@@ -700,19 +713,22 @@ export default function GeofenceDetailPage() {
               <div className="space-y-3">
                 <div>
                   <label className={labelCls}>{t("fields.classification")}</label>
-                  <select
-                    value={classification}
-                    onChange={(e) =>
-                      setClassification(e.target.value as ZoneClassification)
+                  <SearchableDropdown
+                    options={classificationOptions}
+                    value={
+                      classificationOptions.find(
+                        (option) => option.value === classification,
+                      ) || null
                     }
-                    className={inputCls}
-                  >
-                    {CLASSIFICATIONS.map((item) => (
-                      <option key={item} value={item}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(option) =>
+                      setClassification(
+                        (option?.value as ZoneClassification) || "Warehouse",
+                      )
+                    }
+                    placeholder={t("fields.classification")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.classification")}
+                  />
                 </div>
 
                 <div>
@@ -772,14 +788,19 @@ export default function GeofenceDetailPage() {
 
                 <div>
                   <label className={labelCls}>{t("fields.status")}</label>
-                  <select
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value as ZoneStatus)}
-                    className={inputCls}
-                  >
-                    <option value="enabled">{t("fields.enabled")}</option>
-                    <option value="disabled">{t("fields.disabled")}</option>
-                  </select>
+                  <SearchableDropdown
+                    options={statusOptions}
+                    value={
+                      statusOptions.find((option) => option.value === status) ||
+                      null
+                    }
+                    onChange={(option) =>
+                      setStatus((option?.value as ZoneStatus) || "enabled")
+                    }
+                    placeholder={t("fields.status")}
+                    isDark={isDark}
+                    noOptionsMessage={t("fields.status")}
+                  />
                 </div>
 
                 <div>
