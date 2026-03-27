@@ -1,0 +1,106 @@
+{
+  "pages": {
+    "formmaster": {
+      "list": {
+        "title": "ಫಾರ್ಮ್ ಮಾಸ್ಟರ್",
+        "subtitle": "ಅಪ್ಲಿಕೇಶನ್ ಫಾರ್ಮ್‌ಗಳು, ಮಾಡ್ಯೂಲ್‌ಗಳು, ರೂಟ್‌ಗಳು ಮತ್ತು ಗೋಚರತೆಯನ್ನು ನಿರ್ವಹಿಸಿ.",
+        "breadcrumbs": {
+          "configurations": "ಕಾನ್ಫಿಗರೇಶನ್‌ಗಳು",
+          "current": "ಫಾರ್ಮ್ ಮಾಸ್ಟರ್"
+        },
+        "addButton": "ಫಾರ್ಮ್ ಸೇರಿಸಿ",
+        "loading": "ಫಾರ್ಮ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+        "searchPlaceholder": "ಹೆಸರು, ಕೋಡ್ ಅಥವಾ ಮಾಡ್ಯೂಲ್ ಮೂಲಕ ಫಾರ್ಮ್‌ಗಳನ್ನು ಹುಡುಕಿ...",
+        "table": {
+          "no": "ಕ್ರಮ ಸಂಖ್ಯೆ",
+          "formCode": "ಫಾರ್ಮ್ ಕೋಡ್",
+          "formName": "ಫಾರ್ಮ್ ಹೆಸರು",
+          "module": "ಮಾಡ್ಯೂಲ್",
+          "pageUrl": "ಪುಟದ URL",
+          "status": "ಸ್ಥಿತಿ"
+        },
+        "status": {
+          "active": "ಸಕ್ರಿಯ",
+          "inactive": "ನಿಷ್ಕ್ರಿಯ"
+        },
+        "delete": {
+          "title": "ಫಾರ್ಮ್ ಅಳಿಸಿ",
+          "message": "\"{name}\" ಅನ್ನು ನೀವು ಖಚಿತವಾಗಿ ಅಳಿಸಲು ಬಯಸುವಿರಾ? ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂತಿರುಗಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+          "confirm": "ಅಳಿಸಿ",
+          "cancel": "ರದ್ದುಮಾಡಿ"
+        },
+        "toast": {
+          "fetchFailed": "ಫಾರ್ಮ್‌ಗಳನ್ನು ಪಡೆಯಲು ವಿಫಲವಾಗಿದೆ",
+          "deleted": "ಫಾರ್ಮ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ",
+          "deleteFailed": "ಫಾರ್ಮ್ ಅಳಿಸಲು ವಿಫಲವಾಗಿದೆ"
+        }
+      },
+      "detail": {
+        "loading": "ಫಾರ್ಮ್ ವಿವರಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+        "title": {
+          "edit": "ಫಾರ್ಮ್ ಸಂಪಾದಿಸಿ",
+          "create": "ಹೊಸ ಫಾರ್ಮ್ ರಚಿಸಿ"
+        },
+        "section": {
+          "title": "ಫಾರ್ಮ್ ಮಾಹಿತಿ",
+          "subtitle": "ಫಾರ್ಮ್ ಕೋಡ್, ರೂಟ್, ಮಾಡ್ಯೂಲ್ ಮತ್ತು ಗೋಚರತೆಯ ಆಯ್ಕೆಗಳನ್ನು ಕಾನ್ಫಿಗರ್ ಮಾಡಿ."
+        },
+        "fields": {
+          "formCode": "ಫಾರ್ಮ್ ಕೋಡ್",
+          "formCodePlaceholder": "ಉದಾ: USER-001",
+          "formName": "ಫಾರ್ಮ್ ಹೆಸರು",
+          "formNamePlaceholder": "ಉದಾ: ಪಾತ್ರಗಳು ಮತ್ತು ಅನುಮತಿಗಳು",
+          "moduleName": "ಮಾಡ್ಯೂಲ್ ಹೆಸರು",
+          "moduleNamePlaceholder": "ಉದಾ: ಬಳಕೆದಾರ ನಿರ್ವಹಣೆ",
+          "pageUrl": "ಪುಟದ URL",
+          "pageUrlPlaceholder": "ಉದಾ: /users/roles-permissions",
+          "iconName": "ಐಕಾನ್ ಹೆಸರು",
+          "iconNamePlaceholder": "ಉದಾ: Shield",
+          "sortOrder": "ಸಾರ್ಟ್ ಆರ್ಡರ್ (Sort Order)",
+          "sortOrderPlaceholder": "0",
+          "formModuleId": "ಫಾರ್ಮ್ ಮಾಡ್ಯೂಲ್ ಐಡಿ",
+          "formModuleIdPlaceholder": "0",
+          "filterConfigJson": "ಫಿಲ್ಟರ್ ಕಾನ್ಫಿಗ್ JSON",
+          "filterConfigJsonPlaceholder": "ಉದಾ: JSON ಆಬ್ಜೆಕ್ಟ್ ಸ್ಟ್ರಿಂಗ್"
+        },
+        "toggles": {
+          "isMenu": {
+            "title": "ಮೆನುವಿನಲ್ಲಿದೆಯೇ",
+            "description": "ಈ ಫಾರ್ಮ್ ಅನ್ನು ಮೆನುವಿನಲ್ಲಿ ಸೇರಿಸಲು ಇದನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ."
+          },
+          "isBulk": {
+            "title": "ಬಲ್ಕ್ ಅಪ್‌ಲೋಡ್",
+            "description": "ಈ ಫಾರ್ಮ್ ಬಲ್ಕ್ ಅಪ್‌ಲೋಡ್ ಅನ್ನು ಬೆಂಬಲಿಸಿದರೆ ಇದನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ."
+          },
+          "isVisible": {
+            "title": "ಗೋಚರಿಸುತ್ತದೆಯೇ",
+            "description": "UI ಪದರಗಳಲ್ಲಿ ಫಾರ್ಮ್ ಗೋಚರತೆಯನ್ನು ಬದಲಾಯಿಸಿ."
+          },
+          "isActive": {
+            "title": "ಸಕ್ರಿಯವಾಗಿದೆಯೇ",
+            "description": "ನಿಷ್ಕ್ರಿಯ ಫಾರ್ಮ್ ಅನ್ನು ಅಶಕ್ತಗೊಳಿಸಲಾಗಿದೆ ಎಂದು ಪರಿಗಣಿಸಲಾಗುತ್ತದೆ."
+          }
+        },
+        "buttons": {
+          "cancel": "ರದ್ದುಮಾಡಿ",
+          "creating": "ರಚಿಸಲಾಗುತ್ತಿದೆ...",
+          "updating": "ನವೀಕರಿಸಲಾಗುತ್ತಿದೆ...",
+          "create": "ಫಾರ್ಮ್ ರಚಿಸಿ",
+          "update": "ಫಾರ್ಮ್ ನವೀಕರಿಸಿ"
+        },
+        "toast": {
+          "fetchFailed": "ಫಾರ್ಮ್ ಪಡೆಯಲು ವಿಫಲವಾಗಿದೆ",
+          "fetchDetailsFailed": "ಫಾರ್ಮ್ ವಿವರಗಳನ್ನು ಪಡೆಯಲು ವಿಫಲವಾಗಿದೆ",
+          "formCodeRequired": "ಫಾರ್ಮ್ ಕೋಡ್ ಅಗತ್ಯವಿದೆ",
+          "formNameRequired": "ಫಾರ್ಮ್ ಹೆಸರು ಅಗತ್ಯವಿದೆ",
+          "moduleNameRequired": "ಮಾಡ್ಯೂಲ್ ಹೆಸರು ಅಗತ್ಯವಿದೆ",
+          "pageUrlRequired": "ಪುಟದ URL ಅಗತ್ಯವಿದೆ",
+          "filterConfigInvalid": "ಫಿಲ್ಟರ್ ಕಾನ್ಫಿಗ್ JSON ಮಾನ್ಯವಾದ JSON ಆಗಿರಬೇಕು",
+          "created": "ಫಾರ್ಮ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ",
+          "updated": "ಫಾರ್ಮ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ",
+          "saveFailed": "ಫಾರ್ಮ್ ಉಳಿಸಲು ವಿಫಲವಾಗಿದೆ"
+        }
+      }
+    }
+  }
+}

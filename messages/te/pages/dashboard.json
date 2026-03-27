@@ -1,0 +1,64 @@
+{
+  "pages": {
+    "dashboard": {
+      "metrics": {
+        "totalCustomers": "మొత్తం కస్టమర్లు",
+        "dealersDistributors": "డీలర్లు మరియు డిస్ట్రిబ్యూటర్లు",
+        "totalDevices": "మొత్తం పరికరాలు",
+        "activeSubscriptions": "యాక్టివ్ సబ్‌స్క్రిప్షన్లు"
+      },
+      "sections": {
+        "revenueSummary": "ఆదాయ సారాంశం",
+        "deviceStatus": "పరికరాల స్థితి",
+        "recentAlerts": "ఇటీవలి హెచ్చరికలు",
+        "serverHealth": "సర్వర్ ఆరోగ్యం"
+      },
+      "revenue": {
+        "months": {
+          "jan": "జన",
+          "feb": "ఫిబ్ర",
+          "mar": "మార్చి",
+          "apr": "ఏప్రి",
+          "may": "మే",
+          "jun": "జూన్",
+          "jul": "జూలై"
+        }
+      },
+      "deviceStatus": {
+        "installed": "ఇన్‌స్టాల్ చేయబడింది",
+        "available": "అందుబాటులో ఉంది",
+        "faulty": "లోపభూయిష్టమైనది",
+        "returned": "తిరిగి ఇచ్చారు"
+      },
+      "alerts": {
+        "cpuHigh": {
+          "title": "సర్వర్-01లో అధిక CPU వినియోగం",
+          "time": "2 నిమిషాల క్రితం",
+          "severity": "అత్యవసరం"
+        },
+        "dbLimit": {
+          "title": "డేటాబేస్ కనెక్షన్ పరిమితి సమీపిస్తోంది",
+          "time": "15 నిమిషాల క్రితం",
+          "severity": "హెచ్చరిక"
+        },
+        "devicesOffline": {
+          "title": "15 పరికరాలు ఆఫ్‌లైన్‌లో ఉన్నట్లు నివేదించబడ్డాయి",
+          "time": "30 నిమిషాల క్రితం",
+          "severity": "సమాచారం"
+        }
+      },
+      "serverHealth": {
+        "status": {
+          "operational": "పనిచేస్తోంది",
+          "outage": "అంతరాయం"
+        },
+        "services": {
+          "apiServer": "API సర్వర్",
+          "databaseCluster": "డేటాబేస్ క్లస్టర్",
+          "telemetryIngestion": "టెలిమెట్రీ ఇన్‌జెషన్",
+          "forwardingService": "ఫార్వార్డింగ్ సర్వీస్"
+        }
+      }
+    }
+  }
+}

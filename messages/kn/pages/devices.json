@@ -1,0 +1,111 @@
+{
+  "pages": {
+    "devices": {
+      "list": {
+        "title": "ಸಾಧನ",
+        "subtitle": "ಸಾಧನದ ಗುರುತು, ಸಂಪರ್ಕ ಮತ್ತು ನೋಂದಣಿ ಸ್ಥಿತಿಯ ಸಂಪೂರ್ಣ ಪತ್ತೆಹಚ್ಚುವಿಕೆ.",
+        "breadcrumbs": {
+          "fleet": "ಫ್ಲೀಟ್",
+          "current": "ಸಾಧನ"
+        },
+        "addButton": "ಸಾಧನ ಸೇರಿಸಿ",
+        "fields": {
+          "selectAccount": "ಖಾತೆಯನ್ನು ಆರಿಸಿ"
+        },
+        "table": {
+          "deviceIdentity": "ಸಾಧನದ ಗುರುತು",
+          "category": "ವರ್ಗ",
+          "type": "ಮಾದರಿ",
+          "status": "ಸ್ಥಿತಿ",
+          "lastUpdated": "ಕೊನೆಯದಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+        },
+        "status": {
+          "active": "ಸಕ್ರಿಯ",
+          "inactive": "ನಿಷ್ಕ್ರಿಯ",
+          "inService": "ಸೇವೆಯಲ್ಲಿದೆ",
+          "outOfService": "ಸೇವೆಯಲ್ಲಿಲ್ಲ"
+        },
+        "metrics": {
+          "totalDevices": "ಒಟ್ಟು ಸಾಧನಗಳು",
+          "inService": "ಸೇವೆಯಲ್ಲಿದೆ",
+          "outOfService": "ಸೇವೆಯಲ್ಲಿಲ್ಲ"
+        },
+        "fallback": {
+          "defaultCategory": "GPS",
+          "defaultType": "ಟ್ರ್ಯಾಕರ್",
+          "notAvailable": "ಲಭ್ಯವಿಲ್ಲ"
+        },
+        "loading": "ಸಾಧನಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+        "searchPlaceholder": "ಸಾಧನಗಳನ್ನು ಹುಡುಕಿ...",
+        "deleteTitle": "ಸಾಧನವನ್ನು ತೆಗೆದುಹಾಕಿ",
+        "deleteMessage": "ರಿಜಿಸ್ಟ್ರಿಯಿಂದ \"{device}\" ಸಾಧನವನ್ನು ತೆಗೆದುಹಾಕಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ? ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂತಿರುಗಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+        "confirmDelete": "ತೆಗೆದುಹಾಕಿ",
+        "cancel": "ರದ್ದುಮಾಡಿ",
+        "toast": {
+          "loadError": "ಸಾಧನಗಳನ್ನು ಲೋಡ್ ಮಾಡುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ",
+          "removed": "ಸಾಧನವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ತೆಗೆದುಹಾಕಲಾಗಿದೆ",
+          "deleteFailed": "ಸಾಧನವನ್ನು ಅಳಿಸಲು ವಿಫಲವಾಗಿದೆ.",
+          "deleteError": "ಅಳಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ."
+        }
+      },
+      "detail": {
+        "loading": {
+          "edit": "ಸಾಧನ ಡೇಟಾವನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+          "create": "ಫಾರ್ಮ್ ಸಿದ್ಧಪಡಿಸಲಾಗುತ್ತಿದೆ..."
+        },
+        "title": {
+          "edit": "ಸಾಧನ ಸಂಪಾದಿಸಿ",
+          "create": "ಸಾಧನವನ್ನು ನಿಯೋಜಿಸಿ"
+        },
+        "subtitle": {
+          "edit": "ಈ ಸಾಧನಕ್ಕಾಗಿ ನೋಂದಣಿ ವಿವರಗಳನ್ನು ನವೀಕರಿಸಿ.",
+          "create": "ಜಾಗತಿಕ ಆಸ್ತಿ ಪರಸ್ಪರ ಸಂಬಂಧ ಮತ್ತು ಸಾಧನ ನೋಂದಣಿ"
+        },
+        "buttons": {
+          "discard": "ಕೈಬಿಡಿ",
+          "saving": "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+          "update": "ನೋಂದಣಿ ವಿವರ ನವೀಕರಿಸಿ",
+          "create": "ನೋಂದಣಿ ವಿವರ ಸಲ್ಲಿಸಿ"
+        },
+        "sections": {
+          "accountContext": "ಖಾತೆ ಸಂದರ್ಭ",
+          "accountContextSubtitle": "ಈ ಸಾಧನವು ಸೇರಿದ ಖಾತೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+          "identityLifecycle": "ಗುರುತು ಮತ್ತು ಜೀವನಚಕ್ರ",
+          "identityLifecycleSubtitle": "ಹಾರ್ಡ್‌ವೇರ್ ಗುರುತಿಸುವಿಕೆ ಮತ್ತು ವರ್ಗೀಕರಣದ ವಿವರಗಳು.",
+          "preview": "ಸಾಧನದ ಗುರುತಿನ ಮುನ್ನೋಟ",
+          "previewSubtitle": "ಮೇಲಿನ ಕ್ಷೇತ್ರಗಳಿಂದ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾಗಿದೆ."
+        },
+        "fields": {
+          "account": "ಖಾತೆ",
+          "selectAccount": "ಖಾತೆಯನ್ನು ಆರಿಸಿ",
+          "manufacturer": "ತಯಾರಕರು",
+          "selectManufacturer": "ತಯಾರಕರನ್ನು ಆರಿಸಿ",
+          "deviceType": "ಸಾಧನದ ಮಾದರಿ",
+          "selectDeviceType": "ಸಾಧನದ ಮಾದರಿಯನ್ನು ಆರಿಸಿ",
+          "deviceNo": "ಸಾಧನ ಸಂಖ್ಯೆ",
+          "deviceNoPlaceholder": "ಉದಾ: DEV-001",
+          "serial": "IMEI / ಸರಣಿ ಸಂಖ್ಯೆ",
+          "serialPlaceholder": "ಹಾರ್ಡ್‌ವೇರ್ ಐಡೆಂಟಿಟಿ ಕೋಡ್"
+        },
+        "preview": {
+          "deviceType": "ಸಾಧನದ ಮಾದರಿ",
+          "manufacturer": "ತಯಾರಕರು",
+          "deviceNo": "ಸಾಧನ ಸಂಖ್ಯೆ",
+          "serial": "IMEI / ಸರಣಿ ಸಂಖ್ಯೆ",
+          "empty": "—"
+        },
+        "toast": {
+          "loadFailed": "ಸಾಧನ ಡೇಟಾವನ್ನು ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ",
+          "selectAccount": "ದಯವಿಟ್ಟು ಖಾತೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+          "selectManufacturer": "ದಯವಿಟ್ಟು ತಯಾರಕರನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+          "selectDeviceType": "ದಯವಿಟ್ಟು ಸಾಧನದ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+          "serialRequired": "IMEI / ಸರಣಿ ಸಂಖ್ಯೆ ಅಗತ್ಯವಿದೆ",
+          "serialNumericOnly": "IMEI / ಸರಣಿ ಸಂಖ್ಯೆಯು ಕೇವಲ ಅಂಕಿಗಳನ್ನು ಹೊಂದಿರಬೇಕು",
+          "saved": "ಸಾಧನವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಲಾಗಿದೆ",
+          "operationFailed": "ಕಾರ್ಯಾಚರಣೆ ವಿಫಲವಾಗಿದೆ",
+          "errorOccurred": "ದೋಷ ಸಂಭವಿಸಿದೆ"
+        }
+      }
+    }
+  }
+}

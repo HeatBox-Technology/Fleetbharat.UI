@@ -1,0 +1,75 @@
+{
+  "pages": {
+    "accounts": {
+      "list": {
+        "title": "ఖాతాల జాబితా",
+        "subtitle": "గుర్తింపులు, వర్గీకరణలు మరియు గ్లోబల్ పారామితులను నిర్వహించండి.",
+        "breadcrumbs": {
+          "accounts": "ఖాతాలు",
+          "current": "ఖాతాల జాబితా"
+        },
+        "addButton": "ఖాతాను జోడించు",
+        "searchPlaceholder": "ఖాతాలను వెతకండి...",
+        "table": {
+          "no": "సంఖ్య",
+          "code": "కోడ్",
+          "instance": "ఇన్స్టాన్స్",
+          "contact": "సంప్రదింపు",
+          "location": "ప్రాంతం",
+          "status": "స్థితి"
+        },
+        "metrics": {
+          "total": "మొత్తం",
+          "active": "క్రియాశీల",
+          "pending": "పెండింగ్‌లో ఉంది",
+          "inactive": "నిష్క్రియ"
+        },
+        "delete": {
+          "title": "ఖాతాను తొలగించు",
+          "message": "\"{instance}\" ని మీరు ఖచ్చితంగా తొలగించాలనుకుంటున్నారా? ఈ చర్యను తిరిగి మార్చలేము.",
+          "confirm": "తొలగించు",
+          "cancel": "రద్దు చేయి"
+        },
+        "toast": {
+          "loadFailed": "ఖాతాలను లోడ్ చేయడంలో విఫలమైంది",
+          "deleteFailed": "ఖాతాను తొలగించడంలో విఫలమైంది"
+        }
+      },
+      "detail": {
+        "title": {
+          "create": "కొత్త ఖాతాను జోడించు",
+          "edit": "ఖాతాను సవరించు"
+        },
+        "loading": "ఖాతా వివరాలు లోడ్ అవుతున్నాయి...",
+        "sections": {
+          "accountDetails": "ఖాతా వివరాలు",
+          "addressDetails": "చిరునామా వివరాలు",
+          "businessProfile": "వ్యాపార ప్రొఫైల్ వివరాలు",
+          "userPermission": "యూజర్ అనుమతి & యాక్సెస్ వివరాలు"
+        },
+        "buttons": {
+          "cancel": "రద్దు చేయి",
+          "submit": "సమర్పించు"
+        },
+        "toast": {
+          "accountNameRequired": "ఖాతా పేరు తప్పనిసరి!",
+          "categoryRequired": "కేటగిరీ తప్పనిసరి!",
+          "primaryDomainRequired": "ప్రైమరీ డొమైన్ తప్పనిసరి!",
+          "businessEmailRequired": "వ్యాపార ఈమెయిల్ తప్పనిసరి!",
+          "businessAddressRequired": "వ్యాపార చిరునామా తప్పనిసరి!",
+          "businessTimeZoneRequired": "వ్యాపార టైమ్ జోన్ తప్పనిసరి!",
+          "countryRequired": "దేశం తప్పనిసరి!",
+          "stateRequired": "రాష్ట్రం తప్పనిసరి!",
+          "cityRequired": "నగరం తప్పనిసరి!",
+          "createdSuccess": "ఖాతా విజయవంతంగా సృష్టించబడింది!",
+          "updatedSuccess": "ఖాతా విజయవంతంగా అప్‌డేట్ చేయబడింది!",
+          "alreadyExists": "ఖాతా ఇప్పటికే ఉంది!",
+          "genericError": "ఏదో పొరపాటు జరిగింది!",
+          "submitError": "ఫారమ్ సమర్పించేటప్పుడు లోపం సంభవించింది.",
+          "fetchAccountFailed": "ఖాతా వివరాలను పొందడంలో విఫలమైంది!",
+          "fetchAccountError": "ఖాతా వివరాలను పొందేటప్పుడు లోపం సంభవించింది."
+        }
+      }
+    }
+  }
+}

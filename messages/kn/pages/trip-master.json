@@ -1,0 +1,155 @@
+{
+  "pages": {
+    "tripMaster": {
+      "list": {
+        "title": "ಟ್ರಿಪ್ ಮಾಸ್ಟರ್",
+        "subtitle": "ಪ್ರವಾಸದ ವೇಳಾಪಟ್ಟಿಗಳು ಮತ್ತು ಮಾರ್ಗದ ಟೆಂಪ್ಲೆಟ್‌ಗಳನ್ನು ನಿರ್ವಹಿಸಿ.",
+        "breadcrumbs": {
+          "fleet": "ಫ್ಲೀಟ್",
+          "current": "ಟ್ರಿಪ್ ಮಾಸ್ಟರ್"
+        },
+        "addButton": "ಪ್ರವಾಸ ಸೇರಿಸಿ",
+        "searchPlaceholder": "ಪ್ರವಾಸಗಳನ್ನು ಹುಡುಕಿ...",
+        "metrics": {
+          "totalTrips": "ಒಟ್ಟು ಪ್ರವಾಸಗಳು",
+          "activeTrips": "ಸಕ್ರಿಯ ಪ್ರವಾಸಗಳು",
+          "inTransit": "ಪ್ರವಾಸದಲ್ಲಿರುವವು"
+        },
+        "table": {
+          "no": "ಕ್ರಮ ಸಂಖ್ಯೆ",
+          "tripName": "ಪ್ರವಾಸದ ಹೆಸರು",
+          "route": "ಮಾರ್ಗ",
+          "vehicle": "ವಾಹನ",
+          "driver": "ಚಾಲಕ",
+          "cycle": "ಚಕ್ರ (Cycle)",
+          "status": "ಸ್ಥಿತಿ",
+          "startTime": "ಪ್ರಾರಂಭದ ಸಮಯ"
+        },
+        "labels": {
+          "cycle": {
+            "weekly": "ವಾರಕ್ಕೊಮ್ಮೆ",
+            "monthly": "ತಿಂಗಳಿಗೊಮ್ಮೆ",
+            "oneOff": "ಒಂದು ಬಾರಿ (One-Off)"
+          },
+          "status": {
+            "active": "ಸಕ್ರಿಯ",
+            "pending": "ಬಾಕಿ ಇದೆ",
+            "inTransit": "ಪ್ರವಾಸದಲ್ಲಿದೆ",
+            "completed": "ಪೂರ್ಣಗೊಂಡಿದೆ"
+          }
+        },
+        "deleteDialog": {
+          "title": "ಪ್ರವಾಸದ ಯೋಜನೆಯನ್ನು ಅಳಿಸಿ",
+          "message": "{name} ಅನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?",
+          "confirm": "ಅಳಿಸಿ",
+          "cancel": "ರದ್ದುಮಾಡಿ"
+        }
+      },
+      "detail": {
+        "title": "ಮಿಷನ್ ಆರ್ಕಿಟೆಕ್ಟ್",
+        "subtitle": "ಟ್ರಿಪ್ ಮಾಸ್ಟರ್ ಕಾನ್ಫಿಗರೇಶನ್",
+        "breadcrumbs": {
+          "fleet": "ಫ್ಲೀಟ್",
+          "master": "ಟ್ರಿಪ್ ಮಾಸ್ಟರ್",
+          "create": "ರಚಿಸಿ",
+          "edit": "ಸಂಪಾದಿಸಿ"
+        },
+        "buttons": {
+          "discard": "ಕೈಬಿಡಿ",
+          "cancel": "ರದ್ದುಮಾಡಿ",
+          "deployMission": "ಮಿಷನ್ ನಿಯೋಜಿಸಿ",
+          "remove": "ತೆಗೆದುಹಾಕಿ",
+          "prev": "ಹಿಂದಿನ",
+          "next": "ಮುಂದಿನ",
+          "addStop": "ನಿಲ್ದಾಣ ಸೇರಿಸಿ",
+          "addNumber": "ಸಂಖ್ಯೆ ಸೇರಿಸಿ",
+          "deploying": "ನಿಯೋಜಿಸಲಾಗುತ್ತಿದೆ...",
+          "deployMasterMission": "ಮಾಸ್ಟರ್ ಮಿಷನ್ ನಿಯೋಜಿಸಿ"
+        },
+        "sections": {
+          "missionIdentity": "ಮಿಷನ್ ಗುರುತು",
+          "fleetStrategy": "ಫ್ಲೀಟ್ ತಂತ್ರ (Fleet Strategy)",
+          "tripCycleTimeline": "ಪ್ರವಾಸದ ಚಕ್ರ ಮತ್ತು ಕಾಲಮಿತಿ",
+          "timelineRoute": "ಕಾಲಮಿತಿ ಮತ್ತು ಮಾರ್ಗ",
+          "notifications": "ಅಧಿಸೂಚನೆಗಳು",
+          "liveMapPreview": "ನೇರ ನಕ್ಷೆಯ ಮುನ್ನೋಟ",
+          "missionSummary": "ಮಿಷನ್ ಸಾರಾಂಶ"
+        },
+        "fields": {
+          "tripName": "ಪ್ರವಾಸದ ಹೆಸರು",
+          "tripNamePlaceholder": "ಉದಾ: ಮೆಟ್ರೋ ದಿನದ ಪೂರೈಕೆ",
+          "assignedOperator": "ನಿಯೋಜಿತ ಆಪರೇಟರ್",
+          "selectDriver": "ಚಾಲಕನನ್ನು ಆರಿಸಿ",
+          "account": "ಖಾತೆ",
+          "selectAccount": "ಖಾತೆಯನ್ನು ಆರಿಸಿ",
+          "vehicle": "ವಾಹನ",
+          "selectVehicle": "ವಾಹನವನ್ನು ಆರಿಸಿ",
+          "vehicleType": "ವಾಹನದ ಮಾದರಿ",
+          "selectVehicleType": "ವಾಹನದ ಮಾದರಿಯನ್ನು ಆರಿಸಿ",
+          "consignee": "ಸರಕು ಪಡೆಯುವವರು (Consignee)",
+          "consigneePlaceholder": "ಉದಾ: ಶರ್ಮಾ ಟ್ರೇಡರ್ಸ್",
+          "vehicleAssignment": "ವಾಹನ ನಿಯೋಜನೆ",
+          "vehicleTypePageInfo": "ವಾಹನದ ಮಾದರಿಗಳ ಪುಟ {page}/{total}",
+          "noVehicleTypes": "ಯಾವುದೇ ವಾಹನ ಮಾದರಿಗಳು ಕಂಡುಬಂದಿಲ್ಲ",
+          "tripType": "ಪ್ರವಾಸದ ಪ್ರಕಾರ",
+          "weeklyRotation": "ವಾರಕ್ಕೊಮ್ಮೆ ತಿರುಗುವಿಕೆ",
+          "departureEtd": "ನಿರ್ಗಮನದ ಅಂದಾಜು ಸಮಯ (ETD)",
+          "expectedArrival": "ನಿರೀಕ್ಷಿತ ಆಗಮನ ಸಮಯ (ETA)",
+          "selectMasterPipeline": "ಮಾಸ್ಟರ್ ಪೈಪ್‌ಲೈನ್ ಆಯ್ಕೆಮಾಡಿ",
+          "selectSourceGeofence": "ಮೂಲ ಜಿಯೋಫೆನ್ಸ್ ಆಯ್ಕೆಮಾಡಿ",
+          "selectDestinationGeofence": "ಗಮ್ಯಸ್ಥಾನ ಜಿಯೋಫೆನ್ಸ್ ಆಯ್ಕೆಮಾಡಿ",
+          "selectStopGeofence": "ನಿಲ್ದಾಣದ ಜಿಯೋಫೆನ್ಸ್ ಆಯ್ಕೆಮಾಡಿ",
+          "customRouteName": "ಕಸ್ಟಮ್ ಮಾರ್ಗದ ಹೆಸರು",
+          "customRoutePlaceholder": "ಕಸ್ಟಮ್ ಮಾರ್ಗವನ್ನು ನಮೂದಿಸಿ",
+          "sourcePlaceholder": "ಮೂಲ ಸ್ಥಳವನ್ನು ನಮೂದಿಸಿ",
+          "destinationPlaceholder": "ಗಮ್ಯಸ್ಥಾನದ ಸ್ಥಳವನ್ನು ನಮೂದಿಸಿ",
+          "stopPlaceholder": "ನಿಲ್ದಾಣದ ಸ್ಥಳವನ್ನು ನಮೂದಿಸಿ"
+        },
+        "notifications": {
+          "enableOtp": "OTP ಅಧಿಸೂಚನೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ",
+          "otpHelp": "OTP ಸಕ್ರಿಯಗೊಳಿಸಿದಾಗ ಕೆಳಗೆ ಹಲವಾರು ಮೊಬೈಲ್ ಸಂಖ್ಯೆಗಳನ್ನು ಸೇರಿಸಿ.",
+          "mobilePlaceholder": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ",
+          "removeNumberAria": "ಸಂಖ್ಯೆಯನ್ನು ತೆಗೆದುಹಾಕಿ"
+        },
+        "summary": {
+          "trip": "ಪ್ರವಾಸ",
+          "driver": "ಚಾಲಕ",
+          "account": "ಖಾತೆ",
+          "vehicle": "ವಾಹನ",
+          "assignment": "ನಿಯೋಜನೆ",
+          "vehicleType": "ವಾಹನದ ಮಾದರಿ",
+          "cycle": "ಚಕ್ರ (Cycle)",
+          "routeMode": "ಮಾರ್ಗದ ಮೋಡ್",
+          "route": "ಮಾರ್ಗ"
+        },
+        "vehicleClass": {
+          "truck": "ಟ್ರಕ್",
+          "truckSub": "ಫ್ರೈಟ್ ಟೈಟಾನ್",
+          "traveller": "ಟ್ರಾವೆಲರ್",
+          "travellerSub": "ಟ್ರಾನ್ಸಿಟ್ ಕ್ರೂ ವ್ಯಾನ್",
+          "bus": "ಬಸ್",
+          "busSub": "ಶಟಲ್ ಪ್ರೈಮ್"
+        },
+        "scheduling": {
+          "masterRoute": "ಮಾಸ್ಟರ್ ಮಾರ್ಗ",
+          "fixedPath": "ನಿಗದಿತ ಹಾದಿ",
+          "weekly": "ವಾರಕ್ಕೊಮ್ಮೆ",
+          "repeatingCycle": "ಮರುಕಳಿಸುವ ಚಕ್ರ",
+          "customRoute": "ಕಸ್ಟಮ್ ಮಾರ್ಗ",
+          "onDemand": "ಬೇಡಿಕೆಯ ಮೇರೆಗೆ",
+          "oneOff": "ಒಂದು ಬಾರಿ",
+          "scheduled": "ನಿಗದಿತ"
+        },
+        "labels": {
+          "weeklyCycle": "ವಾರದ ಚಕ್ರ",
+          "customRoute": "ಕಸ್ಟಮ್ ಮಾರ್ಗ",
+          "oneOffScheduled": "ಒಂದು ಬಾರಿ ನಿಗದಿಪಡಿಸಲಾಗಿದೆ",
+          "defaultMapQuery": "ಬೆಂಗಳೂರು",
+          "sourceLocation": "ಮೂಲ ಸ್ಥಳ",
+          "destinationLocation": "ಗಮ್ಯಸ್ಥಾನ ಸ್ಥಳ",
+          "stop": "ನಿಲ್ದಾಣ {number}"
+        }
+      }
+    }
+  }
+}

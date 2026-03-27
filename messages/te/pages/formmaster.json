@@ -1,0 +1,106 @@
+{
+  "pages": {
+    "formmaster": {
+      "list": {
+        "title": "ఫామ్ మాస్టర్",
+        "subtitle": "అప్లికేషన్ ఫారమ్‌లు, మాడ్యూల్స్, రూట్‌లు మరియు విజిబిలిటీని నిర్వహించండి.",
+        "breadcrumbs": {
+          "configurations": "కాన్ఫిగరేషన్లు",
+          "current": "ఫామ్ మాస్టర్"
+        },
+        "addButton": "ఫామ్‌ను జోడించు",
+        "loading": "ఫారమ్‌లను లోడ్ చేస్తోంది...",
+        "searchPlaceholder": "పేరు, కోడ్ లేదా మాడ్యూల్ ద్వారా ఫారమ్‌లను వెతకండి...",
+        "table": {
+          "no": "సంఖ్య",
+          "formCode": "ఫామ్ కోడ్",
+          "formName": "ఫామ్ పేరు",
+          "module": "మాడ్యూల్",
+          "pageUrl": "పేజీ URL",
+          "status": "స్థితి"
+        },
+        "status": {
+          "active": "క్రియాశీల",
+          "inactive": "నిష్క్రియ"
+        },
+        "delete": {
+          "title": "ఫామ్‌ను తొలగించు",
+          "message": "\"{name}\" ని మీరు ఖచ్చితంగా తొలగించాలనుకుంటున్నారా? ఈ చర్యను తిరిగి మార్చలేము.",
+          "confirm": "తొలగించు",
+          "cancel": "రద్దు చేయి"
+        },
+        "toast": {
+          "fetchFailed": "ఫారమ్‌లను పొందడంలో విఫలమైంది",
+          "deleted": "ఫామ్ విజయవంతంగా తొలగించబడింది",
+          "deleteFailed": "ఫామ్‌ను తొలగించడంలో విఫలమైంది"
+        }
+      },
+      "detail": {
+        "loading": "ఫామ్ వివరాలను లోడ్ చేస్తోంది...",
+        "title": {
+          "edit": "ఫామ్‌ను సవరించు",
+          "create": "కొత్త ఫామ్‌ను సృష్టించు"
+        },
+        "section": {
+          "title": "ఫామ్ సమాచారం",
+          "subtitle": "ఫామ్ కోడ్, రూట్, మాడ్యూల్ మరియు విజిబిలిటీ ఎంపికలను కాన్ఫిగర్ చేయండి."
+        },
+        "fields": {
+          "formCode": "ఫామ్ కోడ్",
+          "formCodePlaceholder": "ఉదా: USER-001",
+          "formName": "ఫామ్ పేరు",
+          "formNamePlaceholder": "ఉదా: Roles & Permissions",
+          "moduleName": "మాడ్యూల్ పేరు",
+          "moduleNamePlaceholder": "ఉదా: User-Management",
+          "pageUrl": "పేజీ URL",
+          "pageUrlPlaceholder": "ఉదా: /users/roles-permissions",
+          "iconName": "ఐకాన్ పేరు",
+          "iconNamePlaceholder": "ఉదా: Shield",
+          "sortOrder": "సార్ట్ ఆర్డర్",
+          "sortOrderPlaceholder": "0",
+          "formModuleId": "ఫామ్ మాడ్యూల్ ID",
+          "formModuleIdPlaceholder": "0",
+          "filterConfigJson": "ఫిల్టర్ కాన్ఫిగ్ JSON",
+          "filterConfigJsonPlaceholder": "ఉదా: JSON ఆబ్జెక్ట్ స్ట్రింగ్"
+        },
+        "toggles": {
+          "isMenu": {
+            "title": "మెనూలో ఉండాలా (Is Menu)",
+            "description": "ఈ ఫామ్‌ను మెనూలో చేర్చడానికి దీనిని ఎనేబుల్ చేయండి."
+          },
+          "isBulk": {
+            "title": "బల్క్ అప్‌లోడ్ (Is Bulk Upload)",
+            "description": "ఈ ఫామ్ బల్క్ అప్‌లోడ్‌కు మద్దతు ఇస్తే దీనిని ఎనేబుల్ చేయండి."
+          },
+          "isVisible": {
+            "title": "కనిపించాలా (Is Visible)",
+            "description": "UI లేయర్లలో ఫామ్ విజిబిలిటీని మార్చండి."
+          },
+          "isActive": {
+            "title": "క్రియాశీలకంగా ఉందా (Is Active)",
+            "description": "నిష్క్రియ ఫామ్ డిసేబుల్ చేయబడినట్లుగా పరిగణించబడుతుంది."
+          }
+        },
+        "buttons": {
+          "cancel": "రద్దు చేయి",
+          "creating": "సృష్టిస్తోంది...",
+          "updating": "అప్‌డేట్ అవుతోంది...",
+          "create": "ఫామ్‌ను సృష్టించు",
+          "update": "ఫామ్‌ను అప్‌డేట్ చేయి"
+        },
+        "toast": {
+          "fetchFailed": "ఫామ్‌ను పొందడంలో విఫలమైంది",
+          "fetchDetailsFailed": "ఫామ్ వివరాలను పొందడంలో విఫలమైంది",
+          "formCodeRequired": "ఫామ్ కోడ్ తప్పనిసరి",
+          "formNameRequired": "ఫామ్ పేరు తప్పనిసరి",
+          "moduleNameRequired": "మాడ్యూల్ పేరు తప్పనిసరి",
+          "pageUrlRequired": "పేజీ URL తప్పనిసరి",
+          "filterConfigInvalid": "ఫిల్టర్ కాన్ఫిగ్ JSON చెల్లుబాటు అయ్యే JSON అయి ఉండాలి",
+          "created": "ఫామ్ విజయవంతంగా సృష్టించబడింది",
+          "updated": "ఫామ్ విజయవంతంగా అప్‌డేట్ చేయబడింది",
+          "saveFailed": "ఫామ్‌ను సేవ్ చేయడంలో విఫలమైంది"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "pages": {
+    "rolesPermissions": {
+      "list": {
+        "title": "పాత్రలు & అనుమతులు",
+        "subtitle": "వివిధ రకాల వినియోగదారుల కోసం యాక్సెస్ నియంత్రణలను (Access Controls) నిర్వహించండి.",
+        "breadcrumbs": {
+          "users": "వినియోగదారులు",
+          "current": "పాత్రలు & అనుమతులు"
+        },
+        "addButton": "కొత్త పాత్ర",
+        "export": "ఎగుమతి చేయి",
+        "searchPlaceholder": "అన్ని ఫీల్డ్‌లలో వెతకండి...",
+        "table": {
+          "no": "సంఖ్య",
+          "account": "ఖాతా",
+          "role": "పాత్ర",
+          "description": "వివరణ",
+          "createdAt": "సృష్టించబడిన సమయం"
+        },
+        "metrics": {
+          "totalRoles": "మొత్తం పాత్రలు",
+          "systemRoles": "సిస్టమ్ పాత్రలు",
+          "customRoles": "కస్టమ్ పాత్రలు"
+        },
+        "delete": {
+          "title": "పాత్రను తొలగించు",
+          "message": "\"{name}\" అనే పాత్రను మీరు ఖచ్చితంగా తొలగించాలనుకుంటున్నారా? ఈ చర్యను తిరిగి మార్చలేము.",
+          "confirm": "తొలగించు",
+          "cancel": "రద్దు చేయి"
+        },
+        "toast": {
+          "deleteFailed": "పాత్రను తొలగించడంలో విఫలమైంది",
+          "deleteError": "తొలగించేటప్పుడు ఒక లోపం సంభవించింది.",
+          "exportSuccess": "పాత్రల వివరాలు విజయవంతంగా ఎగుమతి చేయబడ్డాయి!",
+          "exportFailed": "పాత్రలను ఎగుమతి చేయడంలో విఫలమైంది"
+        }
+      },
+      "detail": {
+        "loading": "పాత్ర డేటాను లోడ్ చేస్తోంది...",
+        "title": {
+          "edit": "పాత్రను అప్‌డేట్ చేయి",
+          "create": "కొత్త పాత్రను సృష్టించు"
+        },
+        "subtitle": "నిర్దిష్ట ఖాతాల కోసం యాక్సెస్ స్థాయిలు మరియు సామర్థ్యాలను నిర్వచించండి.",
+        "buttons": {
+          "cancel": "రద్దు చేయి",
+          "saving": "సేవ్ అవుతోంది...",
+          "updating": "అప్‌డేట్ అవుతోంది...",
+          "saveRole": "పాత్రను సేవ్ చేయి",
+          "updateRole": "పాత్రను అప్‌డేట్ చేయి"
+        },
+        "sections": {
+          "roleInformation": "పాత్ర సమాచారం",
+          "roleInformationSubtitle": "పాత్ర మరియు దాని పరిధికి సంబంధించిన ప్రాథమిక వివరాలు.",
+          "permissionMatrix": "అనుమతుల మ్యాట్రిక్స్ (Permission Matrix)",
+          "permissionMatrixSubtitle": "ఈ పాత్రకు అనుమతించబడిన వనరులు మరియు చర్యలను ఎంచుకోండి."
+        },
+        "fields": {
+          "account": "ఖాతా",
+          "selectAccount": "ఖాతాను ఎంచుకోండి",
+          "roleName": "పాత్ర పేరు",
+          "roleNamePlaceholder": "ఉదా: రీజనల్ మేనేజర్",
+          "description": "వివరణ",
+          "descriptionPlaceholder": "పాత్ర యొక్క ఉద్దేశ్యాన్ని క్లుప్తంగా వివరించండి"
+        },
+        "permission": {
+          "resource": "వనరు (RESOURCE)",
+          "read": "చదవడం (READ)",
+          "write": "రాయడం (WRITE)",
+          "update": "అప్‌డేట్ (UPDATE)",
+          "delete": "తొలగించడం (DELETE)",
+          "export": "ఎగుమతి (EXPORT)",
+          "all": "అన్నీ (ALL)"
+        },
+        "toast": {
+          "fetchRoleFailed": "పాత్ర డేటాను పొందడంలో విఫలమైంది",
+          "loadRoleFailed": "పాత్ర డేటాను లోడ్ చేయడంలో విఫలమైంది",
+          "fillRequired": "దయచేసి అవసరమైన అన్ని ఫీల్డ్‌లను పూరించండి",
+          "updatedSuccess": "పాత్ర మరియు అనుమతులు విజయవంతంగా అప్‌డేట్ చేయబడ్డాయి!",
+          "updatePermissionsFailed": "అనుమతులను అప్‌డేట్ చేయడంలో విఫలమైంది",
+          "updateRoleFailed": "పాత్రను అప్‌డేట్ చేయడంలో విఫలమైంది",
+          "createdSuccess": "పాత్ర విజయవంతంగా సృష్టించబడింది!",
+          "createFailed": "పాత్ర సృష్టి విఫలమైంది!",
+          "saveFailed": "పాత్రను సేవ్ చేయడంలో విఫలమైంది",
+          "fetchFormsFailed": "ఫారమ్‌లను పొందడంలో విఫలమైంది",
+          "fetchFormsError": "ఫారమ్‌లను పొందేటప్పుడు ఏదో పొరపాటు జరిగింది"
+        }
+      }
+    }
+  }
+}

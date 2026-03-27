@@ -1,0 +1,155 @@
+{
+  "pages": {
+    "tripMaster": {
+      "list": {
+        "title": "டிரிப் மாஸ்டர்",
+        "subtitle": "பயண அட்டவணைகள் மற்றும் வழித்தட வார்ப்புருக்களை (Routing Templates) நிர்வகிக்கவும்.",
+        "breadcrumbs": {
+          "fleet": "வாகனங்கள்",
+          "current": "டிரிப் மாஸ்டர்"
+        },
+        "addButton": "பயணத்தைச் சேர்",
+        "searchPlaceholder": "பயணங்களைத் தேடு...",
+        "metrics": {
+          "totalTrips": "மொத்த பயணங்கள்",
+          "activeTrips": "செயலில் உள்ள பயணங்கள்",
+          "inTransit": "பயணத்தில் உள்ளவை"
+        },
+        "table": {
+          "no": "எண்",
+          "tripName": "பயணப் பெயர்",
+          "route": "வழித்தடம்",
+          "vehicle": "வாகனம்",
+          "driver": "ஓட்டுநர்",
+          "cycle": "சுழற்சி (Cycle)",
+          "status": "நிலை",
+          "startTime": "தொடக்க நேரம்"
+        },
+        "labels": {
+          "cycle": {
+            "weekly": "வாராந்திர",
+            "monthly": "மாதாந்திர",
+            "oneOff": "ஒரு முறை (One-Off)"
+          },
+          "status": {
+            "active": "செயலில்",
+            "pending": "நிலுவையில்",
+            "inTransit": "பயணத்தில்",
+            "completed": "முடிந்தது"
+          }
+        },
+        "deleteDialog": {
+          "title": "பயணத் திட்டத்தை நீக்கு",
+          "message": "{name} ஐ நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
+          "confirm": "நீக்கு",
+          "cancel": "ரத்து செய்"
+        }
+      },
+      "detail": {
+        "title": "மிஷன் ஆர்க்கிடெக்ட் (MISSION ARCHITECT)",
+        "subtitle": "டிரிப் மாஸ்டர் கட்டமைப்பு",
+        "breadcrumbs": {
+          "fleet": "வாகனங்கள்",
+          "master": "டிரிப் மாஸ்டர்",
+          "create": "உருவாக்கு",
+          "edit": "திருத்து"
+        },
+        "buttons": {
+          "discard": "கைவிடு",
+          "cancel": "ரத்து செய்",
+          "deployMission": "மிஷனைச் செயல்படுத்து (DEPLOY)",
+          "remove": "அகற்று",
+          "prev": "முந்தைய",
+          "next": "அடுத்தது",
+          "addStop": "நிறுத்தத்தைச் சேர்",
+          "addNumber": "எண்ணைச் சேர்",
+          "deploying": "செயல்படுத்தப்படுகிறது...",
+          "deployMasterMission": "மாஸ்டர் மிஷனைச் செயல்படுத்து"
+        },
+        "sections": {
+          "missionIdentity": "மிஷன் அடையாளம்",
+          "fleetStrategy": "வாகன உத்தி (Fleet Strategy)",
+          "tripCycleTimeline": "பயணச் சுழற்சி மற்றும் காலவரிசை",
+          "timelineRoute": "காலவரிசை மற்றும் வழித்தடம்",
+          "notifications": "அறிவிப்புகள்",
+          "liveMapPreview": "நேரடி வரைபட முன்னோட்டம்",
+          "missionSummary": "மிஷன் சுருக்கம்"
+        },
+        "fields": {
+          "tripName": "பயணப் பெயர்",
+          "tripNamePlaceholder": "எ.கா. மெட்ரோ தினசரி விநியோகம்",
+          "assignedOperator": "ஒதுக்கப்பட்ட ஆபரேட்டர்",
+          "selectDriver": "ஓட்டுநரைத் தேர்ந்தெடுக்கவும்",
+          "account": "கணக்கு",
+          "selectAccount": "கணக்கைத் தேர்ந்தெடுக்கவும்",
+          "vehicle": "வாகனம்",
+          "selectVehicle": "வாகனத்தைத் தேர்ந்தெடுக்கவும்",
+          "vehicleType": "வாகன ரகம்",
+          "selectVehicleType": "வாகன ரகத்தைத் தேர்ந்தெடுக்கவும்",
+          "consignee": "சரக்கு பெறுபவர் (Consignee)",
+          "consigneePlaceholder": "எ.கா. சர்மா டிரேடர்ஸ்",
+          "vehicleAssignment": "வாகன ஒதுக்கீடு",
+          "vehicleTypePageInfo": "வாகன ரகங்கள் பக்கம் {page}/{total}",
+          "noVehicleTypes": "வாகன ரகங்கள் எதுவும் காணப்படவில்லை",
+          "tripType": "பயண வகை",
+          "weeklyRotation": "வாராந்திர சுழற்சி",
+          "departureEtd": "புறப்படும் நேர மதிப்பீடு (ETD)",
+          "expectedArrival": "எதிர்பார்க்கப்படும் வருகை நேரம் (ETA)",
+          "selectMasterPipeline": "மாஸ்டர் பைப்பலைனைத் தேர்ந்தெடுக்கவும்",
+          "selectSourceGeofence": "தொடக்க ஜியோஃபென்ஸைத் தேர்ந்தெடுக்கவும்",
+          "selectDestinationGeofence": "சேருமிட ஜியோஃபென்ஸைத் தேர்ந்தெடுக்கவும்",
+          "selectStopGeofence": "நிறுத்த ஜியோஃபென்ஸைத் தேர்ந்தெடுக்கவும்",
+          "customRouteName": "தனிப்பயன் வழித்தடப் பெயர்",
+          "customRoutePlaceholder": "தனிப்பயன் வழியை உள்ளிடவும்",
+          "sourcePlaceholder": "தொடக்க இருப்பிடத்தை உள்ளிடவும்",
+          "destinationPlaceholder": "சேருமிடத்தை உள்ளிடவும்",
+          "stopPlaceholder": "நிறுத்த இருப்பிடத்தை உள்ளிடவும்"
+        },
+        "notifications": {
+          "enableOtp": "OTP அறிவிப்பைச் செயல்படுத்து",
+          "otpHelp": "OTP செயல்படுத்தப்படும் போது கீழே பல மொபைல் எண்களைச் சேர்க்கவும்.",
+          "mobilePlaceholder": "மொபைல் எண்ணை உள்ளிடவும்",
+          "removeNumberAria": "எண்ணை அகற்று"
+        },
+        "summary": {
+          "trip": "பயணம்",
+          "driver": "ஓட்டுநர்",
+          "account": "கணக்கு",
+          "vehicle": "வாகனம்",
+          "assignment": "ஒதுக்கீடு",
+          "vehicleType": "வாகன ரகம்",
+          "cycle": "சுழற்சி",
+          "routeMode": "வழித்தட முறை",
+          "route": "வழித்தடம்"
+        },
+        "vehicleClass": {
+          "truck": "லாரி (Truck)",
+          "truckSub": "சரக்கு டைட்டன்",
+          "traveller": "டிராவலர் (Traveller)",
+          "travellerSub": "குழு வேன்",
+          "bus": "பேருந்து (Bus)",
+          "busSub": "ஷட்டில் பிரைம்"
+        },
+        "scheduling": {
+          "masterRoute": "மாஸ்டர் ரூட்",
+          "fixedPath": "நிலையான பாதை",
+          "weekly": "வாராந்திர",
+          "repeatingCycle": "மீண்டும் வரும் சுழற்சி",
+          "customRoute": "தனிப்பயன் ரூட் (Custom)",
+          "onDemand": "தேவைக்கேற்ப",
+          "oneOff": "ஒரு முறை",
+          "scheduled": "திட்டமிடப்பட்டது"
+        },
+        "labels": {
+          "weeklyCycle": "வாராந்திர சுழற்சி",
+          "customRoute": "தனிப்பயன் வழித்தடம்",
+          "oneOffScheduled": "ஒரு முறை திட்டமிடப்பட்டது",
+          "defaultMapQuery": "சென்னை",
+          "sourceLocation": "தொடக்க இருப்பிடம்",
+          "destinationLocation": "சேருமிடம்",
+          "stop": "நிறுத்தம் {number}"
+        }
+      }
+    }
+  }
+}

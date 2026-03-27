@@ -1,0 +1,96 @@
+{
+  "pages": {
+    "whiteLabel": {
+      "list": {
+        "title": "ವೈಟ್ ಲೇಬಲ್",
+        "subtitle": "ಗುರುತುಗಳು, ವರ್ಗೀಕರಣಗಳು ಮತ್ತು ಜಾಗತಿಕ ನಿಯತಾಂಕಗಳನ್ನು ನಿರ್ವಹಿಸಿ.",
+        "breadcrumbs": {
+          "accounts": "ಖಾತೆಗಳು",
+          "current": "ವೈಟ್ ಲೇಬಲ್"
+        },
+        "addButton": "ಬ್ರ್ಯಾಂಡಿಂಗ್ ನಿಯೋಜಿಸಿ",
+        "loading": "ವೈಟ್ ಲೇಬಲ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+        "searchPlaceholder": "ಎಲ್ಲಾ ಕ್ಷೇತ್ರಗಳಲ್ಲಿ ಹುಡುಕಿ...",
+        "table": {
+          "account": "ಖಾತೆ",
+          "domain": "ಡೊಮೇನ್",
+          "theme": "ಥೀಮ್",
+          "status": "ಸ್ಥಿತಿ"
+        },
+        "delete": {
+          "title": "ವೈಟ್ ಲೇಬಲ್ ಅಳಿಸಿ",
+          "message": "\"{account}\" ಗಾಗಿ ವೈಟ್ ಲೇಬಲ್ ಅನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ? ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂತಿರುಗಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+          "confirm": "ಅಳಿಸಿ",
+          "cancel": "ರದ್ದುಮಾಡಿ"
+        },
+        "toast": {
+          "deleted": "ವೈಟ್ ಲೇಬಲ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ!",
+          "deleteFailed": "ವೈಟ್ ಲೇಬಲ್ ಅಳಿಸಲು ವಿಫಲವಾಗಿದೆ",
+          "deleteError": "ಅಳಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ."
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "ಬ್ರ್ಯಾಂಡಿಂಗ್ ಸಂಪಾದಿಸಿ",
+          "create": "ಬ್ರ್ಯಾಂಡಿಂಗ್ ನಿಯೋಜಿಸಿ"
+        },
+        "buttons": {
+          "cancel": "ರದ್ದುಮಾಡಿ",
+          "saving": "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+          "update": "ವೈಟ್ ಲೇಬಲ್ ನವೀಕರಿಸಿ",
+          "activate": "ವೈಟ್ ಲೇಬಲ್ ಸಕ್ರಿಯಗೊಳಿಸಿ"
+        },
+        "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+        "sections": {
+          "coreInstanceMapping": "ಮೂಲ ಇನ್ಸ್ಟನ್ಸ್ ಮ್ಯಾಪಿಂಗ್ (Core Instance Mapping)",
+          "visualIdentitySystems": "ದೃಶ್ಯ ಗುರುತಿನ ವ್ಯವಸ್ಥೆಗಳು",
+          "identityBlueprint": "ಗುರುತಿನ ನೀಲನಕ್ಷೆ (IDENTITY BLUEPRINT)"
+        },
+        "labels": {
+          "account": "ಖಾತೆ",
+          "selectAccount": "ಖಾತೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+          "customEntryFqdn": "ಕಸ್ಟಮ್ ಪ್ರವೇಶ FQDN",
+          "customEntryFqdnPlaceholder": "portal.partner.com",
+          "brandName": "ಬ್ರ್ಯಾಂಡ್ ಹೆಸರು",
+          "brandNamePlaceholder": "ಬ್ರ್ಯಾಂಡ್ ಹೆಸರನ್ನು ನಮೂದಿಸಿ",
+          "logoUrl": "ಲೋಗೋ URL",
+          "logoUrlPlaceholder": "https://cdn.example.com/logo.png",
+          "primaryLogo": "ಪ್ರಾಥಮಿಕ ಲೋಗೋ",
+          "appLogo": "ಅಪ್ಲಿಕೇಶನ್ ಲೋಗೋ",
+          "mobileLogo": "ಮೊಬೈಲ್ ಲೋಗೋ",
+          "favicon": "ಫ್ಯಾವಿಕಾನ್ (Favicon)",
+          "logoDark": "ಲೋಗೋ ಡಾರ್ಕ್",
+          "logoLight": "ಲೋಗೋ ಲೈಟ್",
+          "uploadedUrlPlaceholder": "ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ URL ಇಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತದೆ",
+          "noImagePreview": "ಚಿತ್ರದ ಮುನ್ನೋಟ ಲಭ್ಯವಿಲ್ಲ",
+          "primaryColor": "ಪ್ರಾಥಮಿಕ ಬಣ್ಣ",
+          "secondaryColor": "ದ್ವಿತೀಯ ಬಣ್ಣ",
+          "activeStatus": "ಸಕ್ರಿಯ ಸ್ಥಿತಿ",
+          "fqdn": "FQDN:",
+          "accountCaps": "ಖಾತೆ (ACCOUNT):",
+          "statusCaps": "ಸ್ಥಿತಿ (STATUS):",
+          "colorPreview": "ಬಣ್ಣದ ಮುನ್ನೋಟ"
+        },
+        "summary": {
+          "subtitle": "ಮರುಬ್ರ್ಯಾಂಡ್ ಮಾಡಲಾದ ಪೋರ್ಟಲ್‌ನ ದೃಶ್ಯ ಸಾರಾಂಶ.",
+          "notSet": "ಹೊಂದಿಸಲಾಗಿಲ್ಲ",
+          "active": "ಸಕ್ರಿಯ",
+          "inactive": "ನಿಷ್ಕ್ರಿಯ"
+        },
+        "modes": {
+          "updated": "ನವೀಕರಿಸಲಾಗಿದೆ",
+          "created": "ರಚಿಸಲಾಗಿದೆ"
+        },
+        "toast": {
+          "selectAccount": "ದಯವಿಟ್ಟು ಗುರಿ ಖಾತೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+          "enterFqdn": "ದಯವಿಟ್ಟು ಕಸ್ಟಮ್ FQDN ನಮೂದಿಸಿ",
+          "logoUploadFailed": "ಲೋಗೋ ಅಪ್‌ಲೋಡ್ ವಿಫಲವಾಗಿದೆ",
+          "loadFailed": "ವೈಟ್ ಲೇಬಲ್ ಡೇಟಾವನ್ನು ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ",
+          "saved": "ವೈಟ್ ಲೇಬಲ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ {mode}!",
+          "saveFailed": "ವಿಫಲವಾಗಿದೆ: {message}",
+          "saveError": "ಉಳಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ"
+        }
+      }
+    }
+  }
+}

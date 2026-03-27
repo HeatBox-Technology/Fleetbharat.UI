@@ -1,0 +1,125 @@
+{
+  "pages": {
+    "configuration": {
+      "list": {
+        "title": "కాన్ఫిగరేషన్",
+        "subtitle": "ఖాతా నిర్వహణ కోసం గ్లోబల్ సెట్టింగ్‌లు.",
+        "breadcrumbs": {
+          "accounts": "ఖాతాలు",
+          "current": "కాన్ఫిగరేషన్"
+        },
+        "addButton": "కొత్త కాన్ఫిగరేషన్",
+        "loading": "కాన్ఫిగరేషన్‌లను లోడ్ చేస్తోంది...",
+        "searchPlaceholder": "అన్ని ఫీల్డ్‌లలో వెతకండి...",
+        "table": {
+          "id": "ID",
+          "account": "ఖాతా",
+          "mapProvider": "మ్యాప్ ప్రొవైడర్",
+          "dateFormat": "తేదీ ఫార్మాట్",
+          "language": "భాష",
+          "lastUpdated": "చివరిగా అప్‌డేట్ చేయబడింది"
+        },
+        "delete": {
+          "title": "కాన్ఫిగరేషన్‌ను తొలగించు",
+          "message": "\"{account}\" కోసం కాన్ఫిగరేషన్‌ను మీరు ఖచ్చితంగా తొలగించాలనుకుంటున్నారా? ఈ చర్యను తిరిగి మార్చలేము.",
+          "confirm": "తొలగించు",
+          "cancel": "రద్దు చేయి"
+        },
+        "toast": {
+          "deleted": "కాన్ఫిగరేషన్ విజయవంతంగా తొలగించబడింది!",
+          "deleteFailed": "తొలగించడం విఫలమైంది: {message}",
+          "deleteError": "కాన్ఫిగరేషన్‌ను తొలగించడంలో లోపం సంభవించింది"
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "కాన్ఫిగరేషన్‌ను సవరించు",
+          "create": "కొత్త కాన్ఫిగరేషన్"
+        },
+        "buttons": {
+          "cancel": "రద్దు చేయి",
+          "saving": "సేవ్ అవుతోంది...",
+          "update": "కాన్ఫిగరేషన్‌ను అప్‌డేట్ చేయి",
+          "create": "కాన్ఫిగరేషన్‌ను సేవ్ చేయి",
+          "addMoreLanguages": "మరిన్ని భాషలను జోడించు"
+        },
+        "loading": {
+          "edit": "కాన్ఫిగరేషన్‌ను లోడ్ చేస్తోంది..."
+        },
+        "sections": {
+          "mapConfiguration": "మ్యాప్ కాన్ఫిగరేషన్",
+          "internationalization": "అంతర్జాతీయీకరణ & యూనిట్ కాన్ఫిగరేషన్",
+          "languageConfiguration": "భాషా కాన్ఫిగరేషన్"
+        },
+        "fields": {
+          "accountId": "ఖాతా ID",
+          "selectAccount": "ఖాతాను ఎంచుకోండి",
+          "mapProvider": "మ్యాప్ ప్రొవైడర్",
+          "licenseKey": "లైసెన్స్ కీ",
+          "licenseKeyPlaceholder": "లైసెన్స్ కీని నమోదు చేయండి",
+          "addressKey": "చిరునామా కీ",
+          "addressKeyPlaceholder": "చిరునామా కీని నమోదు చేయండి",
+          "dateFormat": "తేదీ ఫార్మాట్",
+          "timeFormat": "సమయ ఫార్మాట్",
+          "distanceUnit": "దూరపు యూనిట్",
+          "speedUnit": "వేగపు యూనిట్",
+          "fuelUnit": "ఇంధన యూనిట్",
+          "temperature": "ఉష్ణోగ్రత",
+          "addressDisplay": "చిరునామా ప్రదర్శన",
+          "defaultLanguage": "డిఫాల్ట్ భాష",
+          "additionalLanguage": "అదనపు భాష {index}",
+          "selectLanguage": "భాషను ఎంచుకోండి"
+        },
+        "options": {
+          "mapProvider": {
+            "googleMaps": "Google Maps",
+            "hereMaps": "Here Maps",
+            "openStreetMap": "OpenStreetMap"
+          },
+          "timeFormat": {
+            "h12": "12 గంటలు (AM/PM)",
+            "h24": "24 గంటలు"
+          },
+          "distanceUnit": {
+            "km": "కిలోమీటర్లు",
+            "mile": "మైళ్లు"
+          },
+          "speedUnit": {
+            "kmh": "కి.మీ/గం (Km/h)",
+            "mph": "మైళ్లు/గం (Mph)"
+          },
+          "fuelUnit": {
+            "litre": "లీటరు",
+            "gallon": "గ్యాలన్"
+          },
+          "temperature": {
+            "celsius": "సెల్సియస్",
+            "fahrenheit": "ఫారెన్‌హీట్"
+          },
+          "addressDisplay": {
+            "show": "చిరునామాను చూపించు",
+            "hide": "చిరునామాను దాచు"
+          },
+          "language": {
+            "en": "ఇంగ్లీష్ (English)",
+            "es": "స్పానిష్ (Spanish)",
+            "fr": "ఫ్రెంచ్ (French)",
+            "de": "జర్మన్ (German)",
+            "hi": "హిందీ (Hindi)",
+            "te": "తెలుగు (Telugu)",
+            "ta": "తమిళం (Tamil)",
+            "kn": "కన్నడ (Kannada)"
+          }
+        },
+        "toast": {
+          "accountRequired": "దయచేసి సరైన ఖాతా IDని నమోదు చేయండి",
+          "updated": "కాన్ఫిగరేషన్ విజయవంతంగా అప్‌డేట్ చేయబడింది!",
+          "created": "కాన్ఫిగరేషన్ విజయవంతంగా సృష్టించబడింది!",
+          "saveFailed": "సేవ్ చేయడం విఫలమైంది: {message}",
+          "saveError": "సేవ్ చేసేటప్పుడు ఒక లోపం సంభవించింది",
+          "loadFailed": "కాన్ఫిగరేషన్‌ను లోడ్ చేయడంలో విఫలమైంది"
+        }
+      }
+    }
+  }
+}

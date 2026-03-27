@@ -1,0 +1,79 @@
+{
+  "pages": {
+    "managePlans": {
+      "list": {
+        "title": "ಯೋಜನೆಗಳ ನಿರ್ವಹಣೆ",
+        "subtitle": "ಮಲ್ಟಿ-ಟೆನೆಂಟ್ ಖಾತೆ ವರ್ಗಗಳಿಗಾಗಿ ಜಾಗತಿಕ ಬೆಲೆ ನಿಗದಿಯ ನೀಲನಕ್ಷೆಗಳನ್ನು (Blueprints) ವಿನ್ಯಾಸಗೊಳಿಸಿ.",
+        "breadcrumbs": {
+          "billing": "ಬಿಲ್ಲಿಂಗ್",
+          "current": "ಯೋಜನೆಗಳ ನಿರ್ವಹಣೆ"
+        },
+        "addButton": "ಯೋಜನೆಯನ್ನು ರಚಿಸಿ",
+        "searchPlaceholder": "ಎಲ್ಲಾ ಕ್ಷೇತ್ರಗಳಲ್ಲಿ ಹುಡುಕಿ...",
+        "table": {
+          "no": "ಕ್ರಮ ಸಂಖ್ಯೆ",
+          "planName": "ಯೋಜನೆಯ ಹೆಸರು",
+          "category": "ವರ್ಗ",
+          "pricing": "ಬೆಲೆ ನಿಗದಿ",
+          "status": "ಸ್ಥಿತಿ"
+        },
+        "toast": {
+          "deleteFailed": "ಯೋಜನೆಯನ್ನು ಅಳಿಸಲು ವಿಫಲವಾಗಿದೆ",
+          "fetchFailed": "ಯೋಜನೆಗಳನ್ನು ಪಡೆಯಲು ವಿಫಲವಾಗಿದೆ",
+          "genericError": "ಏನೋ ತಪ್ಪಾಗಿದೆ."
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "ಯೋಜನೆಯನ್ನು ಸಂಪಾದಿಸಿ",
+          "create": "ಹೊಸ ಯೋಜನೆಯನ್ನು ರಚಿಸಿ"
+        },
+        "subtitle": "ಬೆಲೆ ನಿಗದಿ, ವೈಶಿಷ್ಟ್ಯಗಳು ಮತ್ತು ಚಂದಾದಾರಿಕೆ ವಿವರಗಳನ್ನು ಕಾನ್ಫಿಗರ್ ಮಾಡಿ.",
+        "buttons": {
+          "cancel": "ರದ್ದುಮಾಡಿ",
+          "saving": "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+          "update": "ಯೋಜನೆಯನ್ನು ನವೀಕರಿಸಿ",
+          "create": "ಯೋಜನೆಯನ್ನು ರಚಿಸಿ"
+        },
+        "status": {
+          "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+          "updated": "ಯೋಜನೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ!",
+          "created": "ಯೋಜನೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ!",
+          "saveFailed": "ಯೋಜನೆಯನ್ನು ಉಳಿಸಲು ವಿಫಲವಾಗಿದೆ",
+          "saveError": "ಯೋಜನೆಯನ್ನು ಉಳಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ",
+          "dropdownFailed": "ಡ್ರಾಪ್‌ಡೌನ್ ಡೇಟಾವನ್ನು ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ",
+          "planLoadFailed": "ಯೋಜನೆಯ ವಿವರಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ"
+        },
+        "sections": {
+          "structuralDefinitions": "ರಚನಾತ್ಮಕ ವ್ಯಾಖ್ಯಾನಗಳು",
+          "structuralDefinitionsSubtitle": "ಮೂಲಭೂತ ಗುರುತು ಮತ್ತು ಟೆನೆಂಟ್-ವ್ಯಾಪ್ತಿಯ ಗುಣಲಕ್ಷಣಗಳು.",
+          "financialDefinitionLayer": "ಹಣಕಾಸು ವಿವರಣೆ ಪದರ",
+          "financialDefinitionLayerSubtitle": "ಸೆಟಪ್ ಮತ್ತು ಮರುಕಳಿಸುವ ಬಿಲ್ಲಿಂಗ್ ನಿಯತಾಂಕಗಳನ್ನು ವ್ಯಾಖ್ಯಾನಿಸಿ.",
+          "entitlementModuleMatrix": "ಹಕ್ಕುಗಳ ಮಾಡ್ಯೂಲ್ ಮ್ಯಾಟ್ರಿಕ್ಸ್ (Entitlement Module Matrix)",
+          "entitlementModuleMatrixSubtitle": "ಈ ಯೋಜನೆಯಲ್ಲಿ ಸೇರಿಸಲಾದ ಮಾಡ್ಯೂಲ್‌ಗಳು ಮತ್ತು ಸಾಮರ್ಥ್ಯಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ.",
+          "usageAndScalability": "ಬಳಕೆ ಮತ್ತು ಸ್ಕೇಲೆಬಿಲಿಟಿ ಮಿತಿಗಳು",
+          "usageAndScalabilitySubtitle": "ಕಾರ್ಯಾಚರಣೆಯ ಮಿತಿಗಳು ಮತ್ತು ಸಂಪನ್ಮೂಲ ಗಡಿಗಳನ್ನು ಹೊಂದಿಸಿ.",
+          "dedicatedSupport": "ಮೀಸಲಾದ ಬೆಂಬಲ ಸಾಲು (Dedicated Support)",
+          "dedicatedSupportSubtitle": "ಈ ಯೋಜನೆಯ ಶ್ರೇಣಿಗಾಗಿ ನಿರ್ದಿಷ್ಟ ಬೆಂಬಲ ಚಾನಲ್ ಅನ್ನು ವ್ಯಾಖ್ಯಾನಿಸಿ.",
+          "adminGuard": "ಅಡ್ಮಿನ್ ಗಾರ್ಡ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+          "blueprint": "ಯೋಜನೆಯ ನೀಲನಕ್ಷೆ (PLAN BLUEPRINT)",
+          "blueprintSubtitle": "ಲೈವ್ ಕಾನ್ಫಿಗರೇಶನ್ ಸಾರಾಂಶ."
+        },
+        "labels": {
+          "category": "ವರ್ಗ:",
+          "cycle": "ಚಕ್ರ (Cycle):",
+          "currency": "ಕರೆನ್ಸಿ:",
+          "usersLimit": "ಬಳಕೆದಾರರ ಮಿತಿ:",
+          "activeFeatures": "ಸಕ್ರಿಯ ವೈಶಿಷ್ಟ್ಯಗಳು:",
+          "setupFee": "ಸೆಟಪ್ ಶುಲ್ಕ (SETUP FEE)",
+          "contractTerm": "ಒಪ್ಪಂದದ ಅವಧಿ",
+          "recurringCharges": "ಮರುಕಳಿಸುವ ಶುಲ್ಕಗಳು (ವರ್ಷ 2+)",
+          "amc": "ವಾರ್ಷಿಕ ನಿರ್ವಹಣೆ (AMC):",
+          "platform": "ಪ್ಲಾಟ್‌ಫಾರ್ಮ್:",
+          "na": "ಲಭ್ಯವಿಲ್ಲ",
+          "unlimited": "ಅನಿಯಮಿತ"
+        }
+      }
+    }
+  }
+}

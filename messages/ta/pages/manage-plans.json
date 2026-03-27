@@ -1,0 +1,79 @@
+{
+  "pages": {
+    "managePlans": {
+      "list": {
+        "title": "திட்டங்களை நிர்வகிக்கவும்",
+        "subtitle": "பல வாடகைதாரர் கணக்கு வகைகளுக்கான உலகளாவிய விலை நிர்ணய வரைபடங்களை (Blueprints) வடிவமைக்கவும்.",
+        "breadcrumbs": {
+          "billing": "பில்லிங்",
+          "current": "திட்டங்களை நிர்வகிக்கவும்"
+        },
+        "addButton": "திட்டத்தை உருவாக்கு",
+        "searchPlaceholder": "அனைத்துப் புலங்களிலும் தேடு...",
+        "table": {
+          "no": "எண்",
+          "planName": "திட்டப் பெயர்",
+          "category": "வகை",
+          "pricing": "விலையிடல்",
+          "status": "நிலை"
+        },
+        "toast": {
+          "deleteFailed": "திட்டத்தை நீக்குவதில் தோல்வி",
+          "fetchFailed": "திட்டங்களைப் பெறுவதில் தோல்வி",
+          "genericError": "ஏதோ தவறு நடந்துவிட்டது."
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "திட்டத்தைத் திருத்து",
+          "create": "புதிய திட்டத்தை உருவாக்கு"
+        },
+        "subtitle": "விலையிடல், அம்சங்கள் மற்றும் சந்தா விவரங்களைக் கட்டமைக்கவும்.",
+        "buttons": {
+          "cancel": "ரத்து செய்",
+          "saving": "சேமிக்கப்படுகிறது...",
+          "update": "திட்டத்தைப் புதுப்பி",
+          "create": "திட்டத்தை உருவாக்கு"
+        },
+        "status": {
+          "loading": "ஏற்றப்படுகிறது...",
+          "updated": "திட்டம் வெற்றிகரமாகப் புதுப்பிக்கப்பட்டது!",
+          "created": "திட்டம் வெற்றிகரமாக உருவாக்கப்பட்டது!",
+          "saveFailed": "திட்டத்தைச் சேமிப்பதில் தோல்வி",
+          "saveError": "திட்டத்தைச் சேமிக்கும் போது பிழை ஏற்பட்டது",
+          "dropdownFailed": "கீழ்தோன்றும் தரவை (Dropdown data) ஏற்றுவதில் தோல்வி",
+          "planLoadFailed": "திட்ட விவரங்களை ஏற்றுவதில் தோல்வி"
+        },
+        "sections": {
+          "structuralDefinitions": "கட்டமைப்பு வரையறைகள் (Structural Definitions)",
+          "structuralDefinitionsSubtitle": "அடிப்படை அடையாளம் மற்றும் வாடகைதாரர் வரம்பு பண்புகள்.",
+          "financialDefinitionLayer": "நிதி வரையறை அடுக்கு",
+          "financialDefinitionLayerSubtitle": "அமைப்பு மற்றும் தொடர்ச்சியான பில்லிங் அளவுருக்களை வரையறுக்கவும்.",
+          "entitlementModuleMatrix": "உரிமைத் தொகுதி மெட்ரிக்ஸ் (Entitlement Module Matrix)",
+          "entitlementModuleMatrixSubtitle": "இந்தத் திட்டத்தில் சேர்க்கப்பட்டுள்ள தொகுதிகள் மற்றும் திறன்களைச் செயல்படுத்தவும்.",
+          "usageAndScalability": "பயன்பாடு மற்றும் விரிவாக்கக் கட்டுப்பாடுகள்",
+          "usageAndScalabilitySubtitle": "செயல்பாட்டு வரம்புகள் மற்றும் வள எல்லைகளை அமைக்கவும்.",
+          "dedicatedSupport": "பிரத்யேக ஆதரவு வரிசை (Dedicated Support)",
+          "dedicatedSupportSubtitle": "இந்தத் திட்ட அடுக்குக்கான குறிப்பிட்ட ஆதரவு சேனலை வரையறுக்கவும்.",
+          "adminGuard": "நிர்வாகப் பாதுகாப்பு அமைப்புகள் (Admin Guard Settings)",
+          "blueprint": "திட்ட வரைபடம் (PLAN BLUEPRINT)",
+          "blueprintSubtitle": "நேரடி கட்டமைப்பு சுருக்கம்."
+        },
+        "labels": {
+          "category": "வகை:",
+          "cycle": "சுழற்சி (Cycle):",
+          "currency": "நாணயம்:",
+          "usersLimit": "பயனர்கள் வரம்பு:",
+          "activeFeatures": "செயலில் உள்ள அம்சங்கள்:",
+          "setupFee": "அமைப்பு கட்டணம் (SETUP FEE)",
+          "contractTerm": "ஒப்பந்தக் காலம்",
+          "recurringCharges": "தொடர்ச்சியான கட்டணங்கள் (ஆண்டு 2+)",
+          "amc": "வருடாந்திர பராமரிப்பு (AMC):",
+          "platform": "தளமேடை (Platform):",
+          "na": "பொருந்தாது",
+          "unlimited": "வரம்பற்றது"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "pages": {
+    "routeMaster": {
+      "list": {
+        "title": "ರೂಟ್ ಮಾಸ್ಟರ್",
+        "subtitle": "ಜಿಯೋಫೆನ್ಸ್ ಪಾಯಿಂಟ್‌ಗಳು ಮತ್ತು ನಿಲ್ದಾಣಗಳನ್ನು ಬಳಸಿಕೊಂಡು ಮರುಬಳಕೆ ಮಾಡಬಹುದಾದ ಮಾರ್ಗ ಟೆಂಪ್ಲೆಟ್‌ಗಳನ್ನು ಕಾನ್ಫಿಗರ್ ಮಾಡಿ.",
+        "breadcrumbs": {
+          "fleet": "ಫ್ಲೀಟ್",
+          "current": "ರೂಟ್ ಮಾಸ್ಟರ್"
+        },
+        "addButton": "ಮಾರ್ಗ ಸೇರಿಸಿ",
+        "loading": "ರೂಟ್ ಮಾಸ್ಟರ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+        "searchPlaceholder": "ಮಾರ್ಗಗಳನ್ನು ಹುಡುಕಿ...",
+        "metrics": {
+          "totalRoutes": "ಒಟ್ಟು ಮಾರ್ಗಗಳು",
+          "activeRoutes": "ಸಕ್ರಿಯ ಮಾರ್ಗಗಳು",
+          "inactiveRoutes": "ನಿಷ್ಕ್ರಿಯ ಮಾರ್ಗಗಳು"
+        },
+        "filters": {
+          "selectAccount": "ಖಾತೆಯನ್ನು ಆರಿಸಿ",
+          "selectedAccount": "ಆಯ್ದ ಖಾತೆ ({id})"
+        },
+        "table": {
+          "no": "ಕ್ರಮ ಸಂಖ್ಯೆ",
+          "routeName": "ಮಾರ್ಗದ ಹೆಸರು",
+          "account": "ಖಾತೆ",
+          "startPoint": "ಪ್ರಾರಂಭದ ಪಾಯಿಂಟ್",
+          "endPoint": "ಅಂತ್ಯದ ಪಾಯಿಂಟ್",
+          "stops": "ನಿಲ್ದಾಣಗಳು",
+          "geofence": "ಜಿಯೋಫೆನ್ಸ್",
+          "status": "ಸ್ಥಿತಿ",
+          "createdOn": "ರಚಿಸಿದ ದಿನಾಂಕ"
+        },
+        "labels": {
+          "yes": "ಹೌದು",
+          "no": "ಇಲ್ಲ",
+          "active": "ಸಕ್ರಿಯ",
+          "inactive": "ನಿಷ್ಕ್ರಿಯ"
+        },
+        "deleteDialog": {
+          "title": "ಮಾರ್ಗ ಅಳಿಸಿ",
+          "message": "\"{name}\" ಅನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?",
+          "confirm": "ಅಳಿಸಿ",
+          "cancel": "ರದ್ದುಮಾಡಿ"
+        },
+        "toast": {
+          "fetchFailed": "ರೂಟ್ ಮಾಸ್ಟರ್ ಪಟ್ಟಿಯನ್ನು ಪಡೆಯಲು ವಿಫಲವಾಗಿದೆ",
+          "deleted": "ಮಾರ್ಗವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ",
+          "deleteFailed": "ಮಾರ್ಗ ಅಳಿಸಲು ವಿಫಲವಾಗಿದೆ",
+          "deleteError": "ಮಾರ್ಗ ಅಳಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ"
+        }
+      },
+      "detail": {
+        "createTitle": "ಮಾರ್ಗ ರಚಿಸಿ",
+        "editTitle": "ಮಾರ್ಗ ಸಂಪಾದಿಸಿ",
+        "subtitle": "ಜಿಯೋಫೆನ್ಸ್‌ಗಳು ಮತ್ತು ನಿಲ್ದಾಣಗಳೊಂದಿಗೆ ರೂಟ್ ಮಾಸ್ಟರ್ ಕಾನ್ಫಿಗರ್ ಮಾಡಿ.",
+        "loadingDetails": "ಮಾರ್ಗದ ವಿವರಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+        "noReadPermission": "ಈ ಪುಟವನ್ನು ವೀಕ್ಷಿಸಲು ನಿಮಗೆ ಅನುಮತಿಯಿಲ್ಲ.",
+        "breadcrumbs": {
+          "fleet": "ಫ್ಲೀಟ್",
+          "master": "ರೂಟ್ ಮಾಸ್ಟರ್",
+          "create": "ರಚಿಸಿ",
+          "edit": "ಸಂಪಾದಿಸಿ"
+        },
+        "buttons": {
+          "cancel": "ರದ್ದುಮಾಡಿ",
+          "saving": "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+          "createRoute": "ಮಾರ್ಗ ರಚಿಸಿ",
+          "updateRoute": "ಮಾರ್ಗ ನವೀಕರಿಸಿ",
+          "loadingRoute": "ಮಾರ್ಗ ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+          "viewRoute": "ಮಾರ್ಗ ವೀಕ್ಷಿಸಿ"
+        },
+        "fields": {
+          "account": "ಖಾತೆ",
+          "selectAccount": "ಖಾತೆಯನ್ನು ಆರಿಸಿ",
+          "selectedAccount": "ಆಯ್ದ ಖಾತೆ ({id})",
+          "routeName": "ಮಾರ್ಗದ ಹೆಸರು",
+          "routeNamePlaceholder": "ಮಾರ್ಗದ ಹೆಸರನ್ನು ನಮೂದಿಸಿ",
+          "geofenceRelated": "ಜಿಯೋಫೆನ್ಸ್ ಸಂಬಂಧಿತ",
+          "yes": "ಹೌದು",
+          "no": "ಇಲ್ಲ",
+          "startPoint": "ಪ್ರಾರಂಭದ ಪಾಯಿಂಟ್",
+          "addGeofence": "ಜಿಯೋಫೆನ್ಸ್ ಸೇರಿಸಿ",
+          "selectStartGeofence": "ಪ್ರಾರಂಭದ ಜಿಯೋಫೆನ್ಸ್ ಆರಿಸಿ",
+          "stopLabel": "ನಿಲ್ದಾಣ {number}",
+          "selectStopGeofence": "ನಿಲ್ದಾಣದ ಜಿಯೋಫೆನ್ಸ್ ಆರಿಸಿ",
+          "addStop": "ನಿಲ್ದಾಣ ಸೇರಿಸಿ",
+          "endPoint": "ಅಂತ್ಯದ ಪಾಯಿಂಟ್",
+          "selectEndGeofence": "ಅಂತ್ಯದ ಜಿಯೋಫೆನ್ಸ್ ಆರಿಸಿ",
+          "status": "ಸ್ಥಿತಿ",
+          "active": "ಸಕ್ರಿಯ",
+          "inactive": "ನಿಷ್ಕ್ರಿಯ",
+          "geofenceFallback": "ಜಿಯೋಫೆನ್ಸ್ {id}"
+        },
+        "section": {
+          "routePreview": "ಮಾರ್ಗದ ಮುನ್ನೋಟ",
+          "mapsLoadFailed": "ಗೂಗಲ್ ಮ್ಯಾಪ್ಸ್ ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ.",
+          "loadingMap": "ನಕ್ಷೆಯನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ..."
+        },
+        "table": {
+          "startGeofence": "ಪ್ರಾರಂಭದ ಜಿಯೋಫೆನ್ಸ್",
+          "endGeofence": "ಅಂತ್ಯದ ಜಿಯೋಫೆನ್ಸ್",
+          "distance": "ದೂರ (ಕಿ.ಮೀ)",
+          "time": "ಸಮಯ (ನಿಮಿಷಗಳು)",
+          "totalDistance": "ಒಟ್ಟು ದೂರ:",
+          "totalTime": "ಒಟ್ಟು ಸಮಯ:"
+        },
+        "toast": {
+          "notFound": "ಮಾರ್ಗ ಕಂಡುಬಂದಿಲ್ಲ",
+          "fetchFailed": "ಮಾರ್ಗದ ವಿವರ ಪಡೆಯಲು ವಿಫಲವಾಗಿದೆ",
+          "geofenceDropdownFailed": "ಜಿಯೋಫೆನ್ಸ್ ಡ್ರಾಪ್‌ಡೌನ್ ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ",
+          "mapsNotLoaded": "ಗೂಗಲ್ ಮ್ಯಾಪ್ಸ್ ಇನ್ನೂ ಲೋಡ್ ಆಗಿಲ್ಲ",
+          "selectStartEndGeofence": "ದಯವಿಟ್ಟು ಪ್ರಾರಂಭ ಮತ್ತು ಅಂತ್ಯದ ಜಿಯೋಫೆನ್ಸ್ ಆರಿಸಿ",
+          "selectAtLeastStartEnd": "ದಯವಿಟ್ಟು ಕನಿಷ್ಠ ಪ್ರಾರಂಭ ಮತ್ತು ಅಂತ್ಯದ ಪಾಯಿಂಟ್‌ಗಳನ್ನು ಆರಿಸಿ",
+          "resolveGeofenceFailed": "ಜಿಯೋಫೆನ್ಸ್ {id} ಅನ್ನು ಪರಿಹರಿಸಲು ವಿಫಲವಾಗಿದೆ",
+          "encodedPathUnavailable": "ನಕ್ಷೆಯ ಪ್ರತಿಕ್ರಿಯೆಯಿಂದ ಮಾರ್ಗದ ರೇಖೆಯನ್ನು (Polyline) ಪಡೆಯಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ",
+          "previewFailed": "ಮಾರ್ಗದ ಮುನ್ನೋಟ ತೋರಿಸಲು ವಿಫಲವಾಗಿದೆ",
+          "selectAccount": "ದಯವಿಟ್ಟು ಖಾತೆಯನ್ನು ಆರಿಸಿ",
+          "enterRouteName": "ದಯವಿಟ್ಟು ಮಾರ್ಗದ ಹೆಸರನ್ನು ನಮೂದಿಸಿ",
+          "startEndMustDiffer": "ಪ್ರಾರಂಭ ಮತ್ತು ಅಂತ್ಯದ ಜಿಯೋಫೆನ್ಸ್ ವಿಭಿನ್ನವಾಗಿರಬೇಕು",
+          "selectGeofenceForEachStop": "ದಯವಿಟ್ಟು ಪ್ರತಿ ನಿಲ್ದಾಣಕ್ಕೆ ಜಿಯೋಫೆನ್ಸ್ ಆರಿಸಿ",
+          "noUpdatePermission": "ಮಾರ್ಗ ನವೀಕರಿಸಲು ನಿಮಗೆ ಅನುಮತಿಯಿಲ್ಲ",
+          "noAddPermission": "ಮಾರ್ಗ ಸೇರಿಸಲು ನಿಮಗೆ ಅನುಮತಿಯಿಲ್ಲ",
+          "routePathMissing": "ಮಾರ್ಗದ ಹಾದಿ ಕಾಣೆಯಾಗಿದೆ. ದಯವಿಟ್ಟು ಮೊದಲು ಮಾರ್ಗದ ಮುನ್ನೋಟ ವೀಕ್ಷಿಸಿ.",
+          "updated": "ಮಾರ್ಗ ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ",
+          "created": "ಮಾರ್ಗ ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ",
+          "saveFailed": "ಮಾರ್ಗ ಉಳಿಸಲು ವಿಫಲವಾಗಿದೆ",
+          "saveError": "ಮಾರ್ಗ ಉಳಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ"
+        }
+      }
+    }
+  }
+}

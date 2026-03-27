@@ -1,0 +1,75 @@
+{
+  "pages": {
+    "accounts": {
+      "list": {
+        "title": "ಖಾತೆಗಳ ಪಟ್ಟಿ",
+        "subtitle": "ಗುರುತುಗಳು, ವರ್ಗೀಕರಣಗಳು ಮತ್ತು ಜಾಗತಿಕ ನಿಯತಾಂಕಗಳನ್ನು ನಿರ್ವಹಿಸಿ.",
+        "breadcrumbs": {
+          "accounts": "ಖಾತೆಗಳು",
+          "current": "ಖಾತೆಗಳ ಪಟ್ಟಿ"
+        },
+        "addButton": "ಖಾತೆ ಸೇರಿಸಿ",
+        "searchPlaceholder": "ಖಾತೆಗಳನ್ನು ಹುಡುಕಿ...",
+        "table": {
+          "no": "ಕ್ರಮ ಸಂಖ್ಯೆ",
+          "code": "ಕೋಡ್",
+          "instance": "ಇನ್ಸ್ಟನ್ಸ್",
+          "contact": "ಸಂಪರ್ಕ",
+          "location": "ಸ್ಥಳ",
+          "status": "ಸ್ಥಿತಿ"
+        },
+        "metrics": {
+          "total": "ಒಟ್ಟು",
+          "active": "ಸಕ್ರಿಯ",
+          "pending": "ಬಾಕಿ ಇದೆ",
+          "inactive": "ನಿಷ್ಕ್ರಿಯ"
+        },
+        "delete": {
+          "title": "ಖಾತೆ ಅಳಿಸಿ",
+          "message": "\"{instance}\" ಅನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ? ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂತಿರುಗಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+          "confirm": "ಅಳಿಸಿ",
+          "cancel": "ರದ್ದುಮಾಡಿ"
+        },
+        "toast": {
+          "loadFailed": "ಖಾತೆಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ",
+          "deleteFailed": "ಖಾತೆಯನ್ನು ಅಳಿಸಲು ವಿಫಲವಾಗಿದೆ"
+        }
+      },
+      "detail": {
+        "title": {
+          "create": "ಹೊಸ ಖಾತೆ ಸೇರಿಸಿ",
+          "edit": "ಖಾತೆ ಸಂಪಾದಿಸಿ"
+        },
+        "loading": "ಖಾತೆ ವಿವರಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+        "sections": {
+          "accountDetails": "ಖಾತೆ ವಿವರಗಳು",
+          "addressDetails": "ವಿಳಾಸದ ವಿವರಗಳು",
+          "businessProfile": "ವ್ಯವಹಾರ ಪ್ರೊಫೈಲ್ ವಿವರಗಳು",
+          "userPermission": "ಬಳಕೆದಾರರ ಅನುಮತಿ ಮತ್ತು ಪ್ರವೇಶ ವಿವರಗಳು"
+        },
+        "buttons": {
+          "cancel": "ರದ್ದುಮಾಡಿ",
+          "submit": "ಸಲ್ಲಿಸಿ"
+        },
+        "toast": {
+          "accountNameRequired": "ಖಾತೆ ಹೆಸರು ಅಗತ್ಯವಿದೆ!",
+          "categoryRequired": "ವರ್ಗ ಅಗತ್ಯವಿದೆ!",
+          "primaryDomainRequired": "ಪ್ರಾಥಮಿಕ ಡೊಮೇನ್ ಅಗತ್ಯವಿದೆ!",
+          "businessEmailRequired": "ವ್ಯವಹಾರ ಇಮೇಲ್ ಅಗತ್ಯವಿದೆ!",
+          "businessAddressRequired": "ವ್ಯವಹಾರ ವಿಳಾಸ ಅಗತ್ಯವಿದೆ!",
+          "businessTimeZoneRequired": "ವ್ಯವಹಾರ ಸಮಯ ವಲಯ ಅಗತ್ಯವಿದೆ!",
+          "countryRequired": "ದೇಶ ಅಗತ್ಯವಿದೆ!",
+          "stateRequired": "ರಾಜ್ಯ ಅಗತ್ಯವಿದೆ!",
+          "cityRequired": "ನಗರ ಅಗತ್ಯವಿದೆ!",
+          "createdSuccess": "ಖಾತೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ!",
+          "updatedSuccess": "ಖಾತೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ!",
+          "alreadyExists": "ಖಾತೆ ಈಗಾಗಲೇ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ!",
+          "genericError": "ಏನೋ ತಪ್ಪಾಗಿದೆ!",
+          "submitError": "ಫಾರ್ಮ್ ಸಲ್ಲಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ.",
+          "fetchAccountFailed": "ಖಾತೆ ವಿವರಗಳನ್ನು ಪಡೆಯಲು ವಿಫಲವಾಗಿದೆ!",
+          "fetchAccountError": "ಖಾತೆ ವಿವರಗಳನ್ನು ಪಡೆಯುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ."
+        }
+      }
+    }
+  }
+}

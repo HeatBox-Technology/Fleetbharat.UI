@@ -57,7 +57,12 @@ export default function ThemeCustomizer() {
     const currentPath = window.location.pathname || "/";
     const segments = currentPath.split("/").filter(Boolean);
     const firstSegment = segments[0]?.toLowerCase();
-    const isPrefixed = firstSegment === "en" || firstSegment === "hi";
+    const isPrefixed =
+      firstSegment === "en" ||
+      firstSegment === "hi" ||
+      firstSegment === "te" ||
+      firstSegment === "ta" ||
+      firstSegment === "kn";
     const restPath = isPrefixed ? `/${segments.slice(1).join("/")}` : currentPath;
     const normalizedRest = restPath === "/" ? "" : restPath;
     const nextPath =
@@ -192,6 +197,9 @@ export default function ThemeCustomizer() {
           >
             <option value="en">English</option>
             <option value="hi">Hindi</option>
+            <option value="te">Telugu</option>
+            <option value="ta">Tamil</option>
+            <option value="kn">Kannada</option>
           </select>
         </div>
 

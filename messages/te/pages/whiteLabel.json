@@ -1,0 +1,96 @@
+{
+  "pages": {
+    "whiteLabel": {
+      "list": {
+        "title": "వైట్ లేబుల్",
+        "subtitle": "గుర్తింపులు, వర్గీకరణలు మరియు గ్లోబల్ పారామితులను నిర్వహించండి.",
+        "breadcrumbs": {
+          "accounts": "ఖాతాలు",
+          "current": "వైట్ లేబుల్"
+        },
+        "addButton": "బ్రాండింగ్‌ను కేటాయించండి",
+        "loading": "వైట్ లేబుల్‌లను లోడ్ చేస్తోంది...",
+        "searchPlaceholder": "అన్ని ఫీల్డ్‌లలో వెతకండి...",
+        "table": {
+          "account": "ఖాతా (ACCOUNT)",
+          "domain": "డొమైన్ (DOMAIN)",
+          "theme": "థీమ్ (THEME)",
+          "status": "స్థితి (STATUS)"
+        },
+        "delete": {
+          "title": "వైట్ లేబుల్‌ను తొలగించు",
+          "message": "\"{account}\" కోసం వైట్ లేబుల్‌ను మీరు ఖచ్చితంగా తొలగించాలనుకుంటున్నారా? ఈ చర్యను తిరిగి మార్చలేము.",
+          "confirm": "తొలగించు",
+          "cancel": "రద్దు చేయి"
+        },
+        "toast": {
+          "deleted": "వైట్ లేబుల్ విజయవంతంగా తొలగించబడింది!",
+          "deleteFailed": "వైట్ లేబుల్‌ను తొలగించడంలో విఫలమైంది",
+          "deleteError": "తొలగించేటప్పుడు ఒక లోపం సంభవించింది."
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "బ్రాండింగ్‌ను సవరించు",
+          "create": "బ్రాండింగ్‌ను కేటాయించండి"
+        },
+        "buttons": {
+          "cancel": "రద్దు చేయి",
+          "saving": "సేవ్ అవుతోంది...",
+          "update": "వైట్ లేబుల్‌ను అప్‌డేట్ చేయి",
+          "activate": "వైట్ లేబుల్‌ను యాక్టివేట్ చేయి"
+        },
+        "loading": "లోడ్ అవుతోంది...",
+        "sections": {
+          "coreInstanceMapping": "కోర్ ఇన్‌స్టాన్స్ మ్యాపింగ్",
+          "visualIdentitySystems": "విజువల్ ఐడెంటిటీ సిస్టమ్స్",
+          "identityBlueprint": "గుర్తింపు బ్లూప్రింట్ (IDENTITY BLUEPRINT)"
+        },
+        "labels": {
+          "account": "ఖాతా",
+          "selectAccount": "ఖాతాను ఎంచుకోండి",
+          "customEntryFqdn": "కస్టమ్ ఎంట్రీ FQDN",
+          "customEntryFqdnPlaceholder": "portal.partner.com",
+          "brandName": "బ్రాండ్ పేరు",
+          "brandNamePlaceholder": "బ్రాండ్ పేరును నమోదు చేయండి",
+          "logoUrl": "లోగో URL",
+          "logoUrlPlaceholder": "https://cdn.example.com/logo.png",
+          "primaryLogo": "ప్రాథమిక లోగో",
+          "appLogo": "యాప్ లోగో",
+          "mobileLogo": "మొబైల్ లోగో",
+          "favicon": "ఫావికాన్ (Favicon)",
+          "logoDark": "లోగో డార్క్ (Dark Mode)",
+          "logoLight": "లోగో లైట్ (Light Mode)",
+          "uploadedUrlPlaceholder": "అప్‌లోడ్ చేసిన URL ఇక్కడ కనిపిస్తుంది",
+          "noImagePreview": "చిత్రం ప్రివ్యూ అందుబాటులో లేదు",
+          "primaryColor": "ప్రాథమిక రంగు",
+          "secondaryColor": "ద్వితీయ రంగు",
+          "activeStatus": "క్రియాశీల స్థితి",
+          "fqdn": "FQDN:",
+          "accountCaps": "ఖాతా (ACCOUNT):",
+          "statusCaps": "స్థితి (STATUS):",
+          "colorPreview": "రంగు ప్రివ్యూ"
+        },
+        "summary": {
+          "subtitle": "రీబ్రాండెడ్ పోర్టల్ యొక్క విజువల్ సారాంశం.",
+          "notSet": "సెట్ చేయబడలేదు",
+          "active": "క్రియాశీల (ACTIVE)",
+          "inactive": "నిష్క్రియ (INACTIVE)"
+        },
+        "modes": {
+          "updated": "అప్‌డేట్ చేయబడింది",
+          "created": "సృష్టించబడింది"
+        },
+        "toast": {
+          "selectAccount": "దయచేసి టార్గెట్ ఖాతాను ఎంచుకోండి",
+          "enterFqdn": "దయచేసి కస్టమ్ FQDNని నమోదు చేయండి",
+          "logoUploadFailed": "లోగో అప్‌లోడ్ విఫలమైంది",
+          "loadFailed": "వైట్ లేబుల్ డేటాను లోడ్ చేయడంలో విఫలమైంది",
+          "saved": "వైట్ లేబుల్ విజయవంతంగా {mode}!",
+          "saveFailed": "విఫలమైంది: {message}",
+          "saveError": "సేవ్ చేసేటప్పుడు ఒక లోపం సంభవించింది"
+        }
+      }
+    }
+  }
+}

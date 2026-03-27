@@ -105,7 +105,10 @@
             "es": "Spanish",
             "fr": "French",
             "de": "German",
-            "hi": "Hindi"
+            "hi": "Hindi",
+            "te": "Telugu",
+            "ta": "Tamil",
+            "kn": "Kannada"
           }
         },
         "toast": {

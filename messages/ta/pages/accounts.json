@@ -1,0 +1,75 @@
+{
+  "pages": {
+    "accounts": {
+      "list": {
+        "title": "கணக்கு பட்டியல்",
+        "subtitle": "அடையாளங்கள், வகைப்பாடுகள் மற்றும் உலகளாவிய அளவுருக்களை நிர்வகிக்கவும்.",
+        "breadcrumbs": {
+          "accounts": "கணக்குகள்",
+          "current": "கணக்கு பட்டியல்"
+        },
+        "addButton": "கணக்கைச் சேர்",
+        "searchPlaceholder": "கணக்குகளைத் தேடு...",
+        "table": {
+          "no": "எண்",
+          "code": "குறியீடு",
+          "instance": "நிகழ்வு (Instance)",
+          "contact": "தொடர்பு",
+          "location": "இடம்",
+          "status": "நிலை"
+        },
+        "metrics": {
+          "total": "மொத்தம்",
+          "active": "செயலில்",
+          "pending": "நிலுவையில்",
+          "inactive": "செயலற்றது"
+        },
+        "delete": {
+          "title": "கணக்கை நீக்கு",
+          "message": "\"{instance}\" ஐ நீங்கள் நிச்சயமாக நீக்க விரும்புகிறீர்களா? இந்தச் செயலை மாற்ற முடியாது.",
+          "confirm": "நீக்கு",
+          "cancel": "ரத்து செய்"
+        },
+        "toast": {
+          "loadFailed": "கணக்குகளை ஏற்றுவதில் தோல்வி",
+          "deleteFailed": "கணக்கை நீக்குவதில் தோல்வி"
+        }
+      },
+      "detail": {
+        "title": {
+          "create": "புதிய கணக்கைச் சேர்",
+          "edit": "கணக்கைத் திருத்து"
+        },
+        "loading": "கணக்கு விவரங்கள் ஏற்றப்படுகின்றன...",
+        "sections": {
+          "accountDetails": "கணக்கு விவரங்கள்",
+          "addressDetails": "முகவரி விவரங்கள்",
+          "businessProfile": "வணிக சுயவிவர விவரங்கள்",
+          "userPermission": "பயனர் அனுமதி மற்றும் அணுகல் விவரங்கள்"
+        },
+        "buttons": {
+          "cancel": "ரத்து செய்",
+          "submit": "சமர்ப்பி"
+        },
+        "toast": {
+          "accountNameRequired": "கணக்கு பெயர் தேவை!",
+          "categoryRequired": "வகை தேவை!",
+          "primaryDomainRequired": "முதன்மை டொமைன் தேவை!",
+          "businessEmailRequired": "வணிக மின்னஞ்சல் தேவை!",
+          "businessAddressRequired": "வணிக முகவரி தேவை!",
+          "businessTimeZoneRequired": "வணிக நேர மண்டலம் தேவை!",
+          "countryRequired": "நாடு தேவை!",
+          "stateRequired": "மாநிலம் தேவை!",
+          "cityRequired": "நகரம் தேவை!",
+          "createdSuccess": "கணக்கு வெற்றிகரமாக உருவாக்கப்பட்டது!",
+          "updatedSuccess": "கணக்கு வெற்றிகரமாக புதுப்பிக்கப்பட்டது!",
+          "alreadyExists": "கணக்கு ஏற்கனவே உள்ளது!",
+          "genericError": "ஏதோ தவறு நடந்துவிட்டது!",
+          "submitError": "படிவத்தைச் சமர்ப்பிக்கும்போது பிழை ஏற்பட்டது.",
+          "fetchAccountFailed": "கணக்கு விவரங்களைப் பெறுவதில் தோல்வி!",
+          "fetchAccountError": "கணக்கு விவரங்களைப் பெறும்போது பிழை ஏற்பட்டது."
+        }
+      }
+    }
+  }
+}
