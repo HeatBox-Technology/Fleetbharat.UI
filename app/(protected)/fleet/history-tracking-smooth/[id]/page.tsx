@@ -21,6 +21,9 @@ import {
 } from "lucide-react";
 import { useGoogleMapsSdk } from "@/hooks/useGoogleMapsSdk";
 import { useParams, useRouter } from "next/navigation";
+import PageHeader from "@/components/PageHeader";
+import { useColor } from "@/context/ColorContext";
+import { useTheme } from "@/context/ThemeContext";
 import { getCarMarkerSvg } from "@/utils/carMarkerIcon";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_JAVA_API_BASE_URL;
@@ -164,6 +167,8 @@ function getPathBearing(from: HistoryDataPoint, to: HistoryDataPoint): number {
 export default function HistoryTracking() {
   const params = useParams();
   const router = useRouter();
+  const { isDark } = useTheme();
+  const { selectedColor } = useColor();
   const mapRef = useRef<google.maps.Map | null>(null);
 
   const vehicleId = params?.id as string;
@@ -451,33 +456,30 @@ export default function HistoryTracking() {
   }, [historyData, currentIndex]);
 
   return (
-    <div className="relative min-h-screen bg-[#f3f4f6]">
+    <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <div className="relative min-h-screen bg-background p-4 text-foreground">
+        <div className="mx-auto mb-6">
+          <PageHeader
+            title="History Tracking"
+            subtitle="Playback route history with timeline analysis."
+            breadcrumbs={[
+              { label: "Fleet" },
+              { label: "Track & Trace", href: "/fleet" },
+              { label: vehicleId || "Vehicle" },
+            ]}
+            showButton
+            buttonText="Back to Fleet"
+            onButtonClick={() => router.push("/fleet")}
+            showExportButton={false}
+            showFilterButton={false}
+            showBulkUpload={false}
+          />
+        </div>
       {/* Desktop Layout */}
-      <div className="hidden p-3 md:p-4 lg:block">
-        {/* Header */}
-        <header className="mb-4">
-          <button
-            onClick={() => router.push("/fleet")}
-            className="mb-3 inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            BACK TO FLEET
-          </button>
-
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-            <div>
-              <h1 className="mb-1 text-[14px] font-bold uppercase tracking-widest text-purple-600">
-                HISTORY ANALYSIS
-              </h1>
-              <div className="text-3xl font-black text-slate-900">
-                {vehicleId || "Unknown Vehicle"}
-              </div>
-            </div>
-          </div>
-        </header>
+      <div className="hidden lg:block">
 
         {/* Time Period Settings */}
-        <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-4">
+        <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
           <h2 className="mb-3 text-[12px] font-bold uppercase tracking-widest text-slate-600">
             TIME PERIOD SETTINGS
           </h2>
@@ -491,7 +493,8 @@ export default function HistoryTracking() {
                 type="datetime-local"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100"
+                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                style={{ borderColor: "hsl(var(--border))" }}
               />
             </div>
 
@@ -503,7 +506,8 @@ export default function HistoryTracking() {
                 type="datetime-local"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100"
+                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                style={{ borderColor: "hsl(var(--border))" }}
               />
             </div>
 
@@ -511,7 +515,8 @@ export default function HistoryTracking() {
               <button
                 onClick={fetchHistoryData}
                 disabled={isLoading}
-                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-50"
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold text-white transition disabled:opacity-50"
+                style={{ backgroundColor: selectedColor }}
               >
                 <Navigation className="h-4 w-4" />
                 {isLoading ? "Loading..." : "RE-PLOT ROUTE"}
@@ -524,7 +529,7 @@ export default function HistoryTracking() {
           {/* Sidebar */}
           <aside className="space-y-3">
             {/* Movement Stats */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
               <h3 className="mb-3 text-[12px] font-bold uppercase tracking-widest text-slate-600">
                 MOVEMENT STATS (TODAY)
               </h3>
@@ -552,7 +557,7 @@ export default function HistoryTracking() {
 
             {/* Violations */}
             {violations.length > 0 && (
-              <div className="rounded-2xl border border-slate-200 bg-white p-4">
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
                 <h3 className="mb-3 text-[12px] font-bold uppercase tracking-widest text-slate-600">
                   VIOLATIONS RECORDED
                 </h3>
@@ -586,7 +591,7 @@ export default function HistoryTracking() {
 
             {/* Current Position Info */}
             {currentPoint && (
-              <div className="rounded-2xl border border-slate-200 bg-white p-4">
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
                 <h3 className="mb-3 text-[12px] font-bold uppercase tracking-widest text-slate-600">
                   CURRENT POSITION
                 </h3>
@@ -671,7 +676,7 @@ export default function HistoryTracking() {
                     <PolylineF
                       path={routePath}
                       options={{
-                        strokeColor: "#6366f1",
+                        strokeColor: selectedColor,
                         strokeOpacity: 0.9,
                         strokeWeight: 4,
                       }}
@@ -771,7 +776,7 @@ export default function HistoryTracking() {
                   <div className="absolute bottom-6 left-1/2 w-[90%] max-w-4xl -translate-x-1/2 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-2xl backdrop-blur">
                     <div className="mb-3 flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-indigo-600">
+                        <span className="text-sm font-bold text-primary">
                           {formatTime(historyData[0].gpsDate)}
                         </span>
                         <span className="text-xs font-semibold uppercase text-slate-400">
@@ -788,9 +793,10 @@ export default function HistoryTracking() {
                     {/* Progress bar */}
                     <div className="relative mb-3 h-2 rounded-full bg-slate-200">
                       <div
-                        className="absolute h-full rounded-full bg-indigo-600 transition-all"
+                        className="absolute h-full rounded-full transition-all"
                         style={{
                           width: `${(currentIndex / (historyData.length - 1)) * 100}%`,
+                          backgroundColor: selectedColor,
                         }}
                       />
                       <input
@@ -810,7 +816,8 @@ export default function HistoryTracking() {
                     <div className="flex items-center justify-between">
                       <button
                         onClick={() => setIsPlaying(!isPlaying)}
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-white transition hover:bg-indigo-700"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white transition"
+                        style={{ backgroundColor: selectedColor }}
                       >
                         {isPlaying ? (
                           <Pause className="h-5 w-5" fill="currentColor" />
@@ -838,25 +845,11 @@ export default function HistoryTracking() {
                   </div>
                 )}
 
-                {/* Map controls */}
-                <div className="absolute right-4 top-4 flex flex-col gap-2">
-                  <button
-                    type="button"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#6d28d9] text-white shadow-lg"
-                  >
-                    <Settings className="h-5 w-5" />
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-700 shadow-lg"
-                  >
-                    <Layers3 className="h-5 w-5" />
-                  </button>
-                </div>
+               
 
                 {/* Error/Empty states */}
                 {error && (
-                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-red-200 bg-white p-6 text-center shadow-xl">
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-red-200 bg-white p-6 text-center shadow-xl dark:bg-slate-900">
                     <AlertTriangle className="mx-auto mb-2 h-8 w-8 text-red-500" />
                     <div className="text-sm font-semibold text-red-600">
                       {error}
@@ -865,7 +858,7 @@ export default function HistoryTracking() {
                 )}
 
                 {!isLoading && !error && historyData.length === 0 && (
-                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-xl">
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-xl dark:border-slate-700 dark:bg-slate-900">
                     <MapPin className="mx-auto mb-2 h-8 w-8 text-slate-400" />
                     <div className="text-sm font-semibold text-slate-600">
                       Select a time period and click "RE-PLOT ROUTE"
@@ -881,11 +874,11 @@ export default function HistoryTracking() {
       {/* Mobile Layout */}
       <div className="flex h-screen flex-col lg:hidden">
         {/* Mobile Header */}
-        <header className="bg-white px-4 py-3 shadow-sm">
+        <header className="bg-white px-4 py-3 shadow-sm dark:bg-slate-900">
           <div className="flex items-center justify-between">
             <button
               onClick={() => router.push("/fleet")}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-primary"
             >
               <ArrowLeft className="h-4 w-4" />
               <span className="hidden sm:inline">Fleet</span>
@@ -894,7 +887,8 @@ export default function HistoryTracking() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowDatePicker(true)}
-                className="inline-flex items-center gap-1 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white"
+                className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-xs font-semibold text-white"
+                style={{ backgroundColor: selectedColor }}
               >
                 <Calendar className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">Date</span>
@@ -902,7 +896,7 @@ export default function HistoryTracking() {
 
               <button
                 onClick={() => setShowSidebar(true)}
-                className="inline-flex items-center gap-1 rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white"
+                className="inline-flex items-center gap-1 rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white dark:bg-slate-700"
               >
                 <Gauge className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">Stats</span>
@@ -911,7 +905,7 @@ export default function HistoryTracking() {
           </div>
 
           <div className="mt-2">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-purple-600">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-primary">
               History Analysis
             </div>
             <div className="text-lg font-black text-slate-900">
@@ -956,7 +950,7 @@ export default function HistoryTracking() {
                   <PolylineF
                     path={routePath}
                     options={{
-                      strokeColor: "#6366f1",
+                      strokeColor: selectedColor,
                       strokeOpacity: 0.9,
                       strokeWeight: 4,
                     }}
@@ -1053,7 +1047,7 @@ export default function HistoryTracking() {
 
               {/* Mobile Stats Card - Floating */}
               {currentPoint && (
-                <div className="absolute left-4 right-4 top-4 rounded-xl bg-white/95 p-3 shadow-lg backdrop-blur">
+                <div className="absolute left-4 right-4 top-4 rounded-xl bg-white/95 p-3 shadow-lg backdrop-blur dark:bg-slate-900/95">
                   <div className="grid grid-cols-3 gap-3 text-center">
                     <div>
                       <div className="text-[10px] font-semibold uppercase text-slate-500">
@@ -1094,13 +1088,14 @@ export default function HistoryTracking() {
 
               {/* Mobile Playback Controls */}
               {historyData.length > 0 && (
-                <div className="absolute bottom-4 left-4 right-4 rounded-xl bg-white/95 p-3 shadow-lg backdrop-blur">
+                <div className="absolute bottom-4 left-4 right-4 rounded-xl bg-white/95 p-3 shadow-lg backdrop-blur dark:bg-slate-900/95">
                   {/* Progress bar */}
                   <div className="relative mb-3 h-2 rounded-full bg-slate-200">
                     <div
-                      className="absolute h-full rounded-full bg-indigo-600 transition-all"
+                      className="absolute h-full rounded-full transition-all"
                       style={{
                         width: `${(currentIndex / (historyData.length - 1)) * 100}%`,
+                        backgroundColor: selectedColor,
                       }}
                     />
                     <input
@@ -1120,7 +1115,8 @@ export default function HistoryTracking() {
                   <div className="flex items-center justify-between">
                     <button
                       onClick={() => setIsPlaying(!isPlaying)}
-                      className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-white"
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white"
+                      style={{ backgroundColor: selectedColor }}
                     >
                       {isPlaying ? (
                         <Pause className="h-5 w-5" fill="currentColor" />
@@ -1165,7 +1161,7 @@ export default function HistoryTracking() {
         {/* Mobile Date Picker Modal */}
         {showDatePicker && (
           <div className="fixed inset-0 z-50 flex items-end bg-black/50">
-            <div className="w-full rounded-t-3xl bg-white p-6">
+            <div className="w-full rounded-t-3xl bg-white p-6 dark:bg-slate-900">
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-lg font-black text-slate-900">
                   Select Time Period
@@ -1187,7 +1183,7 @@ export default function HistoryTracking() {
                     type="datetime-local"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="h-12 w-full rounded-xl border border-slate-200 px-3 text-sm"
+                    className="h-12 w-full rounded-xl border border-slate-200 px-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
                   />
                 </div>
 
@@ -1199,14 +1195,15 @@ export default function HistoryTracking() {
                     type="datetime-local"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="h-12 w-full rounded-xl border border-slate-200 px-3 text-sm"
+                    className="h-12 w-full rounded-xl border border-slate-200 px-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
                   />
                 </div>
 
                 <button
                   onClick={fetchHistoryData}
                   disabled={isLoading}
-                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 text-sm font-semibold text-white disabled:opacity-50"
+                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white disabled:opacity-50"
+                  style={{ backgroundColor: selectedColor }}
                 >
                   <Navigation className="h-4 w-4" />
                   {isLoading ? "Loading..." : "RE-PLOT ROUTE"}
@@ -1219,8 +1216,8 @@ export default function HistoryTracking() {
         {/* Mobile Sidebar Modal */}
         {showSidebar && (
           <div className="fixed inset-0 z-50 flex bg-black/50">
-            <div className="ml-auto h-full w-[85%] max-w-sm overflow-y-auto bg-white">
-              <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white p-4">
+            <div className="ml-auto h-full w-[85%] max-w-sm overflow-y-auto bg-white dark:bg-slate-900">
+              <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
                 <h3 className="text-lg font-black text-slate-900">
                   Trip Details
                 </h3>
@@ -1345,5 +1342,6 @@ export default function HistoryTracking() {
         )}
       </div>
     </div>
+  </div>
   );
 }

@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Card } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
+import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useGoogleMapsSdk } from "@/hooks/useGoogleMapsSdk";
 import {
@@ -49,10 +50,12 @@ export default function FleetDashboard() {
   const mapRef = useRef(null);
   const router = useRouter();
   const { isDark } = useTheme();
+  const { selectedColor } = useColor();
   const [fleetData, setFleetData] = useState([]);
   const [selectedVehicleId, setSelectedVehicleId] = useState(null);
   const [popupVehicleId, setPopupVehicleId] = useState(null);
   const [filterStatus, setFilterStatus] = useState("ALL");
+  const [isFilterCardsOpen, setIsFilterCardsOpen] = useState(true);
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [isFleetLoading, setIsFleetLoading] = useState(true);
@@ -245,7 +248,22 @@ export default function FleetDashboard() {
               </div>
               <button
                 type="button"
-                className="inline-flex h-11 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700"
+                onClick={() => setIsFilterCardsOpen((prev) => !prev)}
+                aria-expanded={isFilterCardsOpen}
+                className={`inline-flex h-11 items-center gap-2 rounded-xl border px-4 text-sm font-semibold transition ${
+                  isFilterCardsOpen
+                    ? "text-white shadow-md"
+                    : "border-slate-200 bg-white text-slate-700"
+                }`}
+                style={
+                  isFilterCardsOpen
+                    ? {
+                        backgroundColor: selectedColor,
+                        borderColor: selectedColor,
+                        boxShadow: `0 0 0 2px ${selectedColor}33`,
+                      }
+                    : undefined
+                }
               >
                 <Filter className="h-4 w-4" />
                 Filter
@@ -253,39 +271,41 @@ export default function FleetDashboard() {
             </div>
           </header>
 
-          <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-7">
-            {stats.map((stat) => {
-              const active = filterStatus === stat.label;
-              const Icon = STATUS_META[stat.label]?.icon || CircleDotDashed;
-              return (
-                <button
-                  key={stat.label}
-                  type="button"
-                  onClick={() => setFilterStatus(stat.label)}
-                  className="text-left"
-                >
-                  <Card
-                    isDark={isDark}
-                    className={`h-full rounded-2xl border p-4 transition ${
-                      active
-                        ? "border-indigo-300 ring-2 ring-indigo-200"
-                        : "hover:border-slate-300"
-                    }`}
+          {isFilterCardsOpen && (
+            <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-7">
+              {stats.map((stat) => {
+                const active = filterStatus === stat.label;
+                const Icon = STATUS_META[stat.label]?.icon || CircleDotDashed;
+                return (
+                  <button
+                    key={stat.label}
+                    type="button"
+                    onClick={() => setFilterStatus(stat.label)}
+                    className="text-left"
                   >
-                    <div className="mb-1 flex items-center gap-2">
-                      <Icon className="h-4 w-4 text-slate-400" />
-                      <span className="text-[12px] font-bold tracking-widest text-slate-600">
-                        {stat.label}
-                      </span>
-                    </div>
-                    <div className="text-2xl font-black text-slate-800">
-                      {stat.count}
-                    </div>
-                  </Card>
-                </button>
-              );
-            })}
-          </div>
+                    <Card
+                      isDark={isDark}
+                      className={`h-full rounded-2xl border p-4 transition ${
+                        active
+                          ? "border-indigo-300 ring-2 ring-indigo-200"
+                          : "hover:border-slate-300"
+                      }`}
+                    >
+                      <div className="mb-1 flex items-center gap-2">
+                        <Icon className="h-4 w-4 text-slate-400" />
+                        <span className="text-[12px] font-bold tracking-widest text-slate-600">
+                          {stat.label}
+                        </span>
+                      </div>
+                      <div className="text-2xl font-black text-slate-800">
+                        {stat.count}
+                      </div>
+                    </Card>
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           <div className="grid min-h-[68vh] grid-cols-1 gap-3 lg:grid-cols-[320px_1fr]">
         <aside className="rounded-2xl bg-transparent">
@@ -533,7 +553,7 @@ export default function FleetDashboard() {
                     <button
                       onClick={() =>
                         router.push(
-                          `/live-tracking/${popupVehicle.vehicleId || popupVehicle.id}`,
+                          `/fleet/live-tracking/${popupVehicle.vehicleId || popupVehicle.id}`,
                         )
                       }
                       className="w-[48%] rounded-xl bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-700"
@@ -543,7 +563,7 @@ export default function FleetDashboard() {
                     <button
                       onClick={() =>
                         router.push(
-                          `/history-tracking-smooth/${popupVehicle.vehicleId || popupVehicle.id}`,
+                          `/fleet/history-tracking-smooth/${popupVehicle.vehicleId || popupVehicle.id}`,
                         )
                       }
                       className="w-[48%] rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
