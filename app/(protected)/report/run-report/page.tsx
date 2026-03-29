@@ -267,11 +267,11 @@ const RunReportPage = () => {
             registrationNumber?: string;
             id?: string | number;
             vehicleId?: string | number;
-          }) => ({
+          }): OptionType => ({
             label: toOptionLabel(vehicle),
             value: toVehicleOptionValue(vehicle),
           }))
-          .filter((vehicle) => {
+          .filter((vehicle: OptionType) => {
             if (!vehicle.value || seenVehicles.has(vehicle.value)) {
               return false;
             }
