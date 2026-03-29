@@ -17,12 +17,14 @@ import { getAllAccounts, getVehicleDropdown } from "@/services/commonServie";
 import { toast } from "react-toastify";
 import { javaApi } from "@/services/apiService";
 
-type MovementReportRow = {
+type RunReportRow = {
   orgId?: number;
+  orgName?: string;
   vehicleNo?: string;
   vehicleId?: string;
-  startTime?: string;
-  endTime?: string;
+  reportDate?: string;
+  firstDataTime?: string;
+  lastDataTime?: string;
   distanceKm?: number;
   ignitionOnMinutes?: number;
   acOnMinutes?: number;
@@ -108,10 +110,22 @@ const formatDateTime = (value?: string) => {
   });
 };
 
-const getGoogleMapsLink = (
-  latitude?: number,
-  longitude?: number,
-) => {
+const formatDateOnly = (value?: string) => {
+  if (!value) return "NA";
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+
+  return parsed.toLocaleDateString("en-IN", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+};
+
+const getGoogleMapsLink = (latitude?: number, longitude?: number) => {
   const lat = Number(latitude);
   const lng = Number(longitude);
 
@@ -162,7 +176,7 @@ const escapeHtml = (value: unknown) =>
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
 
-const MovementReportPage = () => {
+const RunReportPage = () => {
   const [accounts, setAccounts] = useState<OptionType[]>([]);
   const [selectedAccounts, setSelectedAccounts] = useState<OptionType[]>([]);
   const [vehicles, setVehicles] = useState<OptionType[]>([]);
@@ -178,7 +192,7 @@ const MovementReportPage = () => {
     return toDateTimeLocalValue(end);
   });
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<MovementReportRow[]>([]);
+  const [data, setData] = useState<RunReportRow[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [emptyMessage, setEmptyMessage] = useState("No record found");
 
@@ -201,11 +215,12 @@ const MovementReportPage = () => {
           const accountOptions = [
             ALL_ACCOUNTS_OPTION,
             ...response.data.map(
-            (account: { id?: number | string; value?: string; label?: string }) => ({
-              label: toOptionLabel(account),
-              value: toAccountOptionValue(account),
-            }),
-          )];
+              (account: { id?: number | string; value?: string; label?: string }) => ({
+                label: toOptionLabel(account),
+                value: toAccountOptionValue(account),
+              }),
+            ),
+          ];
           setAccounts(accountOptions);
 
           if (userAccountId > 0) {
@@ -218,7 +233,9 @@ const MovementReportPage = () => {
           }
         }
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || "Failed to load organizations");
+        toast.error(
+          error?.response?.data?.message || "Failed to load organizations",
+        );
       }
     };
 
@@ -252,7 +269,7 @@ const MovementReportPage = () => {
             vehicleId?: string | number;
           }) => ({
             label: toOptionLabel(vehicle),
-              value: toVehicleOptionValue(vehicle),
+            value: toVehicleOptionValue(vehicle),
           }))
           .filter((vehicle) => {
             if (!vehicle.value || seenVehicles.has(vehicle.value)) {
@@ -272,10 +289,10 @@ const MovementReportPage = () => {
           : previous.length === 0
             ? [ALL_VEHICLES_OPTION, ...vehicleOptions]
             : previous.some((vehicle) => vehicle.value === ALL_VEHICLES_VALUE)
-          ? [ALL_VEHICLES_OPTION, ...vehicleOptions]
-          : previous.filter((vehicle) =>
-              vehicleOptions.some((option) => option.value === vehicle.value),
-            ),
+              ? [ALL_VEHICLES_OPTION, ...vehicleOptions]
+              : previous.filter((vehicle) =>
+                  vehicleOptions.some((option) => option.value === vehicle.value),
+                ),
       );
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Failed to load vehicles");
@@ -389,7 +406,7 @@ const MovementReportPage = () => {
 
     try {
       setLoading(true);
-      const response = await javaApi.post("reports/movement-report", {
+      const response = await javaApi.post("reports/daily-report", {
         orgIds,
         vehicleIds,
         start: toApiDateTime(startDate),
@@ -413,12 +430,18 @@ const MovementReportPage = () => {
     } catch (error: any) {
       setData([]);
       toast.error(
-        error?.response?.data?.message || "Failed to load movement report",
+        error?.response?.data?.message || "Failed to load run report",
       );
     } finally {
       setLoading(false);
     }
   };
+
+  const accountNameById = new Map(
+    accounts
+      .filter((account) => account.value !== ALL_ACCOUNTS_VALUE)
+      .map((account) => [Number(account.value), account.label]),
+  );
 
   const handleExport = () => {
     if (!data.length) {
@@ -428,12 +451,13 @@ const MovementReportPage = () => {
 
     const rows = data.map((row) => ({
       Organization:
-        row.orgId
-          ? accountNameById.get(Number(row.orgId)) || `Org ${row.orgId}`
-          : "Movement Report",
+        row.orgName ||
+        (row.orgId ? accountNameById.get(Number(row.orgId)) : "") ||
+        "Run Report",
       Vehicle: row.vehicleNo || "NA",
-      "Start Time": formatDateTime(row.startTime),
-      "End Time": formatDateTime(row.endTime),
+      "Report Date": formatDateOnly(row.reportDate),
+      "First Data Time": formatDateTime(row.firstDataTime),
+      "Last Data Time": formatDateTime(row.lastDataTime),
       "Distance (KM)":
         row.distanceKm !== undefined ? Number(row.distanceKm).toFixed(2) : "NA",
       "Moving Time": formatMinutes(row.movingTimeMinutes),
@@ -484,12 +508,12 @@ const MovementReportPage = () => {
           </style>
         </head>
         <body>
-      <table>
-        <thead>
-          <tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join("")}</tr>
-        </thead>
-        <tbody>${tableRows}</tbody>
-      </table>
+          <table>
+            <thead>
+              <tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join("")}</tr>
+            </thead>
+            <tbody>${tableRows}</tbody>
+          </table>
         </body>
       </html>
     `;
@@ -502,7 +526,7 @@ const MovementReportPage = () => {
     const stamp = new Date().toISOString().slice(0, 19).replaceAll(":", "-");
 
     link.href = url;
-    link.download = `movement-report-${stamp}.xls`;
+    link.download = `run-report-${stamp}.xls`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -526,17 +550,15 @@ const MovementReportPage = () => {
     ? data.reduce((sum, row) => sum + Number(row.fleetEfficiency || 0), 0) /
       data.length
     : 0;
-  const accountNameById = new Map(
-    accounts
-      .filter((account) => account.value !== ALL_ACCOUNTS_VALUE)
-      .map((account) => [Number(account.value), account.label]),
-  );
+
   const filteredData = data.filter((row) => {
     if (!searchQuery.trim()) return true;
     const haystack = [
+      row.orgName,
       row.vehicleNo,
-      row.startTime,
-      row.endTime,
+      row.reportDate,
+      row.firstDataTime,
+      row.lastDataTime,
       row.startAddress,
       row.endAddress,
       row.distanceKm,
@@ -555,11 +577,11 @@ const MovementReportPage = () => {
   return (
     <div className="p-4">
       <TableHeader
-        title="Movement Report"
+        title="Run Report"
         breadcrumbs={[
           { label: "Operations", href: "/operations" },
           { label: "Reports", href: "/report" },
-          { label: "Movement Report" },
+          { label: "Run Report" },
         ]}
       />
       <div className="mb-4 flex justify-end">
@@ -572,7 +594,6 @@ const MovementReportPage = () => {
           Export Excel
         </button>
       </div>
-      {/* Filter Row */}
       <div className="mb-6 overflow-visible rounded-[28px] bg-white shadow-[0_18px_40px_rgba(15,23,42,0.12)]">
         <div className="h-1 w-full bg-gradient-to-r from-violet-600 via-sky-500 to-emerald-500" />
         <div className="grid items-start gap-4 p-5 md:grid-cols-2 xl:grid-cols-[minmax(240px,1.15fr)_minmax(260px,1.2fr)_minmax(190px,0.9fr)_minmax(190px,0.9fr)_auto]">
@@ -581,53 +602,53 @@ const MovementReportPage = () => {
               <Building2 className="h-3.5 w-3.5" />
               Organization
             </div>
-          <MultiSelect
-            options={accounts}
-            value={selectedAccounts}
-            onChange={handleAccountChange}
-            placeholder="Select Account"
-            searchPlaceholder="Search account..."
-          />
+            <MultiSelect
+              options={accounts}
+              value={selectedAccounts}
+              onChange={handleAccountChange}
+              placeholder="Select Account"
+              searchPlaceholder="Search account..."
+            />
           </div>
           <div>
             <div className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-slate-500">
               <Truck className="h-3.5 w-3.5" />
               Vehicle Plate
             </div>
-          <MultiSelect
-            options={vehicles}
-            value={selectedVehicles}
-            onChange={handleVehicleChange}
-            placeholder="Select Vehicle"
-            searchPlaceholder="Search vehicle..."
-            isDisabled={!selectedAccounts.length}
-          />
+            <MultiSelect
+              options={vehicles}
+              value={selectedVehicles}
+              onChange={handleVehicleChange}
+              placeholder="Select Vehicle"
+              searchPlaceholder="Search vehicle..."
+              isDisabled={!selectedAccounts.length}
+            />
           </div>
           <div>
             <div className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-slate-500">
               <CalendarDays className="h-3.5 w-3.5" />
               From Date
             </div>
-          <input
-            type="datetime-local"
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            placeholder="Start Date & Time"
-          />
+            <input
+              type="datetime-local"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              placeholder="Start Date & Time"
+            />
           </div>
           <div>
             <div className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-slate-500">
               <CalendarDays className="h-3.5 w-3.5" />
               To Date
             </div>
-          <input
-            type="datetime-local"
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            placeholder="End Date & Time"
-          />
+            <input
+              type="datetime-local"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              placeholder="End Date & Time"
+            />
           </div>
           <div className="flex h-full items-start pt-[25px]">
             <button
@@ -641,44 +662,61 @@ const MovementReportPage = () => {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <div className="flex-1 bg-white rounded-2xl shadow p-6 flex items-center gap-4 min-w-[220px]">
-          <div className="bg-violet-100 rounded-xl p-3 flex items-center justify-center">
+      <div className="mb-6 flex flex-col gap-4 md:flex-row">
+        <div className="flex-1 rounded-2xl bg-white p-6 shadow min-w-[220px] flex items-center gap-4">
+          <div className="rounded-xl bg-violet-100 p-3 flex items-center justify-center">
             <Activity className="text-violet-500 w-7 h-7" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Total Distance</div>
-            <div className="text-2xl font-bold text-gray-900">{totalDistance.toFixed(2)} KM</div>
+            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+              Total Distance
+            </div>
+            <div className="text-2xl font-bold text-gray-900">
+              {totalDistance.toFixed(2)} KM
+            </div>
           </div>
         </div>
-        <div className="flex-1 bg-white rounded-2xl shadow p-6 flex items-center gap-4 min-w-[220px]">
-          <div className="bg-green-100 rounded-xl p-3 flex items-center justify-center">
+        <div className="flex-1 rounded-2xl bg-white p-6 shadow min-w-[220px] flex items-center gap-4">
+          <div className="rounded-xl bg-green-100 p-3 flex items-center justify-center">
             <Clock className="text-green-500 w-7 h-7" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Avg Moving Time</div>
-            <div className="text-2xl font-bold text-gray-900">{formatMinutes(Math.round(avgMovingMinutes))}</div>
+            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+              Avg Moving Time
+            </div>
+            <div className="text-2xl font-bold text-gray-900">
+              {formatMinutes(Math.round(avgMovingMinutes))}
+            </div>
           </div>
         </div>
-        <div className="flex-1 bg-white rounded-2xl shadow p-6 flex items-center gap-4 min-w-[220px]">
-          <div className="bg-violet-100 rounded-xl p-3 flex items-center justify-center">
+        <div className="flex-1 rounded-2xl bg-white p-6 shadow min-w-[220px] flex items-center gap-4">
+          <div className="rounded-xl bg-violet-100 p-3 flex items-center justify-center">
             <TrendingUp className="text-violet-500 w-7 h-7" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Avg Idle Time</div>
-            <div className="text-2xl font-bold text-gray-900">{formatMinutes(Math.round(avgIdleMinutes))}</div>
+            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+              Avg Idle Time
+            </div>
+            <div className="text-2xl font-bold text-gray-900">
+              {formatMinutes(Math.round(avgIdleMinutes))}
+            </div>
           </div>
         </div>
-        <div className="flex-1 bg-white rounded-2xl shadow p-6 flex items-center gap-4 min-w-[220px]">
-          <div className="bg-red-100 rounded-xl p-3 flex items-center justify-center">
+        <div className="flex-1 rounded-2xl bg-white p-6 shadow min-w-[220px] flex items-center gap-4">
+          <div className="rounded-xl bg-red-100 p-3 flex items-center justify-center">
             <Shield className="text-red-500 w-7 h-7" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Avg Fleet Efficiency</div>
-            <div className="text-2xl font-bold text-gray-900">{avgFleetEfficiency.toFixed(0)}%</div>
+            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+              Avg Fleet Efficiency
+            </div>
+            <div className="text-2xl font-bold text-gray-900">
+              {avgFleetEfficiency.toFixed(0)}%
+            </div>
           </div>
         </div>
       </div>
+
       <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
         <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="relative w-full md:max-w-md">
@@ -697,14 +735,14 @@ const MovementReportPage = () => {
         </div>
 
         <div className="overflow-hidden rounded-[24px] border border-slate-200">
-          <div className="grid grid-cols-[1.15fr_0.8fr_0.9fr_0.9fr_0.9fr_0.9fr_0.9fr_1.5fr] gap-4 border-b border-slate-200 bg-slate-50 px-6 py-4 text-xs font-extrabold uppercase tracking-[0.2em] text-slate-600">
+          <div className="grid grid-cols-[1.05fr_0.95fr_0.9fr_0.9fr_0.8fr_0.8fr_0.8fr_1.6fr] gap-4 border-b border-slate-200 bg-slate-50 px-6 py-4 text-xs font-extrabold uppercase tracking-[0.2em] text-slate-600">
             <div>Vehicle</div>
+            <div>Report Date</div>
+            <div>First Data</div>
+            <div>Last Data</div>
             <div>Dist. (KM)</div>
             <div>Moving</div>
             <div>Idle</div>
-            <div>Ignition</div>
-            <div>AC On</div>
-            <div>Efficiency</div>
             <div>Journey</div>
           </div>
 
@@ -716,17 +754,27 @@ const MovementReportPage = () => {
             filteredData.map((row, index) => (
               <div
                 key={`${row.vehicleId || row.vehicleNo || "row"}-${index}`}
-                className="grid grid-cols-[1.15fr_0.8fr_0.9fr_0.9fr_0.9fr_0.9fr_0.9fr_1.5fr] gap-4 border-b border-slate-200 px-6 py-5 last:border-b-0"
+                className="grid grid-cols-[1.05fr_0.95fr_0.9fr_0.9fr_0.8fr_0.8fr_0.8fr_1.6fr] gap-4 border-b border-slate-200 px-6 py-5 last:border-b-0"
               >
                 <div>
                   <div className="text-lg font-bold text-slate-900">
                     {row.vehicleNo || "NA"}
                   </div>
                   <div className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
-                    {row.orgId
-                      ? accountNameById.get(Number(row.orgId)) || `Org ${row.orgId}`
-                      : "Movement Report"}
+                    {row.orgName ||
+                      (row.orgId
+                        ? accountNameById.get(Number(row.orgId)) || `Org ${row.orgId}`
+                        : "Run Report")}
                   </div>
+                </div>
+                <div className="text-sm font-semibold text-slate-700">
+                  {formatDateOnly(row.reportDate)}
+                </div>
+                <div className="text-sm font-semibold text-slate-700">
+                  {formatDateTime(row.firstDataTime)}
+                </div>
+                <div className="text-sm font-semibold text-slate-700">
+                  {formatDateTime(row.lastDataTime)}
                 </div>
                 <div className="text-lg font-bold text-violet-600">
                   {row.distanceKm !== undefined
@@ -739,21 +787,10 @@ const MovementReportPage = () => {
                 <div className="text-lg font-semibold text-amber-600">
                   {formatMinutes(row.idleTimeMinutes)}
                 </div>
-                <div className="text-lg font-semibold text-slate-700">
-                  {formatMinutes(row.ignitionOnMinutes)}
-                </div>
-                <div className="text-lg font-semibold text-slate-700">
-                  {formatMinutes(row.acOnMinutes)}
-                </div>
-                <div className="text-lg font-semibold text-slate-700">
-                  {row.fleetEfficiency !== undefined
-                    ? `${row.fleetEfficiency}%`
-                    : "NA"}
-                </div>
                 <div className="space-y-1 text-sm text-slate-600">
                   <div>
                     <span className="font-semibold text-emerald-600">Start:</span>{" "}
-                    {row.startAddress || formatDateTime(row.startTime)}
+                    {row.startAddress || formatDateTime(row.firstDataTime)}
                     {getGoogleMapsLink(row.startLatitude, row.startLongitude) && (
                       <>
                         {" "}
@@ -773,7 +810,7 @@ const MovementReportPage = () => {
                   </div>
                   <div>
                     <span className="font-semibold text-rose-500">End:</span>{" "}
-                    {row.endAddress || formatDateTime(row.endTime)}
+                    {row.endAddress || formatDateTime(row.lastDataTime)}
                     {getGoogleMapsLink(row.endLatitude, row.endLongitude) && (
                       <>
                         {" "}
@@ -800,4 +837,5 @@ const MovementReportPage = () => {
     </div>
   );
 };
-export default MovementReportPage;
+
+export default RunReportPage;
