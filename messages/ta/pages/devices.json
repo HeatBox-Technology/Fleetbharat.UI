@@ -1,0 +1,111 @@
+{
+  "pages": {
+    "devices": {
+      "list": {
+        "title": "கருவி",
+        "subtitle": "கருவியின் அடையாளம், இணைப்பு மற்றும் ஒதுக்கீடு நிலையை முழுமையாகக் கண்காணித்தல்.",
+        "breadcrumbs": {
+          "fleet": "வாகனங்கள் (Fleet)",
+          "current": "கருவி"
+        },
+        "addButton": "கருவியைச் சேர்",
+        "fields": {
+          "selectAccount": "கணக்கைத் தேர்ந்தெடுக்கவும்"
+        },
+        "table": {
+          "deviceIdentity": "கருவி அடையாளம்",
+          "category": "வகை",
+          "type": "ரகம்",
+          "status": "நிலை",
+          "lastUpdated": "கடைசியாகப் புதுப்பிக்கப்பட்டது"
+        },
+        "status": {
+          "active": "செயலில் (ACTIVE)",
+          "inactive": "செயலற்றது (INACTIVE)",
+          "inService": "சேவையில் உள்ளது (IN SERVICE)",
+          "outOfService": "சேவையில் இல்லை (OUT OF SERVICE)"
+        },
+        "metrics": {
+          "totalDevices": "மொத்தக் கருவிகள்",
+          "inService": "சேவையில் இருப்பவை",
+          "outOfService": "சேவையில் இல்லாதவை"
+        },
+        "fallback": {
+          "defaultCategory": "GPS",
+          "defaultType": "ட்ராக்கர் (Tracker)",
+          "notAvailable": "கிடைக்கவில்லை"
+        },
+        "loading": "கருவிகள் ஏற்றப்படுகின்றன...",
+        "searchPlaceholder": "கருவிகளைத் தேடு...",
+        "deleteTitle": "கருவியை அகற்று",
+        "deleteMessage": "பதிவேட்டில் (Registry) இருந்து \"{device}\" என்ற கருவியை நிச்சயமாக அகற்ற விரும்புகிறீர்களா? இந்தச் செயலை மாற்ற முடியாது.",
+        "confirmDelete": "அகற்று",
+        "cancel": "ரத்து செய்",
+        "toast": {
+          "loadError": "கருவிகளை ஏற்றும்போது பிழை ஏற்பட்டது",
+          "removed": "கருவி வெற்றிகரமாக அகற்றப்பட்டது",
+          "deleteFailed": "கருவியை நீக்குவதில் தோல்வி.",
+          "deleteError": "நீக்கும் போது பிழை ஏற்பட்டது."
+        }
+      },
+      "detail": {
+        "loading": {
+          "edit": "கருவித் தரவு ஏற்றப்படுகிறது...",
+          "create": "படிவம் தயார் செய்யப்படுகிறது..."
+        },
+        "title": {
+          "edit": "கருவியைத் திருத்து",
+          "create": "கருவியை ஒதுக்கு (Provision Device)"
+        },
+        "subtitle": {
+          "edit": "இந்தக் கருவிக்கான பதிவேட்டுத் தகவலைப் புதுப்பிக்கவும்.",
+          "create": "உலகளாவிய சொத்து தொடர்பு மற்றும் கருவி பதிவேடு"
+        },
+        "buttons": {
+          "discard": "கைவிடு",
+          "saving": "சேமிக்கப்படுகிறது...",
+          "update": "பதிவேட்டுத் தகவலைப் புதுப்பிக்கவும்",
+          "create": "பதிவேட்டுத் தகவலைச் சமர்ப்பிக்கவும்"
+        },
+        "sections": {
+          "accountContext": "கணக்கு சூழல் (Account Context)",
+          "accountContextSubtitle": "இந்தக் கருவி எந்தக் கணக்கிற்கு உரியது என்பதைத் தேர்ந்தெடுக்கவும்.",
+          "identityLifecycle": "அடையாளம் மற்றும் வாழ்க்கைச் சுழற்சி",
+          "identityLifecycleSubtitle": "ஹார்டுவேர் அடையாளம் மற்றும் வகைப்பாடு விவரங்கள்.",
+          "preview": "கருவி அடையாள முன்னோட்டம்",
+          "previewSubtitle": "மேலே உள்ள புலங்களிலிருந்து தானாக உருவாக்கப்பட்டது."
+        },
+        "fields": {
+          "account": "கணக்கு",
+          "selectAccount": "கணக்கைத் தேர்ந்தெடுக்கவும்",
+          "manufacturer": "தயாரிப்பாளர்",
+          "selectManufacturer": "தயாரிப்பாளரைத் தேர்ந்தெடுக்கவும்",
+          "deviceType": "கருவி ரகம்",
+          "selectDeviceType": "கருவி ரகத்தைத் தேர்ந்தெடுக்கவும்",
+          "deviceNo": "கருவி எண்",
+          "deviceNoPlaceholder": "எ.கா. DEV-001",
+          "serial": "IMEI / வரிசை எண் (Serial)",
+          "serialPlaceholder": "ஹார்டுவேர் அடையாளக் குறியீடு"
+        },
+        "preview": {
+          "deviceType": "கருவி ரகம்",
+          "manufacturer": "தயாரிப்பாளர்",
+          "deviceNo": "கருவி எண்",
+          "serial": "IMEI / வரிசை எண் (Serial)",
+          "empty": "—"
+        },
+        "toast": {
+          "loadFailed": "கருவித் தரவை ஏற்றுவதில் தோல்வி",
+          "selectAccount": "தயவுசெய்து ஒரு கணக்கைத் தேர்ந்தெடுக்கவும்",
+          "selectManufacturer": "தயவுசெய்து ஒரு தயாரிப்பாளரைத் தேர்ந்தெடுக்கவும்",
+          "selectDeviceType": "தயவுசெய்து ஒரு கருவி ரகத்தைத் தேர்ந்தெடுக்கவும்",
+          "serialRequired": "IMEI / வரிசை எண் தேவை",
+          "serialNumericOnly": "IMEI / வரிசை எண் எண்களை மட்டுமே கொண்டிருக்க வேண்டும்",
+          "saved": "கருவி வெற்றிகரமாகச் சேமிக்கப்பட்டது",
+          "operationFailed": "செயல்பாடு தோல்வியடைந்தது",
+          "errorOccurred": "ஒரு பிழை ஏற்பட்டது"
+        }
+      }
+    }
+  }
+}

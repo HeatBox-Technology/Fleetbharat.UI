@@ -1,0 +1,104 @@
+{
+  "pages": {
+    "simMaster": {
+      "list": {
+        "title": "ಸಿಮ್ ಮಾಸ್ಟರ್",
+        "subtitle": "ಜಾಗತಿಕ ಸಿಮ್ ದಾಸ್ತಾನು (Inventory), ಕ್ಯಾರಿಯರ್ ಒಪ್ಪಂದಗಳು ಮತ್ತು MSISDN ಮ್ಯಾಪಿಂಗ್‌ಗಳನ್ನು ನಿರ್ವಹಿಸಿ.",
+        "breadcrumbs": {
+          "fleet": "ಫ್ಲೀಟ್",
+          "current": "ಸಿಮ್ ಮಾಸ್ಟರ್"
+        },
+        "addButton": "ಸಿಮ್ ಸೇರಿಸಿ",
+        "export": "ರಫ್ತು ಮಾಡಿ",
+        "searchPlaceholder": "ICCID ಅಥವಾ MSISDN ಮೂಲಕ ಹುಡುಕಿ...",
+        "table": {
+          "iccid": "ICCID ಗುರುತಿಸುವಿಕೆ",
+          "msisdn": "ಲೈನ್ ಸಂಖ್ಯೆ (MSISDN)",
+          "status": "ಸಂಪರ್ಕ ಸ್ಥಿತಿ",
+          "contractExpiry": "ಒಪ್ಪಂದದ ಅವಧಿ ಮುಕ್ತಾಯ",
+          "lastUpdated": "ಕೊನೆಯದಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+        },
+        "metrics": {
+          "totalSims": "ಒಟ್ಟು ಸಿಮ್‌ಗಳು",
+          "enabled": "ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ",
+          "disabled": "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ",
+          "activeCarriers": "ಸಕ್ರಿಯ ಕ್ಯಾರಿಯರ್‌ಗಳು"
+        },
+        "delete": {
+          "title": "ಸಿಮ್ ತೆಗೆದುಹಾಕಿ",
+          "message": "ರಿಜಿಸ್ಟ್ರಿಯಿಂದ \"{iccid}\" ಸಿಮ್ ಅನ್ನು ತೆಗೆದುಹಾಕಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ? ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂತಿರುಗಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+          "confirm": "ತೆಗೆದುಹಾಕಿ",
+          "cancel": "ರದ್ದುಮಾಡಿ"
+        },
+        "toast": {
+          "loadError": "ಸಿಮ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ",
+          "removed": "ರಿಜಿಸ್ಟ್ರಿಯಿಂದ ಸಿಮ್ ತೆಗೆದುಹಾಕಲಾಗಿದೆ!",
+          "deleteFailed": "ಸಿಮ್ ಅಳಿಸಲು ವಿಫಲವಾಗಿದೆ",
+          "deleteError": "ಅಳಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ.",
+          "exportSoon": "ರಫ್ತು ಆಯ್ಕೆ ಶೀಘ್ರದಲ್ಲೇ ಲಭ್ಯವಿರುತ್ತದೆ!"
+        }
+      },
+      "detail": {
+        "loading": {
+          "edit": "ಸಿಮ್ ಡೇಟಾವನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+          "create": "ಫಾರ್ಮ್ ಸಿದ್ಧಪಡಿಸಲಾಗುತ್ತಿದೆ..."
+        },
+        "title": {
+          "edit": "ಸಿಮ್ ಕಾರ್ಡ್ ಸಂಪಾದಿಸಿ",
+          "create": "ಸಿಮ್ ಕಾರ್ಡ್ ನೋಂದಾಯಿಸಿ"
+        },
+        "subtitle": {
+          "edit": "ಸಿಮ್ ನೋಂದಣಿ ವಿವರಗಳನ್ನು ನವೀಕರಿಸಿ.",
+          "create": "ಚಂದಾದಾರರ ಗುರುತಿನ ಮಾಡ್ಯೂಲ್ (Subscriber Identity Module)"
+        },
+        "buttons": {
+          "discard": "ಕೈಬಿಡಿ",
+          "saving": "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+          "update": "ಸಿಮ್ ಫೈಲ್ ನವೀಕರಿಸಿ",
+          "create": "ಸಿಮ್ ಫೈಲ್ ಸಲ್ಲಿಸಿ"
+        },
+        "sections": {
+          "hardwareIdentity": "ಹಾರ್ಡ್‌ವೇರ್ ಗುರುತು",
+          "carrierDetails": "ಕ್ಯಾರಿಯರ್ ವಿವರಗಳು",
+          "carrierDetailsSubtitle": "ನೆಟ್‌ವರ್ಕ್ ಪೂರೈಕೆದಾರರು ಮತ್ತು ಒಪ್ಪಂದದ ಮಾಹಿತಿ.",
+          "provisioningStatus": "ನಿಯೋಜನೆಯ ಸ್ಥಿತಿ (Provisioning Status)"
+        },
+        "fields": {
+          "accountContext": "ಖಾತೆ ಸಂದರ್ಭ",
+          "selectAccount": "ಖಾತೆಯನ್ನು ಆರಿಸಿ",
+          "iccid": "ICCID ಗುರುತಿಸುವಿಕೆ",
+          "iccidPlaceholder": "89...",
+          "msisdn": "MSISDN ಸಂಖ್ಯೆ",
+          "msisdnPlaceholder": "+91 ...",
+          "imsi": "IMSI ಕೋಡ್",
+          "imsiPlaceholder": "ಸಂಖ್ಯಾತ್ಮಕ ಐಡಿ (Numeric ID)",
+          "networkProvider": "ನೆಟ್‌ವರ್ಕ್ ಪೂರೈಕೆದಾರರು",
+          "selectCarrier": "ಕ್ಯಾರಿಯರ್ ಆಯ್ಕೆಮಾಡಿ",
+          "activatedOn": "ಸಕ್ರಿಯಗೊಳಿಸಿದ ದಿನಾಂಕ",
+          "contractExpiry": "ಒಪ್ಪಂದದ ಅವಧಿ ಮುಕ್ತಾಯ"
+        },
+        "status": {
+          "title": "ಸಂಪರ್ಕ ನಿಯೋಜನೆಯ ಸ್ಥಿತಿ",
+          "subtitle": "ಸಕ್ರಿಯಗೊಳಿಸಿದ ಸಿಮ್‌ಗಳನ್ನು ಮಾತ್ರ ಹಾರ್ಡ್‌ವೇರ್‌ಗೆ ನಿಯೋಜಿಸಬಹುದು.",
+          "enabled": "ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ",
+          "disabled": "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ"
+        },
+        "validation": {
+          "iccidRange": "ICCID ಕೇವಲ 19-20 ಅಂಕಿಗಳನ್ನು ಹೊಂದಿರಬೇಕು ({count} ನಮೂದಿಸಲಾಗಿದೆ)",
+          "imsiLength": "IMSI ಸರಿಯಾಗಿ 15 ಅಂಕಿಗಳನ್ನು ಹೊಂದಿರಬೇಕು ({count}/15)"
+        },
+        "toast": {
+          "notFound": "ಸಿಮ್ ಕಂಡುಬಂದಿಲ್ಲ",
+          "loadFailed": "ಡೇಟಾ ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ",
+          "selectAccount": "ದಯವಿಟ್ಟು ಒಂದು ಖಾತೆಯನ್ನು ಆರಿಸಿ",
+          "iccidRequired": "ICCID ಅಗತ್ಯವಿದೆ",
+          "iccidRange": "ICCID ಕೇವಲ 19 ಅಥವಾ 20 ಅಂಕಿಗಳನ್ನು ಹೊಂದಿರಬೇಕು",
+          "selectProvider": "ದಯವಿಟ್ಟು ನೆಟ್‌ವರ್ಕ್ ಪೂರೈಕೆದಾರರನ್ನು ಆರಿಸಿ",
+          "saved": "ಸಿಮ್ ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಲಾಗಿದೆ!",
+          "operationFailed": "ಕಾರ್ಯಾಚರಣೆ ವಿಫಲವಾಗಿದೆ",
+          "errorOccurred": "ದೋಷ ಸಂಭವಿಸಿದೆ"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "pages": {
+    "tripMaster": {
+      "list": {
+        "title": "ట్రిప్ మాస్టర్",
+        "subtitle": "ట్రిప్ షెడ్యూల్స్ మరియు రూటింగ్ టెంప్లేట్‌లను నిర్వహించండి.",
+        "breadcrumbs": {
+          "fleet": "ఫ్లీట్ (Fleet)",
+          "current": "ట్రిప్ మాస్టర్"
+        },
+        "addButton": "ట్రిప్‌ను జోడించు",
+        "searchPlaceholder": "ట్రిప్పులను వెతకండి...",
+        "metrics": {
+          "totalTrips": "మొత్తం ట్రిప్పులు",
+          "activeTrips": "క్రియాశీల ట్రిప్పులు",
+          "inTransit": "ప్రయాణంలో ఉన్నవి"
+        },
+        "table": {
+          "no": "సంఖ్య",
+          "tripName": "ట్రిప్ పేరు",
+          "route": "రూట్",
+          "vehicle": "వాహనం",
+          "driver": "డ్రైవర్",
+          "cycle": "సైకిల్ (Cycle)",
+          "status": "స్థితి",
+          "startTime": "ప్రారంభ సమయం"
+        },
+        "labels": {
+          "cycle": {
+            "weekly": "వారపు",
+            "monthly": "నెలవారీ",
+            "oneOff": "ఒకసారి (One-Off)"
+          },
+          "status": {
+            "active": "క్రియాశీల",
+            "pending": "పెండింగ్‌లో ఉంది",
+            "inTransit": "ప్రయాణంలో ఉంది",
+            "completed": "పూర్తయింది"
+          }
+        },
+        "deleteDialog": {
+          "title": "ట్రిప్ ప్లాన్‌ను తొలగించు",
+          "message": "\"{name}\" ని మీరు ఖచ్చితంగా తొలగించాలనుకుంటున్నారా?",
+          "confirm": "తొలగించు",
+          "cancel": "రద్దు చేయి"
+        }
+      },
+      "detail": {
+        "title": "మిషన్ ఆర్కిటెక్ట్ (MISSION ARCHITECT)",
+        "subtitle": "ట్రిప్ మాస్టర్ కాన్ఫిగరేషన్",
+        "breadcrumbs": {
+          "fleet": "ఫ్లీట్ (Fleet)",
+          "master": "ట్రిప్ మాస్టర్",
+          "create": "సృష్టించు",
+          "edit": "సవరించు"
+        },
+        "buttons": {
+          "discard": "వదిలివేయి",
+          "cancel": "రద్దు చేయి",
+          "deployMission": "మిషన్‌ను అమలు చేయి (DEPLOY)",
+          "remove": "తొలగించు",
+          "prev": "మునుపటి",
+          "next": "తరువాతి",
+          "addStop": "స్టాప్‌ను జోడించు",
+          "addNumber": "నంబర్‌ను జోడించు",
+          "deploying": "అమలు అవుతోంది...",
+          "deployMasterMission": "మాస్టర్ మిషన్‌ను అమలు చేయి"
+        },
+        "sections": {
+          "missionIdentity": "మిషన్ గుర్తింపు (MISSION IDENTITY)",
+          "fleetStrategy": "ఫ్లీట్ వ్యూహం (FLEET STRATEGY)",
+          "tripCycleTimeline": "ట్రిప్ సైకిల్ & టైమ్‌లైన్",
+          "timelineRoute": "టైమ్‌లైన్ & రూట్",
+          "notifications": "నోటిఫికేషన్లు",
+          "liveMapPreview": "లైవ్ మ్యాప్ ప్రివ్యూ",
+          "missionSummary": "మిషన్ సారాంశం"
+        },
+        "fields": {
+          "tripName": "ట్రిప్ పేరు",
+          "tripNamePlaceholder": "ఉదా: మెట్రో డైలీ సప్లై",
+          "assignedOperator": "కేటాయించిన ఆపరేటర్",
+          "selectDriver": "డ్రైవర్‌ను ఎంచుకోండి",
+          "account": "ఖాతా",
+          "selectAccount": "ఖాతాను ఎంచుకోండి",
+          "vehicle": "వాహనం",
+          "selectVehicle": "వాహనాన్ని ఎంచుకోండి",
+          "vehicleType": "వాహనం రకం",
+          "selectVehicleType": "వాహనం రకాన్ని ఎంచుకోండి",
+          "consignee": "కన్సైనీ (CONSIGNEE)",
+          "consigneePlaceholder": "ఉదా: శర్మ ట్రేడర్స్",
+          "vehicleAssignment": "వాహనం కేటాయింపు",
+          "vehicleTypePageInfo": "వాహనం రకాల పేజీ {page}/{total}",
+          "noVehicleTypes": "వాహనం రకాలు కనుగొనబడలేదు",
+          "tripType": "ట్రిప్ రకం",
+          "weeklyRotation": "వారపు రొటేషన్",
+          "departureEtd": "బయలుదేరే అంచనా సమయం (ETD)",
+          "expectedArrival": "రాక అంచనా సమయం (ETA)",
+          "selectMasterPipeline": "మాస్టర్ పైప్‌లైన్‌ను ఎంచుకోండి",
+          "selectSourceGeofence": "ప్రారంభ జియోఫెన్స్‌ను ఎంచుకోండి",
+          "selectDestinationGeofence": "గమ్యస్థాన జియోఫెన్స్‌ను ఎంచుకోండి",
+          "selectStopGeofence": "స్టాప్ జియోఫెన్స్‌ను ఎంచుకోండి",
+          "customRouteName": "కస్టమ్ రూట్ పేరు",
+          "customRoutePlaceholder": "కస్టమ్ రూట్‌ను నమోదు చేయండి",
+          "sourcePlaceholder": "ప్రారంభ ప్రాంతాన్ని నమోదు చేయండి",
+          "destinationPlaceholder": "గమ్యస్థాన ప్రాంతాన్ని నమోదు చేయండి",
+          "stopPlaceholder": "స్టాప్ ప్రాంతాన్ని నమోదు చేయండి"
+        },
+        "notifications": {
+          "enableOtp": "OTP నోటిఫికేషన్‌ను ఎనేబుల్ చేయండి",
+          "otpHelp": "OTP ఎనేబుల్ చేసినప్పుడు కింద ఒకటి కంటే ఎక్కువ మొబైల్ నంబర్లను జోడించవచ్చు.",
+          "mobilePlaceholder": "మొబైల్ నంబర్‌ను నమోదు చేయండి",
+          "removeNumberAria": "నంబర్‌ను తొలగించు"
+        },
+        "summary": {
+          "trip": "ట్రిప్",
+          "driver": "డ్రైవర్",
+          "account": "ఖాతా",
+          "vehicle": "వాహనం",
+          "assignment": "కేటాయింపు",
+          "vehicleType": "వాహనం రకం",
+          "cycle": "సైకిల్",
+          "routeMode": "రూట్ మోడ్",
+          "route": "రూట్"
+        },
+        "vehicleClass": {
+          "truck": "ట్రక్ (Truck)",
+          "truckSub": "ఫ్రైట్ టైటాన్",
+          "traveller": "ట్రావెలర్ (Traveller)",
+          "travellerSub": "ట్రాన్సిట్ క్రూ వ్యాన్",
+          "bus": "బస్సు (Bus)",
+          "busSub": "షటిల్ ప్రైమ్"
+        },
+        "scheduling": {
+          "masterRoute": "మాస్టర్ రూట్",
+          "fixedPath": "స్థిరమైన మార్గం (Fixed Path)",
+          "weekly": "వారపు",
+          "repeatingCycle": "పునరావృత సైకిల్",
+          "customRoute": "కస్టమ్ రూట్",
+          "onDemand": "డిమాండ్ మేరకు (On Demand)",
+          "oneOff": "ఒకసారి (One-Off)",
+          "scheduled": "షెడ్యూల్ చేయబడింది"
+        },
+        "labels": {
+          "weeklyCycle": "వారపు సైకిల్",
+          "customRoute": "కస్టమ్ రూట్",
+          "oneOffScheduled": "ఒకసారి షెడ్యూల్ చేయబడింది",
+          "defaultMapQuery": "ఢిల్లీ",
+          "sourceLocation": "ప్రారంభ ప్రాంతం",
+          "destinationLocation": "గమ్యస్థాన ప్రాంతం",
+          "stop": "స్టాప్ {number}"
+        }
+      }
+    }
+  }
+}

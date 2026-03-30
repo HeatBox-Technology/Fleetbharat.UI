@@ -1,0 +1,72 @@
+{
+  "pages": {
+    "invoices": {
+      "list": {
+        "title": "ఇన్వాయిస్లు",
+        "subtitle": "ఆర్థిక లెడ్జర్ మరియు బిల్లింగ్ సైకిల్ ఆటోమేషన్ నియంత్రణ.",
+        "breadcrumbs": {
+          "billing": "బిల్లింగ్",
+          "current": "ఇన్వాయిస్లు"
+        },
+        "addButton": "ఇన్వాయిస్‌ను జోడించు",
+        "exportButton": "ఎగుమతి చేయి",
+        "exportingButton": "ఎగుమతి అవుతోంది...",
+        "searchPlaceholder": "ఇన్వాయిస్లను వెతకండి...",
+        "table": {
+          "no": "సంఖ్య",
+          "invoiceNumber": "ఇన్వాయిస్ #",
+          "account": "ఖాతా",
+          "amount": "మొత్తం",
+          "invoiceDate": "ఇన్వాయిస్ తేదీ",
+          "dueDate": "గడువు తేదీ",
+          "status": "స్థితి"
+        },
+        "labels": {
+          "pending": "పెండింగ్‌లో ఉంది",
+          "defaultFileName": "invoices-export.xlsx"
+        },
+        "toast": {
+          "exportFailed": "ఎగుమతి విఫలమైంది",
+          "exportInvalidData": "ఎగుమతి ఫైల్ డేటా చెల్లదు",
+          "exportSuccess": "ఇన్వాయిస్లు విజయవంతంగా ఎగుమతి చేయబడ్డాయి",
+          "exportCatchFailed": "ఇన్వాయిస్లను ఎగుమతి చేయడంలో విఫలమైంది",
+          "fetchFailed": "ఇన్వాయిస్లను పొందడంలో విఫలమైంది"
+        }
+      },
+      "detail": {
+        "title": {
+          "add": "ఇన్వాయిస్‌ను జోడించు",
+          "edit": "ఇన్వాయిస్"
+        },
+        "subtitle": "మాన్యువల్ బిల్లింగ్ ఇన్వాయిస్‌ను సృష్టించండి.",
+        "breadcrumbs": {
+          "billing": "బిల్లింగ్",
+          "current": "ఇన్వాయిస్లు"
+        },
+        "fields": {
+          "account": "ఖాతా",
+          "subscription": "సబ్‌స్క్రిప్షన్",
+          "amount": "మొత్తం",
+          "currency": "కరెన్సీ",
+          "invoiceDate": "ఇన్వాయిస్ తేదీ",
+          "dueDate": "గడువు తేదీ"
+        },
+        "buttons": {
+          "cancel": "రద్దు చేయి",
+          "saving": "సేవ్ అవుతోంది...",
+          "submit": "ఇన్వాయిస్‌ను సృష్టించు"
+        },
+        "toast": {
+          "editNotEnabled": "ఇన్వాయిస్ ఎడిట్ ఇంకా ప్రారంభించబడలేదు.",
+          "selectAccountSubscription": "దయచేసి ఖాతా మరియు సబ్‌స్క్రిప్షన్‌ను ఎంచుకోండి",
+          "selectCurrency": "దయచేసి కరెన్సీని ఎంచుకోండి",
+          "amountGreaterThanZero": "మొత్తం 0 కంటే ఎక్కువగా ఉండాలి",
+          "validDates": "దయచేసి సరైన ఇన్వాయిస్ మరియు గడువు తేదీలను నమోదు చేయండి",
+          "createdSuccess": "ఇన్వాయిస్ విజయవంతంగా సృష్టించబడింది",
+          "createFailed": "ఇన్వాయిస్ సృష్టించడంలో విఫలమైంది",
+          "dropdownFailed": "డ్రాప్‌డౌన్ డేటాను లోడ్ చేయడంలో విఫలమైంది"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "pages": {
+    "driver": {
+      "list": {
+        "title": "ಸಿಬ್ಬಂದಿ ನೋಂದಣಿ",
+        "subtitle": "ಚಾಲಕರನ್ನು ನೋಂದಾಯಿಸಿ ಮತ್ತು ನಿರ್ವಹಿಸಿ",
+        "breadcrumbs": {
+          "fleet": "ಫ್ಲೀಟ್",
+          "current": "ಚಾಲಕ"
+        },
+        "addButton": "ಚಾಲಕನನ್ನು ಸೇರಿಸಿ",
+        "export": "ರಫ್ತು ಮಾಡಿ",
+        "loading": "ಚಾಲಕರ ವಿವರಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+        "searchPlaceholder": "ಚಾಲಕರನ್ನು ಹುಡುಕಿ...",
+        "metrics": {
+          "totalDrivers": "ಒಟ್ಟು ಚಾಲಕರು",
+          "activeDrivers": "ಸಕ್ರಿಯ ಚಾಲಕರು",
+          "inactiveDrivers": "ನಿಷ್ಕ್ರಿಯ ಚಾಲಕರು",
+          "licenseExpiringSoon": "ಶೀಘ್ರದಲ್ಲೇ ಪರವಾನಗಿ ಅವಧಿ ಮುಗಿಯಲಿದೆ"
+        },
+        "table": {
+          "driverId": "ಚಾಲಕ ಐಡಿ",
+          "driverName": "ಚಾಲಕನ ಹೆಸರು",
+          "mobile": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+          "licenceNo": "ಪರವಾನಗಿ ಸಂಖ್ಯೆ",
+          "licenceExpiry": "ಪರವಾನಗಿ ಅವಧಿ ಮುಕ್ತಾಯ",
+          "status": "ಸ್ಥಿತಿ"
+        },
+        "labels": {
+          "active": "ಸಕ್ರಿಯ",
+          "inactive": "ನಿಷ್ಕ್ರಿಯ"
+        },
+        "deleteDialog": {
+          "title": "ಚಾಲಕನನ್ನು ಅಳಿಸಿ",
+          "message": "\"{name}\" ಚಾಲಕನನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ? ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂತಿರುಗಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+          "confirm": "ಅಳಿಸಿ",
+          "cancel": "ರದ್ದುಮಾಡಿ"
+        },
+        "toast": {
+          "deleted": "ಚಾಲಕನನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ!",
+          "deleteFailed": "ಅಳಿಸಲು ವಿಫಲವಾಗಿದೆ",
+          "deleteError": "ಚಾಲಕನನ್ನು ಅಳಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ",
+          "exportSuccess": "ಚಾಲಕರ ವಿವರಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಫ್ತು ಮಾಡಲಾಗಿದೆ",
+          "exportFailed": "ರಫ್ತು ಮಾಡಲು ವಿಫಲವಾಗಿದೆ"
+        }
+      },
+      "detail": {
+        "loading": "ಚಾಲಕನ ಡೇಟಾವನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+        "title": {
+          "create": "ಹೊಸ ಚಾಲಕ",
+          "edit": "ಚಾಲಕ ಸಂಪಾದಿಸಿ"
+        },
+        "section": {
+          "title": "ಸಿಬ್ಬಂದಿ ಗುರುತು",
+          "createDescription": "ಚಾಲಕನ ವೈಯಕ್ತಿಕ ಮತ್ತು ಸಂಪರ್ಕ ಮಾಹಿತಿಯನ್ನು ಭರ್ತಿ ಮಾಡಿ.",
+          "editDescription": "ಚಾಲಕನ ವೈಯಕ್ತಿಕ ಮತ್ತು ಸಂಪರ್ಕ ಮಾಹಿತಿಯನ್ನು ನವೀಕರಿಸಿ."
+        },
+        "fields": {
+          "driverCode": "ಚಾಲಕನ ಕೋಡ್",
+          "organisation": "ಸಂಸ್ಥೆ",
+          "selectAccount": "ಖಾತೆಯನ್ನು ಆರಿಸಿ",
+          "firstName": "ಮೊದಲ ಹೆಸರು",
+          "firstNamePlaceholder": "ಉದಾ: ವಿಕ್ರಮ್",
+          "lastName": "ಕೊನೆಯ ಹೆಸರು",
+          "lastNamePlaceholder": "ಉದಾ: ರಾಥೋಡ್",
+          "mobile": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ (E.164)",
+          "mobilePlaceholder": "+91 0000000000",
+          "emergencyContact": "ತುರ್ತು ಸಂಪರ್ಕ ಸಂಖ್ಯೆ",
+          "emergencyPlaceholder": "ತುರ್ತು ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+          "licenceNo": "ಪರವಾನಗಿ ಸಂಖ್ಯೆ",
+          "licenceNoPlaceholder": "ಉದಾ: KA-01-2023-0000",
+          "licenceExpiry": "ಪರವಾನಗಿ ಅವಧಿ ಮುಕ್ತಾಯ",
+          "bloodGroup": "ರಕ್ತದ ಗುಂಪು",
+          "bloodGroupPlaceholder": "ಉದಾ: O+"
+        },
+        "status": {
+          "title": "ಚಾಲಕನ ಸ್ಥಿತಿ",
+          "description": "ನಿಷ್ಕ್ರಿಯ ಚಾಲಕರನ್ನು ಹೊಸ ಪ್ರವಾಸಗಳಿಗೆ ನಿಯೋಜಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ."
+        },
+        "buttons": {
+          "cancel": "ರದ್ದುಮಾಡಿ",
+          "update": "ಚಾಲಕನ ವಿವರ ನವೀಕರಿಸಿ",
+          "create": "ಚಾಲಕನನ್ನು ಸೇರಿಸಿ",
+          "updating": "ನವೀಕರಿಸಲಾಗುತ್ತಿದೆ...",
+          "creating": "ಸೇರಿಸಲಾಗುತ್ತಿದೆ..."
+        },
+        "validation": {
+          "firstNameRequired": "ದಯವಿಟ್ಟು ಮೊದಲ ಹೆಸರನ್ನು ನಮೂದಿಸಿ",
+          "mobileRequired": "ದಯವಿಟ್ಟು ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
+          "licenceNoRequired": "ದಯವಿಟ್ಟು ಪರವಾನಗಿ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
+          "licenceExpiryRequired": "ದಯವಿಟ್ಟು ಪರವಾನಗಿ ಅವಧಿ ಮುಕ್ತಾಯದ ದಿನಾಂಕವನ್ನು ಆರಿಸಿ",
+          "organisationRequired": "ದಯವಿಟ್ಟು ಸಂಸ್ಥೆಯನ್ನು ಆರಿಸಿ"
+        },
+        "toast": {
+          "fetchFailed": "ಚಾಲಕನ ಡೇಟಾ ಪಡೆಯಲು ವಿಫಲವಾಗಿದೆ",
+          "loadError": "ಚಾಲಕನ ಡೇಟಾ ಲೋಡ್ ಮಾಡುವಾಗ ದೋಷ",
+          "updated": "ಚಾಲಕನ ವಿವರಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ!",
+          "created": "ಚಾಲಕನನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸೇರಿಸಲಾಗಿದೆ!",
+          "failed": "ವಿಫಲವಾಗಿದೆ",
+          "saveError": "ಚಾಲಕನ ವಿವರಗಳನ್ನು ಉಳಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ"
+        }
+      }
+    }
+  }
+}

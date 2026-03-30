@@ -1,0 +1,72 @@
+{
+  "pages": {
+    "invoices": {
+      "list": {
+        "title": "ಇನ್ವಾಯ್ಸ್‌ಗಳು",
+        "subtitle": "ಹಣಕಾಸು ಲೆಡ್ಜರ್ ಮತ್ತು ಬಿಲ್ಲಿಂಗ್ ಚಕ್ರದ ಸ್ವಯಂಚಾಲಿತ ನಿಯಂತ್ರಣ.",
+        "breadcrumbs": {
+          "billing": "ಬಿಲ್ಲಿಂಗ್",
+          "current": "ಇನ್ವಾಯ್ಸ್‌ಗಳು"
+        },
+        "addButton": "ಇನ್ವಾಯ್ಸ್ ಸೇರಿಸಿ",
+        "exportButton": "ರಫ್ತು ಮಾಡಿ",
+        "exportingButton": "ರಫ್ತು ಮಾಡಲಾಗುತ್ತಿದೆ...",
+        "searchPlaceholder": "ಇನ್ವಾಯ್ಸ್‌ಗಳನ್ನು ಹುಡುಕಿ...",
+        "table": {
+          "no": "ಕ್ರಮ ಸಂಖ್ಯೆ",
+          "invoiceNumber": "ಇನ್ವಾಯ್ಸ್ ಸಂಖ್ಯೆ",
+          "account": "ಖಾತೆ",
+          "amount": "ಮೊತ್ತ",
+          "invoiceDate": "ಇನ್ವಾಯ್ಸ್ ದಿನಾಂಕ",
+          "dueDate": "ಅಂತಿಮ ದಿನಾಂಕ",
+          "status": "ಸ್ಥಿತಿ"
+        },
+        "labels": {
+          "pending": "ಬಾಕಿ ಇದೆ",
+          "defaultFileName": "invoices-export.xlsx"
+        },
+        "toast": {
+          "exportFailed": "ರಫ್ತು ಮಾಡಲು ವಿಫಲವಾಗಿದೆ",
+          "exportInvalidData": "ರಫ್ತು ಮಾಡುವ ಫೈಲ್ ಡೇಟಾ ಅಮಾನ್ಯವಾಗಿದೆ",
+          "exportSuccess": "ಇನ್ವಾಯ್ಸ್‌ಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಫ್ತು ಮಾಡಲಾಗಿದೆ",
+          "exportCatchFailed": "ಇನ್ವಾಯ್ಸ್‌ಗಳನ್ನು ರಫ್ತು ಮಾಡುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ",
+          "fetchFailed": "ಇನ್ವಾಯ್ಸ್‌ಗಳನ್ನು ಪಡೆಯಲು ವಿಫಲವಾಗಿದೆ"
+        }
+      },
+      "detail": {
+        "title": {
+          "add": "ಇನ್ವಾಯ್ಸ್ ಸೇರಿಸಿ",
+          "edit": "ಇನ್ವಾಯ್ಸ್"
+        },
+        "subtitle": "ಮ್ಯಾನುವಲ್ ಬಿಲ್ಲಿಂಗ್ ಇನ್ವಾಯ್ಸ್ ರಚಿಸಿ.",
+        "breadcrumbs": {
+          "billing": "ಬಿಲ್ಲಿಂಗ್",
+          "current": "ಇನ್ವಾಯ್ಸ್‌ಗಳು"
+        },
+        "fields": {
+          "account": "ಖಾತೆ",
+          "subscription": "ಚಂದಾದಾರಿಕೆ",
+          "amount": "ಮೊತ್ತ",
+          "currency": "ಕರೆನ್ಸಿ",
+          "invoiceDate": "ಇನ್ವಾಯ್ಸ್ ದಿನಾಂಕ",
+          "dueDate": "ಅಂತಿಮ ದಿನಾಂಕ"
+        },
+        "buttons": {
+          "cancel": "ರದ್ದುಮಾಡಿ",
+          "saving": "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+          "submit": "ಇನ್ವಾಯ್ಸ್ ರಚಿಸಿ"
+        },
+        "toast": {
+          "editNotEnabled": "ಇನ್ವಾಯ್ಸ್ ಸಂಪಾದನೆಯು ಇನ್ನೂ ಸಕ್ರಿಯಗೊಂಡಿಲ್ಲ.",
+          "selectAccountSubscription": "ದಯವಿಟ್ಟು ಖಾತೆ ಮತ್ತು ಚಂದಾದಾರಿಕೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+          "selectCurrency": "ದಯವಿಟ್ಟು ಕರೆನ್ಸಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+          "amountGreaterThanZero": "ಮೊತ್ತವು 0 ಕ್ಕಿಂತ ಹೆಚ್ಚಿರಬೇಕು",
+          "validDates": "ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಇನ್ವಾಯ್ಸ್ ಮತ್ತು ಅಂತಿಮ ದಿನಾಂಕಗಳನ್ನು ನೀಡಿ",
+          "createdSuccess": "ಇನ್ವಾಯ್ಸ್ ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ",
+          "createFailed": "ಇನ್ವಾಯ್ಸ್ ರಚಿಸಲು ವಿಫಲವಾಗಿದೆ",
+          "dropdownFailed": "ಡ್ರಾಪ್‌ಡೌನ್ ಡೇಟಾವನ್ನು ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ"
+        }
+      }
+    }
+  }
+}

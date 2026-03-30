@@ -1,0 +1,125 @@
+{
+  "pages": {
+    "configuration": {
+      "list": {
+        "title": "ಕಾನ್ಫಿಗರೇಶನ್",
+        "subtitle": "ಖಾತೆ ನಿರ್ವಹಣೆಗಾಗಿ ಜಾಗತಿಕ ಸೆಟ್ಟಿಂಗ್‌ಗಳು.",
+        "breadcrumbs": {
+          "accounts": "ಖಾತೆಗಳು",
+          "current": "ಕಾನ್ಫಿಗರೇಶನ್"
+        },
+        "addButton": "ಹೊಸ ಕಾನ್ಫಿಗರೇಶನ್",
+        "loading": "ಕಾನ್ಫಿಗರೇಶನ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+        "searchPlaceholder": "ಎಲ್ಲಾ ಕ್ಷೇತ್ರಗಳಲ್ಲಿ ಹುಡುಕಿ...",
+        "table": {
+          "id": "ಐಡಿ",
+          "account": "ಖಾತೆ",
+          "mapProvider": "ಮ್ಯಾಪ್ ಪೂರೈಕೆದಾರ",
+          "dateFormat": "ದಿನಾಂಕ ನಮೂನೆ",
+          "language": "ಭಾಷೆ",
+          "lastUpdated": "ಕೊನೆಯದಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+        },
+        "delete": {
+          "title": "ಕಾನ್ಫಿಗರೇಶನ್ ಅಳಿಸಿ",
+          "message": "\"{account}\" ಗಾಗಿ ಕಾನ್ಫಿಗರೇಶನ್ ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ? ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂತಿರುಗಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+          "confirm": "ಅಳಿಸಿ",
+          "cancel": "ರದ್ದುಮಾಡಿ"
+        },
+        "toast": {
+          "deleted": "ಕಾನ್ಫಿಗರೇಶನ್ ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ!",
+          "deleteFailed": "ಅಳಿಸಲು ವಿಫಲವಾಗಿದೆ: {message}",
+          "deleteError": "ಕಾನ್ಫಿಗರೇಶನ್ ಅಳಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ"
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "ಕಾನ್ಫಿಗರೇಶನ್ ಸಂಪಾದಿಸಿ",
+          "create": "ಹೊಸ ಕಾನ್ಫಿಗರೇಶನ್"
+        },
+        "buttons": {
+          "cancel": "ರದ್ದುಮಾಡಿ",
+          "saving": "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+          "update": "ಕಾನ್ಫಿಗರೇಶನ್ ನವೀಕರಿಸಿ",
+          "create": "ಕಾನ್ಫಿಗರೇಶನ್ ಉಳಿಸಿ",
+          "addMoreLanguages": "ಹೆಚ್ಚಿನ ಭಾಷೆಗಳನ್ನು ಸೇರಿಸಿ"
+        },
+        "loading": {
+          "edit": "ಕಾನ್ಫಿಗರೇಶನ್ ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ..."
+        },
+        "sections": {
+          "mapConfiguration": "ಮ್ಯಾಪ್ ಕಾನ್ಫಿಗರೇಶನ್",
+          "internationalization": "ಅಂತರಾಷ್ಟ್ರೀಕರಣ ಮತ್ತು ಘಟಕ ಕಾನ್ಫಿಗರೇಶನ್",
+          "languageConfiguration": "ಭಾಷಾ ಕಾನ್ಫಿಗರೇಶನ್"
+        },
+        "fields": {
+          "accountId": "ಖಾತೆ ಐಡಿ",
+          "selectAccount": "ಖಾತೆಯನ್ನು ಆರಿಸಿ",
+          "mapProvider": "ಮ್ಯಾಪ್ ಪೂರೈಕೆದಾರ",
+          "licenseKey": "ಲೈಸೆನ್ಸ್ ಕೀ",
+          "licenseKeyPlaceholder": "ಲೈಸೆನ್ಸ್ ಕೀ ನಮೂದಿಸಿ",
+          "addressKey": "ವಿಳಾಸ ಕೀ",
+          "addressKeyPlaceholder": "ವಿಳಾಸ ಕೀ ನಮೂದಿಸಿ",
+          "dateFormat": "ದಿನಾಂಕ ನಮೂನೆ",
+          "timeFormat": "ಸಮಯದ ನಮೂನೆ",
+          "distanceUnit": "ದೂರದ ಘಟಕ",
+          "speedUnit": "ವೇಗದ ಘಟಕ",
+          "fuelUnit": "ಇಂಧನ ಘಟಕ",
+          "temperature": "ತಾಪಮಾನ",
+          "addressDisplay": "ವಿಳಾಸ ಪ್ರದರ್ಶನ",
+          "defaultLanguage": "ಡೀಫಾಲ್ಟ್ ಭಾಷೆ",
+          "additionalLanguage": "ಹೆಚ್ಚುವರಿ ಭಾಷೆ {index}",
+          "selectLanguage": "ಭಾಷೆಯನ್ನು ಆರಿಸಿ"
+        },
+        "options": {
+          "mapProvider": {
+            "googleMaps": "ಗೂಗಲ್ ಮ್ಯಾಪ್ಸ್",
+            "hereMaps": "ಹಿಯರ್ ಮ್ಯಾಪ್ಸ್",
+            "openStreetMap": "ಓಪನ್ ಸ್ಟ್ರೀಟ್ ಮ್ಯಾಪ್"
+          },
+          "timeFormat": {
+            "h12": "12 ಗಂಟೆ (AM/PM)",
+            "h24": "24 ಗಂಟೆ"
+          },
+          "distanceUnit": {
+            "km": "ಕಿಲೋಮೀಟರ್‌ಗಳು",
+            "mile": "ಮೈಲಿಗಳು"
+          },
+          "speedUnit": {
+            "kmh": "ಕಿಮೀ/ಗಂ",
+            "mph": "ಮೈಲಿ/ಗಂ"
+          },
+          "fuelUnit": {
+            "litre": "ಲೀಟರ್",
+            "gallon": "ಗ್ಯಾಲನ್"
+          },
+          "temperature": {
+            "celsius": "ಸೆಲ್ಸಿಯಸ್",
+            "fahrenheit": "ಫ್ಯಾರನ್ಹೀಟ್"
+          },
+          "addressDisplay": {
+            "show": "ವಿಳಾಸ ತೋರಿಸು",
+            "hide": "ವಿಳಾಸ ಮರೆಮಾಚು"
+          },
+          "language": {
+            "en": "ಇಂಗ್ಲಿಷ್",
+            "es": "ಸ್ಪ್ಯಾನಿಷ್",
+            "fr": "ಫ್ರೆಂಚ್",
+            "de": "ಜರ್ಮನ್",
+            "hi": "ಹಿಂದಿ",
+            "te": "ತೆಲುಗು",
+            "ta": "ತಮಿಳು",
+            "kn": "ಕನ್ನಡ"
+          }
+        },
+        "toast": {
+          "accountRequired": "ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಖಾತೆ ಐಡಿ ನಮೂದಿಸಿ",
+          "updated": "ಕಾನ್ಫಿಗರೇಶನ್ ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ!",
+          "created": "ಕಾನ್ಫಿಗರೇಶನ್ ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ!",
+          "saveFailed": "ಉಳಿಸಲು ವಿಫಲವಾಗಿದೆ: {message}",
+          "saveError": "ಉಳಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ",
+          "loadFailed": "ಕಾನ್ಫಿಗರೇಶನ್ ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ"
+        }
+      }
+    }
+  }
+}

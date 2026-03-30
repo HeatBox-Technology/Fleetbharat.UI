@@ -1,0 +1,106 @@
+{
+  "pages": {
+    "formmaster": {
+      "list": {
+        "title": "படிவ முதன்மை",
+        "subtitle": "விண்ணப்பப் படிவங்கள், தொகுதிகள், வழிகள் மற்றும் அவற்றின் தெரிவுநிலையை நிர்வகிக்கவும்.",
+        "breadcrumbs": {
+          "configurations": "கட்டமைப்புகள்",
+          "current": "படிவ முதன்மை"
+        },
+        "addButton": "படிவத்தைச் சேர்",
+        "loading": "படிவங்கள் ஏற்றப்படுகின்றன...",
+        "searchPlaceholder": "பெயர், குறியீடு அல்லது தொகுதி மூலம் படிவங்களைத் தேடு...",
+        "table": {
+          "no": "எண்",
+          "formCode": "படிவக் குறியீடு",
+          "formName": "படிவப் பெயர்",
+          "module": "தொகுதி (Module)",
+          "pageUrl": "பக்க URL",
+          "status": "நிலை"
+        },
+        "status": {
+          "active": "செயலில்",
+          "inactive": "செயலற்றது"
+        },
+        "delete": {
+          "title": "படிவத்தை நீக்கு",
+          "message": "\"{name}\" ஐ நிச்சயமாக நீக்க விரும்புகிறீர்களா? இந்தச் செயலை மாற்ற முடியாது.",
+          "confirm": "நீக்கு",
+          "cancel": "ரத்து செய்"
+        },
+        "toast": {
+          "fetchFailed": "படிவங்களைப் பெறுவதில் தோல்வி",
+          "deleted": "படிவம் வெற்றிகரமாக நீக்கப்பட்டது",
+          "deleteFailed": "படிவத்தை நீக்குவதில் தோல்வி"
+        }
+      },
+      "detail": {
+        "loading": "படிவ விவரங்கள் ஏற்றப்படுகின்றன...",
+        "title": {
+          "edit": "படிவத்தைத் திருத்து",
+          "create": "புதிய படிவத்தை உருவாக்கு"
+        },
+        "section": {
+          "title": "படிவத் தகவல்",
+          "subtitle": "படிவக் குறியீடு, வழி (Route), தொகுதி மற்றும் தெரிவுநிலை விருப்பங்களைக் கட்டமைக்கவும்."
+        },
+        "fields": {
+          "formCode": "படிவக் குறியீடு",
+          "formCodePlaceholder": "எ.கா. USER-001",
+          "formName": "படிவப் பெயர்",
+          "formNamePlaceholder": "எ.கா. பாத்திரங்கள் மற்றும் அனுமதிகள்",
+          "moduleName": "தொகுதி பெயர்",
+          "moduleNamePlaceholder": "எ.கா. பயனர் மேலாண்மை",
+          "pageUrl": "பக்க URL",
+          "pageUrlPlaceholder": "எ.கா. /users/roles-permissions",
+          "iconName": "ஐகான் (Icon) பெயர்",
+          "iconNamePlaceholder": "எ.கா. Shield",
+          "sortOrder": "வரிசைப்படுத்தும் முறை (Sort Order)",
+          "sortOrderPlaceholder": "0",
+          "formModuleId": "படிவத் தொகுதி ஐடி",
+          "formModuleIdPlaceholder": "0",
+          "filterConfigJson": "வடிகட்டி கட்டமைப்பு JSON",
+          "filterConfigJsonPlaceholder": "எ.கா. JSON ஆப்ஜெக்ட் ஸ்டிரிங்"
+        },
+        "toggles": {
+          "isMenu": {
+            "title": "மெனுவில் உள்ளதா",
+            "description": "இந்த படிவத்தை மெனுவில் சேர்க்க இதைச் செயல்படுத்தவும்."
+          },
+          "isBulk": {
+            "title": "மொத்தமாகப் பதிவேற்றுதல் (Bulk Upload)",
+            "description": "இந்த படிவம் மொத்தமாகப் பதிவேற்றுவதை ஆதரித்தால் இதைச் செயல்படுத்தவும்."
+          },
+          "isVisible": {
+            "title": "தெரிவுநிலையில் உள்ளதா (Is Visible)",
+            "description": "UI அடுக்குகளில் படிவத்தின் தெரிவுநிலையை மாற்றவும்."
+          },
+          "isActive": {
+            "title": "செயலில் உள்ளதா",
+            "description": "செயலற்ற படிவம் முடக்கப்பட்டது என கருதப்படும்."
+          }
+        },
+        "buttons": {
+          "cancel": "ரத்து செய்",
+          "creating": "உருவாக்கப்படுகிறது...",
+          "updating": "புதுப்பிக்கப்படுகிறது...",
+          "create": "படிவத்தை உருவாக்கு",
+          "update": "படிவத்தைப் புதுப்பி"
+        },
+        "toast": {
+          "fetchFailed": "படிவத்தைப் பெறுவதில் தோல்வி",
+          "fetchDetailsFailed": "படிவ விவரங்களைப் பெறுவதில் தோல்வி",
+          "formCodeRequired": "படிவக் குறியீடு தேவை",
+          "formNameRequired": "படிவப் பெயர் தேவை",
+          "moduleNameRequired": "தொகுதி பெயர் தேவை",
+          "pageUrlRequired": "பக்க URL தேவை",
+          "filterConfigInvalid": "வடிகட்டி கட்டமைப்பு JSON செல்லுபடியாகும் JSON ஆக இருக்க வேண்டும்",
+          "created": "படிவம் வெற்றிகரமாக உருவாக்கப்பட்டது",
+          "updated": "படிவம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது",
+          "saveFailed": "படிவத்தைச் சேமிப்பதில் தோல்வி"
+        }
+      }
+    }
+  }
+}

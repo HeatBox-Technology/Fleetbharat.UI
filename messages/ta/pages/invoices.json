@@ -1,0 +1,72 @@
+{
+  "pages": {
+    "invoices": {
+      "list": {
+        "title": "இன்வாய்ஸ்கள்",
+        "subtitle": "நிதிப் பேரேடு மற்றும் பில்லிங் சுழற்சி தன்னியக்கக் கட்டுப்பாடு.",
+        "breadcrumbs": {
+          "billing": "பில்லிங்",
+          "current": "இன்வாய்ஸ்கள்"
+        },
+        "addButton": "இன்வாய்ஸைச் சேர்",
+        "exportButton": "ஏற்றுமதி",
+        "exportingButton": "ஏற்றுமதி செய்யப்படுகிறது...",
+        "searchPlaceholder": "இன்வாய்ஸ்களைத் தேடு...",
+        "table": {
+          "no": "எண்",
+          "invoiceNumber": "இன்வாய்ஸ் #",
+          "account": "கணக்கு",
+          "amount": "தொகை",
+          "invoiceDate": "இன்வாய்ஸ் தேதி",
+          "dueDate": "நிலுவைத் தேதி",
+          "status": "நிலை"
+        },
+        "labels": {
+          "pending": "நிலுவையில்",
+          "defaultFileName": "invoices-export.xlsx"
+        },
+        "toast": {
+          "exportFailed": "ஏற்றுமதி தோல்வியடைந்தது",
+          "exportInvalidData": "ஏற்றுமதி கோப்புத் தரவு தவறானது",
+          "exportSuccess": "இன்வாய்ஸ்கள் வெற்றிகரமாக ஏற்றுமதி செய்யப்பட்டன",
+          "exportCatchFailed": "இன்வாய்ஸ்களை ஏற்றுமதி செய்வதில் தோல்வி",
+          "fetchFailed": "இன்வாய்ஸ்களைப் பெறுவதில் தோல்வி"
+        }
+      },
+      "detail": {
+        "title": {
+          "add": "இன்வாய்ஸைச் சேர்",
+          "edit": "இன்வாய்ஸ்"
+        },
+        "subtitle": "கைமுறை பில்லிங் இன்வாய்ஸை உருவாக்கவும்.",
+        "breadcrumbs": {
+          "billing": "பில்லிங்",
+          "current": "இன்வாய்ஸ்கள்"
+        },
+        "fields": {
+          "account": "கணக்கு",
+          "subscription": "சந்தா (Subscription)",
+          "amount": "தொகை",
+          "currency": "நாணயம்",
+          "invoiceDate": "இன்வாய்ஸ் தேதி",
+          "dueDate": "நிலுவைத் தேதி"
+        },
+        "buttons": {
+          "cancel": "ரத்து செய்",
+          "saving": "சேமிக்கப்படுகிறது...",
+          "submit": "இன்வாய்ஸை உருவாக்கு"
+        },
+        "toast": {
+          "editNotEnabled": "இன்வாய்ஸைத் திருத்துதல் இன்னும் செயல்படுத்தப்படவில்லை.",
+          "selectAccountSubscription": "தயவுசெய்து கணக்கு மற்றும் சந்தாவைத் தேர்ந்தெடுக்கவும்",
+          "selectCurrency": "தயவுசெய்து நாணயத்தைத் தேர்ந்தெடுக்கவும்",
+          "amountGreaterThanZero": "தொகை 0-ஐ விட அதிகமாக இருக்க வேண்டும்",
+          "validDates": "தயவுசெய்து சரியான இன்வாய்ஸ் மற்றும் நிலுவைத் தேதிகளை வழங்கவும்",
+          "createdSuccess": "இன்வாய்ஸ் வெற்றிகரமாக உருவாக்கப்பட்டது",
+          "createFailed": "இன்வாய்ஸை உருவாக்குவதில் தோல்வி",
+          "dropdownFailed": "கீழ்தோன்றும் தரவை (Dropdown data) ஏற்றுவதில் தோல்வி"
+        }
+      }
+    }
+  }
+}

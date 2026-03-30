@@ -104,6 +104,9 @@ const NewConfiguration: React.FC = () => {
     { value: "fr", label: t("options.language.fr") },
     { value: "de", label: t("options.language.de") },
     { value: "hi", label: t("options.language.hi") },
+    { value: "te", label: t("options.language.te") },
+    { value: "ta", label: t("options.language.ta") },
+    { value: "kn", label: t("options.language.kn") },
   ];
 
   const fetchConfiguration = async () => {

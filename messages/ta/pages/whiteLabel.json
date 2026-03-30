@@ -1,0 +1,96 @@
+{
+  "pages": {
+    "whiteLabel": {
+      "list": {
+        "title": "வைட் லேபிள்",
+        "subtitle": "அடையாளங்கள், வகைப்பாடுகள் மற்றும் உலகளாவிய அளவுருக்களை நிர்வகிக்கவும்.",
+        "breadcrumbs": {
+          "accounts": "கணக்குகள்",
+          "current": "வைட் லேபிள்"
+        },
+        "addButton": "பிராண்டிங்கை ஒதுக்கு",
+        "loading": "வைட் லேபிள்கள் ஏற்றப்படுகின்றன...",
+        "searchPlaceholder": "அனைத்துப் புலங்களிலும் தேடு...",
+        "table": {
+          "account": "கணக்கு",
+          "domain": "டொமைன்",
+          "theme": "தீம்",
+          "status": "நிலை"
+        },
+        "delete": {
+          "title": "வைட் லேபிளை நீக்கு",
+          "message": "\"{account}\" க்கான வைட் லேபிளை நிச்சயமாக நீக்க விரும்புகிறீர்களா? இந்தச் செயலை மாற்ற முடியாது.",
+          "confirm": "நீக்கு",
+          "cancel": "ரத்து செய்"
+        },
+        "toast": {
+          "deleted": "வைட் லேபிள் வெற்றிகரமாக நீக்கப்பட்டது!",
+          "deleteFailed": "வைட் லேபிளை நீக்குவதில் தோல்வி",
+          "deleteError": "நீக்கும் போது பிழை ஏற்பட்டது."
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "பிராண்டிங்கைத் திருத்து",
+          "create": "பிராண்டிங்கை ஒதுக்கு"
+        },
+        "buttons": {
+          "cancel": "ரத்து செய்",
+          "saving": "சேமிக்கப்படுகிறது...",
+          "update": "வைட் லேபிளைப் புதுப்பி",
+          "activate": "வைட் லேபிளைச் செயல்படுத்து"
+        },
+        "loading": "ஏற்றப்படுகிறது...",
+        "sections": {
+          "coreInstanceMapping": "கோர் இன்ஸ்டன்ஸ் மேப்பிங் (Core Instance Mapping)",
+          "visualIdentitySystems": "காட்சி அடையாள அமைப்புகள்",
+          "identityBlueprint": "அடையாள வரைபடம் (IDENTITY BLUEPRINT)"
+        },
+        "labels": {
+          "account": "கணக்கு",
+          "selectAccount": "கணக்கைத் தேர்ந்தெடுக்கவும்",
+          "customEntryFqdn": "தனிப்பயன் நுழைவு FQDN",
+          "customEntryFqdnPlaceholder": "portal.partner.com",
+          "brandName": "பிராண்ட் பெயர்",
+          "brandNamePlaceholder": "பிராண்ட் பெயரை உள்ளிடவும்",
+          "logoUrl": "லோகோ (Logo) URL",
+          "logoUrlPlaceholder": "https://cdn.example.com/logo.png",
+          "primaryLogo": "முதன்மை லோகோ",
+          "appLogo": "ஆப் (App) லோகோ",
+          "mobileLogo": "மொபைல் லோகோ",
+          "favicon": "ஃபேவிகான் (Favicon)",
+          "logoDark": "லோகோ (இருண்ட பயன்முறை)",
+          "logoLight": "லோகோ (ஒளி பயன்முறை)",
+          "uploadedUrlPlaceholder": "பதிவேற்றப்பட்ட URL இங்கே தோன்றும்",
+          "noImagePreview": "பட முன்னோட்டம் இல்லை",
+          "primaryColor": "முதன்மை வண்ணம்",
+          "secondaryColor": "இரண்டாம் நிலை வண்ணம்",
+          "activeStatus": "செயல்பாட்டு நிலை",
+          "fqdn": "FQDN:",
+          "accountCaps": "கணக்கு (ACCOUNT):",
+          "statusCaps": "நிலை (STATUS):",
+          "colorPreview": "வண்ண முன்னோட்டம்"
+        },
+        "summary": {
+          "subtitle": "மறுபெயரிடப்பட்ட போர்ட்டலின் காட்சிச் சுருக்கம்.",
+          "notSet": "அமைக்கப்படவில்லை",
+          "active": "செயலில் (ACTIVE)",
+          "inactive": "செயலற்றது (INACTIVE)"
+        },
+        "modes": {
+          "updated": "புதுப்பிக்கப்பட்டது",
+          "created": "உருவாக்கப்பட்டது"
+        },
+        "toast": {
+          "selectAccount": "தயவுசெய்து இலக்கு கணக்கைத் தேர்ந்தெடுக்கவும்",
+          "enterFqdn": "தயவுசெய்து தனிப்பயன் FQDN ஐ உள்ளிடவும்",
+          "logoUploadFailed": "லோகோ பதிவேற்றம் தோல்வியடைந்தது",
+          "loadFailed": "வைட் லேபிள் தரவை ஏற்றுவதில் தோல்வி",
+          "saved": "வைட் லேபிள் வெற்றிகரமாக {mode}!",
+          "saveFailed": "தோல்வி: {message}",
+          "saveError": "சேமிக்கும் போது பிழை ஏற்பட்டது"
+        }
+      }
+    }
+  }
+}

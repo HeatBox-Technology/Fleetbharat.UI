@@ -1,0 +1,64 @@
+{
+  "pages": {
+    "dashboard": {
+      "metrics": {
+        "totalCustomers": "மொத்த வாடிக்கையாளர்கள்",
+        "dealersDistributors": "டீலர்கள் மற்றும் விநியோகஸ்தர்கள்",
+        "totalDevices": "மொத்தக் கருவிகள்",
+        "activeSubscriptions": "செயலில் உள்ள சந்தாக்கள்"
+      },
+      "sections": {
+        "revenueSummary": "வருவாய் சுருக்கம்",
+        "deviceStatus": "கருவி நிலை",
+        "recentAlerts": "சமீபத்திய எச்சரிக்கைகள்",
+        "serverHealth": "சர்வர் ஆரோக்கியம்"
+      },
+      "revenue": {
+        "months": {
+          "jan": "ஜன",
+          "feb": "பிப்",
+          "mar": "மார்",
+          "apr": "ஏப்",
+          "may": "மே",
+          "jun": "ஜூன்",
+          "jul": "ஜூலை"
+        }
+      },
+      "deviceStatus": {
+        "installed": "நிறுவப்பட்டவை",
+        "available": "இருப்பவை",
+        "faulty": "பழுதடைந்தவை",
+        "returned": "திருப்பியவை"
+      },
+      "alerts": {
+        "cpuHigh": {
+          "title": "சர்வர்-01-இல் அதிக CPU பயன்பாடு",
+          "time": "2 நிமிடங்களுக்கு முன்பு",
+          "severity": "மிக முக்கியமானது (Critical)"
+        },
+        "dbLimit": {
+          "title": "தரவுத்தள இணைப்பு வரம்பு நெருங்குகிறது",
+          "time": "15 நிமிடங்களுக்கு முன்பு",
+          "severity": "எச்சரிக்கை"
+        },
+        "devicesOffline": {
+          "title": "15 கருவிகள் ஆஃப்லைனில் இருப்பதாகத் தெரிவிக்கப்பட்டுள்ளது",
+          "time": "30 நிமிடங்களுக்கு முன்பு",
+          "severity": "தகவல்"
+        }
+      },
+      "serverHealth": {
+        "status": {
+          "operational": "செயல்பாட்டில் உள்ளது",
+          "outage": "செயலிழப்பு"
+        },
+        "services": {
+          "apiServer": "API சர்வர்",
+          "databaseCluster": "டேட்டாபேஸ் கிளஸ்டர்",
+          "telemetryIngestion": "டெலிமெட்ரி உட்கிரகிப்பு",
+          "forwardingService": "பகிர்தல் சேவை"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "pages": {
+    "configuration": {
+      "list": {
+        "title": "கட்டமைப்பு",
+        "subtitle": "கணக்கு மேலாண்மைக்கான உலகளாவிய அமைப்புகள்.",
+        "breadcrumbs": {
+          "accounts": "கணக்குகள்",
+          "current": "கட்டமைப்பு"
+        },
+        "addButton": "புதிய கட்டமைப்பு",
+        "loading": "கட்டமைப்புகள் ஏற்றப்படுகின்றன...",
+        "searchPlaceholder": "அனைத்துப் புலங்களிலும் தேடு...",
+        "table": {
+          "id": "ID",
+          "account": "கணக்கு",
+          "mapProvider": "வரைபட வழங்குநர்",
+          "dateFormat": "தேதி வடிவம்",
+          "language": "மொழி",
+          "lastUpdated": "கடைசியாகப் புதுப்பிக்கப்பட்டது"
+        },
+        "delete": {
+          "title": "கட்டமைப்பை நீக்கு",
+          "message": "\"{account}\" க்கான கட்டமைப்பை நீங்கள் நிச்சயமாக நீக்க விரும்புகிறீர்களா? இந்தச் செயலை மாற்ற முடியாது.",
+          "confirm": "நீக்கு",
+          "cancel": "ரத்து செய்"
+        },
+        "toast": {
+          "deleted": "கட்டமைப்பு வெற்றிகரமாக நீக்கப்பட்டது!",
+          "deleteFailed": "நீக்குவதில் தோல்வி: {message}",
+          "deleteError": "கட்டமைப்பை நீக்குவதில் பிழை ஏற்பட்டது"
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "கட்டமைப்பைத் திருத்து",
+          "create": "புதிய கட்டமைப்பு"
+        },
+        "buttons": {
+          "cancel": "ரத்து செய்",
+          "saving": "சேமிக்கப்படுகிறது...",
+          "update": "கட்டமைப்பைப் புதுப்பிக்கவும்",
+          "create": "கட்டமைப்பைச் சேமிக்கவும்",
+          "addMoreLanguages": "கூடுதல் மொழிகளைச் சேர்க்கவும்"
+        },
+        "loading": {
+          "edit": "கட்டமைப்பு ஏற்றப்படுகிறது..."
+        },
+        "sections": {
+          "mapConfiguration": "வரைபடக் கட்டமைப்பு",
+          "internationalization": "சர்வதேசமயமாக்கல் மற்றும் அலகு கட்டமைப்பு",
+          "languageConfiguration": "மொழிக் கட்டமைப்பு"
+        },
+        "fields": {
+          "accountId": "கணக்கு ஐடி (Account ID)",
+          "selectAccount": "கணக்கைத் தேர்ந்தெடுக்கவும்",
+          "mapProvider": "வரைபட வழங்குநர்",
+          "licenseKey": "உரிமச் சாவி (License Key)",
+          "licenseKeyPlaceholder": "உரிமச் சாவியை உள்ளிடவும்",
+          "addressKey": "முகவரிச் சாவி (Address Key)",
+          "addressKeyPlaceholder": "முகவரிச் சாவியை உள்ளிடவும்",
+          "dateFormat": "தேதி வடிவம்",
+          "timeFormat": "நேர வடிவம்",
+          "distanceUnit": "தொலைவு அலகு",
+          "speedUnit": "வேக அலகு",
+          "fuelUnit": "எரிபொருள் அலகு",
+          "temperature": "வெப்பநிலை",
+          "addressDisplay": "முகவரி காட்சி",
+          "defaultLanguage": "இயல்புநிலை மொழி",
+          "additionalLanguage": "கூடுதல் மொழி {index}",
+          "selectLanguage": "மொழியைத் தேர்ந்தெடுக்கவும்"
+        },
+        "options": {
+          "mapProvider": {
+            "googleMaps": "Google Maps",
+            "hereMaps": "Here Maps",
+            "openStreetMap": "OpenStreetMap"
+          },
+          "timeFormat": {
+            "h12": "12 மணிநேரம் (AM/PM)",
+            "h24": "24 மணிநேரம்"
+          },
+          "distanceUnit": {
+            "km": "கிலோமீட்டர்கள்",
+            "mile": "மைல்கள்"
+          },
+          "speedUnit": {
+            "kmh": "கி.மீ/மணி",
+            "mph": "மைல்/மணி"
+          },
+          "fuelUnit": {
+            "litre": "லிட்டர்",
+            "gallon": "கேலன்"
+          },
+          "temperature": {
+            "celsius": "செல்சியஸ்",
+            "fahrenheit": "பாரன்ஹீட்"
+          },
+          "addressDisplay": {
+            "show": "முகவரியைக் காட்டு",
+            "hide": "முகவரியை மறை"
+          },
+          "language": {
+            "en": "ஆங்கிலம் (English)",
+            "es": "ஸ்பானிஷ் (Spanish)",
+            "fr": "பிரஞ்சு (French)",
+            "de": "ஜெர்மன் (German)",
+            "hi": "இந்தி (Hindi)",
+            "te": "தெலுங்கு (Telugu)",
+            "ta": "தமிழ் (Tamil)",
+            "kn": "கன்னடம் (Kannada)"
+          }
+        },
+        "toast": {
+          "accountRequired": "தயவுசெய்து செல்லுபடியாகும் கணக்கு ஐடியை உள்ளிடவும்",
+          "updated": "கட்டமைப்பு வெற்றிகரமாக புதுப்பிக்கப்பட்டது!",
+          "created": "கட்டமைப்பு வெற்றிகரமாக உருவாக்கப்பட்டது!",
+          "saveFailed": "சேமிப்பதில் தோல்வி: {message}",
+          "saveError": "சேமிக்கும் போது பிழை ஏற்பட்டது",
+          "loadFailed": "கட்டமைப்பை ஏற்றுவதில் தோல்வி"
+        }
+      }
+    }
+  }
+}

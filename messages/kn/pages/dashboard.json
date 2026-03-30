@@ -1,0 +1,64 @@
+{
+  "pages": {
+    "dashboard": {
+      "metrics": {
+        "totalCustomers": "ಒಟ್ಟು ಗ್ರಾಹಕರು",
+        "dealersDistributors": "ಡೀಲರ್‌ಗಳು ಮತ್ತು ವಿತರಕರು",
+        "totalDevices": "ಒಟ್ಟು ಸಾಧನಗಳು",
+        "activeSubscriptions": "ಸಕ್ರಿಯ ಚಂದಾದಾರಿಕೆಗಳು"
+      },
+      "sections": {
+        "revenueSummary": "ಆದಾಯದ ಸಾರಾಂಶ",
+        "deviceStatus": "ಸಾಧನದ ಸ್ಥಿತಿ",
+        "recentAlerts": "ಇತ್ತೀಚಿನ ಎಚ್ಚರಿಕೆಗಳು",
+        "serverHealth": "ಸರ್ವರ್ ಆರೋಗ್ಯ"
+      },
+      "revenue": {
+        "months": {
+          "jan": "ಜನವರಿ",
+          "feb": "ಫೆಬ್ರವರಿ",
+          "mar": "ಮಾರ್ಚ್",
+          "apr": "ಏಪ್ರಿಲ್",
+          "may": "ಮೇ",
+          "jun": "ಜೂನ್",
+          "jul": "ಜುಲೈ"
+        }
+      },
+      "deviceStatus": {
+        "installed": "ಅಳವಡಿಸಲಾಗಿದೆ",
+        "available": "ಲಭ್ಯವಿದೆ",
+        "faulty": "ದೋಷಪೂರಿತ",
+        "returned": "ಹಿಂದಿರುಗಿಸಲಾಗಿದೆ"
+      },
+      "alerts": {
+        "cpuHigh": {
+          "title": "ಸರ್ವರ್-01 ರಲ್ಲಿ ಹೆಚ್ಚಿನ CPU ಬಳಕೆ",
+          "time": "2 ನಿಮಿಷಗಳ ಹಿಂದೆ",
+          "severity": "ನಿರ್ಣಾಯಕ"
+        },
+        "dbLimit": {
+          "title": "ಡೇಟಾಬೇಸ್ ಸಂಪರ್ಕ ಮಿತಿ ಸಮೀಪಿಸುತ್ತಿದೆ",
+          "time": "15 ನಿಮಿಷಗಳ ಹಿಂದೆ",
+          "severity": "ಎಚ್ಚರಿಕೆ"
+        },
+        "devicesOffline": {
+          "title": "15 ಸಾಧನಗಳು ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿವೆ ಎಂದು ವರದಿಯಾಗಿದೆ",
+          "time": "30 ನಿಮಿಷಗಳ ಹಿಂದೆ",
+          "severity": "ಮಾಹಿತಿ"
+        }
+      },
+      "serverHealth": {
+        "status": {
+          "operational": "ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತಿದೆ",
+          "outage": "ಸಂಪರ್ಕ ಕಡಿತ"
+        },
+        "services": {
+          "apiServer": "API ಸರ್ವರ್",
+          "databaseCluster": "ಡೇಟಾಬೇಸ್ ಕ್ಲಸ್ಟರ್",
+          "telemetryIngestion": "ಟೆಲಿಮೆಟ್ರಿ ಇಂಜೆಷನ್",
+          "forwardingService": "ಫಾರ್ವರ್ಡಿಂಗ್ ಸೇವೆ"
+        }
+      }
+    }
+  }
+}
