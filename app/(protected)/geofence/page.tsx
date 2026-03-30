@@ -945,32 +945,26 @@ export default function GeofencePage() {
         </div>
 
         <div className="w-full">
-          {loadingZones ? (
-            <div className="px-4 py-2 text-sm text-gray-500">
-              {t("loading")}
-            </div>
-          ) : (
-            <CommonTable
-              columns={columns}
-              data={zones.map((zone) => ({
-                ...zone,
-                identity: zone.displayName,
-              }))}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              showActions={true}
-              searchPlaceholder={t("searchPlaceholder")}
-              rowsPerPageOptions={[5, 10, 25, 50]}
-              pageNo={pageNo}
-              pageSize={pageSize}
-              onPageChange={setPageNo}
-              onPageSizeChange={setPageSize}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              totalRecords={totalRecords}
-              isServerSide={true}
-            />
-          )}
+          <CommonTable
+            columns={columns}
+            data={zones.map((zone) => ({
+              ...zone,
+              identity: zone.displayName,
+            }))}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            showActions={true}
+            searchPlaceholder={t("searchPlaceholder")}
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            pageNo={pageNo}
+            pageSize={pageSize}
+            onPageChange={setPageNo}
+            onPageSizeChange={setPageSize}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            totalRecords={totalRecords}
+            isServerSide={true}
+          />
         </div>
 
         <ConfirmationDialog

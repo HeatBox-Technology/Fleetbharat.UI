@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
@@ -275,9 +276,8 @@ const AddEditVehicleGeofence: React.FC = () => {
   if (fetchingData) {
     return (
       <div className={`${isDark ? "dark" : ""}`}>
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <p className="text-foreground">{t("loadingDetails")}</p>
-        </div>
+        <ActionLoader isVisible={true} text="Loading assignment details..." />
+        <div className="min-h-screen bg-background" />
       </div>
     );
   }
@@ -294,6 +294,10 @@ const AddEditVehicleGeofence: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader
+        isVisible={loading}
+        text={isEditMode ? "Updating assignment..." : "Creating assignment..."}
+      />
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-3 sm:p-4 md:p-6`}
       >

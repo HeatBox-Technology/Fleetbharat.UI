@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import CommonTable from "@/components/CommonTable";
+import ActionLoader from "@/components/ActionLoader";
 import ThemeCustomizer from "@/components/ThemeCustomizer";
 import PageHeader from "@/components/PageHeader";
 import { MetricCard } from "@/components/CommonCard";
@@ -27,6 +28,7 @@ const ManagePlans: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+  const [loading, setLoading] = useState(true);
 
   const columns = [
     {
@@ -96,6 +98,7 @@ const ManagePlans: React.FC = () => {
 
   async function getPlansList() {
     try {
+      setLoading(true);
       const response = await getPlans(pageNo, pageSize, debouncedQuery);
       if (response && response.statusCode === 200) {
         const items = Array.isArray(response?.data?.items)
@@ -115,6 +118,8 @@ const ManagePlans: React.FC = () => {
       // Mock data for now
     } catch (error) {
       toast.error(t("toast.fetchFailed"));
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -185,6 +190,7 @@ const ManagePlans: React.FC = () => {
 
         {/* Table Section - Mobile Optimized */}
         <div className="w-full">
+          <ActionLoader isVisible={loading} text="Loading plans..." />
           <CommonTable
             columns={columns}
             data={data}

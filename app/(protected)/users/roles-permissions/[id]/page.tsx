@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Card } from "@/components/CommonCard";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
@@ -33,6 +34,7 @@ const AddRole: React.FC = () => {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
   const [formData, setFormData] = useState<RoleFormData>({
     account: "",
     roleName: "",
@@ -189,7 +191,7 @@ const AddRole: React.FC = () => {
 
   const fetchRoleData = async (id: string) => {
     try {
-      setLoading(true);
+      setFetchingData(true);
 
       // Get accountId from localStorage
       const accountId = getStoredAccountId();
@@ -250,7 +252,7 @@ const AddRole: React.FC = () => {
       console.error("Error fetching role:", error);
       toast.error(t("toast.loadRoleFailed"));
     } finally {
-      setLoading(false);
+      setFetchingData(false);
     }
   };
 
@@ -408,35 +410,34 @@ const AddRole: React.FC = () => {
   }
 
   useEffect(() => {
-    fetchAllAcounts();
-    fetchAllAForms();
-  }, []);
+    const loadInitialData = async () => {
+      setFetchingData(true);
+      try {
+        await fetchAllAcounts();
+        await fetchAllAForms();
+      } finally {
+        setFetchingData(false);
+      }
+    };
 
-  if (loading && isEditMode && formData.permissions.length === 0) {
-    return (
-      <div className={`${isDark ? "dark" : ""} `}>
-        <div
-          className={`min-h-screen ${isDark ? "bg-background" : "bg-gray-50"} p-6 flex items-center justify-center`}
-        >
-          <div className="text-center">
-            <div
-              className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4"
-              style={{ borderColor: selectedColor }}
-            ></div>
-            <p className={isDark ? "text-gray-400" : "text-gray-600"}>
-              {t("loading")}
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+    loadInitialData();
+  }, []);
 
   return (
     <div className={`${isDark ? "dark" : ""} `}>
       <div
         className={`min-h-screen ${isDark ? "bg-background" : "bg-gray-50"} p-6`}
       >
+        <ActionLoader
+          isVisible={fetchingData || loading}
+          text={
+            fetchingData
+              ? "Loading role details..."
+              : isCreateMode
+                ? "Creating role..."
+                : "Updating role..."
+          }
+        />
         <div className="max-w-7xl mx-auto mb-6">
           <PageHeader
             title={isCreateMode ? t("title.create") : t("title.edit")}

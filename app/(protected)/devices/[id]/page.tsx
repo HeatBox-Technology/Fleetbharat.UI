@@ -1,6 +1,7 @@
 "use client";
 
 import { Card } from "@/components/CommonCard";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
@@ -312,6 +313,10 @@ const ProvisionDevice: React.FC = () => {
   if (pageLoading) {
     return (
       <div className={`${isDark ? "dark" : ""}`}>
+        <ActionLoader
+          isVisible={true}
+          text={isEditMode ? "Loading device..." : "Preparing device form..."}
+        />
         <div
           className={`min-h-screen ${isDark ? "bg-background" : ""} p-6 flex items-center justify-center`}
         >
@@ -331,6 +336,10 @@ const ProvisionDevice: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader
+        isVisible={loading}
+        text={isEditMode ? "Updating device..." : "Saving device..."}
+      />
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-3 sm:p-4 md:p-6`}
       >

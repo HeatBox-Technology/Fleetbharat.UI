@@ -1,5 +1,6 @@
 "use client";
 
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
@@ -41,6 +42,7 @@ const NewConfiguration: React.FC = () => {
   const isEditMode = id && id !== "0";
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
   const [formData, setFormData] = useState({
     accountId: 0,
     mapProvider: "GoogleMaps",
@@ -106,7 +108,7 @@ const NewConfiguration: React.FC = () => {
 
   const fetchConfiguration = async () => {
     try {
-      setLoading(true);
+      setFetchingData(true);
       const response = await getConfigurationById(Number(id));
       if (response.success && response.data) {
         const config = response.data;
@@ -131,7 +133,7 @@ const NewConfiguration: React.FC = () => {
       console.error("Error fetching configuration:", error);
       toast.error(t("toast.loadFailed"));
     } finally {
-      setLoading(false);
+      setFetchingData(false);
     }
   };
 
@@ -229,6 +231,14 @@ const NewConfiguration: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader
+        isVisible={fetchingData}
+        text="Loading configuration details..."
+      />
+      <ActionLoader
+        isVisible={loading}
+        text={isEditMode ? "Updating configuration..." : "Creating configuration..."}
+      />
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-3 sm:p-4 md:p-6`}
       >
@@ -252,7 +262,7 @@ const NewConfiguration: React.FC = () => {
           />
         </div>
 
-        {loading && isEditMode ? (
+        {fetchingData && isEditMode ? (
           <div className="flex items-center justify-center p-8">
             <p>{t("loading.edit")}</p>
           </div>

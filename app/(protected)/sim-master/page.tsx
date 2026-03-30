@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import ActionLoader from "@/components/ActionLoader";
 import CommonTable from "@/components/CommonTable";
 import PageHeader from "@/components/PageHeader";
 import { MetricCard } from "@/components/CommonCard";
@@ -52,6 +53,7 @@ const SimMaster: React.FC = () => {
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [simToDelete, setSimToDelete] = useState<SimItem | null>(null);
+  const [isSimsLoading, setIsSimsLoading] = useState(false);
 
   const getUserAccountIdFromStorage = () => {
     try {
@@ -140,10 +142,12 @@ const SimMaster: React.FC = () => {
         disabled: 0,
         activeCarriers: 0,
       });
+      setIsSimsLoading(false);
       return;
     }
 
     try {
+      setIsSimsLoading(true);
       const response = await getSims(
         pageNo,
         pageSize,
@@ -197,6 +201,8 @@ const SimMaster: React.FC = () => {
     } catch (error) {
       console.error("Error fetching SIMs:", error);
       toast.error(t("toast.loadError"));
+    } finally {
+      setIsSimsLoading(false);
     }
   };
 
@@ -264,6 +270,7 @@ const SimMaster: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader isVisible={isSimsLoading} text="Loading SIMs..." />
       <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-2`}>
         <PageHeader
           title={t("title")}

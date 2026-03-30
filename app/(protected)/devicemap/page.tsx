@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import { MetricCard } from "@/components/CommonCard";
 import CommonTable from "@/components/CommonTable";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
@@ -430,7 +431,7 @@ const DeviceMap: React.FC = () => {
     }
 
     try {
-      if (isInitialLoad) setLoading(true);
+      setLoading(true);
       const nextSyncStatusMap = getDeviceMapSyncStatusMap();
       const requestParams = {
         page: pageNo,
@@ -769,6 +770,7 @@ const DeviceMap: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader isVisible={loading} text="Loading device assignments..." />
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-2 sm:p-0 md:p-2`}
       >
@@ -861,32 +863,26 @@ const DeviceMap: React.FC = () => {
           />
         </div>
 
-        {loading ? (
-          <div className="flex items-center justify-center p-8">
-            <p>{t("loading")}</p>
-          </div>
-        ) : (
-          <CommonTable
-            columns={columns}
-            data={rows}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            showActions={true}
-            searchPlaceholder={t("searchPlaceholder")}
-            rowsPerPageOptions={[10, 25, 50, 100]}
-            defaultRowsPerPage={10}
-            pageNo={pageNo}
-            pageSize={pageSize}
-            onPageChange={setPageNo}
-            onPageSizeChange={(size) => {
-              setPageSize(size);
-              setPageNo(1);
-            }}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            totalRecords={totalRecords}
-          />
-        )}
+        <CommonTable
+          columns={columns}
+          data={rows}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          showActions={true}
+          searchPlaceholder={t("searchPlaceholder")}
+          rowsPerPageOptions={[10, 25, 50, 100]}
+          defaultRowsPerPage={10}
+          pageNo={pageNo}
+          pageSize={pageSize}
+          onPageChange={setPageNo}
+          onPageSizeChange={(size) => {
+            setPageSize(size);
+            setPageNo(1);
+          }}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          totalRecords={totalRecords}
+        />
 
         <ConfirmationDialog
           isOpen={isDeleteDialogOpen}

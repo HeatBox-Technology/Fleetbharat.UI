@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Cpu, Link2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
@@ -498,9 +499,8 @@ const AddEditDeviceMap: React.FC = () => {
   if (fetchingData) {
     return (
       <div className={`${isDark ? "dark" : ""} `}>
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <p className="text-foreground">{t("loadingDetails")}</p>
-        </div>
+        <ActionLoader isVisible={true} text="Loading assignment details..." />
+        <div className="min-h-screen bg-background" />
       </div>
     );
   }
@@ -519,6 +519,10 @@ const AddEditDeviceMap: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader
+        isVisible={loading}
+        text={isEditMode ? "Updating assignment..." : "Creating assignment..."}
+      />
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-3 sm:p-4 md:p-6`}
       >

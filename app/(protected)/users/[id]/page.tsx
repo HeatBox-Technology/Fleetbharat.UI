@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Card } from "@/components/CommonCard";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
 import ThemeCustomizer from "@/components/ThemeCustomizer";
@@ -60,6 +61,7 @@ const CreateUser: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>("profile");
   const [isEditMode, setIsEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
   const [formData, setFormData] = useState<UserFormData>({
     accountName: "",
     accountCode: "",
@@ -337,7 +339,7 @@ const CreateUser: React.FC = () => {
 
   const fetchUserData = async (userId: string) => {
     try {
-      setLoading(true);
+      setFetchingData(true);
       const response = await getUserById(userId);
 
       if (response && response.statusCode === 200) {
@@ -404,7 +406,7 @@ const CreateUser: React.FC = () => {
       console.error("Error fetching user:", error);
       toast.error(t("toast.loadUserFailed"));
     } finally {
-      setLoading(false);
+      setFetchingData(false);
     }
   };
 
@@ -557,31 +559,21 @@ const CreateUser: React.FC = () => {
     { id: "security" as TabType, label: t("tabs.security") },
   ];
 
-  if (loading && isEditMode && !formData.emailAddress) {
-    return (
-      <div className={`${isDark ? "dark" : ""}  sm:`}>
-        <div
-          className={`min-h-screen ${isDark ? "bg-background" : "bg-gray-50"} p-3 sm:p-4 md:p-6 flex items-center justify-center`}
-        >
-          <div className="text-center">
-            <div
-              className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4"
-              style={{ borderColor: selectedColor }}
-            ></div>
-            <p className={isDark ? "text-gray-400" : "text-gray-600"}>
-              {t("loading.userData")}
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className={`${isDark ? "dark" : ""}  sm:`}>
       <div
         className={`min-h-screen ${isDark ? "bg-background" : "bg-gray-50"} p-3 sm:p-4 md:p-6`}
       >
+        <ActionLoader
+          isVisible={fetchingData || loading}
+          text={
+            fetchingData
+              ? "Loading user details..."
+              : isCreateMode
+                ? "Creating user..."
+                : "Updating user..."
+          }
+        />
         <div className="max-w-7xl mx-auto mb-4 sm:mb-6">
           <PageHeader
             title={isCreateMode ? t("title.create") : t("title.edit")}

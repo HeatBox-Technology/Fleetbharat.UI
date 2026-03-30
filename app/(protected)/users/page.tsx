@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import CommonTable from "@/components/CommonTable";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import { MetricCard } from "@/components/CommonCard";
 import { useTheme } from "@/context/ThemeContext";
@@ -24,6 +25,7 @@ const Users: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<UserItem[]>([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [summaryData, setSummaryData] = useState({
@@ -110,6 +112,7 @@ const Users: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
+      setLoading(true);
       const response = await getUsers(pageNo, pageSize, debouncedQuery);
       if (response && response.statusCode === 200) {
         setSummaryData(response.data.summary);
@@ -120,6 +123,8 @@ const Users: React.FC = () => {
       }
     } catch (error) {
       console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -258,6 +263,7 @@ const Users: React.FC = () => {
         </div>
 
         {/* Table */}
+        <ActionLoader isVisible={loading} text="Loading users..." />
         <CommonTable
           columns={columns}
           data={data}

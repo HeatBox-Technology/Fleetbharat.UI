@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import CommonTable from "@/components/CommonTable";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useTheme } from "@/context/ThemeContext";
@@ -72,7 +73,7 @@ const WhiteLabelPage: React.FC = () => {
   // Fetch White Labels Data
   const fetchWhiteLabels = async () => {
     try {
-      if (isInitialLoad) setLoading(true);
+      setLoading(true);
       const response = await getWhiteLabels(pageNo, pageSize, debouncedQuery);
 
       if (response.success && response.data) {
@@ -142,6 +143,7 @@ const WhiteLabelPage: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader isVisible={loading} text="Loading white labels..." />
       <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-2`}>
         <PageHeader
           title={t("title")}
@@ -156,32 +158,24 @@ const WhiteLabelPage: React.FC = () => {
         />
 
         {/* Table */}
-        {loading ? (
-          <div className="flex items-center justify-center p-8">
-            <p className={isDark ? "text-foreground" : "text-gray-900"}>
-              {t("loading")}
-            </p>
-          </div>
-        ) : (
-          <CommonTable
-            columns={columns}
-            data={data}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            showActions={true}
-            searchPlaceholder={t("searchPlaceholder")}
-            rowsPerPageOptions={[10, 25, 50, 100]}
-            defaultRowsPerPage={10}
-            variant="simple"
-            pageNo={pageNo}
-            pageSize={pageSize}
-            totalRecords={totalRecords}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
-        )}
+        <CommonTable
+          columns={columns}
+          data={data}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          showActions={true}
+          searchPlaceholder={t("searchPlaceholder")}
+          rowsPerPageOptions={[10, 25, 50, 100]}
+          defaultRowsPerPage={10}
+          variant="simple"
+          pageNo={pageNo}
+          pageSize={pageSize}
+          totalRecords={totalRecords}
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
 
         {/* Confirmation Dialog */}
         <ConfirmationDialog

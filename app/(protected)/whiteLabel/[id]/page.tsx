@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
@@ -106,6 +107,7 @@ const ProvisionBranding: React.FC = () => {
   const [primaryRgb, setPrimaryRgb] = useState({ r: 79, g: 70, b: 229 });
   const [secondaryRgb, setSecondaryRgb] = useState({ r: 255, g: 255, b: 255 });
   const [loading, setLoading] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
   const [accounts, setAccounts] = useState<{ id: number; value: string }[]>([]);
   const accountOptions = accounts.map((account) => ({
     value: account.id,
@@ -123,7 +125,7 @@ const ProvisionBranding: React.FC = () => {
 
   const fetchWhiteLabelData = async () => {
     try {
-      setLoading(true);
+      setFetchingData(true);
       const response = await getWhiteLabelById(whiteLabelId);
 
       if (response.success && response.data) {
@@ -167,7 +169,7 @@ const ProvisionBranding: React.FC = () => {
       console.error("Error fetching white label:", error);
       toast.error(t("toast.loadFailed"));
     } finally {
-      setLoading(false);
+      setFetchingData(false);
     }
   };
 
@@ -433,9 +435,10 @@ const ProvisionBranding: React.FC = () => {
     fetchAllAcounts();
   }, []);
 
-  if (loading && isEditMode) {
+  if (fetchingData && isEditMode) {
     return (
       <div className={`${isDark ? "dark" : ""}`}>
+        <ActionLoader isVisible={true} text="Loading white label details..." />
         <div
           className={`min-h-screen ${isDark ? "bg-background" : "bg-gray-50"} p-6 flex items-center justify-center`}
         >
@@ -449,6 +452,10 @@ const ProvisionBranding: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""}`}>
+      <ActionLoader
+        isVisible={loading}
+        text={isEditMode ? "Updating white label..." : "Creating white label..."}
+      />
       <div className={`min-h-screen ${isDark ? "bg-background" : "bg-gray-50"} p-6`}>
         <div className="max-w-7xl mx-auto mb-6">
           <PageHeader

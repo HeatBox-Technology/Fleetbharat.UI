@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import ActionLoader from "@/components/ActionLoader";
 import CommonTable from "@/components/CommonTable";
 import PageHeader from "@/components/PageHeader";
 import { MetricCard } from "@/components/CommonCard";
@@ -67,6 +68,7 @@ const Vehicles: React.FC = () => {
   const [selectedAccountId, setSelectedAccountId] = useState<number | null>(
     null,
   );
+  const [isVehiclesLoading, setIsVehiclesLoading] = useState(false);
   const columns = [
     {
       key: "registrationNumber",
@@ -200,10 +202,12 @@ const Vehicles: React.FC = () => {
         offRoadOrOutOfService: 0,
         activeAccounts: 0,
       });
+      setIsVehiclesLoading(false);
       return;
     }
 
     try {
+      setIsVehiclesLoading(true);
       const response = await getVehicles(
         pageNo,
         pageSize,
@@ -243,6 +247,8 @@ const Vehicles: React.FC = () => {
     } catch (error) {
       console.error("Error fetching vehicles:", error);
       toast.error(t("toast.loadError"));
+    } finally {
+      setIsVehiclesLoading(false);
     }
   };
 
@@ -318,6 +324,7 @@ const Vehicles: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader isVisible={isVehiclesLoading} text="Loading vehicles..." />
       <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-2`}>
         <PageHeader
           title={t("title")}

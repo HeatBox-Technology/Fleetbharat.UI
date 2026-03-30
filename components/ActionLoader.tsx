@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useColor } from "@/context/ColorContext";
 
 interface ActionLoaderProps {
   isVisible: boolean;
@@ -11,33 +12,36 @@ const segmentIndexes = Array.from({ length: 12 }, (_, index) => index);
 
 const ActionLoader: React.FC<ActionLoaderProps> = ({
   isVisible,
-  text = "Saving geofence...",
+  text = "Processing...",
 }) => {
+  const { selectedColor } = useColor();
+
   if (!isVisible) return null;
 
   return (
     <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/35 backdrop-blur-[1px]">
-      <div className="rounded-2xl dark:bg-gray-900 shadow-xl px-8 py-6 flex flex-col items-center gap-4">
-        <div className="relative w-16 h-16">
+      <div
+        className="rounded-2xl px-8 py-6 flex flex-col items-center gap-4 "
+        style={{ borderColor: `${selectedColor}33` }}
+      >
+        <div className="relative w-16 h-16 flex items-center justify-center">
           {segmentIndexes.map((index) => (
             <span
               key={index}
-              className="absolute left-1/2 top-1/2 w-1.5 h-4 -ml-[3px] -mt-8 rounded-full bg-gray-300 dark:bg-gray-600 geofence-loader-segment"
+              className="absolute w-1.5 h-4 rounded-full geofence-loader-segment"
               style={{
                 transform: `rotate(${index * 30}deg) translateY(-20px)`,
                 animationDelay: `${index * 0.08}s`,
+                backgroundColor: selectedColor,
               }}
             />
           ))}
         </div>
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
-          {text}
-        </p>
       </div>
 
       <style jsx>{`
         .geofence-loader-segment {
-          transform-origin: center 32px;
+          transform-origin: center 20px;
           animation: geofence-spin-fade 1s linear infinite;
         }
 

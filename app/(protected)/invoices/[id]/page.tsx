@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
 import { useTheme } from "@/context/ThemeContext";
@@ -198,6 +199,10 @@ const AddInvoicePage = () => {
       <div
         className={`min-h-screen ${isDark ? "bg-background" : "bg-gray-50"} p-6`}
       >
+        <ActionLoader
+          isVisible={loadingDropdowns || loading}
+          text={loadingDropdowns ? "Loading invoice form..." : "Saving invoice..."}
+        />
         <div className="max-w-7xl mx-auto mb-6">
           <PageHeader
             title={isAddMode ? t("title.add") : t("title.edit")}

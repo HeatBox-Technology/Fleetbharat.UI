@@ -7,6 +7,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { MetricCard } from "@/components/CommonCard";
 import CommonTable from "@/components/CommonTable";
+import ActionLoader from "@/components/ActionLoader";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import PageHeader from "@/components/PageHeader";
 import { useTheme } from "@/context/ThemeContext";
@@ -72,6 +73,7 @@ const DeviceCategoriesPage: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [loading, setLoading] = useState(true);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<DeviceCategoryRow | null>(
     null,
@@ -81,6 +83,12 @@ const DeviceCategoriesPage: React.FC = () => {
     const timer = setTimeout(() => setDebouncedQuery(searchQuery), 300);
     return () => clearTimeout(timer);
   }, [searchQuery]);
+
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 150);
+    return () => clearTimeout(timer);
+  }, [debouncedQuery, pageNo, pageSize, rows]);
 
   const filteredRows = useMemo(() => {
     const term = debouncedQuery.trim().toLowerCase();
@@ -190,6 +198,7 @@ const DeviceCategoriesPage: React.FC = () => {
           />
         </div>
 
+        <ActionLoader isVisible={loading} text="Loading device categories..." />
         <CommonTable
           columns={columns}
           data={filteredRows}

@@ -35,6 +35,7 @@ import {
   Currency,
   FormModule,
 } from "@/interfaces/plan.interface";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
 
@@ -116,6 +117,7 @@ const PlansManagement = () => {
   const [loadingDropdowns, setLoadingDropdowns] = useState(true);
 
   const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     type: "success" | "error" | null;
     message: string;
@@ -408,7 +410,7 @@ const PlansManagement = () => {
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
+    setIsSubmitting(true);
     setSubmitStatus({ type: null, message: "" });
 
     // Get selected solution IDs
@@ -478,7 +480,7 @@ const PlansManagement = () => {
         message: t("status.saveError"),
       });
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -525,6 +527,18 @@ const PlansManagement = () => {
       <div
         className={`min-h-screen ${isDark ? "bg-background" : "bg-gray-50"} p-6`}
       >
+        <ActionLoader
+          isVisible={loadingDropdowns || loading || isSubmitting}
+          text={
+            loadingDropdowns
+              ? "Loading plan form..."
+              : loading
+                ? "Loading plan details..."
+                : isEditMode
+                  ? "Updating plan..."
+                  : "Creating plan..."
+          }
+        />
         <div className="max-w-7xl mx-auto mb-6">
           <PageHeader
             title={isEditMode ? t("title.edit") : t("title.create")}
@@ -535,10 +549,14 @@ const PlansManagement = () => {
             ]}
             showButton
             buttonText={
-              loading ? t("buttons.saving") : isEditMode ? t("buttons.update") : t("buttons.create")
+              isSubmitting
+                ? t("buttons.saving")
+                : isEditMode
+                  ? t("buttons.update")
+                  : t("buttons.create")
             }
             onButtonClick={() => {
-              if (!loading && !loadingDropdowns) {
+              if (!isSubmitting && !loading && !loadingDropdowns) {
                 handleSubmit();
               }
             }}

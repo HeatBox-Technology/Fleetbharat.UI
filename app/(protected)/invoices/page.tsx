@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "react-toastify";
 import CommonTable from "@/components/CommonTable";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import { useTheme } from "@/context/ThemeContext";
 import { exportInvoices, getInvoices } from "@/services/invoiceService";
@@ -22,6 +23,7 @@ const Invoices: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+  const [loading, setLoading] = useState(true);
   const [loadingExport, setLoadingExport] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
 
@@ -110,6 +112,7 @@ const Invoices: React.FC = () => {
 
   async function getInvoicesList() {
     try {
+      setLoading(true);
       const response = await getInvoices(pageNo, pageSize, debouncedQuery);
       if (response && response.statusCode === 200) {
         const items = Array.isArray(response?.data?.items)
@@ -140,6 +143,8 @@ const Invoices: React.FC = () => {
       }
     } catch (error) {
       toast.error(t("toast.fetchFailed"));
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -175,6 +180,7 @@ const Invoices: React.FC = () => {
         </div>
 
         <div className="w-full">
+          <ActionLoader isVisible={loading} text="Loading invoices..." />
           <CommonTable
             columns={columns}
             data={data}

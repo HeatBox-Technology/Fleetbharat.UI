@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Card } from "@/components/CommonCard";
+import ActionLoader from "@/components/ActionLoader";
 import { useTheme } from "@/context/ThemeContext";
 import { useColor } from "@/context/ColorContext";
 import { useRouter, useParams } from "next/navigation";
@@ -30,12 +31,16 @@ const ServiceVendorForm: React.FC = () => {
     description: "",
     isEnabled: true,
   });
+  const [loading, setLoading] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
 
   useEffect(() => {
     if (isEditMode) {
+      setFetchingData(true);
       // In a real application, fetch the vendor data here:
       // fetchVendorById(params.id).then(data => setFormData(data));
       console.log("Fetching details for Service Vendor ID:", params.id);
+      setFetchingData(false);
     }
   }, [isEditMode, params.id]);
 
@@ -60,6 +65,7 @@ const ServiceVendorForm: React.FC = () => {
     }
 
     try {
+      setLoading(true);
       console.log("Submitting Service Vendor:", formData);
       
       // Example Service Call:
@@ -69,12 +75,24 @@ const ServiceVendorForm: React.FC = () => {
       router.push("/service-vendors");
     } catch (error) {
       toast.error("An error occurred while saving the record.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
       <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-6`}>
+        <ActionLoader
+          isVisible={fetchingData || loading}
+          text={
+            fetchingData
+              ? "Loading service vendor details..."
+              : isEditMode
+                ? "Updating service vendor..."
+                : "Creating service vendor..."
+          }
+        />
         
         {/* Header Section */}
         <div className="max-w-4xl mx-auto mb-6">

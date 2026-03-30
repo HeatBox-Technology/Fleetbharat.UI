@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import CommonTable from "@/components/CommonTable";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import PageHeader from "@/components/PageHeader";
@@ -50,7 +51,7 @@ const ConfigurationPage: React.FC = () => {
 
   const fetchConfigurations = async () => {
     try {
-      if (isInitialLoad) setLoading(true);
+      setLoading(true);
       const response = await getConfigurations(pageNo, pageSize, debouncedQuery);
       if (response.success) {
         setConfigurations(response.data?.items || []);
@@ -119,6 +120,7 @@ const ConfigurationPage: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader isVisible={loading} text="Loading configurations..." />
       <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-2`}>
         <PageHeader
           title={t("title")}
@@ -132,31 +134,23 @@ const ConfigurationPage: React.FC = () => {
           buttonRoute="/configuration/0"
         />
 
-        {loading ? (
-          <div className="flex items-center justify-center p-8">
-            <p className={isDark ? "text-foreground" : "text-gray-900"}>
-              {t("loading")}
-            </p>
-          </div>
-        ) : (
-          <CommonTable
-            columns={columns}
-            data={configurations}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            showActions={true}
-            searchPlaceholder={t("searchPlaceholder")}
-            rowsPerPageOptions={[10, 25, 50, 100]}
-            defaultRowsPerPage={10}
-            pageNo={pageNo}
-            pageSize={pageSize}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            totalRecords={totalRecords}
-          />
-        )}
+        <CommonTable
+          columns={columns}
+          data={configurations}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          showActions={true}
+          searchPlaceholder={t("searchPlaceholder")}
+          rowsPerPageOptions={[10, 25, 50, 100]}
+          defaultRowsPerPage={10}
+          pageNo={pageNo}
+          pageSize={pageSize}
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          totalRecords={totalRecords}
+        />
 
         {/* Confirmation Dialog */}
         <ConfirmationDialog

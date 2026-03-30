@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
@@ -220,6 +221,7 @@ const AddEditDriver: React.FC = () => {
   if (fetchingData) {
     return (
       <div className={`${isDark ? "dark" : ""}`}>
+        <ActionLoader isVisible={true} text="Loading driver details..." />
         <div className="min-h-screen bg-background flex items-center justify-center">
           <p className="text-foreground">{t("loading")}</p>
         </div>
@@ -229,6 +231,10 @@ const AddEditDriver: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""}`}>
+      <ActionLoader
+        isVisible={loading}
+        text={isEditMode ? "Updating driver..." : "Creating driver..."}
+      />
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-2 mt-10`}
       >

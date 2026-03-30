@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import CommonTable from "@/components/CommonTable";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import { MetricCard } from "@/components/CommonCard";
 import { useTheme } from "@/context/ThemeContext";
@@ -23,6 +24,7 @@ const Roles: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+  const [loading, setLoading] = useState(true);
 
   const [summary, setSummary] = useState({
     totalRoles: 0,
@@ -101,12 +103,17 @@ const Roles: React.FC = () => {
   };
 
   async function fetchRoles() {
-    const response = await getRoles(pageNo, pageSize, debouncedQuery);
-    if (response && response.statusCode === 200) {
-      setSummary(response.data.summary);
-      setData(response.data.roles.items);
-      setTotalRecords(response.data.roles.totalRecords);
-    } else toast.error(response.message);
+    try {
+      setLoading(true);
+      const response = await getRoles(pageNo, pageSize, debouncedQuery);
+      if (response && response.statusCode === 200) {
+        setSummary(response.data.summary);
+        setData(response.data.roles.items);
+        setTotalRecords(response.data.roles.totalRecords);
+      } else toast.error(response.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -166,6 +173,7 @@ const Roles: React.FC = () => {
         </div>
 
         {/* Table */}
+        <ActionLoader isVisible={loading} text="Loading roles and permissions..." />
         <CommonTable
           columns={columns}
           data={data}

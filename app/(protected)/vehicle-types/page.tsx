@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import CommonTable from "@/components/CommonTable";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import { MetricCard } from "@/components/CommonCard";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
@@ -41,6 +42,7 @@ const VehicleTypes: React.FC = () => {
     inactive: 0,
   });
   const [data, setData] = useState<VehicleTypeRow[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const columns = [
     {
@@ -161,35 +163,42 @@ const VehicleTypes: React.FC = () => {
   };
 
   const fetchVehicleTypes = async () => {
-    const response = await getVehicleTypes();
+    setLoading(true);
+    try {
+      const response = await getVehicleTypes();
 
-    if (Array.isArray(response)) {
-      const mapped = response.map(mapVehicleTypeToRow);
-      setData(mapped);
-      setTotalRecords(mapped.length);
-      setCardCounts({
-        total: mapped.length,
-        active: mapped.filter((m) => m.status).length,
-        pending: mapped.filter((m) => !m.status).length,
-        inactive: mapped.filter((m) => !m.status).length,
-      });
-      return;
+      if (Array.isArray(response)) {
+        const mapped = response.map(mapVehicleTypeToRow);
+        setData(mapped);
+        setTotalRecords(mapped.length);
+        setCardCounts({
+          total: mapped.length,
+          active: mapped.filter((m) => m.status).length,
+          pending: mapped.filter((m) => !m.status).length,
+          inactive: mapped.filter((m) => !m.status).length,
+        });
+        return;
+      }
+
+      if (response?.success && Array.isArray(response?.data)) {
+        const mapped = response.data.map(mapVehicleTypeToRow);
+        setData(mapped);
+        setTotalRecords(mapped.length);
+        setCardCounts({
+          total: mapped.length,
+          active: mapped.filter((m:any) => m.status).length,
+          pending: mapped.filter((m:any) => !m.status).length,
+          inactive: mapped.filter((m:any) => !m.status).length,
+        });
+        return;
+      }
+
+      toast.error(response?.message || "Failed to load vehicle types");
+    } catch (error) {
+      toast.error("Failed to load vehicle types");
+    } finally {
+      setLoading(false);
     }
-
-    if (response?.success && Array.isArray(response?.data)) {
-      const mapped = response.data.map(mapVehicleTypeToRow);
-      setData(mapped);
-      setTotalRecords(mapped.length);
-      setCardCounts({
-        total: mapped.length,
-        active: mapped.filter((m:any) => m.status).length,
-        pending: mapped.filter((m:any) => !m.status).length,
-        inactive: mapped.filter((m:any) => !m.status).length,
-      });
-      return;
-    }
-
-    toast.error(response?.message || "Failed to load vehicle types");
   };
 
   const handleEdit = (row: VehicleTypeRow) => {
@@ -291,6 +300,7 @@ const VehicleTypes: React.FC = () => {
         </div>
 
         <div className="w-full">
+          <ActionLoader isVisible={loading} text="Loading vehicle types..." />
           <CommonTable
             columns={columns}
             data={data}

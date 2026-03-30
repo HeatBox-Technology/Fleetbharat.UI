@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Card } from "@/components/CommonCard";
+import ActionLoader from "@/components/ActionLoader";
 import SearchableDropdown from "@/components/SearchableDropdown";
 import { useTheme } from "@/context/ThemeContext";
 import { useColor } from "@/context/ColorContext";
@@ -44,6 +45,8 @@ const ManufacturerForm: React.FC = () => {
   });
   const [initialFormData, setInitialFormData] =
     useState<OemManufacturerFormData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
 
   const [countries, setCountries] = useState<Country[]>([]);
   const countryOptions = countries.map((country) => ({
@@ -55,12 +58,15 @@ const ManufacturerForm: React.FC = () => {
   useEffect(() => {
     async function fetchCountries() {
       try {
+        setFetchingData(true);
         const response = await getCountries();
         if (response && Array.isArray(response)) {
           setCountries(response);
         }
       } catch (error) {
         console.error("Error fetching countries:", error);
+      } finally {
+        setFetchingData(false);
       }
     }
     fetchCountries();
@@ -68,6 +74,7 @@ const ManufacturerForm: React.FC = () => {
     if (isEditMode) {
       (async () => {
         try {
+          setFetchingData(true);
           const response = await getOemManufactureById(manufacturerId);
           const manufacturer: OemManufacturer | null =
             response?.data?.manufacturer ||
@@ -97,6 +104,8 @@ const ManufacturerForm: React.FC = () => {
           setInitialFormData(normalizedData);
         } catch (error) {
           toast.error("Failed to load manufacturer details.");
+        } finally {
+          setFetchingData(false);
         }
       })();
     }
@@ -149,6 +158,7 @@ const ManufacturerForm: React.FC = () => {
     }
 
     try {
+      setLoading(true);
       let response;
 
       if (isEditMode) {
@@ -196,12 +206,24 @@ const ManufacturerForm: React.FC = () => {
       toast.error(response?.message || "Failed to save manufacturer.");
     } catch (error) {
       toast.error("An error occurred while saving the record.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
       <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-6`}>
+        <ActionLoader
+          isVisible={fetchingData || loading}
+          text={
+            fetchingData
+              ? "Loading manufacturer details..."
+              : isEditMode
+                ? "Updating manufacturer..."
+                : "Creating manufacturer..."
+          }
+        />
         {/* Header */}
         <div className="max-w-5xl mx-auto mb-6">
           <div className="flex flex-col">

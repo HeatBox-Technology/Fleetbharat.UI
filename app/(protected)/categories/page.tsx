@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import ActionLoader from "@/components/ActionLoader";
 import CommonTable from "@/components/CommonTable";
 import ThemeCustomizer from "@/components/ThemeCustomizer";
 import PageHeader from "@/components/PageHeader";
@@ -65,7 +66,7 @@ const Categories: React.FC = () => {
 
   const fetchCategories = async () => {
     try {
-      if (isInitialLoad) setLoading(true);
+      setLoading(true);
       const response = await getCategories(pageNo, pageSize, debouncedQuery);
       if (response.success) {
         const pageData = response.data;
@@ -172,6 +173,7 @@ const Categories: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader isVisible={loading} text="Loading categories..." />
       <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-2`}>
         <PageHeader
           title={t("title")}
@@ -187,30 +189,24 @@ const Categories: React.FC = () => {
         />
 
         {/* Table */}
-        {loading ? (
-          <div className="flex items-center justify-center p-8">
-            <p>{t("loading")}</p>
-          </div>
-        ) : (
-          <CommonTable
-            columns={columns}
-            data={categories}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            showActions={true}
-            searchPlaceholder={t("searchPlaceholder")}
-            rowsPerPageOptions={[10, 25, 50, 100]}
-            defaultRowsPerPage={10}
-            pageNo={pageNo}
-            pageSize={pageSize}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            totalRecords={totalRecords}
-            isServerSide={true}
-          />
-        )}
+        <CommonTable
+          columns={columns}
+          data={categories}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          showActions={true}
+          searchPlaceholder={t("searchPlaceholder")}
+          rowsPerPageOptions={[10, 25, 50, 100]}
+          defaultRowsPerPage={10}
+          pageNo={pageNo}
+          pageSize={pageSize}
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          totalRecords={totalRecords}
+          isServerSide={true}
+        />
 
         {/* Confirmation Dialog */}
         <ConfirmationDialog

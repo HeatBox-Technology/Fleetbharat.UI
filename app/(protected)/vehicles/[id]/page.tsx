@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import { Card } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
@@ -358,25 +359,21 @@ const ProvisionVehicle: React.FC = () => {
   if (pageLoading) {
     return (
       <div className={`${isDark ? "dark" : ""}`}>
-        <div
-          className={`min-h-screen ${isDark ? "bg-background" : ""} p-6 flex items-center justify-center`}
-        >
-          <div className="text-center">
-            <div
-              className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4"
-              style={{ borderColor: selectedColor }}
-            ></div>
-            <p className={isDark ? "text-gray-400" : "text-gray-600"}>
-              {isEditMode ? t("loading.edit") : t("loading.create")}
-            </p>
-          </div>
-        </div>
+        <ActionLoader
+          isVisible={true}
+          text={isEditMode ? "Loading vehicle details..." : "Preparing vehicle form..."}
+        />
+        <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-6`} />
       </div>
     );
   }
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader
+        isVisible={loading}
+        text={isEditMode ? "Updating vehicle..." : "Saving vehicle..."}
+      />
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-3 sm:p-4 md:p-6`}
       >

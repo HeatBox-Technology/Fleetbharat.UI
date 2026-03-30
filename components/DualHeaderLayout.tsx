@@ -38,7 +38,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   HeaderClasses,
   SidebarClasses,
@@ -104,10 +104,20 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
   const [brandLogoUrl, setBrandLogoUrl] = useState<string>("");
   const [isBrandLogoError, setIsBrandLogoError] = useState(false);
   const [locale, setLocale] = useState(activeLocale);
+  const [globalSearchInput, setGlobalSearchInput] = useState<string>("");
+  const [globalSearchQuery, setGlobalSearchQuery] = useState<string>("");
 
   useEffect(() => {
     setLocale(activeLocale);
   }, [activeLocale]);
+
+  useEffect(() => {
+    const debounceTimer = window.setTimeout(() => {
+      setGlobalSearchQuery(globalSearchInput);
+    }, 350);
+
+    return () => window.clearTimeout(debounceTimer);
+  }, [globalSearchInput]);
 
   const handleLocaleChange = (nextLocale: string) => {
     setLocale(nextLocale);
@@ -631,6 +641,51 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
     };
   };
 
+  const visibleSections = useMemo(() => {
+    const query = globalSearchQuery.trim().toLowerCase();
+    if (!query) return filteredSections;
+
+    return filteredSections
+      .map((section) => {
+        const items = section.items
+          .map((item) => {
+            if (!item.expandable) {
+              const matchesItem =
+                item.label.toLowerCase().includes(query) ||
+                String(item.path || "")
+                  .toLowerCase()
+                  .includes(query);
+              return matchesItem ? item : null;
+            }
+
+            const matchingChildren =
+              item.children?.filter(
+                (child) =>
+                  child.label.toLowerCase().includes(query) ||
+                  child.path.toLowerCase().includes(query),
+              ) || [];
+
+            const matchesParent = item.label.toLowerCase().includes(query);
+
+            if (!matchesParent && matchingChildren.length === 0) {
+              return null;
+            }
+
+            return {
+              ...item,
+              children: matchesParent ? item.children : matchingChildren,
+            };
+          })
+          .filter(Boolean) as SidebarSection["items"];
+
+        return {
+          ...section,
+          items,
+        };
+      })
+      .filter((section) => section.items.length > 0);
+  }, [filteredSections, globalSearchQuery]);
+
   const getTopNavHeaderClasses = (): HeaderClasses => {
     if (isDark) {
       return {
@@ -662,7 +717,7 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
     };
   };
 
-  const TopNavHeader: React.FC = () => {
+  const renderTopNavHeader = () => {
     const headerClasses = getTopNavHeaderClasses();
     return (
       <div className={isDark ? "dark" : ""}>
@@ -704,7 +759,7 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                     Loading...
                   </div>
                 ) : (
-                  filteredSections.map((section) =>
+                  visibleSections.map((section) =>
                     section.items.map((item) => {
                       if (item.expandable) {
                         return (
@@ -775,6 +830,8 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                 <input
                   type="text"
                   placeholder="Search..."
+                  value={globalSearchInput}
+                  onChange={(e) => setGlobalSearchInput(e.target.value)}
                   className={`pl-10 pr-4 py-2 border ${headerClasses.inputBorder} ${headerClasses.inputText} rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary w-40 md:w-64`}
                 />
               </div>
@@ -891,7 +948,7 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const SidebarHeader: React.FC = () => {
+  const renderSidebarHeader = () => {
     const sidebarClasses = getSidebarClasses();
 
     const headerBg = isDark ? "bg-card" : "bg-white";
@@ -962,6 +1019,8 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
               <input
                 type="text"
                 placeholder="Search..."
+                value={globalSearchInput}
+                onChange={(e) => setGlobalSearchInput(e.target.value)}
                 className={`pl-10 pr-4 py-2 border ${headerInputBorder} ${headerInputText} ${headerInputPlaceholder} rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary w-40 md:w-64 ${isDark ? "bg-card" : "bg-white"}`}
               />
             </div>
@@ -1132,7 +1191,7 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                 </div>
               </div>
             ) : (
-              filteredSections.map((section, index) => (
+              visibleSections.map((section, index) => (
                 <div key={index} className="mb-6">
                   {isOpen && (
                     <h3
@@ -1144,7 +1203,9 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                   <nav className="space-y-1">
                     {section.items.map((item) => {
                       const IconComponent = item.icon;
-                      const isExpanded = expandedMenus.includes(item.id);
+                      const forceExpand = Boolean(globalSearchQuery.trim());
+                      const isExpanded =
+                        forceExpand || expandedMenus.includes(item.id);
                       const isItemSelected = selectedItemId === item.id;
 
                       return (
@@ -1301,7 +1362,7 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
     <div
       className={`${isDark ? "dark" : ""} bg-background min-h-screen overflow-hidden flex flex-col`}
     >
-      {menuLayout === "topnav" ? <TopNavHeader /> : <SidebarHeader />}
+      {menuLayout === "topnav" ? renderTopNavHeader() : renderSidebarHeader()}
 
       <MobileSidebarOverlay />
 

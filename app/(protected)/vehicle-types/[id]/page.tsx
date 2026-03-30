@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Card } from "@/components/CommonCard";
+import ActionLoader from "@/components/ActionLoader";
 import { useTheme } from "@/context/ThemeContext";
 import { useColor } from "@/context/ColorContext";
 import { useRouter, useParams } from "next/navigation";
@@ -115,6 +116,8 @@ const VehicleTypeForm: React.FC = () => {
     description: "",
     isEnabled: true,
   });
+  const [loading, setLoading] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
 
   const resolveIconSet = (item: VehicleType): string => {
     const vehicleIcon = String(item.defaultVehicleIcon || "").toLowerCase();
@@ -130,31 +133,36 @@ const VehicleTypeForm: React.FC = () => {
   useEffect(() => {
     if (!isEditMode) return;
     (async () => {
-      const response = await getVehicleTypeById(vehicleTypeId);
-      const item: VehicleType | null =
-        (response?.data as VehicleType) ||
-        (response as VehicleType) ||
-        null;
+      setFetchingData(true);
+      try {
+        const response = await getVehicleTypeById(vehicleTypeId);
+        const item: VehicleType | null =
+          (response?.data as VehicleType) ||
+          (response as VehicleType) ||
+          null;
 
-      if (!item || typeof item !== "object") {
-        toast.error(response?.message || "Failed to load vehicle type details.");
-        return;
+        if (!item || typeof item !== "object") {
+          toast.error(response?.message || "Failed to load vehicle type details.");
+          return;
+        }
+
+        setFormData((prev) => ({
+          ...prev,
+          code: item.vehicleTypeName || "",
+          displayName: item.vehicleTypeName || "",
+          speedLimit: Number(item.defaultSpeedLimit || 60),
+          idleThreshold: Number(item.defaultIdleThreshold || 180),
+          tankCapacity: Number(item.tankCapacity || 50),
+          iconSet: resolveIconSet(item),
+          description: "",
+          isEnabled:
+            ["true", "active", "enabled"].includes(
+              String(item.status || "").trim().toLowerCase(),
+            ),
+        }));
+      } finally {
+        setFetchingData(false);
       }
-
-      setFormData((prev) => ({
-        ...prev,
-        code: item.vehicleTypeName || "",
-        displayName: item.vehicleTypeName || "",
-        speedLimit: Number(item.defaultSpeedLimit || 60),
-        idleThreshold: Number(item.defaultIdleThreshold || 180),
-        tankCapacity: Number(item.tankCapacity || 50),
-        iconSet: resolveIconSet(item),
-        description: "",
-        isEnabled:
-          ["true", "active", "enabled"].includes(
-            String(item.status || "").trim().toLowerCase(),
-          ),
-      }));
     })();
   }, [isEditMode, vehicleTypeId]);
 
@@ -196,24 +204,29 @@ const VehicleTypeForm: React.FC = () => {
       status: formData.isEnabled ? "Active" : "Inactive",
     };
 
-    const response = isEditMode
-      ? await updateVehicleTypeById(vehicleTypeId, payload)
-      : await saveVehicleType(payload);
+    setLoading(true);
+    try {
+      const response = isEditMode
+        ? await updateVehicleTypeById(vehicleTypeId, payload)
+        : await saveVehicleType(payload);
 
-    if (
-      response?.success ||
-      Number(response?.id || 0) > 0 ||
-      Number(response?.data?.id || 0) > 0 ||
-      response?.statusCode === 200 ||
-      response?.statusCode === 201 ||
-      response?.statusCode === 204
-    ) {
-      toast.success(response?.message || "Vehicle Type committed successfully!");
-      router.push("/vehicle-types");
-      return;
+      if (
+        response?.success ||
+        Number(response?.id || 0) > 0 ||
+        Number(response?.data?.id || 0) > 0 ||
+        response?.statusCode === 200 ||
+        response?.statusCode === 201 ||
+        response?.statusCode === 204
+      ) {
+        toast.success(response?.message || "Vehicle Type committed successfully!");
+        router.push("/vehicle-types");
+        return;
+      }
+
+      toast.error(response?.message || "Failed to save vehicle type.");
+    } finally {
+      setLoading(false);
     }
-
-    toast.error(response?.message || "Failed to save vehicle type.");
   };
 
   const getActiveIcon = () => {
@@ -226,6 +239,16 @@ const VehicleTypeForm: React.FC = () => {
   return (
     <div className={`${isDark ? "dark text-foreground" : "text-gray-900"} mt-10 pb-20`}>
       <div className="max-w-4xl mx-auto p-6 space-y-6">
+        <ActionLoader
+          isVisible={fetchingData || loading}
+          text={
+            fetchingData
+              ? "Loading vehicle type details..."
+              : isEditMode
+                ? "Updating vehicle type..."
+                : "Creating vehicle type..."
+          }
+        />
         <div className="mb-6">
           <h1 className="text-2xl font-bold">{isEditMode ? "Edit Record" : "Create Record"}</h1>
           <p className="text-sm opacity-60">Vehicle Types Master Entity</p>

@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "react-toastify";
 import { MetricCard } from "@/components/CommonCard";
 import CommonTable from "@/components/CommonTable";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import { useTheme } from "@/context/ThemeContext";
 import { getSubscriptions } from "@/services/subscriptionService";
@@ -24,6 +25,7 @@ const Subscriptions: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+  const [loading, setLoading] = useState(true);
   const [totalRecords, setTotalRecords] = useState(0);
   const [summary, setSummary] = useState({
     total: 0,
@@ -77,6 +79,7 @@ const Subscriptions: React.FC = () => {
 
   async function getSubscriptionsList() {
     try {
+      setLoading(true);
       const response = await getSubscriptions(pageNo, pageSize, debouncedQuery);
       if (response && response.statusCode === 200) {
         const items = Array.isArray(response?.data?.items)
@@ -122,6 +125,8 @@ const Subscriptions: React.FC = () => {
       }
     } catch (error) {
       toast.error(t("toast.fetchFailed"));
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -189,6 +194,7 @@ const Subscriptions: React.FC = () => {
         </div>
 
         <div className="w-full">
+          <ActionLoader isVisible={loading} text="Loading subscriptions..." />
           <CommonTable
             columns={columns}
             data={data}

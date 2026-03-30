@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import { useTheme } from "@/context/ThemeContext";
 import { getAccountHierarchy } from "@/services/accountService";
@@ -168,6 +169,10 @@ const AddSubscriptionPage = () => {
       <div
         className={`min-h-screen ${isDark ? "bg-background" : "bg-gray-50"} p-6`}
       >
+        <ActionLoader
+          isVisible={loadingDropdowns || loading}
+          text={loadingDropdowns ? "Loading subscription form..." : "Saving subscription..."}
+        />
         <div className="max-w-7xl mx-auto mb-6">
           <PageHeader
             title={isAddMode ? t("title.add") : t("title.edit")}

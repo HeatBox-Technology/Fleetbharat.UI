@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
@@ -164,15 +165,18 @@ const AddEditFormMasterPage: React.FC = () => {
   if (fetchingData) {
     return (
       <div className={`${isDark ? "dark" : ""}`}>
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <p className="text-foreground">{t("loading")}</p>
-        </div>
+        <ActionLoader isVisible={true} text="Loading form details..." />
+        <div className="min-h-screen bg-background" />
       </div>
     );
   }
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader
+        isVisible={loading}
+        text={isEditMode ? "Updating form..." : "Creating form..."}
+      />
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-3 sm:p-4 md:p-6`}
       >

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import { useTheme } from "@/context/ThemeContext";
 import HierarchicalTable from "@/components/HierarchicalTable";
 import PageHeader from "@/components/PageHeader";
@@ -96,11 +97,12 @@ const Hierarchy: React.FC = () => {
   };
 
   return (
-    <div className={`${isDark ? "dark" : ""}`}>
+    <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader isVisible={loading} text="Loading hierarchy..." />
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-6`}
       >
-        <div className="max-w-7xl mx-auto mb-6">
+        <div className="mx-auto mb-6">
           <PageHeader
             title={t("title")}
             subtitle={t("subtitle")}
@@ -113,20 +115,14 @@ const Hierarchy: React.FC = () => {
           />
         </div>
 
-        <div className="max-w-7xl mx-auto">
-          {loading ? (
-            <div className="flex items-center justify-center p-8">
-              <p>{t("loading")}</p>
-            </div>
-          ) : (
-            <HierarchicalTable
-              title={t("table.title")}
-              subtitle={t("table.subtitle")}
-              data={hierarchyData}
-              onEdit={handleEdit}
-              showSearch={true}
-            />
-          )}
+        <div className="mx-auto">
+          <HierarchicalTable
+            title={t("table.title")}
+            subtitle={t("table.subtitle")}
+            data={hierarchyData}
+            onEdit={handleEdit}
+            showSearch={true}
+          />
         </div>
       </div>
     </div>

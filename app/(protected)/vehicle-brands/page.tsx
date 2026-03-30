@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import CommonTable from "@/components/CommonTable";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import { MetricCard } from "@/components/CommonCard";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
@@ -20,6 +21,7 @@ const VehicleBrands :  React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+  const [loading, setLoading] = useState(true);
   const [totalRecords, setTotalRecords] = useState(0);
   const [accountsRight, setAccountRights] = useState<FormRights | null>(null);
 
@@ -101,15 +103,20 @@ const VehicleBrands :  React.FC = () => {
   };
 
   async function getAccountsList() {
-    const response = await getAccounts(pageNo, pageSize, debouncedQuery);
+    try {
+      setLoading(true);
+      const response = await getAccounts(pageNo, pageSize, debouncedQuery);
 
-    if (response && response.statusCode === 200) {
-      const pageData = response.data.pageData;
-      setData(pageData.items);
-      setTotalRecords(pageData.totalRecords);
-      setCardCounts(response.data.cardCounts);
-    } else {
-      toast.error(response?.message ?? "Failed to load accounts");
+      if (response && response.statusCode === 200) {
+        const pageData = response.data.pageData;
+        setData(pageData.items);
+        setTotalRecords(pageData.totalRecords);
+        setCardCounts(response.data.cardCounts);
+      } else {
+        toast.error(response?.message ?? "Failed to load accounts");
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -202,6 +209,7 @@ const VehicleBrands :  React.FC = () => {
 
         {/* Table Section */}
         <div className="w-full">
+          <ActionLoader isVisible={loading} text="Loading vehicle brands..." />
           <CommonTable
             columns={columns}
             data={data}

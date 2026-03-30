@@ -1,6 +1,7 @@
 "use client";
 
 import { Card } from "@/components/CommonCard";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
@@ -75,6 +76,7 @@ const AddEditDeviceCategoryPage: React.FC = () => {
 
   const [formData, setFormData] = useState<DeviceCategoryForm>(INITIAL_FORM);
   const [loading, setLoading] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
   const protocolOptions = [
     { value: "TCP", label: "TCP" },
     { value: "HTTP", label: "HTTP" },
@@ -83,13 +85,16 @@ const AddEditDeviceCategoryPage: React.FC = () => {
 
   useEffect(() => {
     if (!isEditMode) return;
+    setFetchingData(true);
     const existing = STATIC_CATEGORY_MAP[id];
     if (!existing) {
       toast.error(t("toast.notFound"));
       router.push("/device-categories");
+      setFetchingData(false);
       return;
     }
     setFormData(existing);
+    setFetchingData(false);
   }, [id, isEditMode, router]);
 
   const hasAccess = isEditMode ? canUpdate : canWrite;
@@ -151,6 +156,16 @@ const AddEditDeviceCategoryPage: React.FC = () => {
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-3 sm:p-4 md:p-6`}
       >
+        <ActionLoader
+          isVisible={fetchingData || loading}
+          text={
+            fetchingData
+              ? "Loading device category details..."
+              : isEditMode
+                ? "Updating device category..."
+                : "Creating device category..."
+          }
+        />
         <PageHeader
           title={isEditMode ? t("title.edit") : t("title.create")}
           subtitle={isEditMode ? t("subtitle.edit") : t("subtitle.create")}

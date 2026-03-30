@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import { MetricCard } from "@/components/CommonCard";
 import CommonTable from "@/components/CommonTable";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
@@ -30,6 +31,7 @@ const Accounts: React.FC = () => {
   const [accountToDelete, setAccountToDelete] = useState<AccountData | null>(
     null,
   );
+  const [isAccountsLoading, setIsAccountsLoading] = useState(false);
 
   const [cardCounts, setCardCounts] = useState({
     total: 0,
@@ -118,15 +120,20 @@ const Accounts: React.FC = () => {
   };
 
   async function getAccountsList() {
-    const response = await getAccounts(pageNo, pageSize, debouncedQuery);
+    try {
+      setIsAccountsLoading(true);
+      const response = await getAccounts(pageNo, pageSize, debouncedQuery);
 
-    if (response && response.statusCode === 200) {
-      const pageData = response.data.pageData;
-      setData(pageData.items);
-      setTotalRecords(pageData.totalRecords);
-      setCardCounts(response.data.cardCounts);
-    } else {
-      toast.error(response?.message ?? t("toast.loadFailed"));
+      if (response && response.statusCode === 200) {
+        const pageData = response.data.pageData;
+        setData(pageData.items);
+        setTotalRecords(pageData.totalRecords);
+        setCardCounts(response.data.cardCounts);
+      } else {
+        toast.error(response?.message ?? t("toast.loadFailed"));
+      }
+    } finally {
+      setIsAccountsLoading(false);
     }
   }
 
@@ -173,6 +180,7 @@ const Accounts: React.FC = () => {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader isVisible={isAccountsLoading} text="Loading accounts..." />
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-2 sm:p-0 md:p-2`}
       >

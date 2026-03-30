@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import { Card } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
 import SearchableDropdown from "@/components/SearchableDropdown";
@@ -157,6 +158,7 @@ const EditAccount: React.FC = () => {
   const [states, setStates] = useState<State[]>([]);
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(!isCreateMode);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [defaultSuperiorAccountId, setDefaultSuperiorAccountId] = useState("");
   const superiorOptions = accounts.map((account) => ({
     value: String(account.id),
@@ -316,50 +318,60 @@ const EditAccount: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     try {
       // Validate required fields
       if (!formData.accountName) {
         toast.error(t("toast.accountNameRequired"));
+        setIsSubmitting(false);
         return;
       }
 
       if (!formData.categoryId) {
         toast.error(t("toast.categoryRequired"));
+        setIsSubmitting(false);
         return;
       }
 
       if (!formData.primaryDomain) {
         toast.error(t("toast.primaryDomainRequired"));
+        setIsSubmitting(false);
         return;
       }
 
       if (!formData.businessEmail) {
         toast.error(t("toast.businessEmailRequired"));
+        setIsSubmitting(false);
         return;
       }
 
       if (!formData.businessAddress) {
         toast.error(t("toast.businessAddressRequired"));
+        setIsSubmitting(false);
         return;
       }
 
       if (!formData.businessTimeZone) {
         toast.error(t("toast.businessTimeZoneRequired"));
+        setIsSubmitting(false);
         return;
       }
 
       if (!formData.countryId) {
         toast.error(t("toast.countryRequired"));
+        setIsSubmitting(false);
         return;
       }
 
       if (!formData.stateId) {
         toast.error(t("toast.stateRequired"));
+        setIsSubmitting(false);
         return;
       }
 
       if (!formData.cityId) {
         toast.error(t("toast.cityRequired"));
+        setIsSubmitting(false);
         return;
       }
 
@@ -427,6 +439,8 @@ const EditAccount: React.FC = () => {
     } catch (error) {
       console.error("Error while saving account:", error);
       toast.error(t("toast.submitError"));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -593,22 +607,21 @@ const EditAccount: React.FC = () => {
   if (loading) {
     return (
       <div className={`${isDark ? "dark" : ""} `}>
-        <div
-          className={`min-h-screen ${isDark ? "bg-background" : "bg-gray-50"} p-6 flex items-center justify-center`}
-        >
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
-            <p className={isDark ? "text-gray-400" : "text-gray-600"}>
-              {t("loading")}
-            </p>
-          </div>
-        </div>
+        <ActionLoader
+          isVisible={true}
+          text={isCreateMode ? "Preparing account form..." : "Loading account details..."}
+        />
+        <div className={`min-h-screen ${isDark ? "bg-background" : "bg-gray-50"} p-6`} />
       </div>
     );
   }
 
   return (
     <div className={`${isDark ? "dark" : ""} `}>
+      <ActionLoader
+        isVisible={isSubmitting}
+        text={isCreateMode ? "Creating account..." : "Updating account..."}
+      />
       <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-6`}>
         <div className="max-w-7xl mx-auto mb-6">
           <PageHeader

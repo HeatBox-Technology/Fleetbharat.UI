@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Card } from "@/components/CommonCard";
+import ActionLoader from "@/components/ActionLoader";
 import { useTheme } from "@/context/ThemeContext";
 import { useColor } from "@/context/ColorContext";
 import { useRouter, useParams } from "next/navigation";
@@ -30,11 +31,15 @@ const VehicleBrandForm: React.FC = () => {
     description: "",
     isEnabled: true,
   });
+  const [loading, setLoading] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
 
   useEffect(() => {
     if (isEditMode) {
+      setFetchingData(true);
       // Fetch existing Vehicle Brand data if needed
       console.log("Fetching details for Vehicle Brand ID:", params.id);
+      setFetchingData(false);
     }
   }, [isEditMode, params.id]);
 
@@ -59,6 +64,7 @@ const VehicleBrandForm: React.FC = () => {
     }
 
     try {
+      setLoading(true);
       console.log("Submitting Vehicle Brand Entry:", formData);
       
       // Replace with your service call, e.g.:
@@ -68,12 +74,24 @@ const VehicleBrandForm: React.FC = () => {
       router.push("/vehicle-brands");
     } catch (error) {
       toast.error("An error occurred while saving the record.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
       <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-6`}>
+        <ActionLoader
+          isVisible={fetchingData || loading}
+          text={
+            fetchingData
+              ? "Loading vehicle brand details..."
+              : isEditMode
+                ? "Updating vehicle brand..."
+                : "Creating vehicle brand..."
+          }
+        />
         
         {/* Header */}
         <div className="max-w-4xl mx-auto mb-6">

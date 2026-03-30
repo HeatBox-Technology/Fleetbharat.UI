@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Card } from "@/components/CommonCard";
+import ActionLoader from "@/components/ActionLoader";
 import { useTheme } from "@/context/ThemeContext";
 import { useColor } from "@/context/ColorContext";
 import { useRouter, useParams } from "next/navigation";
@@ -30,11 +31,15 @@ const NetworkProviderForm: React.FC = () => {
     description: "",
     isEnabled: true,
   });
+  const [loading, setLoading] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
 
   useEffect(() => {
     if (isEditMode) {
+      setFetchingData(true);
       // Logic to fetch existing Network Provider data goes here
       console.log("Fetching details for Network Provider ID:", params.id);
+      setFetchingData(false);
     }
   }, [isEditMode, params.id]);
 
@@ -59,6 +64,7 @@ const NetworkProviderForm: React.FC = () => {
     }
 
     try {
+      setLoading(true);
       console.log("Submitting Network Provider Entry:", formData);
       
       // Call your specific service here:
@@ -68,12 +74,24 @@ const NetworkProviderForm: React.FC = () => {
       router.push("/network-providers");
     } catch (error) {
       toast.error("An error occurred while saving the record.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
       <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-6`}>
+        <ActionLoader
+          isVisible={fetchingData || loading}
+          text={
+            fetchingData
+              ? "Loading network provider details..."
+              : isEditMode
+                ? "Updating network provider..."
+                : "Creating network provider..."
+          }
+        />
         
         {/* Header Section */}
         <div className="max-w-4xl mx-auto mb-6">

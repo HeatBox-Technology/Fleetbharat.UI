@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import CommonTable from "@/components/CommonTable";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import { MetricCard } from "@/components/CommonCard";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
@@ -29,6 +30,7 @@ const Manufacturers: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+  const [loading, setLoading] = useState(true);
   const [totalRecords, setTotalRecords] = useState(0);
   const [manufacturersRight, setManufacturersRight] = useState<FormRights | null>(null);
 
@@ -172,52 +174,57 @@ const Manufacturers: React.FC = () => {
   };
 
   async function getManufacturersList() {
-    const response = await getOemManufacturers(pageNo, pageSize, debouncedQuery);
+    try {
+      setLoading(true);
+      const response = await getOemManufacturers(pageNo, pageSize, debouncedQuery);
 
-    if (response && response.statusCode === 200) {
-      const listData =
-        response?.data?.pageData ||
-        response?.data?.manufacturers ||
-        response?.data ||
-        ({} as OemManufacturerPageData);
-      const items: OemManufacturer[] = Array.isArray(listData?.items)
-        ? (listData.items as OemManufacturer[])
-        : Array.isArray(response?.data?.items)
-          ? (response.data.items as OemManufacturer[])
-          : Array.isArray(response?.data)
-            ? (response.data as OemManufacturer[])
-            : [];
+      if (response && response.statusCode === 200) {
+        const listData =
+          response?.data?.pageData ||
+          response?.data?.manufacturers ||
+          response?.data ||
+          ({} as OemManufacturerPageData);
+        const items: OemManufacturer[] = Array.isArray(listData?.items)
+          ? (listData.items as OemManufacturer[])
+          : Array.isArray(response?.data?.items)
+            ? (response.data.items as OemManufacturer[])
+            : Array.isArray(response?.data)
+              ? (response.data as OemManufacturer[])
+              : [];
 
-      const mappedRows: OemManufacturerRow[] = items.map((item) => ({
-        id: item.id,
-        code: item.code || "-",
-        name: item.displayName || "-",
-        reach: {
-          website: item.officialWebsite || "",
-          email: item.supportEmail || "",
-        },
-        status: Boolean(item.isEnabled),
-        lastUpdated: item.updatedAt || item.createdAt || "",
-      }));
+        const mappedRows: OemManufacturerRow[] = items.map((item) => ({
+          id: item.id,
+          code: item.code || "-",
+          name: item.displayName || "-",
+          reach: {
+            website: item.officialWebsite || "",
+            email: item.supportEmail || "",
+          },
+          status: Boolean(item.isEnabled),
+          lastUpdated: item.updatedAt || item.createdAt || "",
+        }));
 
-      setData(mappedRows);
-      setTotalRecords(
-        Number(
-          listData?.totalRecords ??
-            response?.data?.totalRecords ??
-            mappedRows.length,
-        ),
-      );
-      setCardCounts(
-        response?.data?.cardCounts || {
-          total: mappedRows.length,
-          active: mappedRows.filter((row) => row.status).length,
-          pending: mappedRows.filter((row) => !row.status).length,
-          inactive: mappedRows.filter((row) => !row.status).length,
-        },
-      );
-    } else {
-      toast.error(response?.message ?? "Failed to load manufacturers");
+        setData(mappedRows);
+        setTotalRecords(
+          Number(
+            listData?.totalRecords ??
+              response?.data?.totalRecords ??
+              mappedRows.length,
+          ),
+        );
+        setCardCounts(
+          response?.data?.cardCounts || {
+            total: mappedRows.length,
+            active: mappedRows.filter((row) => row.status).length,
+            pending: mappedRows.filter((row) => !row.status).length,
+            inactive: mappedRows.filter((row) => !row.status).length,
+          },
+        );
+      } else {
+        toast.error(response?.message ?? "Failed to load manufacturers");
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -313,6 +320,7 @@ const Manufacturers: React.FC = () => {
 
         {/* Table Section */}
         <div className="w-full">
+          <ActionLoader isVisible={loading} text="Loading manufacturers..." />
           <CommonTable
             columns={columns}
             data={data}
