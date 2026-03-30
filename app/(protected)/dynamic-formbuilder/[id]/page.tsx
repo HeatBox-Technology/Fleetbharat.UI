@@ -610,7 +610,11 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
                         ? "bg-gray-900/40 border-gray-700"
                         : "bg-white border-gray-200"
                     }`}
-                    style={isSelected ? { ringColor: selectedColor } : {}}
+                    style={
+                      isSelected
+                        ? { boxShadow: `0 0 0 2px ${selectedColor}` }
+                        : undefined
+                    }
                   >
                     <div className="flex items-start justify-between gap-2 mb-2">
                       <p className="text-sm font-semibold text-foreground">

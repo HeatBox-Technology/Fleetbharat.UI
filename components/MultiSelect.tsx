@@ -29,7 +29,6 @@ const MultiSelect = ({
   const [search, setSearch] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (
@@ -56,56 +55,75 @@ const MultiSelect = ({
     opt.label.toLowerCase().includes(search.toLowerCase()),
   );
 
+  const handleToggleOpen = () => {
+    if (!isDisabled) {
+      setOpen((current) => !current);
+    }
+  };
+
   return (
     <div ref={containerRef} className="relative w-full">
-      {/* Control */}
       <div
-        onClick={() => !isDisabled && setOpen(!open)}
-        className={`min-h-[42px] px-3 py-2 flex flex-wrap gap-2 items-center rounded-lg border cursor-pointer
-        ${isDisabled ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-        border-indigo-500`}
+        onClick={handleToggleOpen}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleToggleOpen();
+          }
+        }}
+        role="combobox"
+        tabIndex={isDisabled ? -1 : 0}
+        aria-disabled={isDisabled}
+        aria-expanded={open}
+        aria-haspopup="listbox"
+        className={`min-h-[52px] rounded-2xl border px-3 py-2 ${
+          isDisabled
+            ? "cursor-not-allowed bg-gray-100"
+            : "cursor-pointer bg-white"
+        } flex items-center border-slate-200 shadow-sm transition focus-within:border-violet-400`}
       >
-        {value.length === 0 && (
-          <span className="text-gray-400">{placeholder}</span>
-        )}
+        <div className="flex max-h-[72px] min-h-[28px] w-full flex-wrap items-center gap-2 overflow-y-auto pr-1">
+          {value.length === 0 && (
+            <span className="self-center text-gray-400">{placeholder}</span>
+          )}
 
-        {value.map((item) => (
-          <span
-            key={item.value}
-            className="flex items-center gap-1 px-2 py-1 text-sm rounded-md bg-indigo-500 text-white"
-          >
-            {item.label}
-            {!isDisabled && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onChange(value.filter((v) => v.value !== item.value));
-                }}
-              >
-                ✕
-              </button>
-            )}
-          </span>
-        ))}
+          {value.map((item) => (
+            <span
+              key={item.value}
+              className="flex max-w-full items-center gap-1 rounded-md bg-indigo-500 px-2 py-1 text-sm text-white"
+            >
+              <span className="truncate">{item.label}</span>
+              {!isDisabled && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onChange(value.filter((v) => v.value !== item.value));
+                  }}
+                  className="leading-none"
+                >
+                  x
+                </button>
+              )}
+            </span>
+          ))}
+        </div>
       </div>
 
-      {/* Dropdown */}
       {open && !isDisabled && (
-        <div className="absolute z-10 mt-1 w-full rounded-lg border bg-white shadow-md">
-          {/* Search */}
-          <div className="flex items-center gap-2 px-3 py-2 border-b">
+        <div className="absolute z-20 mt-2 w-full rounded-2xl border border-slate-200 bg-white shadow-xl">
+          <div className="flex items-center gap-2 border-b px-3 py-2">
             <Search size={16} className="text-gray-400" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={searchPlaceholder}
-              className="w-full outline-none text-sm"
+              className="w-full text-sm outline-none"
             />
           </div>
 
-          {/* Options */}
-          <div className="max-h-52 overflow-auto">
+          <div className="max-h-64 overflow-auto">
             {filteredOptions.length === 0 && (
               <p className="px-3 py-2 text-sm text-gray-400">
                 No options found
@@ -118,7 +136,7 @@ const MultiSelect = ({
               return (
                 <label
                   key={option.value}
-                  className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-indigo-50"
+                  className="flex cursor-pointer items-center gap-3 px-3 py-2 hover:bg-indigo-50"
                 >
                   <input
                     type="checkbox"
