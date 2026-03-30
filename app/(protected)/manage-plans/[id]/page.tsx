@@ -1127,7 +1127,9 @@ const PlansManagement = () => {
 
                 {loadingDropdowns ? (
                   <div className="flex items-center justify-center py-8">
-                    <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                    <p className={`${isDark ? "text-gray-400" : "text-gray-600"} text-sm`}>
+                      Loading modules...
+                    </p>
                   </div>
                 ) : formModules.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

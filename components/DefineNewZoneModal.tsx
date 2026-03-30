@@ -497,7 +497,7 @@ const DefineNewZoneModal: React.FC<Props> = ({
                 </GoogleMap>
               ) : (
                 <div className="h-48 flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500" />
+                  <p className="text-sm text-muted-foreground">Loading map...</p>
                 </div>
               )}
             </div>

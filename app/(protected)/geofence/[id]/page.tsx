@@ -35,11 +35,7 @@ import {
 
 const GeofenceMap = dynamic(() => import("@/components/GeofenceMap"), {
   ssr: false,
-  loading: () => (
-    <div className="flex items-center justify-center h-full">
-      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500" />
-    </div>
-  ),
+  loading: () => <ActionLoader isVisible={true} text="Loading map..." />,
 });
 
 const MapLocationPicker = dynamic(() => import("@/components/MapLocationPicker"), {
@@ -574,10 +570,6 @@ export default function GeofenceDetailPage() {
         className={`${isDark ? "dark" : ""} flex items-center justify-center h-screen`}
       >
         <ActionLoader isVisible={true} text="Loading geofence details..." />
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500 mx-auto mb-3" />
-          <p className="text-sm text-gray-400">{t("loadingDetails")}</p>
-        </div>
       </div>
     );
   }
@@ -920,7 +912,7 @@ export default function GeofenceDetailPage() {
                   </>
                 ) : (
                   <div className="flex items-center justify-center h-full">
-                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500" />
+                    <p className="text-sm text-gray-400">{t("loadingDetails")}</p>
                   </div>
                 )}
 

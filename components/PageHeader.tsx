@@ -28,7 +28,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   FilterbuttonText = "Filters",
   onFilterClick,
   showWriteButton = true,
-  showBulkUpload = true,
+  showBulkUpload = false,
   bulkUploadModuleKey,
 }) => {
   const { isDark } = useTheme();

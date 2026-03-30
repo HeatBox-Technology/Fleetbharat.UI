@@ -617,13 +617,13 @@ const EditAccount: React.FC = () => {
   }
 
   return (
-    <div className={`${isDark ? "dark" : ""} `}>
+    <div className={`${isDark ? "dark" : ""} mt-10`}>
       <ActionLoader
         isVisible={isSubmitting}
         text={isCreateMode ? "Creating account..." : "Updating account..."}
       />
       <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-6`}>
-        <div className="max-w-7xl mx-auto mb-6">
+        <div className="mx-auto mb-6">
           <PageHeader
             title={isCreateMode ? t("title.create") : t("title.edit")}
             breadcrumbs={[
@@ -638,7 +638,7 @@ const EditAccount: React.FC = () => {
         </div>
 
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto space-y-6">
+        <div className="mx-auto space-y-6">
           {/* Account Details Section */}
           <Card isDark={isDark}>
             <div className="p-6">
@@ -650,7 +650,7 @@ const EditAccount: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 {/* Account Name */}
-                <div>
+                <div className="min-w-0">
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
@@ -726,7 +726,7 @@ const EditAccount: React.FC = () => {
               <h3
                 className={`text-sm font-medium mb-4 ${isDark ? "text-gray-300" : "text-gray-700"}`}
               >
-                Contact
+                <span className="font-bold">Contact</span>
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Contact Name */}
@@ -757,8 +757,8 @@ const EditAccount: React.FC = () => {
                   >
                     Phone
                   </label>
-                  <div className="flex gap-2">
-                    <div className="w-48 shrink-0">
+                  <div className="flex min-w-0 gap-2">
+                    <div className="w-40 shrink-0 sm:w-48">
                       <SearchableDropdown
                         options={countryCodeOptions}
                         value={
@@ -783,7 +783,7 @@ const EditAccount: React.FC = () => {
                       onChange={handleInputChange}
                       placeholder="Phone"
                       maxLength={10}
-                      className={`flex-1 px-4 py-2.5 rounded-lg border transition-colors ${
+                      className={`min-w-0 flex-1 px-4 py-2.5 rounded-lg border transition-colors ${
                         isDark
                           ? "bg-gray-800 border-gray-700 text-foreground placeholder-gray-500"
                           : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
@@ -793,7 +793,7 @@ const EditAccount: React.FC = () => {
                 </div>
 
                 {/* Position/Designation */}
-                <div>
+                <div className="min-w-0">
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
@@ -962,8 +962,8 @@ const EditAccount: React.FC = () => {
                   >
                     Contact Number
                   </label>
-                  <div className="flex gap-2">
-                    <div className="w-48 shrink-0">
+                  <div className="flex min-w-0 gap-2">
+                    <div className="w-40 shrink-0 sm:w-48">
                       <SearchableDropdown
                         options={countryCodeOptions}
                         value={
@@ -989,7 +989,7 @@ const EditAccount: React.FC = () => {
                       onChange={handleInputChange}
                       placeholder="Business Contact Number"
                       maxLength={10}
-                      className={`flex-1 px-4 py-2.5 rounded-lg border transition-colors ${
+                      className={`min-w-0 flex-1 px-4 py-2.5 rounded-lg border transition-colors ${
                         isDark
                           ? "bg-gray-800 border-gray-700 text-foreground placeholder-gray-500"
                           : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"

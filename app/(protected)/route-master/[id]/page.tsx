@@ -29,6 +29,7 @@ import { toast } from "react-toastify";
 import SearchableDropdown, {
   type SearchableOption,
 } from "@/components/SearchableDropdown";
+import ActionLoader from "@/components/ActionLoader";
 import { useTheme } from "@/context/ThemeContext";
 import { useGoogleMapsSdk } from "@/hooks/useGoogleMapsSdk";
 import type {
@@ -599,6 +600,18 @@ const AddEditRouteMasterPage: React.FC = () => {
 
   return (
     <>
+      <ActionLoader
+        isVisible={fetchingData || loading || previewLoading}
+        text={
+          fetchingData
+            ? "Loading route details..."
+            : loading
+              ? isEditMode
+                ? "Updating route..."
+                : "Creating route..."
+              : "Optimizing route..."
+        }
+      />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Sora:wght@400;600&display=swap');
         
@@ -806,7 +819,7 @@ const AddEditRouteMasterPage: React.FC = () => {
           <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
             {fetchingData ? (
               <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500"></div>
+                <p className={`text-sm ${textLightClass}`}>Loading route details...</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 xl:grid-cols-5 gap-8">
@@ -1174,12 +1187,9 @@ const AddEditRouteMasterPage: React.FC = () => {
                         </div>
                       ) : !isLoaded ? (
                         <div className="h-full flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-cyan-500 mx-auto mb-3"></div>
-                            <p className={`text-sm ${textLightClass}`}>
-                              {t("section.loadingMap")}
-                            </p>
-                          </div>
+                          <p className={`text-sm ${textLightClass}`}>
+                            {t("section.loadingMap")}
+                          </p>
                         </div>
                       ) : directionsResult ? (
                         <GoogleMap

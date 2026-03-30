@@ -317,19 +317,7 @@ const ProvisionDevice: React.FC = () => {
           isVisible={true}
           text={isEditMode ? "Loading device..." : "Preparing device form..."}
         />
-        <div
-          className={`min-h-screen ${isDark ? "bg-background" : ""} p-6 flex items-center justify-center`}
-        >
-          <div className="text-center">
-            <div
-              className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4"
-              style={{ borderColor: selectedColor }}
-            />
-            <p className={isDark ? "text-gray-400" : "text-gray-600"}>
-              {isEditMode ? t("loading.edit") : t("loading.create")}
-            </p>
-          </div>
-        </div>
+        <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-6`} />
       </div>
     );
   }

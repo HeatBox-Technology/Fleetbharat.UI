@@ -809,9 +809,7 @@ export default function GeofencePage() {
                     : "border-gray-300 text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                <RefreshCw
-                  className={`h-3 w-3 ${isSyncing ? "animate-spin" : ""}`}
-                />
+                <RefreshCw className="h-3 w-3" />
                 {isSyncing ? "Syncing" : "Sync"}
               </button>
             )}
@@ -912,7 +910,7 @@ export default function GeofencePage() {
                 : "border-gray-300 text-gray-700 hover:bg-gray-50"
             }`}
           >
-            <RefreshCw className={`h-4 w-4 ${syncingAll ? "animate-spin" : ""}`} />
+            <RefreshCw className="h-4 w-4" />
             {syncingAll ? "Syncing..." : "Sync All Unsynced"}
           </button>
         </div>

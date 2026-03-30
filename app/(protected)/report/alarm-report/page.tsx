@@ -1,20 +1,22 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import MultiSelect, { OptionType } from "@/components/MultiSelect";
+import ActionLoader from "@/components/ActionLoader";
+import { MetricCard } from "@/components/CommonCard";
+import PageHeader from "@/components/PageHeader";
+import { useTheme } from "@/context/ThemeContext";
+import { javaApi } from "@/services/apiService";
+import { getAllAccounts, getVehicleDropdown } from "@/services/commonServie";
 import {
   Activity,
   BellRing,
   Building2,
   CalendarDays,
-  Download,
   Search,
   Shield,
   Truck,
 } from "lucide-react";
-import TableHeader from "@/components/TableHeader";
-import MultiSelect, { OptionType } from "@/components/MultiSelect";
-import { getAllAccounts, getVehicleDropdown } from "@/services/commonServie";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { javaApi } from "@/services/apiService";
 
 type AlarmReportRow = {
   orgId?: number;
@@ -242,6 +244,7 @@ const getSeverityBadgeClassName = (severity: string) => {
 };
 
 const AlarmReportPage = () => {
+  const { isDark } = useTheme();
   const [accounts, setAccounts] = useState<OptionType[]>([]);
   const [selectedAccounts, setSelectedAccounts] = useState<OptionType[]>([]);
   const [vehicles, setVehicles] = useState<OptionType[]>([]);
@@ -688,25 +691,25 @@ const AlarmReportPage = () => {
   });
 
   return (
-    <div className="p-4">
-      <TableHeader
+    <div className="p-4 mt-10">
+      <ActionLoader isVisible={loading} text="Loading alarm report..." />
+      <PageHeader
         title="Alarm Report"
         breadcrumbs={[
           { label: "Operations", href: "/operations" },
           { label: "Reports", href: "/report" },
           { label: "Alarm Report" },
         ]}
+        showButton={true}
+        buttonText={loading ? "Loading..." : "View Report"}
+        onButtonClick={() => {
+          if (!loading) handleViewReport();
+        }}
+        showExportButton={true}
+        ExportbuttonText="Export Excel"
+        onExportClick={handleExport}
+        showFilterButton={false}
       />
-      <div className="mb-4 flex justify-end">
-        <button
-          type="button"
-          onClick={handleExport}
-          className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
-        >
-          <Download className="h-4 w-4" />
-          Export Excel
-        </button>
-      </div>
 
       <div className="mb-6 overflow-visible rounded-[28px] bg-white shadow-[0_18px_40px_rgba(15,23,42,0.12)]">
         <div className="h-1 w-full bg-gradient-to-r from-violet-600 via-sky-500 to-emerald-500" />
@@ -777,71 +780,42 @@ const AlarmReportPage = () => {
               placeholder="End Date & Time"
             />
           </div>
-          <div className="flex h-full items-start pt-[25px]">
-            <button
-              className="h-[52px] w-full min-w-[142px] rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 font-semibold text-white shadow-lg transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60 xl:w-auto"
-              onClick={handleViewReport}
-              disabled={loading}
-            >
-              {loading ? "Loading..." : "View Report"}
-            </button>
-          </div>
         </div>
       </div>
 
-      <div className="mb-6 flex flex-col gap-4 md:flex-row">
-        <div className="flex min-w-[220px] flex-1 items-center gap-4 rounded-2xl bg-white p-6 shadow">
-          <div className="flex items-center justify-center rounded-xl bg-violet-100 p-3">
-            <Activity className="h-7 w-7 text-violet-500" />
-          </div>
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-              Total Alerts
-            </div>
-            <div className="text-2xl font-bold text-gray-900">
-              {totalAlerts}
-            </div>
-          </div>
-        </div>
-        <div className="flex min-w-[220px] flex-1 items-center gap-4 rounded-2xl bg-white p-6 shadow">
-          <div className="flex items-center justify-center rounded-xl bg-green-100 p-3">
-            <Truck className="h-7 w-7 text-green-500" />
-          </div>
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-              Unique Vehicles
-            </div>
-            <div className="text-2xl font-bold text-gray-900">
-              {uniqueVehicles}
-            </div>
-          </div>
-        </div>
-        <div className="flex min-w-[220px] flex-1 items-center gap-4 rounded-2xl bg-white p-6 shadow">
-          <div className="flex items-center justify-center rounded-xl bg-amber-100 p-3">
-            <BellRing className="h-7 w-7 text-amber-500" />
-          </div>
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-              Alert Types
-            </div>
-            <div className="text-2xl font-bold text-gray-900">
-              {uniqueAlertTypes}
-            </div>
-          </div>
-        </div>
-        <div className="flex min-w-[220px] flex-1 items-center gap-4 rounded-2xl bg-white p-6 shadow">
-          <div className="flex items-center justify-center rounded-xl bg-red-100 p-3">
-            <Shield className="h-7 w-7 text-red-500" />
-          </div>
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-              Devices Seen
-            </div>
-            <div className="text-2xl font-bold text-gray-900">
-              {uniqueDevices}
-            </div>
-          </div>
-        </div>
+      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <MetricCard
+          icon={Activity}
+          label="Total Alerts"
+          value={totalAlerts}
+          iconBgColor="bg-purple-100"
+          iconColor="text-purple-600"
+          isDark={isDark}
+        />
+        <MetricCard
+          icon={Truck}
+          label="Unique Vehicles"
+          value={uniqueVehicles}
+          iconBgColor="bg-green-100"
+          iconColor="text-green-600"
+          isDark={isDark}
+        />
+        <MetricCard
+          icon={BellRing}
+          label="Alert Types"
+          value={uniqueAlertTypes}
+          iconBgColor="bg-amber-100"
+          iconColor="text-amber-600"
+          isDark={isDark}
+        />
+        <MetricCard
+          icon={Shield}
+          label="Devices Seen"
+          value={uniqueDevices}
+          iconBgColor="bg-red-100"
+          iconColor="text-red-600"
+          isDark={isDark}
+        />
       </div>
 
       <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
