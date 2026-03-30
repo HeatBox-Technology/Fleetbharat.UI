@@ -327,10 +327,30 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
         },
         {
           id: "report",
-          label: "Report",
+          label: "Reports",
           icon: FileText,
           active: false,
-          path: "/report",
+          expandable: true,
+          children: [
+            {
+              id: "run-report",
+              label: "Run Report",
+              icon: FileText,
+              path: "/report/run-report",
+            },
+            {
+              id: "movement-report",
+              label: "Movement Report",
+              icon: FileText,
+              path: "/report/movement-report",
+            },
+            {
+              id: "alarm-report",
+              label: "Alarm Report",
+              icon: FileText,
+              path: "/report/alarm-report",
+            },
+          ],
         },
       ],
     },
