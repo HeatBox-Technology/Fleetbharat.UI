@@ -25,7 +25,7 @@
           "totalFleetSize": "மொத்த வாகன எண்ணிக்கை",
           "inService": "சேவையில் உள்ளவை",
           "offRoadOutOfService": "பழுது / சேவையில் இல்லாதவை",
-          "activeAccounts": "செயலில் உள்ள கணக்குகள்"
+          "activeVehicles": "செயலில் உள்ள வாகனங்கள்"
         },
         "fallback": {
           "unknown": "தெரியவில்லை",

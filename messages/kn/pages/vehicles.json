@@ -25,7 +25,7 @@
           "totalFleetSize": "ಒಟ್ಟು ಫ್ಲೀಟ್ ಗಾತ್ರ",
           "inService": "ಸೇವೆಯಲ್ಲಿದೆ",
           "offRoadOutOfService": "ದುರಸ್ತಿಯಲ್ಲಿದೆ / ಸೇವೆಯಲ್ಲಿಲ್ಲ",
-          "activeAccounts": "ಸಕ್ರಿಯ ಖಾತೆಗಳು"
+          "activeVehicles": "ಸಕ್ರಿಯ ವಾಹನಗಳು"
         },
         "fallback": {
           "unknown": "ತಿಳಿದಿಲ್ಲ",

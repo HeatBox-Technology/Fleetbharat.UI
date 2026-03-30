@@ -25,7 +25,7 @@
           "totalFleetSize": "कुल फ्लीट आकार",
           "inService": "सेवा में",
           "offRoadOutOfService": "ऑफ-रोड / सेवा से बाहर",
-          "activeAccounts": "सक्रिय अकाउंट"
+          "activeVehicles": "सक्रिय वाहन"
         },
         "fallback": {
           "unknown": "अज्ञात",

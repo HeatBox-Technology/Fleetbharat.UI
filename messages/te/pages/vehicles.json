@@ -25,7 +25,7 @@
           "totalFleetSize": "మొత్తం ఫ్లీట్ పరిమాణం",
           "inService": "సేవలో ఉన్నవి",
           "offRoadOutOfService": "ఆఫ్-రోడ్ / సేవలో లేనివి",
-          "activeAccounts": "యాక్టివ్ ఖాతాలు"
+          "activeVehicles": "యాక్టివ్ వాహనాలు"
         },
         "fallback": {
           "unknown": "తెలియదు",
