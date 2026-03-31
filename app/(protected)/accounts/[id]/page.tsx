@@ -327,14 +327,44 @@ const EditAccount: React.FC = () => {
         return;
       }
 
-      if (!formData.categoryId) {
-        toast.error(t("toast.categoryRequired"));
+      if (!formData.contactName) {
+        toast.error("Contact name is required");
         setIsSubmitting(false);
         return;
       }
 
-      if (!formData.primaryDomain) {
-        toast.error(t("toast.primaryDomainRequired"));
+      if (!formData.phone) {
+        toast.error("Phone number is required");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (!formData.username) {
+        toast.error("Username is required");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (!formData.password) {
+        toast.error("Password is required");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (!formData.email) {
+        toast.error("Email is required");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (!formData.contactNumber) {
+        toast.error("Contact number is required");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (!formData.categoryId) {
+        toast.error(t("toast.categoryRequired"));
         setIsSubmitting(false);
         return;
       }
@@ -654,7 +684,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    Account Name
+                    Account Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -734,7 +764,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    Name
+                    Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -755,7 +785,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    Phone
+                    Phone <span className="text-red-500">*</span>
                   </label>
                   <div className="flex min-w-0 gap-2">
                     <div className="w-40 shrink-0 sm:w-48">
@@ -831,7 +861,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    Country
+                    Country <span className="text-red-500">*</span>
                   </label>
                   <SearchableDropdown
                     options={countryOptions}
@@ -854,7 +884,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    State/Province
+                    State/Province <span className="text-red-500">*</span>
                   </label>
                   <SearchableDropdown
                     options={stateOptions}
@@ -878,7 +908,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    Town/City
+                    Town/City <span className="text-red-500">*</span>
                   </label>
                   <SearchableDropdown
                     options={cityOptions}
@@ -960,7 +990,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    Contact Number
+                    Contact Number <span className="text-red-500">*</span>
                   </label>
                   <div className="flex min-w-0 gap-2">
                     <div className="w-40 shrink-0 sm:w-48">
@@ -1026,7 +1056,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    Primary Domain <span className="text-red-500">*</span>
+                    Primary Domain
                   </label>
                   <input
                     type="text"
@@ -1126,7 +1156,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    Username
+                    Username <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -1147,7 +1177,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    Password
+                    Password <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="password"
@@ -1168,7 +1198,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    Email
+                    Email <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -1191,7 +1221,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    Category
+                    Category <span className="text-red-500">*</span>
                   </label>
                   <SearchableDropdown
                     options={categoryOptions}
