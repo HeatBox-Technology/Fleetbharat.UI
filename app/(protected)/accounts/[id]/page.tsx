@@ -345,11 +345,11 @@ const EditAccount: React.FC = () => {
         return;
       }
 
-      if (!formData.password) {
-        toast.error("Password is required");
-        setIsSubmitting(false);
-        return;
-      }
+      // if (!formData.password) {
+      //   toast.error("Password is required");
+      //   setIsSubmitting(false);
+      //   return;
+      // }
 
       if (!formData.email) {
         toast.error("Email is required");
@@ -1177,7 +1177,7 @@ const EditAccount: React.FC = () => {
                   <label
                     className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
                   >
-                    Password <span className="text-red-500">*</span>
+                    Password 
                   </label>
                   <input
                     type="password"
