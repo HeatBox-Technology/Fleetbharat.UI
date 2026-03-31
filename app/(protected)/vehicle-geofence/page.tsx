@@ -223,7 +223,7 @@ const VehicleGeofencePage: React.FC = () => {
       } else {
         toast.error(response?.message || t("toast.deleteFailed"));
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting vehicle geofence assignment:", error);
       toast.error(
         error?.response?.data?.message || t("toast.deleteError"),
