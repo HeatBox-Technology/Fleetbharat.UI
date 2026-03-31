@@ -45,7 +45,6 @@ interface FormData {
   contactNumber: string;
   supportTimings: string;
   username: string;
-  password: string;
   email: string;
   categoryId: string;
   status: string;
@@ -110,7 +109,6 @@ const EditAccount: React.FC = () => {
     contactNumber: "",
     supportTimings: "",
     username: "",
-    password: "",
     email: "",
     categoryId: "",
     status: "Active",
@@ -433,7 +431,6 @@ const EditAccount: React.FC = () => {
         businessHours: formData.supportTimings,
         businessTimeZone: formData.businessTimeZone,
         userName: formData.username,
-        password: formData.password || undefined,
         share: [
           formData.shareEmail && "Email",
           formData.shareWhatsApp && "WhatsApp",
@@ -539,7 +536,6 @@ const EditAccount: React.FC = () => {
           contactNumber: parsedBusinessPhone.phone,
           supportTimings: data.businessHours || "",
           username: data.userName || data.usernamesacc || "",
-          password: "",
           email: data.email || data.contactPersonEmail || "",
           categoryId: data.categoryId?.toString() || "",
           status: data.status ? "Active" : "Inactive",
