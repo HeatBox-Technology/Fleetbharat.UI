@@ -54,34 +54,18 @@ const ALL_ALERTS_OPTION: OptionType = {
 
 const ALERT_OPTIONS: OptionType[] = [
   ALL_ALERTS_OPTION,
-  { label: "Power Cut", value: "Power Cut" },
   { label: "Ignition", value: "Ignition" },
-  { label: "Overspeed", value: "Overspeed" },
   { label: "AC", value: "AC" },
+  { label: "Door Lock", value: "Door Lock" },
+  { label: "Door Open", value: "Door Open" },
+  { label: "Low Power", value: "Low Power" },
+  { label: "Power Cut", value: "Power Cut" },
+  { label: "Idle AC", value: "Idle AC" },
+  { label: "Idle Start", value: "Idle Start" },
+  { label: "Rollover", value: "Rollover" },
+  { label: "Fatigue", value: "Fatigue" },
   { label: "SOS", value: "SOS" },
-  { label: "Geofence In", value: "Geofence In" },
-  { label: "Geofence Out", value: "Geofence Out" },
-  { label: "Harsh Braking", value: "Harsh Braking" },
-  { label: "Harsh Acceleration", value: "Harsh Acceleration" },
-  { label: "Idle", value: "Idle" },
-  { label: "Low Battery", value: "Low Battery" },
-  { label: "Main Power Restore", value: "Main Power Restore" },
-  { label: "Battery Disconnect", value: "Battery Disconnect" },
-  { label: "Tow", value: "Tow" },
-  { label: "Tamper", value: "Tamper" },
-  { label: "E-Lock Alert", value: "E-Lock Alert" },
-  { label: "Steel Wire Lock Cut", value: "Steel Wire Lock Cut" },
-  { label: "Steel Wire Lock Open", value: "Steel Wire Lock Open" },
-  { label: "Steel Wire Lock Tamper", value: "Steel Wire Lock Tamper" },
-  { label: "Steel Wire Lock Disconnect", value: "Steel Wire Lock Disconnect" },
-  { label: "Steel Wire Lock Low Battery", value: "Steel Wire Lock Low Battery" },
-  { label: "Steel Wire Lock Battery Restore", value: "Steel Wire Lock Battery Restore" },
-  { label: "Steel Wire Lock Locked", value: "Steel Wire Lock Locked" },
-  { label: "Steel Wire Lock Unlocked", value: "Steel Wire Lock Unlocked" },
-  { label: "Rash Driving", value: "Rash Driving" },
-  { label: "Night Driving", value: "Night Driving" },
-  { label: "Route Deviation", value: "Route Deviation" },
-  { label: "Stoppage", value: "Stoppage" },
+  { label: "Case Tampering", value: "Case Tampering" },
 ];
 
 const toOptionLabel = (item: {
@@ -249,9 +233,7 @@ const AlarmReportPage = () => {
   const [selectedAccounts, setSelectedAccounts] = useState<OptionType[]>([]);
   const [vehicles, setVehicles] = useState<OptionType[]>([]);
   const [selectedVehicles, setSelectedVehicles] = useState<OptionType[]>([]);
-  const [selectedAlerts, setSelectedAlerts] = useState<OptionType[]>(
-    ALERT_OPTIONS,
-  );
+  const [selectedAlerts, setSelectedAlerts] = useState<OptionType[]>([]);
   const [startDate, setStartDate] = useState(() => {
     const start = new Date();
     start.setHours(0, 0, 0, 0);
@@ -359,17 +341,9 @@ const AlarmReportPage = () => {
         vehicleOptions.length ? [ALL_VEHICLES_OPTION, ...vehicleOptions] : [],
       );
       setSelectedVehicles((previous) =>
-        !vehicleOptions.length
-          ? []
-          : previous.length === 0
-            ? [ALL_VEHICLES_OPTION, ...vehicleOptions]
-            : previous.some((vehicle) => vehicle.value === ALL_VEHICLES_VALUE)
-              ? [ALL_VEHICLES_OPTION, ...vehicleOptions]
-              : previous.filter((vehicle) =>
-                  vehicleOptions.some(
-                    (option) => option.value === vehicle.value,
-                  ),
-                ),
+        previous.filter((vehicle) =>
+          vehicleOptions.some((option) => option.value === vehicle.value),
+        ),
       );
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Failed to load vehicles");
@@ -516,11 +490,6 @@ const AlarmReportPage = () => {
 
     if (!orgIds.length) {
       toast.error("Please select at least one organization");
-      return;
-    }
-
-    if (!alertValues.length) {
-      toast.error("Please select at least one alert");
       return;
     }
 

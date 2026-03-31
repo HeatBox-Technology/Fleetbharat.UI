@@ -1,6 +1,7 @@
 import { javaApi } from "./apiService";
 
 const STORAGE_KEY = "geofenceJavaSyncStatus";
+const inFlightGeofenceSyncs = new Map();
 
 export const GEOFENCE_JAVA_SYNC_STATUS = {
   UNSYNCED: "UNSYNCED",
@@ -158,67 +159,80 @@ export const buildGeofenceJavaPayload = (source = {}) => {
 export const syncGeofenceToJava = async (source = {}) => {
   const payload = buildGeofenceJavaPayload(source);
   const geoId = getGeofenceSyncId(source);
+  const syncKey =
+    String(geoId || "") || JSON.stringify(payload);
 
-  if (geoId) {
-    setGeofenceSyncStatus(geoId, {
-      status: GEOFENCE_JAVA_SYNC_STATUS.SYNCING,
-      message: "Sync in progress",
-    });
+  if (inFlightGeofenceSyncs.has(syncKey)) {
+    return inFlightGeofenceSyncs.get(syncKey);
   }
 
-  try {
-    const res = await javaApi.post("mapping/geofence", payload);
-    const response = res.data;
-
-    logGeofenceJavaSync({
-      geoId,
-      payload,
-      response: {
-        statusCode: res?.status,
-        statusText: res?.statusText,
-        data: response,
-      },
-      status: GEOFENCE_JAVA_SYNC_STATUS.SYNCED,
-      method: "POST",
-    });
-
+  const syncPromise = (async () => {
     if (geoId) {
       setGeofenceSyncStatus(geoId, {
+        status: GEOFENCE_JAVA_SYNC_STATUS.SYNCING,
+        message: "Sync in progress",
+      });
+    }
+
+    try {
+      const res = await javaApi.post("mapping/geofence", payload);
+      const response = res.data;
+
+      logGeofenceJavaSync({
+        geoId,
+        payload,
+        response: {
+          statusCode: res?.status,
+          statusText: res?.statusText,
+          data: response,
+        },
         status: GEOFENCE_JAVA_SYNC_STATUS.SYNCED,
-        message: response?.message || "Synced to Java",
-        lastSuccessAt: new Date().toISOString(),
+        method: "POST",
       });
-    }
 
-    return { success: true, data: response, payload };
-  } catch (error) {
-    const response = error?.response?.data;
+      if (geoId) {
+        setGeofenceSyncStatus(geoId, {
+          status: GEOFENCE_JAVA_SYNC_STATUS.SYNCED,
+          message: response?.message || "Synced to Java",
+          lastSuccessAt: new Date().toISOString(),
+        });
+      }
 
-    logGeofenceJavaSync({
-      geoId,
-      payload,
-      response: error?.response
-        ? {
-            statusCode: error.response.status,
-            statusText: error.response.statusText,
-            data: response,
-          }
-        : null,
-      error,
-      status: GEOFENCE_JAVA_SYNC_STATUS.FAILED,
-      method: "POST",
-    });
+      return { success: true, data: response, payload };
+    } catch (error) {
+      const response = error?.response?.data;
 
-    if (geoId) {
-      setGeofenceSyncStatus(geoId, {
+      logGeofenceJavaSync({
+        geoId,
+        payload,
+        response: error?.response
+          ? {
+              statusCode: error.response.status,
+              statusText: error.response.statusText,
+              data: response,
+            }
+          : null,
+        error,
         status: GEOFENCE_JAVA_SYNC_STATUS.FAILED,
-        message: response?.message || "Java sync failed",
-        error: response || error?.message || "Java sync failed",
+        method: "POST",
       });
-    }
 
-    return { success: false, data: response, error, payload };
-  }
+      if (geoId) {
+        setGeofenceSyncStatus(geoId, {
+          status: GEOFENCE_JAVA_SYNC_STATUS.FAILED,
+          message: response?.message || "Java sync failed",
+          error: response || error?.message || "Java sync failed",
+        });
+      }
+
+      return { success: false, data: response, error, payload };
+    } finally {
+      inFlightGeofenceSyncs.delete(syncKey);
+    }
+  })();
+
+  inFlightGeofenceSyncs.set(syncKey, syncPromise);
+  return syncPromise;
 };
 
 export const deleteGeofenceFromJava = async (source = {}) => {

@@ -270,15 +270,9 @@ const MovementReportPage = () => {
         vehicleOptions.length ? [ALL_VEHICLES_OPTION, ...vehicleOptions] : [],
       );
       setSelectedVehicles((previous) =>
-        !vehicleOptions.length
-          ? []
-          : previous.length === 0
-            ? [ALL_VEHICLES_OPTION, ...vehicleOptions]
-            : previous.some((vehicle) => vehicle.value === ALL_VEHICLES_VALUE)
-          ? [ALL_VEHICLES_OPTION, ...vehicleOptions]
-          : previous.filter((vehicle) =>
-              vehicleOptions.some((option) => option.value === vehicle.value),
-            ),
+        previous.filter((vehicle) =>
+          vehicleOptions.some((option) => option.value === vehicle.value),
+        ),
       );
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Failed to load vehicles");

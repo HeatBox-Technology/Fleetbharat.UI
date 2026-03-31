@@ -28,6 +28,7 @@ import {
   deleteVehicleGeofence,
   getVehicleGeofences,
 } from "@/services/vehicleGeofenceService";
+import { deleteVehicleGeofenceFromJava } from "@/services/vehicleGeofenceJavaSyncService";
 
 interface AccountOption {
   id: number;
@@ -111,7 +112,19 @@ const VehicleGeofencePage: React.FC = () => {
 
   const mapRow = (item: VehicleGeofenceItem): VehicleGeofenceRow => ({
     id: Number(item?.id || 0),
+    accountId: Number(item?.accountId || selectedAccountId || 0),
+    vehicleId: Number(item?.vehicleId || 0),
+    geofenceId: Number(item?.geofenceId || 0),
     vehicleNo: String(item?.vehicleNo || "-"),
+    deviceNo: String(
+      item?.deviceNo ??
+        item?.DeviceNo ??
+        item?.deviceNumber ??
+        item?.DeviceNumber ??
+        item?.imei ??
+        item?.Imei ??
+        "",
+    ),
     geofenceName: String(item?.geofenceName || "-"),
     geometryType: String(item?.geometryType || "-"),
     remarks: String(item?.remarks || "-"),
@@ -186,10 +199,6 @@ const VehicleGeofencePage: React.FC = () => {
     fetchVehicleGeofences();
   }, [pageNo, pageSize, debouncedQuery, selectedAccountId]);
 
-  const handleEdit = (row: VehicleGeofenceRow) => {
-    router.push(`/vehicle-geofence/${row.id}`);
-  };
-
   const handleDelete = (row: VehicleGeofenceRow) => {
     setSelectedRow(row);
     setIsDeleteDialogOpen(true);
@@ -199,6 +208,14 @@ const VehicleGeofencePage: React.FC = () => {
     if (!selectedRow) return;
 
     try {
+      await deleteVehicleGeofenceFromJava({
+        accountId: Number(selectedRow.accountId || selectedAccountId || 0),
+        vehicleId: Number(selectedRow.vehicleId || 0),
+        vehicleNo: String(selectedRow.vehicleNo || ""),
+        deviceNo: String(selectedRow.deviceNo || ""),
+        geofenceId: Number(selectedRow.geofenceId || 0),
+      });
+
       const response = await deleteVehicleGeofence(selectedRow.id);
       if (response?.success || response?.statusCode === 200) {
         toast.success(response?.message || t("toast.deleted"));
@@ -208,7 +225,9 @@ const VehicleGeofencePage: React.FC = () => {
       }
     } catch (error) {
       console.error("Error deleting vehicle geofence assignment:", error);
-      toast.error(t("toast.deleteError"));
+      toast.error(
+        error?.response?.data?.message || t("toast.deleteError"),
+      );
     } finally {
       setSelectedRow(null);
       setIsDeleteDialogOpen(false);
@@ -310,7 +329,6 @@ const VehicleGeofencePage: React.FC = () => {
         <CommonTable
           columns={columns}
           data={rows}
-          onEdit={handleEdit}
           onDelete={handleDelete}
           showActions={true}
           searchPlaceholder={t("searchPlaceholder")}

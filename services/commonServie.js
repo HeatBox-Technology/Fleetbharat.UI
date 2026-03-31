@@ -65,6 +65,7 @@ export const hasPermission = (rights, pageUrl, permission = "canRead") => {
     const normalizedRightPath = String(right.pageUrl || "")
       .replace(/\/$/, "")
       .toLowerCase();
+
     const normalizedPageUrl = String(pageUrl || "")
       .replace(/\/$/, "")
       .toLowerCase();

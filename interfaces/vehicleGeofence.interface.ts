@@ -10,6 +10,7 @@ export interface VehicleGeofenceItem {
   vehicleId: number;
   geofenceId: number;
   vehicleNo: string;
+  deviceNo?: string;
   geofenceName: string;
   geometryType: string;
   isActive: boolean;
@@ -23,7 +24,11 @@ export interface VehicleGeofenceItem {
 
 export interface VehicleGeofenceRow {
   id: number;
+  accountId: number;
+  vehicleId: number;
+  geofenceId: number;
   vehicleNo: string;
+  deviceNo?: string;
   geofenceName: string;
   geometryType: string;
   status: string;
