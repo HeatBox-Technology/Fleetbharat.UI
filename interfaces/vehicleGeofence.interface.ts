@@ -11,6 +11,11 @@ export interface VehicleGeofenceItem {
   geofenceId: number;
   vehicleNo: string;
   deviceNo?: string;
+  DeviceNo?: string;
+  deviceNumber?: string;
+  DeviceNumber?: string;
+  imei?: string;
+  Imei?: string;
   geofenceName: string;
   geometryType: string;
   isActive: boolean;
