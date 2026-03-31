@@ -468,6 +468,7 @@ const CreateUser: React.FC = () => {
         }
         const payload = {
           Email: formData.emailAddress,
+          UserName: formData.userName,
           FirstName: formData.accountName,
           LastName: formData.accountCode,
           MobileNo: formData.phoneNumber

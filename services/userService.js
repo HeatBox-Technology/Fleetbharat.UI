@@ -78,6 +78,7 @@ export const updateUser = async (id, payload) => {
       `/api/users/${id}` +
         `?userId=${id}` +
         `&Email=${encodeURIComponent(payload.Email)}` +
+        `&UserName=${encodeURIComponent(payload.UserName)}` +
         `&FirstName=${encodeURIComponent(payload.FirstName)}` +
         `&LastName=${encodeURIComponent(payload.LastName)}` +
         `&MobileNo=${encodeURIComponent(payload.MobileNo || "")}` +
