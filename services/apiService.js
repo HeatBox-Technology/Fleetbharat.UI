@@ -11,7 +11,7 @@ const LOGOUT_KEYS = [
 ];
 
 let isLogoutInProgress = false;
-export const SESSION_EXPIRED_EVENT = "fleetbharat:session-expired";
+export const SESSION_EXPIRED_EVENT = "session-expired";
 
 const PUBLIC_AUTH_ROUTES = new Set([
   "/api/auth/login",
@@ -100,7 +100,8 @@ export const tmsApi = attachApiInterceptors(
 export const javaApi = attachApiInterceptors(
   axios.create({
     baseURL:
-      process.env.NEXT_PUBLIC_JAVA_API_BASE_URL || "http://localhost:8083/api/v1/",
+      process.env.NEXT_PUBLIC_JAVA_API_BASE_URL ||
+      "http://localhost:8083/api/v1/",
   }),
 );
 

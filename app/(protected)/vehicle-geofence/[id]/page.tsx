@@ -21,6 +21,10 @@ import {
   saveVehicleGeofence,
   updateVehicleGeofence,
 } from "@/services/vehicleGeofenceService";
+import {
+  resolveVehicleGeofenceDeviceNo,
+  syncVehicleGeofenceToJava,
+} from "@/services/vehicleGeofenceJavaSyncService";
 
 interface DropdownOption {
   id: number;
@@ -79,6 +83,9 @@ const AddEditVehicleGeofence: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(false);
+
+  const getVehicleLabelById = (id: number) =>
+    vehicleOptions.find((option) => Number(option.value) === Number(id))?.label || "";
 
   const toOptions = (response: any): DropdownOption[] => {
     const data = Array.isArray(response?.data)
@@ -257,6 +264,30 @@ const AddEditVehicleGeofence: React.FC = () => {
       }
 
       if (response?.success || response?.statusCode === 200) {
+        try {
+          const resolvedDeviceNo = await resolveVehicleGeofenceDeviceNo({
+            accountId: Number(formData.accountId),
+            vehicleId: Number(formData.vehicleId),
+            vehicleNo: getVehicleLabelById(formData.vehicleId),
+          });
+
+          await syncVehicleGeofenceToJava({
+            accountId: Number(formData.accountId),
+            vehicleId: Number(formData.vehicleId),
+            vehicleNo: getVehicleLabelById(formData.vehicleId),
+            deviceNo: resolvedDeviceNo,
+            geofenceId: Number(formData.geofenceId),
+          });
+        } catch (javaError: any) {
+          console.error("Error syncing vehicle geofence to Java:", javaError);
+          toast.warning(
+            javaError?.response?.data?.message ||
+              "Saved locally, but Java sync failed",
+          );
+          router.push("/vehicle-geofence");
+          return;
+        }
+
         toast.success(
           response?.message ||
             (isEditMode ? t("toast.updated") : t("toast.created")),

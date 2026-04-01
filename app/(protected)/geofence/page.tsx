@@ -3,7 +3,7 @@
 import { Ban, Building2, CheckCircle2, ChevronDown, MapPinned, RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import ActionLoader from "@/components/ActionLoader";
 import CommonTable from "@/components/CommonTable";
@@ -147,7 +147,6 @@ export default function GeofencePage() {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [syncingRowId, setSyncingRowId] = useState<string | null>(null);
   const [syncingAll, setSyncingAll] = useState(false);
-  const autoSyncStartedRef = useRef<Set<string>>(new Set());
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [zoneToDelete, setZoneToDelete] = useState<GeofenceZone | null>(null);
   const [summary, setSummary] = useState({
@@ -336,22 +335,6 @@ export default function GeofencePage() {
     if (!selectedAccountId || selectedAccountId <= 0) return;
     fetchGeofenceList();
   }, [fetchGeofenceList, selectedAccountId]);
-
-  useEffect(() => {
-    const nextZone = zones.find(
-      (zone) =>
-        zone.id &&
-        zone.javaSyncStatus !== GEOFENCE_JAVA_SYNC_STATUS.SYNCED &&
-        !autoSyncStartedRef.current.has(zone.id),
-    );
-
-    if (!nextZone || syncingAll || syncingRowId !== null) {
-      return;
-    }
-
-    autoSyncStartedRef.current.add(nextZone.id);
-    void handleSyncRow(nextZone, { silent: true });
-  }, [zones, syncingAll, syncingRowId]);
 
   useEffect(() => {
     const handler = setTimeout(() => {

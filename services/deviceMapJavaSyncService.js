@@ -1,6 +1,7 @@
 import { javaApi } from "./apiService";
 
 const STORAGE_KEY = "deviceMapJavaSyncStatus";
+const inFlightVehicleMappingSyncs = new Map();
 
 export const JAVA_SYNC_STATUS = {
   UNSYNCED: "UNSYNCED",
@@ -56,7 +57,17 @@ export const clearDeviceMapSyncStatus = (mappingId) => {
 };
 
 const normalizeNumber = (value) => Number(value || 0);
-const normalizeString = (value) => String(value || "").trim();
+const normalizeString = (value) => {
+  const normalized = String(value ?? "").trim();
+  if (!normalized) return "";
+
+  const lowered = normalized.toLowerCase();
+  if (lowered === "undefined" || lowered === "null") {
+    return "";
+  }
+
+  return normalized;
+};
 const normalizeBoolean = (value, fallback = false) => {
   if (typeof value === "boolean") return value;
   if (typeof value === "number") return value === 1;
@@ -114,11 +125,11 @@ export const buildVehicleMappingJavaPayload = (source = {}) => [
       source.imei ?? source.deviceNo ?? source.deviceNumber ?? source.deviceSerialNo,
     ),
     deviceType: normalizeString(
-      source.deviceTypeId ??
-        source.fk_devicetypeid ??
-        source.deviceType ??
+      source.deviceType ??
         source.deviceTypeName ??
-        source.deviceTypeLabel,
+        source.deviceTypeLabel ??
+        source.deviceTypeId ??
+        source.fk_devicetypeid,
     ),
     deviceTypeId: normalizeNumber(
       source.deviceTypeId ?? source.fk_devicetypeid,
@@ -131,100 +142,113 @@ export const buildVehicleMappingJavaPayload = (source = {}) => [
     ),
     orgId: normalizeNumber(source.orgId ?? source.accountId),
     speedLimit: normalizeNumber(source.speedLimit),
-    overspeed: normalizeBoolean(source.overspeed),
-    powerCut: normalizeBoolean(source.powerCut),
-    lowPower: normalizeBoolean(source.lowPower),
-    doorClose: normalizeBoolean(source.doorClose),
-    doorLock: normalizeBoolean(source.doorLock),
-    collision: normalizeBoolean(source.collision),
-    geofence: normalizeBoolean(source.geofence),
-    ac: normalizeBoolean(source.ac),
-    ignition: normalizeBoolean(source.ignition),
-    sos: normalizeBoolean(source.sos),
-    fatigue: normalizeBoolean(source.fatigue),
-    gnssFault: normalizeBoolean(source.gnssFault),
-    gnssAntennaDisconnect: normalizeBoolean(source.gnssAntennaDisconnect),
-    gnssAntennaShort: normalizeBoolean(source.gnssAntennaShort),
-    rollover: normalizeBoolean(source.rollover),
-    idleStart: normalizeBoolean(source.idleStart),
+    overspeed: false,
+    powerCut: false,
+    lowPower: false,
+    doorClose: false,
+    doorLock: false,
+    collision: false,
+    geofence: true,
+    ac: false,
+    ignition: true,
+    sos: false,
+    fatigue: false,
+    gnssFault: false,
+    gnssAntennaDisconnect: false,
+    gnssAntennaShort: false,
+    rollover: false,
+    idleStart: false,
     idleStartDurationMin: normalizeNumber(source.idleStartDurationMin),
-    idleAc: normalizeBoolean(source.idleAc),
+    idleAc: false,
     idleACDurationMin: normalizeNumber(source.idleACDurationMin),
-    towing: normalizeBoolean(source.towing),
+    towing: false,
   },
 ];
 
 export const syncVehicleMappingToJava = async (source = {}) => {
   const payload = buildVehicleMappingJavaPayload(source);
   const mappingId = getVehicleMappingId(source);
+  const syncKey =
+    String(mappingId || "") || JSON.stringify(payload);
 
-  if (mappingId) {
-    setDeviceMapSyncStatus(mappingId, {
-      status: JAVA_SYNC_STATUS.SYNCING,
-      message: "Sync in progress",
-    });
+  if (inFlightVehicleMappingSyncs.has(syncKey)) {
+    return inFlightVehicleMappingSyncs.get(syncKey);
   }
 
-  try {
-    const res = await javaApi.post("mapping/vehicle-mapping", payload);
-    const response = res.data;
-    logVehicleMappingJavaSync({
-      mappingId,
-      payload,
-      response: {
-        statusCode: res?.status,
-        statusText: res?.statusText,
-        data: response,
-      },
-      status: JAVA_SYNC_STATUS.SYNCED,
-      method: "POST",
-    });
-
+  const syncPromise = (async () => {
     if (mappingId) {
       setDeviceMapSyncStatus(mappingId, {
+        status: JAVA_SYNC_STATUS.SYNCING,
+        message: "Sync in progress",
+      });
+    }
+
+    try {
+      const res = await javaApi.post("mapping/vehicle-mapping", payload);
+      const response = res.data;
+      logVehicleMappingJavaSync({
+        mappingId,
+        payload,
+        response: {
+          statusCode: res?.status,
+          statusText: res?.statusText,
+          data: response,
+        },
         status: JAVA_SYNC_STATUS.SYNCED,
-        message: response?.message || "Synced to Java",
-        lastSuccessAt: new Date().toISOString(),
+        method: "POST",
       });
-    }
 
-    return {
-      success: true,
-      data: response,
-      payload,
-    };
-  } catch (error) {
-    const response = error?.response?.data;
-    logVehicleMappingJavaSync({
-      mappingId,
-      payload,
-      response: error?.response
-        ? {
-            statusCode: error.response.status,
-            statusText: error.response.statusText,
-            data: response,
-          }
-        : null,
-      error,
-      status: JAVA_SYNC_STATUS.FAILED,
-      method: "POST",
-    });
+      if (mappingId) {
+        setDeviceMapSyncStatus(mappingId, {
+          status: JAVA_SYNC_STATUS.SYNCED,
+          message: response?.message || "Synced to Java",
+          lastSuccessAt: new Date().toISOString(),
+        });
+      }
 
-    if (mappingId) {
-      setDeviceMapSyncStatus(mappingId, {
+      return {
+        success: true,
+        data: response,
+        payload,
+      };
+    } catch (error) {
+      const response = error?.response?.data;
+      logVehicleMappingJavaSync({
+        mappingId,
+        payload,
+        response: error?.response
+          ? {
+              statusCode: error.response.status,
+              statusText: error.response.statusText,
+              data: response,
+            }
+          : null,
+        error,
         status: JAVA_SYNC_STATUS.FAILED,
-        message: response?.message || "Java sync failed",
-        error: response || error?.message || "Java sync failed",
+        method: "POST",
       });
-    }
 
-    return {
-      success: false,
-      data: response,
-      error,
-      payload,
-    };
-  }
+      if (mappingId) {
+        setDeviceMapSyncStatus(mappingId, {
+          status: JAVA_SYNC_STATUS.FAILED,
+          message: response?.message || "Java sync failed",
+          error: response || error?.message || "Java sync failed",
+        });
+      }
+
+      return {
+        success: false,
+        data: response,
+        error,
+        payload,
+      };
+    } finally {
+      inFlightVehicleMappingSyncs.delete(syncKey);
+    }
+  })();
+
+  inFlightVehicleMappingSyncs.set(syncKey, syncPromise);
+  return syncPromise;
 };
 
 export const deleteVehicleMappingFromJava = async (source = {}) => {

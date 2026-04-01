@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import ActionLoader from "@/components/ActionLoader";
 import { MetricCard } from "@/components/CommonCard";
@@ -103,7 +103,6 @@ const DeviceMap: React.FC = () => {
   const [summaryCounts, setSummaryCounts] = useState(STATIC_COUNTS);
   const [syncingRowId, setSyncingRowId] = useState<number | null>(null);
   const [syncingAll, setSyncingAll] = useState(false);
-  const autoSyncStartedRef = useRef<Set<number>>(new Set());
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<DeviceMapRow | null>(null);
@@ -126,7 +125,7 @@ const DeviceMap: React.FC = () => {
         label: "JAVA SYNC",
         visible: true,
         render: (value: string, row: DeviceMapRow) => {
-          const normalizedStatus = String(value || JAVA_SYNC_STATUS.UNSYNCED);
+          const normalizedStatus = String(value || "").trim();
           const isSynced = normalizedStatus === JAVA_SYNC_STATUS.SYNCED;
           const isSyncing =
             normalizedStatus === JAVA_SYNC_STATUS.SYNCING ||
@@ -149,12 +148,14 @@ const DeviceMap: React.FC = () => {
 
           return (
             <div className="flex items-center gap-2">
-              <span
-                className={`inline-flex px-2 sm:px-3 py-1 sm:py-1.5 text-xs font-semibold rounded-md ${badgeClasses}`}
-                title={row.javaSyncMessage || normalizedStatus}
-              >
-                {normalizedStatus}
-              </span>
+              {normalizedStatus ? (
+                <span
+                  className={`inline-flex px-2 sm:px-3 py-1 sm:py-1.5 text-xs font-semibold rounded-md ${badgeClasses}`}
+                  title={row.javaSyncMessage || normalizedStatus}
+                >
+                  {normalizedStatus}
+                </span>
+              ) : null}
               {!isSynced && (
                 <button
                   type="button"
@@ -337,7 +338,7 @@ const DeviceMap: React.FC = () => {
     javaSyncStatus: String(
       getDeviceMapSyncStatusMap()?.[
         String(Number(item?.id ?? item?.vehicleDeviceMapId ?? item?.mapId ?? 0))
-      ]?.status ?? JAVA_SYNC_STATUS.UNSYNCED,
+      ]?.status ?? "",
     ),
     javaSyncMessage: String(
       getDeviceMapSyncStatusMap()?.[
@@ -449,7 +450,7 @@ const DeviceMap: React.FC = () => {
           return {
             ...row,
             javaSyncStatus: String(
-              savedStatus?.status ?? row.javaSyncStatus ?? JAVA_SYNC_STATUS.UNSYNCED,
+              savedStatus?.status ?? row.javaSyncStatus ?? "",
             ),
             javaSyncMessage: String(savedStatus?.message ?? row.javaSyncMessage ?? ""),
           };
@@ -485,32 +486,16 @@ const DeviceMap: React.FC = () => {
     fetchDeviceMaps();
   }, [pageNo, pageSize, debouncedQuery, selectedAccountId]);
 
-  useEffect(() => {
-    const nextRow = rows.find(
-      (row) =>
-        row.id > 0 &&
-        row.javaSyncStatus !== JAVA_SYNC_STATUS.SYNCED &&
-        !autoSyncStartedRef.current.has(row.id),
-    );
-
-    if (!nextRow || syncingAll || syncingRowId !== null) {
-      return;
-    }
-
-    autoSyncStartedRef.current.add(nextRow.id);
-    void handleSyncRow(nextRow, { silent: true });
-  }, [rows, syncingAll, syncingRowId]);
-
   const refreshSyncStatuses = () => {
     const nextSyncStatusMap = getDeviceMapSyncStatusMap();
     setRows((prevRows) =>
       prevRows.map((row) => {
         const syncEntry = nextSyncStatusMap[String(row.id)];
-        return {
-          ...row,
-          javaSyncStatus: String(
-            syncEntry?.status ?? row.javaSyncStatus ?? JAVA_SYNC_STATUS.UNSYNCED,
-          ),
+          return {
+            ...row,
+            javaSyncStatus: String(
+              syncEntry?.status ?? row.javaSyncStatus ?? "",
+            ),
           javaSyncMessage: String(syncEntry?.message ?? row.javaSyncMessage ?? ""),
         };
       }),

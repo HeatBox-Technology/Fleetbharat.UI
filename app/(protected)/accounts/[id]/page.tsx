@@ -45,7 +45,6 @@ interface FormData {
   contactNumber: string;
   supportTimings: string;
   username: string;
-  password: string;
   email: string;
   categoryId: string;
   status: string;
@@ -110,7 +109,6 @@ const EditAccount: React.FC = () => {
     contactNumber: "",
     supportTimings: "",
     username: "",
-    password: "",
     email: "",
     categoryId: "",
     status: "Active",
@@ -345,12 +343,6 @@ const EditAccount: React.FC = () => {
         return;
       }
 
-      if (!formData.password) {
-        toast.error("Password is required");
-        setIsSubmitting(false);
-        return;
-      }
-
       if (!formData.email) {
         toast.error("Email is required");
         setIsSubmitting(false);
@@ -439,7 +431,6 @@ const EditAccount: React.FC = () => {
         businessHours: formData.supportTimings,
         businessTimeZone: formData.businessTimeZone,
         userName: formData.username,
-        password: formData.password || undefined,
         share: [
           formData.shareEmail && "Email",
           formData.shareWhatsApp && "WhatsApp",
@@ -545,7 +536,6 @@ const EditAccount: React.FC = () => {
           contactNumber: parsedBusinessPhone.phone,
           supportTimings: data.businessHours || "",
           username: data.userName || data.usernamesacc || "",
-          password: "",
           email: data.email || data.contactPersonEmail || "",
           categoryId: data.categoryId?.toString() || "",
           status: data.status ? "Active" : "Inactive",
@@ -1150,7 +1140,7 @@ const EditAccount: React.FC = () => {
                 {t("sections.userPermission")}
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 {/* Username */}
                 <div>
                   <label
@@ -1164,27 +1154,6 @@ const EditAccount: React.FC = () => {
                     value={formData.username}
                     onChange={handleInputChange}
                     placeholder="Enter username"
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? "bg-gray-800 border-gray-700 text-foreground placeholder-gray-500"
-                        : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
-                    } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
-                  />
-                </div>
-
-                {/* Password */}
-                <div>
-                  <label
-                    className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
-                  >
-                    Password <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    placeholder="Enter password"
                     className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
                       isDark
                         ? "bg-gray-800 border-gray-700 text-foreground placeholder-gray-500"

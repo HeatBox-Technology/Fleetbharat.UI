@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import type { CSSObjectWithLabel, GroupBase, StylesConfig } from "react-select";
 import Select from "react-select";
 import { useColor } from "@/context/ColorContext";
@@ -157,6 +158,7 @@ const SearchableDropdown = ({
 }: SearchableDropdownProps) => {
   const { selectedColor } = useColor();
   const { isDark: isDarkFromContext } = useTheme();
+  const selectId = useId();
 
   const resolvedIsDark = isDark || isDarkFromContext;
   const primaryColor = selectedColor || "#6366f1";
@@ -167,6 +169,8 @@ const SearchableDropdown = ({
 
   return (
     <Select<SearchableOption, false, GroupBase<SearchableOption>>
+      instanceId={selectId}
+      inputId={`${selectId}-input`}
       options={options}
       value={value}
       onChange={(option) => onChange(option)}
