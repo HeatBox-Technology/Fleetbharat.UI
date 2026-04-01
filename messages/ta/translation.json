@@ -329,5 +329,12 @@
         }
       }
     }
+  },
+  "auth": {
+    "sessionExpired": {
+      "title": "Session Expired",
+      "message": "Your session has expired or you are unauthorized. Please login again to continue.",
+      "action": "Login Again"
+    }
   }
 }
