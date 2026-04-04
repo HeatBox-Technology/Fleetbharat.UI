@@ -21,16 +21,22 @@ import {
   Zap,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Card } from "@/components/CommonCard";
 import PageHeader from "@/components/PageHeader";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useGoogleMapsSdk } from "@/hooks/useGoogleMapsSdk";
-import {
-  getLiveTrackingBatch,
-} from "@/services/liveTrackingService";
-import { getCarMarkerSvg } from "@/utils/carMarkerIcon";
+import { getLiveTrackingBatch } from "@/services/liveTrackingService";
+// import { getCarMarkerSvg } from "@/utils/carMarkerIcon";
+import bus from "../../../assets/vechileImages/bus.png";
 
 const POLL_MS = 15000;
 const SEARCH_DEBOUNCE_MS = 350;
@@ -215,17 +221,12 @@ export default function FleetDashboard() {
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
-      <div
-        className={`min-h-screen ${isDark ? "bg-background" : ""}`}
-      >
+      <div className={`min-h-screen ${isDark ? "bg-background" : ""}`}>
         <div className="mx-auto">
           <PageHeader
             title="Fleet Intelligence"
             subtitle="Track, monitor, and manage your fleet in real time."
-            breadcrumbs={[
-              { label: "Operations" },
-              { label: "Live Fleet Hub" },
-            ]}
+            breadcrumbs={[{ label: "Operations" }, { label: "Live Fleet Hub" }]}
             showButton={false}
             showExportButton={false}
             showFilterButton={false}
@@ -308,289 +309,295 @@ export default function FleetDashboard() {
           )}
 
           <div className="grid min-h-[68vh] grid-cols-1 gap-3 lg:grid-cols-[320px_1fr]">
-        <aside className="rounded-2xl bg-transparent">
-          <div className="max-h-[68vh] space-y-3 overflow-y-auto pr-1">
-            {isFleetLoading && (
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center text-sm font-semibold text-slate-500">
-                Loading vehicle data...
-              </div>
-            )}
-            {!isFleetLoading && fleetError && (
-              <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-sm font-semibold text-red-600">
-                {fleetError}
-              </div>
-            )}
-            {!isFleetLoading &&
-              !fleetError &&
-              filteredFleet.map((vehicle) => {
-                const statusColor =
-                  STATUS_META[vehicle.status]?.color || "#64748b";
-                const active = selectedVehicle?.id === vehicle.id;
-                return (
-                  <button
-                    type="button"
-                    key={vehicle.id}
-                    onClick={() => focusVehicle(vehicle, true)}
-                    className={`w-full rounded-2xl border bg-white p-4 text-left shadow-sm transition ${
-                      active
-                        ? "border-blue-700 ring-2 ring-blue-700"
-                        : "border-slate-200 hover:border-slate-300"
-                    }`}
-                  >
-                    <div className="mb-3 flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="flex h-10 w-10 items-center justify-center rounded-full"
-                          style={{ backgroundColor: `${statusColor}22` }}
-                        >
-                          <CarFront
-                            className="h-5 w-5"
-                            style={{ color: statusColor }}
-                          />
-                        </div>
-                        <div>
-                          <div className="text-lg font-black text-slate-900">
-                            {vehicle.name}
-                          </div>
-                          <div className="text-sm font-semibold text-slate-400">
-                            {vehicle.vehicleNumber}
-                          </div>
-                        </div>
-                      </div>
-                      <span
-                        className="rounded-lg px-3 py-1 text-xs font-extrabold text-white"
-                        style={{ backgroundColor: statusColor }}
-                      >
-                        {vehicle.status}
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3 border-y border-dashed border-slate-200 py-3">
-                      <div>
-                        <div className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                          <Gauge className="h-3.5 w-3.5" />
-                          Velocity
-                        </div>
-                        <div className="text-lg font-black text-slate-900">
-                          {vehicle.velocity} KM/H
-                        </div>
-                      </div>
-                      <div>
-                        <div className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                          <Zap className="h-3.5 w-3.5" />
-                          Ignition
-                        </div>
-                        <div
-                          className={`text-lg font-black ${
-                            vehicle.ignition === "ON"
-                              ? "text-emerald-500"
-                              : "text-slate-400"
-                          }`}
-                        >
-                          {vehicle.ignition}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-3 flex items-center justify-between text-sm text-slate-500">
-                      <div className="flex items-center gap-1.5">
-                        <User className="h-4 w-4" />
-                        {vehicle.driver}
-                      </div>
-                      <div className="flex items-center gap-1.5 text-[#7c3aed]">
-                        <Clock3 className="h-4 w-4" />
-                        {vehicle.lastUpdate}
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            {!isFleetLoading && !fleetError && filteredFleet.length === 0 && (
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center text-sm font-semibold text-slate-500">
-                No vehicles match your filter.
-              </div>
-            )}
-          </div>
-        </aside>
-
-        <main className="relative min-h-[68vh] overflow-hidden rounded-2xl border border-slate-200 bg-white">
-          {!hasApiKey && (
-            <div className="flex h-full items-center justify-center p-8 text-center text-sm font-semibold text-red-600">
-              Google Maps key missing in env. Set `NEXT_PUBLIC_GOOGLE_MAPS_KEY`.
-            </div>
-          )}
-
-          {hasApiKey && loadError && (
-            <div className="flex h-full items-center justify-center p-8 text-center text-sm font-semibold text-red-600">
-              Unable to load Google Maps SDK.
-            </div>
-          )}
-
-          {hasApiKey && !loadError && !isLoaded && (
-            <div className="flex h-full items-center justify-center p-8 text-sm font-semibold text-slate-500">
-              Loading map...
-            </div>
-          )}
-
-          {hasApiKey && !loadError && isLoaded && (
-            <>
-              <GoogleMap
-                mapContainerStyle={{ width: "100%", height: "100%" }}
-                center={mapCenter}
-                zoom={12}
-                options={mapOptions}
-                onLoad={(map) => {
-                  mapRef.current = map;
-                }}
-              >
-                {fleetData.map((vehicle) => {
-                  const trail = vehicleTrails[vehicle.id] || [];
-                  return (
-                    <Fragment key={vehicle.id}>
-                      {trail.length > 1 && (
-                        <PolylineF
-                          path={trail}
-                          options={{
-                            strokeColor: "#1e3a8a",
-                            strokeOpacity: 0,
-                            strokeWeight: 3,
-                            icons: [
-                              {
-                                icon: {
-                                  path: "M 0,-1 0,1",
-                                  strokeOpacity: 1,
-                                  scale: 3,
-                                  strokeColor: "#1e3a8a",
-                                },
-                                offset: "0",
-                                repeat: "12px",
-                              },
-                            ],
-                          }}
-                        />
-                      )}
-                      <MarkerF
-                        position={{
-                          lat: vehicle.position[0],
-                          lng: vehicle.position[1],
-                        }}
-                        icon={{
-                          url: getCarMarkerSvg({
-                            color:
-                              STATUS_META[vehicle.status]?.color || "#64748b",
-                            isActive: selectedVehicle?.id === vehicle.id,
-                            strokeColor:
-                              selectedVehicle?.id === vehicle.id
-                                ? "#1e3a8a"
-                                : "#0f172a",
-                            direction: Number(vehicle?.raw?.direction || 0),
-                          }),
-                        }}
+            <aside className="rounded-2xl bg-transparent">
+              <div className="max-h-[68vh] space-y-3 overflow-y-auto pr-1">
+                {isFleetLoading && (
+                  <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center text-sm font-semibold text-slate-500">
+                    Loading vehicle data...
+                  </div>
+                )}
+                {!isFleetLoading && fleetError && (
+                  <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-sm font-semibold text-red-600">
+                    {fleetError}
+                  </div>
+                )}
+                {!isFleetLoading &&
+                  !fleetError &&
+                  filteredFleet.map((vehicle) => {
+                    const statusColor =
+                      STATUS_META[vehicle.status]?.color || "#64748b";
+                    const active = selectedVehicle?.id === vehicle.id;
+                    return (
+                      <button
+                        type="button"
+                        key={vehicle.id}
                         onClick={() => focusVehicle(vehicle, true)}
-                      />
-                    </Fragment>
-                  );
-                })}
-              </GoogleMap>
-
-              <div className="pointer-events-none absolute left-4 top-4 rounded-xl bg-white/95 px-4 py-2 shadow-lg">
-                <div className="text-sm font-bold text-slate-900">
-                  Live Tracking Active
-                </div>
-                <div className="text-xs font-medium text-slate-500">
-                  Monitoring {fleetData.length} vehicles
-                </div>
-              </div>
-
-              {popupVehicle && (
-                <div className="absolute left-1/2 top-6 w-[340px] max-w-[92%] -translate-x-1/2 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-2xl backdrop-blur">
-                  <div className="mb-3 flex items-start justify-between">
-                    <div>
-                      <div className="text-[24px] font-black text-slate-900">
-                        {popupVehicle.name}
-                      </div>
-                      <div
-                        className="text-sm font-bold"
-                        style={{
-                          color:
-                            STATUS_META[popupVehicle.status]?.color ||
-                            "#64748b",
-                        }}
+                        className={`w-full rounded-2xl border bg-white p-4 text-left shadow-sm transition ${
+                          active
+                            ? "border-blue-700 ring-2 ring-blue-700"
+                            : "border-slate-200 hover:border-slate-300"
+                        }`}
                       >
-                        {popupVehicle.status}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setPopupVehicleId(null)}
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100"
-                    >
-                      <X className="h-5 w-5" />
-                    </button>
-                  </div>
+                        <div className="mb-3 flex items-start justify-between">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className="flex h-10 w-10 items-center justify-center rounded-full"
+                              style={{ backgroundColor: `${statusColor}22` }}
+                            >
+                              <CarFront
+                                className="h-5 w-5"
+                                style={{ color: statusColor }}
+                              />
+                            </div>
+                            <div>
+                              <div className="text-lg font-black text-slate-900">
+                                {vehicle.name}
+                              </div>
+                              <div className="text-sm font-semibold text-slate-400">
+                                {vehicle.vehicleNumber}
+                              </div>
+                            </div>
+                          </div>
+                          <span
+                            className="rounded-lg px-3 py-1 text-xs font-extrabold text-white"
+                            style={{ backgroundColor: statusColor }}
+                          >
+                            {vehicle.status}
+                          </span>
+                        </div>
 
-                  <div className="grid grid-cols-2 gap-3 border-y border-dashed border-slate-200 py-3">
-                    <div>
-                      <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                        Driver
-                      </div>
-                      <div className="text-base font-black text-slate-900">
-                        {popupVehicle.driver}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                        Velocity
-                      </div>
-                      <div className="text-base font-black text-slate-900">
-                        {popupVehicle.velocity} KM/H
-                      </div>
-                    </div>
-                  </div>
+                        <div className="grid grid-cols-2 gap-3 border-y border-dashed border-slate-200 py-3">
+                          <div>
+                            <div className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                              <Gauge className="h-3.5 w-3.5" />
+                              Velocity
+                            </div>
+                            <div className="text-lg font-black text-slate-900">
+                              {vehicle.velocity} KM/H
+                            </div>
+                          </div>
+                          <div>
+                            <div className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                              <Zap className="h-3.5 w-3.5" />
+                              Ignition
+                            </div>
+                            <div
+                              className={`text-lg font-black ${
+                                vehicle.ignition === "ON"
+                                  ? "text-emerald-500"
+                                  : "text-slate-400"
+                              }`}
+                            >
+                              {vehicle.ignition}
+                            </div>
+                          </div>
+                        </div>
 
-                  {/* ✅ Added Buttons */}
-                  <div className="mt-4 flex justify-between">
-                    <button
-                      onClick={() =>
-                        router.push(
-                          `/fleet/live-tracking/${popupVehicle.vehicleId || popupVehicle.id}`,
-                        )
-                      }
-                      className="w-[48%] rounded-xl bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-700"
-                    >
-                      Live Tracking
-                    </button>
-                    <button
-                      onClick={() =>
-                        router.push(
-                          `/fleet/history-tracking-smooth/${popupVehicle.vehicleId || popupVehicle.id}`,
-                        )
-                      }
-                      className="w-[48%] rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-                    >
-                      History Tracking
-                    </button>
-                  </div>
+                        <div className="mt-3 flex items-center justify-between text-sm text-slate-500">
+                          <div className="flex items-center gap-1.5">
+                            <User className="h-4 w-4" />
+                            {vehicle.driver}
+                          </div>
+                          <div className="flex items-center gap-1.5 text-[#7c3aed]">
+                            <Clock3 className="h-4 w-4" />
+                            {vehicle.lastUpdate}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                {!isFleetLoading &&
+                  !fleetError &&
+                  filteredFleet.length === 0 && (
+                    <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center text-sm font-semibold text-slate-500">
+                      No vehicles match your filter.
+                    </div>
+                  )}
+              </div>
+            </aside>
+
+            <main className="relative min-h-[68vh] overflow-hidden rounded-2xl border border-slate-200 bg-white">
+              {!hasApiKey && (
+                <div className="flex h-full items-center justify-center p-8 text-center text-sm font-semibold text-red-600">
+                  Google Maps key missing in env. Set
+                  `NEXT_PUBLIC_GOOGLE_MAPS_KEY`.
                 </div>
               )}
 
-              <div className="absolute right-4 top-4 flex flex-col gap-2">
-                <button
-                  type="button"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#6d28d9] text-white shadow-lg"
-                >
-                  <Settings2 className="h-5 w-5" />
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-700 shadow-lg"
-                >
-                  <Layers3 className="h-5 w-5" />
-                </button>
-              </div>
-            </>
-          )}
-        </main>
+              {hasApiKey && loadError && (
+                <div className="flex h-full items-center justify-center p-8 text-center text-sm font-semibold text-red-600">
+                  Unable to load Google Maps SDK.
+                </div>
+              )}
+
+              {hasApiKey && !loadError && !isLoaded && (
+                <div className="flex h-full items-center justify-center p-8 text-sm font-semibold text-slate-500">
+                  Loading map...
+                </div>
+              )}
+
+              {hasApiKey && !loadError && isLoaded && (
+                <>
+                  <GoogleMap
+                    mapContainerStyle={{ width: "100%", height: "100%" }}
+                    center={mapCenter}
+                    zoom={12}
+                    options={mapOptions}
+                    onLoad={(map) => {
+                      mapRef.current = map;
+                    }}
+                  >
+                    {fleetData.map((vehicle) => {
+                      const trail = vehicleTrails[vehicle.id] || [];
+                      return (
+                        <Fragment key={vehicle.id}>
+                          {trail.length > 1 && (
+                            <PolylineF
+                              path={trail}
+                              options={{
+                                strokeColor: "#1e3a8a",
+                                strokeOpacity: 0,
+                                strokeWeight: 3,
+                                icons: [
+                                  {
+                                    icon: {
+                                      path: "M 0,-1 0,1",
+                                      strokeOpacity: 1,
+                                      scale: 3,
+                                      strokeColor: "#1e3a8a",
+                                    },
+                                    offset: "0",
+                                    repeat: "12px",
+                                  },
+                                ],
+                              }}
+                            />
+                          )}
+                          <MarkerF
+                            position={{
+                              lat: vehicle.position[0],
+                              lng: vehicle.position[1],
+                            }}
+                            // icon={{
+                            //   url: getCarMarkerSvg({
+                            //     color:
+                            //       STATUS_META[vehicle.status]?.color || "#64748b",
+                            //     isActive: selectedVehicle?.id === vehicle.id,
+                            //     strokeColor:
+                            //       selectedVehicle?.id === vehicle.id
+                            //         ? "#1e3a8a"
+                            //         : "#0f172a",
+                            //     direction: Number(vehicle?.raw?.direction || 0),
+                            //   }),
+                            // }}
+                            icon={{
+                              url: bus.src, // ✅ correct
+                              scaledSize: new window.google.maps.Size(40, 40), // optional
+                            }}
+                          />
+                        </Fragment>
+                      );
+                    })}
+                  </GoogleMap>
+
+                  <div className="pointer-events-none absolute left-4 top-4 rounded-xl bg-white/95 px-4 py-2 shadow-lg">
+                    <div className="text-sm font-bold text-slate-900">
+                      Live Tracking Active
+                    </div>
+                    <div className="text-xs font-medium text-slate-500">
+                      Monitoring {fleetData.length} vehicles
+                    </div>
+                  </div>
+
+                  {popupVehicle && (
+                    <div className="absolute left-1/2 top-6 w-[340px] max-w-[92%] -translate-x-1/2 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-2xl backdrop-blur">
+                      <div className="mb-3 flex items-start justify-between">
+                        <div>
+                          <div className="text-[24px] font-black text-slate-900">
+                            {popupVehicle.name}
+                          </div>
+                          <div
+                            className="text-sm font-bold"
+                            style={{
+                              color:
+                                STATUS_META[popupVehicle.status]?.color ||
+                                "#64748b",
+                            }}
+                          >
+                            {popupVehicle.status}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setPopupVehicleId(null)}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100"
+                        >
+                          <X className="h-5 w-5" />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3 border-y border-dashed border-slate-200 py-3">
+                        <div>
+                          <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                            Driver
+                          </div>
+                          <div className="text-base font-black text-slate-900">
+                            {popupVehicle.driver}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                            Velocity
+                          </div>
+                          <div className="text-base font-black text-slate-900">
+                            {popupVehicle.velocity} KM/H
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* ✅ Added Buttons */}
+                      <div className="mt-4 flex justify-between">
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/fleet/live-tracking/${popupVehicle.vehicleId || popupVehicle.id}`,
+                            )
+                          }
+                          className="w-[48%] rounded-xl bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-700"
+                        >
+                          Live Tracking
+                        </button>
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/fleet/history-tracking-smooth/${popupVehicle.vehicleId || popupVehicle.id}`,
+                            )
+                          }
+                          className="w-[48%] rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+                        >
+                          History Tracking
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="absolute right-4 top-4 flex flex-col gap-2">
+                    <button
+                      type="button"
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#6d28d9] text-white shadow-lg"
+                    >
+                      <Settings2 className="h-5 w-5" />
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-700 shadow-lg"
+                    >
+                      <Layers3 className="h-5 w-5" />
+                    </button>
+                  </div>
+                </>
+              )}
+            </main>
           </div>
         </div>
       </div>
