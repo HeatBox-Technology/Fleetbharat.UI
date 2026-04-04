@@ -1,32 +1,38 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
 import { GoogleMap, MarkerF, PolylineF } from "@react-google-maps/api";
 import {
+  AlertTriangle,
   ArrowLeft,
+  Building2,
   Calendar,
+  CarFront,
   Clock,
-  Layers3,
+  Gauge,
+  MapPin,
+  Navigation,
   Pause,
   Play,
-  Settings,
-  Gauge,
-  Navigation,
-  Zap,
-  AlertTriangle,
-  MapPin,
-  ChevronDown,
-  ChevronUp,
   X,
+  Zap,
 } from "lucide-react";
-import { useGoogleMapsSdk } from "@/hooks/useGoogleMapsSdk";
 import { useParams, useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
 import PageHeader from "@/components/PageHeader";
+import type { SearchableOption } from "@/components/SearchableDropdown";
+import SearchableDropdown from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useGoogleMapsSdk } from "@/hooks/useGoogleMapsSdk";
+import { getAllAccounts, getVehicleDropdown } from "@/services/commonServie";
 import { getCarMarkerSvg } from "@/utils/carMarkerIcon";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_JAVA_API_BASE_URL;
+
+interface DropdownOption {
+  id: number;
+  value: string;
+}
 
 interface HistoryDataPoint {
   deviceNo: string;
@@ -172,6 +178,12 @@ export default function HistoryTracking() {
   const mapRef = useRef<google.maps.Map | null>(null);
 
   const vehicleId = params?.id as string;
+  const [accounts, setAccounts] = useState<DropdownOption[]>([]);
+  const [selectedAccountId, setSelectedAccountId] = useState<number | null>(
+    null,
+  );
+  const [vehicles, setVehicles] = useState<DropdownOption[]>([]);
+  const [isVehiclesLoading, setIsVehiclesLoading] = useState<boolean>(false);
 
   // Date state - default to today
   const [startDate, setStartDate] = useState<string>(() => {
@@ -207,6 +219,124 @@ export default function HistoryTracking() {
   const previousIndexRef = useRef<number>(0);
 
   const { isLoaded, loadError, hasApiKey } = useGoogleMapsSdk();
+
+  const accountSelectOptions = useMemo<SearchableOption[]>(
+    () =>
+      accounts.map((account) => ({
+        label: account.value,
+        value: account.id,
+      })),
+    [accounts],
+  );
+
+  const selectedAccountOption = useMemo<SearchableOption | null>(() => {
+    if (!selectedAccountId) return null;
+    return (
+      accountSelectOptions.find(
+        (option) => Number(option.value) === Number(selectedAccountId),
+      ) ?? { label: String(selectedAccountId), value: selectedAccountId }
+    );
+  }, [accountSelectOptions, selectedAccountId]);
+
+  const vehicleSelectOptions = useMemo<SearchableOption[]>(() => {
+    const options = vehicles.map((vehicle) => ({
+      label: vehicle.value,
+      value: String(vehicle.id),
+    }));
+
+    if (
+      vehicleId &&
+      !options.some((option) => String(option.value) === String(vehicleId))
+    ) {
+      options.unshift({ label: String(vehicleId), value: String(vehicleId) });
+    }
+
+    return options;
+  }, [vehicles, vehicleId]);
+
+  const selectedVehicleOption = useMemo<SearchableOption | null>(() => {
+    if (!vehicleId) return null;
+    return (
+      vehicleSelectOptions.find(
+        (option) => String(option.value) === String(vehicleId),
+      ) ?? { label: String(vehicleId), value: String(vehicleId) }
+    );
+  }, [vehicleSelectOptions, vehicleId]);
+
+  useEffect(() => {
+    const resolveAccountId = (): number => {
+      if (typeof window === "undefined") return 0;
+
+      try {
+        const selected = Number(localStorage.getItem("accountId") || 0);
+        if (selected > 0) return selected;
+
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        const accountId = Number(user?.accountId || user?.AccountId || 0);
+        return Number.isFinite(accountId) ? accountId : 0;
+      } catch {
+        return 0;
+      }
+    };
+
+    const accountId = resolveAccountId();
+    if (accountId > 0) setSelectedAccountId(accountId);
+
+    (async () => {
+      try {
+        const response = await getAllAccounts();
+        if (response?.statusCode === 200 && Array.isArray(response?.data)) {
+          setAccounts(response.data);
+          if ((!accountId || accountId <= 0) && response.data.length > 0) {
+            const fallbackAccountId = Number(response.data[0]?.id || 0);
+            if (fallbackAccountId > 0) {
+              setSelectedAccountId(fallbackAccountId);
+              try {
+                localStorage.setItem("accountId", String(fallbackAccountId));
+              } catch {
+                // ignore
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch accounts:", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedAccountId || selectedAccountId <= 0) {
+      setVehicles([]);
+      return;
+    }
+
+    (async () => {
+      try {
+        setIsVehiclesLoading(true);
+        const response = await getVehicleDropdown(selectedAccountId);
+        if (response?.statusCode === 200 && Array.isArray(response?.data)) {
+          setVehicles(response.data);
+        } else {
+          setVehicles([]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch vehicles:", error);
+        setVehicles([]);
+      } finally {
+        setIsVehiclesLoading(false);
+      }
+    })();
+  }, [selectedAccountId]);
+
+  const resetKey = `${vehicleId ?? ""}::${selectedAccountId ?? ""}`;
+  useEffect(() => {
+    void resetKey;
+    setIsPlaying(false);
+    setCurrentIndex(0);
+    setHistoryData([]);
+    setError("");
+  }, [resetKey]);
 
   // Fetch history data
   const fetchHistoryData = async (): Promise<void> => {
@@ -475,187 +605,546 @@ export default function HistoryTracking() {
             showBulkUpload={false}
           />
         </div>
-      {/* Desktop Layout */}
-      <div className="hidden lg:block">
+        {/* Desktop Layout */}
+        <div className="hidden lg:block">
+          {/* Time Period Settings */}
+          <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+            <h2 className="mb-3 text-[12px] font-bold uppercase tracking-widest text-slate-600">
+              TIME PERIOD SETTINGS
+            </h2>
 
-        {/* Time Period Settings */}
-        <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
-          <h2 className="mb-3 text-[12px] font-bold uppercase tracking-widest text-slate-600">
-            TIME PERIOD SETTINGS
-          </h2>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-6">
+              <div>
+                <div className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Account
+                </div>
+                <div className="flex items-center gap-2">
+                  <Building2
+                    className={`h-4 w-4 ${
+                      isDark ? "text-slate-300" : "text-slate-500"
+                    }`}
+                  />
+                  <div className="flex-1">
+                    <SearchableDropdown
+                      options={accountSelectOptions}
+                      value={selectedAccountOption}
+                      onChange={(option) => {
+                        const nextAccountId = Number(option?.value || 0);
+                        if (!nextAccountId) return;
+                        setSelectedAccountId(nextAccountId);
+                        try {
+                          localStorage.setItem(
+                            "accountId",
+                            String(nextAccountId),
+                          );
+                        } catch {
+                          // ignore
+                        }
+                      }}
+                      placeholder="Select account"
+                      isClearable={false}
+                      isDark={isDark}
+                      noOptionsMessage="No accounts found"
+                    />
+                  </div>
+                </div>
+              </div>
 
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
-            <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Start Date
-              </label>
-              <input
-                type="datetime-local"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
-                style={{ borderColor: "hsl(var(--border))" }}
-              />
-            </div>
+              <div>
+                <div className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Vehicle
+                </div>
+                <div className="flex items-center gap-2">
+                  <CarFront
+                    className={`h-4 w-4 ${
+                      isDark ? "text-slate-300" : "text-slate-500"
+                    }`}
+                  />
+                  <div className="flex-1">
+                    <SearchableDropdown
+                      options={vehicleSelectOptions}
+                      value={selectedVehicleOption}
+                      onChange={(option) => {
+                        const nextVehicleId = String(option?.value || "");
+                        if (!nextVehicleId) return;
+                        router.push(
+                          `/fleet/history-tracking-smooth/${nextVehicleId}`,
+                        );
+                      }}
+                      placeholder="Select vehicle"
+                      isClearable={false}
+                      isDisabled={!selectedAccountId}
+                      isLoading={isVehiclesLoading}
+                      isDark={isDark}
+                      noOptionsMessage={
+                        selectedAccountId
+                          ? "No vehicles found"
+                          : "Select an account first"
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
 
-            <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
-                End Date
-              </label>
-              <input
-                type="datetime-local"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
-                style={{ borderColor: "hsl(var(--border))" }}
-              />
-            </div>
+              <div>
+                <label
+                  htmlFor="history-tracking-start"
+                  className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500"
+                >
+                  Start Date
+                </label>
+                <input
+                  id="history-tracking-start"
+                  type="datetime-local"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                  style={{ borderColor: "hsl(var(--border))" }}
+                />
+              </div>
 
-            <div className="flex items-end">
-              <button
-                onClick={fetchHistoryData}
-                disabled={isLoading}
-                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold text-white transition disabled:opacity-50"
-                style={{ backgroundColor: selectedColor }}
-              >
-                <Navigation className="h-4 w-4" />
-                {isLoading ? "Loading..." : "RE-PLOT ROUTE"}
-              </button>
+              <div>
+                <label
+                  htmlFor="history-tracking-end"
+                  className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500"
+                >
+                  End Date
+                </label>
+                <input
+                  id="history-tracking-end"
+                  type="datetime-local"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                  style={{ borderColor: "hsl(var(--border))" }}
+                />
+              </div>
+
+              <div className="flex items-end">
+                <button
+                  type="button"
+                  onClick={fetchHistoryData}
+                  disabled={isLoading}
+                  className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold text-white transition disabled:opacity-50"
+                  style={{ backgroundColor: selectedColor }}
+                >
+                  <Navigation className="h-4 w-4" />
+                  {isLoading ? "Loading..." : "RE-PLOT ROUTE"}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[340px_1fr]">
-          {/* Sidebar */}
-          <aside className="space-y-3">
-            {/* Movement Stats */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
-              <h3 className="mb-3 text-[12px] font-bold uppercase tracking-widest text-slate-600">
-                MOVEMENT STATS (TODAY)
-              </h3>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                    Dist. Covered
-                  </div>
-                  <div className="text-2xl font-black text-slate-900">
-                    {stats.distance} KM
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                    Moving Time
-                  </div>
-                  <div className="text-2xl font-black text-slate-900">
-                    {stats.movingTime}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Violations */}
-            {violations.length > 0 && (
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-[340px_1fr]">
+            {/* Sidebar */}
+            <aside className="space-y-3">
+              {/* Movement Stats */}
               <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
                 <h3 className="mb-3 text-[12px] font-bold uppercase tracking-widest text-slate-600">
-                  VIOLATIONS RECORDED
+                  MOVEMENT STATS (TODAY)
                 </h3>
 
-                <div className="space-y-2">
-                  {violations.map((violation, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        setCurrentIndex(violation.index);
-                        setIsPlaying(false);
-                      }}
-                      className="w-full rounded-xl border border-red-200 bg-red-50 p-3 text-left transition hover:bg-red-100"
-                    >
-                      <div className="mb-1 flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4 text-red-600" />
-                        <span className="text-sm font-bold text-red-600">
-                          {violation.overSpeed && "Over-speeding"}
-                          {violation.collision && "Collision"}
-                          {violation.fatigue && "Fatigue"}
-                        </span>
-                      </div>
-                      <div className="text-xs font-semibold text-slate-500">
-                        {formatTime(violation.gpsDate)} • {violation.speed} KM/H
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Current Position Info */}
-            {currentPoint && (
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
-                <h3 className="mb-3 text-[12px] font-bold uppercase tracking-widest text-slate-600">
-                  CURRENT POSITION
-                </h3>
-
-                <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <div className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                        <Gauge className="h-3.5 w-3.5" />
-                        Speed
-                      </div>
-                      <div className="text-lg font-black text-slate-900">
-                        {currentPoint.speed} KM/H
-                      </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                      Dist. Covered
                     </div>
-
-                    <div>
-                      <div className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                        <Zap className="h-3.5 w-3.5" />
-                        Ignition
-                      </div>
-                      <div
-                        className={`text-lg font-black ${
-                          currentPoint.ignition
-                            ? "text-emerald-500"
-                            : "text-slate-400"
-                        }`}
-                      >
-                        {currentPoint.ignition ? "ON" : "OFF"}
-                      </div>
+                    <div className="text-2xl font-black text-slate-900">
+                      {stats.distance} KM
                     </div>
                   </div>
 
                   <div>
-                    <div className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                      <Clock className="h-3.5 w-3.5" />
-                      Timestamp
+                    <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                      Moving Time
                     </div>
-                    <div className="text-sm font-bold text-slate-700">
-                      {formatDateTime(currentPoint.gpsDate)}
+                    <div className="text-2xl font-black text-slate-900">
+                      {stats.movingTime}
                     </div>
                   </div>
                 </div>
               </div>
-            )}
-          </aside>
 
-          {/* Map */}
-          <main className="relative min-h-[70vh] overflow-hidden rounded-2xl border border-slate-200 bg-white">
+              {/* Violations */}
+              {violations.length > 0 && (
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+                  <h3 className="mb-3 text-[12px] font-bold uppercase tracking-widest text-slate-600">
+                    VIOLATIONS RECORDED
+                  </h3>
+
+                  <div className="space-y-2">
+                    {violations.map((violation, idx) => (
+                      <button
+                        type="button"
+                        key={`${violation.id}-${violation.index}-${idx}`}
+                        onClick={() => {
+                          setCurrentIndex(violation.index);
+                          setIsPlaying(false);
+                        }}
+                        className="w-full rounded-xl border border-red-200 bg-red-50 p-3 text-left transition hover:bg-red-100"
+                      >
+                        <div className="mb-1 flex items-center gap-2">
+                          <AlertTriangle className="h-4 w-4 text-red-600" />
+                          <span className="text-sm font-bold text-red-600">
+                            {violation.overSpeed && "Over-speeding"}
+                            {violation.collision && "Collision"}
+                            {violation.fatigue && "Fatigue"}
+                          </span>
+                        </div>
+                        <div className="text-xs font-semibold text-slate-500">
+                          {formatTime(violation.gpsDate)} • {violation.speed}{" "}
+                          KM/H
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Current Position Info */}
+              {currentPoint && (
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+                  <h3 className="mb-3 text-[12px] font-bold uppercase tracking-widest text-slate-600">
+                    CURRENT POSITION
+                  </h3>
+
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <div className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                          <Gauge className="h-3.5 w-3.5" />
+                          Speed
+                        </div>
+                        <div className="text-lg font-black text-slate-900">
+                          {currentPoint.speed} KM/H
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                          <Zap className="h-3.5 w-3.5" />
+                          Ignition
+                        </div>
+                        <div
+                          className={`text-lg font-black ${
+                            currentPoint.ignition
+                              ? "text-emerald-500"
+                              : "text-slate-400"
+                          }`}
+                        >
+                          {currentPoint.ignition ? "ON" : "OFF"}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                        <Clock className="h-3.5 w-3.5" />
+                        Timestamp
+                      </div>
+                      <div className="text-sm font-bold text-slate-700">
+                        {formatDateTime(currentPoint.gpsDate)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </aside>
+
+            {/* Map */}
+            <main className="relative min-h-[70vh] overflow-hidden rounded-2xl border border-slate-200 bg-white">
+              {!hasApiKey && (
+                <div className="flex h-full items-center justify-center p-8 text-center text-sm font-semibold text-red-600">
+                  Google Maps key missing in env. Set
+                  `NEXT_PUBLIC_GOOGLE_MAPS_KEY`.
+                </div>
+              )}
+
+              {hasApiKey && loadError && (
+                <div className="flex h-full items-center justify-center p-8 text-center text-sm font-semibold text-red-600">
+                  Unable to load Google Maps SDK.
+                </div>
+              )}
+
+              {hasApiKey && !loadError && !isLoaded && (
+                <div className="flex h-full items-center justify-center p-8 text-sm font-semibold text-slate-500">
+                  Loading map...
+                </div>
+              )}
+
+              {hasApiKey && !loadError && isLoaded && (
+                <>
+                  <GoogleMap
+                    mapContainerStyle={{ width: "100%", height: "100%" }}
+                    center={mapCenter}
+                    zoom={13}
+                    options={mapOptions}
+                    onLoad={(map) => {
+                      mapRef.current = map;
+                    }}
+                  >
+                    {/* Route polyline */}
+                    {routePath.length > 1 && (
+                      <PolylineF
+                        path={routePath}
+                        options={{
+                          strokeColor: selectedColor,
+                          strokeOpacity: 0.9,
+                          strokeWeight: 4,
+                        }}
+                      />
+                    )}
+
+                    {/* Start marker */}
+                    {historyData.length > 0 && (
+                      <MarkerF
+                        position={{
+                          lat: historyData[0].latitude,
+                          lng: historyData[0].longitude,
+                        }}
+                        icon={{
+                          ...getAnchoredIcon(
+                            getCarMarkerSvg({
+                              color: "#10b981",
+                              strokeColor: "#0f172a",
+                              size: 44,
+                            }),
+                            44,
+                          ),
+                        }}
+                      />
+                    )}
+
+                    {/* End marker */}
+                    {historyData.length > 0 &&
+                      currentIndex === historyData.length - 1 && (
+                        <MarkerF
+                          position={{
+                            lat: historyData[historyData.length - 1].latitude,
+                            lng: historyData[historyData.length - 1].longitude,
+                          }}
+                          icon={{
+                            ...getAnchoredIcon(
+                              getCarMarkerSvg({
+                                color: "#ef4444",
+                                strokeColor: "#0f172a",
+                                size: 44,
+                              }),
+                              44,
+                            ),
+                          }}
+                        />
+                      )}
+
+                    {/* Current position marker */}
+                    {currentPoint && animatedPosition && (
+                      <MarkerF
+                        position={animatedPosition}
+                        icon={{
+                          ...getAnchoredIcon(
+                            getCarMarkerSvg({
+                              color: "#1d4ed8",
+                              strokeColor: "#0f172a",
+                              isActive: true,
+                              size: 48,
+                              direction: carDirection,
+                            }),
+                            48,
+                          ),
+                        }}
+                      />
+                    )}
+
+                    {/* Violation markers */}
+                    {violations.map((violation, idx) => (
+                      <MarkerF
+                        key={`${violation.id}-${violation.index}-${idx}`}
+                        position={{
+                          lat: violation.latitude,
+                          lng: violation.longitude,
+                        }}
+                        icon={{
+                          ...getAnchoredIcon(
+                            "data:image/svg+xml;utf-8," +
+                              encodeURIComponent(`
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+                          <circle cx="14" cy="14" r="10" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+                          <text x="14" y="18" text-anchor="middle" font-size="14" font-weight="bold" fill="white">!</text>
+                        </svg>
+                      `),
+                            28,
+                          ),
+                        }}
+                        onClick={() => {
+                          setCurrentIndex(violation.index);
+                          setIsPlaying(false);
+                        }}
+                      />
+                    ))}
+                  </GoogleMap>
+
+                  {/* Playback Controls */}
+                  {historyData.length > 0 && (
+                    <div className="absolute bottom-6 left-1/2 w-[90%] max-w-4xl -translate-x-1/2 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-2xl backdrop-blur">
+                      <div className="mb-3 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold text-primary">
+                            {formatTime(historyData[0].gpsDate)}
+                          </span>
+                          <span className="text-xs font-semibold uppercase text-slate-400">
+                            PLAYING TRIP • {playbackSpeed}X
+                          </span>
+                        </div>
+                        <span className="text-sm font-bold text-slate-900">
+                          {formatTime(
+                            historyData[historyData.length - 1].gpsDate,
+                          )}
+                        </span>
+                      </div>
+
+                      {/* Progress bar */}
+                      <div className="relative mb-3 h-2 rounded-full bg-slate-200">
+                        <div
+                          className="absolute h-full rounded-full transition-all"
+                          style={{
+                            width: `${(currentIndex / (historyData.length - 1)) * 100}%`,
+                            backgroundColor: selectedColor,
+                          }}
+                        />
+                        <input
+                          type="range"
+                          min="0"
+                          max={historyData.length - 1}
+                          value={currentIndex}
+                          onChange={(e) => {
+                            setCurrentIndex(Number(e.target.value));
+                            setIsPlaying(false);
+                          }}
+                          className="absolute inset-0 w-full cursor-pointer opacity-0"
+                        />
+                      </div>
+
+                      {/* Controls */}
+                      <div className="flex items-center justify-between">
+                        <button
+                          type="button"
+                          onClick={() => setIsPlaying(!isPlaying)}
+                          className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white transition"
+                          style={{ backgroundColor: selectedColor }}
+                        >
+                          {isPlaying ? (
+                            <Pause className="h-5 w-5" fill="currentColor" />
+                          ) : (
+                            <Play className="h-5 w-5" fill="currentColor" />
+                          )}
+                        </button>
+
+                        <div className="flex items-center gap-2">
+                          {[1, 2, 4].map((speed) => (
+                            <button
+                              key={speed}
+                              type="button"
+                              onClick={() => setPlaybackSpeed(speed)}
+                              className={`h-8 rounded-lg px-3 text-xs font-bold transition ${
+                                playbackSpeed === speed
+                                  ? "bg-slate-900 text-white"
+                                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                              }`}
+                            >
+                              {speed}x
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Error/Empty states */}
+                  {error && (
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-red-200 bg-white p-6 text-center shadow-xl dark:bg-slate-900">
+                      <AlertTriangle className="mx-auto mb-2 h-8 w-8 text-red-500" />
+                      <div className="text-sm font-semibold text-red-600">
+                        {error}
+                      </div>
+                    </div>
+                  )}
+
+                  {!isLoading && !error && historyData.length === 0 && (
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-xl dark:border-slate-700 dark:bg-slate-900">
+                      <MapPin className="mx-auto mb-2 h-8 w-8 text-slate-400" />
+                      <div className="text-sm font-semibold text-slate-600">
+                        Select a time period and click "RE-PLOT ROUTE"
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </main>
+          </div>
+        </div>
+
+        {/* Mobile Layout */}
+        <div className="flex h-screen flex-col lg:hidden">
+          {/* Mobile Header */}
+          <header className="bg-white px-4 py-3 shadow-sm dark:bg-slate-900">
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => router.push("/fleet")}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                <span className="hidden sm:inline">Fleet</span>
+              </button>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowDatePicker(true)}
+                  className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-xs font-semibold text-white"
+                  style={{ backgroundColor: selectedColor }}
+                >
+                  <Calendar className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Date</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowSidebar(true)}
+                  className="inline-flex items-center gap-1 rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white dark:bg-slate-700"
+                >
+                  <Gauge className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Stats</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-2">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-primary">
+                History Analysis
+              </div>
+              <div className="text-lg font-black text-slate-900">
+                {vehicleId || "Unknown Vehicle"}
+              </div>
+            </div>
+          </header>
+
+          {/* Mobile Map */}
+          <main className="relative flex-1">
             {!hasApiKey && (
-              <div className="flex h-full items-center justify-center p-8 text-center text-sm font-semibold text-red-600">
-                Google Maps key missing in env. Set
-                `NEXT_PUBLIC_GOOGLE_MAPS_KEY`.
+              <div className="flex h-full items-center justify-center bg-white p-4 text-center text-sm font-semibold text-red-600">
+                Google Maps key missing
               </div>
             )}
 
             {hasApiKey && loadError && (
-              <div className="flex h-full items-center justify-center p-8 text-center text-sm font-semibold text-red-600">
-                Unable to load Google Maps SDK.
+              <div className="flex h-full items-center justify-center bg-white p-4 text-center text-sm font-semibold text-red-600">
+                Unable to load Maps
               </div>
             )}
 
             {hasApiKey && !loadError && !isLoaded && (
-              <div className="flex h-full items-center justify-center p-8 text-sm font-semibold text-slate-500">
+              <div className="flex h-full items-center justify-center bg-white p-4 text-sm font-semibold text-slate-500">
                 Loading map...
               </div>
             )}
@@ -746,7 +1235,7 @@ export default function HistoryTracking() {
                   {/* Violation markers */}
                   {violations.map((violation, idx) => (
                     <MarkerF
-                      key={idx}
+                      key={`${violation.id}-${violation.index}-${idx}`}
                       position={{
                         lat: violation.latitude,
                         lng: violation.longitude,
@@ -771,25 +1260,50 @@ export default function HistoryTracking() {
                   ))}
                 </GoogleMap>
 
-                {/* Playback Controls */}
-                {historyData.length > 0 && (
-                  <div className="absolute bottom-6 left-1/2 w-[90%] max-w-4xl -translate-x-1/2 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-2xl backdrop-blur">
-                    <div className="mb-3 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-primary">
-                          {formatTime(historyData[0].gpsDate)}
-                        </span>
-                        <span className="text-xs font-semibold uppercase text-slate-400">
-                          PLAYING TRIP • {playbackSpeed}X
-                        </span>
+                {/* Mobile Stats Card - Floating */}
+                {currentPoint && (
+                  <div className="absolute left-4 right-4 top-4 rounded-xl bg-white/95 p-3 shadow-lg backdrop-blur dark:bg-slate-900/95">
+                    <div className="grid grid-cols-3 gap-3 text-center">
+                      <div>
+                        <div className="text-[10px] font-semibold uppercase text-slate-500">
+                          Speed
+                        </div>
+                        <div className="text-xl font-black text-slate-900">
+                          {currentPoint.speed}
+                        </div>
+                        <div className="text-[9px] font-bold text-slate-400">
+                          KM/H
+                        </div>
                       </div>
-                      <span className="text-sm font-bold text-slate-900">
-                        {formatTime(
-                          historyData[historyData.length - 1].gpsDate,
-                        )}
-                      </span>
+                      <div>
+                        <div className="text-[10px] font-semibold uppercase text-slate-500">
+                          Distance
+                        </div>
+                        <div className="text-xl font-black text-slate-900">
+                          {stats.distance}
+                        </div>
+                        <div className="text-[9px] font-bold text-slate-400">
+                          KM
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] font-semibold uppercase text-slate-500">
+                          Time
+                        </div>
+                        <div className="text-xl font-black text-slate-900">
+                          {stats.movingTime.split(" ")[0]}
+                        </div>
+                        <div className="text-[9px] font-bold text-slate-400">
+                          {stats.movingTime.split(" ")[1]}
+                        </div>
+                      </div>
                     </div>
+                  </div>
+                )}
 
+                {/* Mobile Playback Controls */}
+                {historyData.length > 0 && (
+                  <div className="absolute bottom-4 left-4 right-4 rounded-xl bg-white/95 p-3 shadow-lg backdrop-blur dark:bg-slate-900/95">
                     {/* Progress bar */}
                     <div className="relative mb-3 h-2 rounded-full bg-slate-200">
                       <div
@@ -815,8 +1329,9 @@ export default function HistoryTracking() {
                     {/* Controls */}
                     <div className="flex items-center justify-between">
                       <button
+                        type="button"
                         onClick={() => setIsPlaying(!isPlaying)}
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white transition"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white"
                         style={{ backgroundColor: selectedColor }}
                       >
                         {isPlaying ? (
@@ -830,518 +1345,304 @@ export default function HistoryTracking() {
                         {[1, 2, 4].map((speed) => (
                           <button
                             key={speed}
+                            type="button"
                             onClick={() => setPlaybackSpeed(speed)}
-                            className={`h-8 rounded-lg px-3 text-xs font-bold transition ${
+                            className={`h-8 rounded-lg px-2.5 text-xs font-bold ${
                               playbackSpeed === speed
                                 ? "bg-slate-900 text-white"
-                                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                                : "bg-slate-100 text-slate-600"
                             }`}
                           >
                             {speed}x
                           </button>
                         ))}
                       </div>
+
+                      <div className="text-xs font-semibold text-slate-500">
+                        {formatTime(currentPoint?.gpsDate || "")}
+                      </div>
                     </div>
                   </div>
                 )}
 
-               
-
-                {/* Error/Empty states */}
+                {/* Error states */}
                 {error && (
-                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-red-200 bg-white p-6 text-center shadow-xl dark:bg-slate-900">
-                    <AlertTriangle className="mx-auto mb-2 h-8 w-8 text-red-500" />
-                    <div className="text-sm font-semibold text-red-600">
-                      {error}
-                    </div>
-                  </div>
-                )}
-
-                {!isLoading && !error && historyData.length === 0 && (
-                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-xl dark:border-slate-700 dark:bg-slate-900">
-                    <MapPin className="mx-auto mb-2 h-8 w-8 text-slate-400" />
-                    <div className="text-sm font-semibold text-slate-600">
-                      Select a time period and click "RE-PLOT ROUTE"
-                    </div>
+                  <div className="absolute left-4 right-4 top-20 rounded-xl bg-red-500 p-3 text-center text-sm font-semibold text-white shadow-lg">
+                    {error}
                   </div>
                 )}
               </>
             )}
           </main>
-        </div>
-      </div>
 
-      {/* Mobile Layout */}
-      <div className="flex h-screen flex-col lg:hidden">
-        {/* Mobile Header */}
-        <header className="bg-white px-4 py-3 shadow-sm dark:bg-slate-900">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => router.push("/fleet")}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-primary"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span className="hidden sm:inline">Fleet</span>
-            </button>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setShowDatePicker(true)}
-                className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-xs font-semibold text-white"
-                style={{ backgroundColor: selectedColor }}
-              >
-                <Calendar className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Date</span>
-              </button>
-
-              <button
-                onClick={() => setShowSidebar(true)}
-                className="inline-flex items-center gap-1 rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white dark:bg-slate-700"
-              >
-                <Gauge className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Stats</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-2">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-primary">
-              History Analysis
-            </div>
-            <div className="text-lg font-black text-slate-900">
-              {vehicleId || "Unknown Vehicle"}
-            </div>
-          </div>
-        </header>
-
-        {/* Mobile Map */}
-        <main className="relative flex-1">
-          {!hasApiKey && (
-            <div className="flex h-full items-center justify-center bg-white p-4 text-center text-sm font-semibold text-red-600">
-              Google Maps key missing
-            </div>
-          )}
-
-          {hasApiKey && loadError && (
-            <div className="flex h-full items-center justify-center bg-white p-4 text-center text-sm font-semibold text-red-600">
-              Unable to load Maps
-            </div>
-          )}
-
-          {hasApiKey && !loadError && !isLoaded && (
-            <div className="flex h-full items-center justify-center bg-white p-4 text-sm font-semibold text-slate-500">
-              Loading map...
-            </div>
-          )}
-
-          {hasApiKey && !loadError && isLoaded && (
-            <>
-              <GoogleMap
-                mapContainerStyle={{ width: "100%", height: "100%" }}
-                center={mapCenter}
-                zoom={13}
-                options={mapOptions}
-                onLoad={(map) => {
-                  mapRef.current = map;
-                }}
-              >
-                {/* Route polyline */}
-                {routePath.length > 1 && (
-                  <PolylineF
-                    path={routePath}
-                    options={{
-                      strokeColor: selectedColor,
-                      strokeOpacity: 0.9,
-                      strokeWeight: 4,
-                    }}
-                  />
-                )}
-
-                {/* Start marker */}
-                {historyData.length > 0 && (
-                  <MarkerF
-                    position={{
-                      lat: historyData[0].latitude,
-                      lng: historyData[0].longitude,
-                    }}
-                    icon={{
-                      ...getAnchoredIcon(
-                        getCarMarkerSvg({
-                          color: "#10b981",
-                          strokeColor: "#0f172a",
-                          size: 44,
-                        }),
-                        44,
-                      ),
-                    }}
-                  />
-                )}
-
-                {/* End marker */}
-                {historyData.length > 0 &&
-                  currentIndex === historyData.length - 1 && (
-                    <MarkerF
-                      position={{
-                        lat: historyData[historyData.length - 1].latitude,
-                        lng: historyData[historyData.length - 1].longitude,
-                      }}
-                      icon={{
-                        ...getAnchoredIcon(
-                          getCarMarkerSvg({
-                            color: "#ef4444",
-                            strokeColor: "#0f172a",
-                            size: 44,
-                          }),
-                          44,
-                        ),
-                      }}
-                    />
-                  )}
-
-                {/* Current position marker */}
-                {currentPoint && animatedPosition && (
-                  <MarkerF
-                    position={animatedPosition}
-                    icon={{
-                      ...getAnchoredIcon(
-                        getCarMarkerSvg({
-                          color: "#1d4ed8",
-                          strokeColor: "#0f172a",
-                          isActive: true,
-                          size: 48,
-                          direction: carDirection,
-                        }),
-                        48,
-                      ),
-                    }}
-                  />
-                )}
-
-                {/* Violation markers */}
-                {violations.map((violation, idx) => (
-                  <MarkerF
-                    key={idx}
-                    position={{
-                      lat: violation.latitude,
-                      lng: violation.longitude,
-                    }}
-                    icon={{
-                      ...getAnchoredIcon(
-                        "data:image/svg+xml;utf-8," +
-                          encodeURIComponent(`
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
-                          <circle cx="14" cy="14" r="10" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
-                          <text x="14" y="18" text-anchor="middle" font-size="14" font-weight="bold" fill="white">!</text>
-                        </svg>
-                      `),
-                        28,
-                      ),
-                    }}
-                    onClick={() => {
-                      setCurrentIndex(violation.index);
-                      setIsPlaying(false);
-                    }}
-                  />
-                ))}
-              </GoogleMap>
-
-              {/* Mobile Stats Card - Floating */}
-              {currentPoint && (
-                <div className="absolute left-4 right-4 top-4 rounded-xl bg-white/95 p-3 shadow-lg backdrop-blur dark:bg-slate-900/95">
-                  <div className="grid grid-cols-3 gap-3 text-center">
-                    <div>
-                      <div className="text-[10px] font-semibold uppercase text-slate-500">
-                        Speed
-                      </div>
-                      <div className="text-xl font-black text-slate-900">
-                        {currentPoint.speed}
-                      </div>
-                      <div className="text-[9px] font-bold text-slate-400">
-                        KM/H
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-semibold uppercase text-slate-500">
-                        Distance
-                      </div>
-                      <div className="text-xl font-black text-slate-900">
-                        {stats.distance}
-                      </div>
-                      <div className="text-[9px] font-bold text-slate-400">
-                        KM
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-semibold uppercase text-slate-500">
-                        Time
-                      </div>
-                      <div className="text-xl font-black text-slate-900">
-                        {stats.movingTime.split(" ")[0]}
-                      </div>
-                      <div className="text-[9px] font-bold text-slate-400">
-                        {stats.movingTime.split(" ")[1]}
-                      </div>
-                    </div>
-                  </div>
+          {/* Mobile Date Picker Modal */}
+          {showDatePicker && (
+            <div className="fixed inset-0 z-50 flex items-end bg-black/50">
+              <div className="w-full rounded-t-3xl bg-white p-6 dark:bg-slate-900">
+                <div className="mb-4 flex items-center justify-between">
+                  <h3 className="text-lg font-black text-slate-900">
+                    Select Time Period
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setShowDatePicker(false)}
+                    className="rounded-full p-1 hover:bg-slate-100"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
                 </div>
-              )}
 
-              {/* Mobile Playback Controls */}
-              {historyData.length > 0 && (
-                <div className="absolute bottom-4 left-4 right-4 rounded-xl bg-white/95 p-3 shadow-lg backdrop-blur dark:bg-slate-900/95">
-                  {/* Progress bar */}
-                  <div className="relative mb-3 h-2 rounded-full bg-slate-200">
-                    <div
-                      className="absolute h-full rounded-full transition-all"
-                      style={{
-                        width: `${(currentIndex / (historyData.length - 1)) * 100}%`,
-                        backgroundColor: selectedColor,
-                      }}
-                    />
-                    <input
-                      type="range"
-                      min="0"
-                      max={historyData.length - 1}
-                      value={currentIndex}
-                      onChange={(e) => {
-                        setCurrentIndex(Number(e.target.value));
-                        setIsPlaying(false);
-                      }}
-                      className="absolute inset-0 w-full cursor-pointer opacity-0"
-                    />
-                  </div>
-
-                  {/* Controls */}
-                  <div className="flex items-center justify-between">
-                    <button
-                      onClick={() => setIsPlaying(!isPlaying)}
-                      className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white"
-                      style={{ backgroundColor: selectedColor }}
-                    >
-                      {isPlaying ? (
-                        <Pause className="h-5 w-5" fill="currentColor" />
-                      ) : (
-                        <Play className="h-5 w-5" fill="currentColor" />
-                      )}
-                    </button>
-
+                <div className="space-y-4">
+                  <div>
+                    <div className="mb-2 block text-xs font-semibold uppercase text-slate-500">
+                      Account
+                    </div>
                     <div className="flex items-center gap-2">
-                      {[1, 2, 4].map((speed) => (
-                        <button
-                          key={speed}
-                          onClick={() => setPlaybackSpeed(speed)}
-                          className={`h-8 rounded-lg px-2.5 text-xs font-bold ${
-                            playbackSpeed === speed
-                              ? "bg-slate-900 text-white"
-                              : "bg-slate-100 text-slate-600"
-                          }`}
-                        >
-                          {speed}x
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="text-xs font-semibold text-slate-500">
-                      {formatTime(currentPoint?.gpsDate || "")}
+                      <Building2
+                        className={`h-4 w-4 ${
+                          isDark ? "text-slate-300" : "text-slate-500"
+                        }`}
+                      />
+                      <div className="flex-1">
+                        <SearchableDropdown
+                          options={accountSelectOptions}
+                          value={selectedAccountOption}
+                          onChange={(option) => {
+                            const nextAccountId = Number(option?.value || 0);
+                            if (!nextAccountId) return;
+                            setSelectedAccountId(nextAccountId);
+                            try {
+                              localStorage.setItem(
+                                "accountId",
+                                String(nextAccountId),
+                              );
+                            } catch {
+                              // ignore
+                            }
+                          }}
+                          placeholder="Select account"
+                          isClearable={false}
+                          isDark={isDark}
+                          noOptionsMessage="No accounts found"
+                        />
+                      </div>
                     </div>
                   </div>
+
+                  <div>
+                    <div className="mb-2 block text-xs font-semibold uppercase text-slate-500">
+                      Vehicle
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CarFront
+                        className={`h-4 w-4 ${
+                          isDark ? "text-slate-300" : "text-slate-500"
+                        }`}
+                      />
+                      <div className="flex-1">
+                        <SearchableDropdown
+                          options={vehicleSelectOptions}
+                          value={selectedVehicleOption}
+                          onChange={(option) => {
+                            const nextVehicleId = String(option?.value || "");
+                            if (!nextVehicleId) return;
+                            router.push(
+                              `/fleet/history-tracking-smooth/${nextVehicleId}`,
+                            );
+                          }}
+                          placeholder="Select vehicle"
+                          isClearable={false}
+                          isDisabled={!selectedAccountId}
+                          isLoading={isVehiclesLoading}
+                          isDark={isDark}
+                          noOptionsMessage={
+                            selectedAccountId
+                              ? "No vehicles found"
+                              : "Select an account first"
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="history-tracking-mobile-start"
+                      className="mb-2 block text-xs font-semibold uppercase text-slate-500"
+                    >
+                      Start Date & Time
+                    </label>
+                    <input
+                      id="history-tracking-mobile-start"
+                      type="datetime-local"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      className="h-12 w-full rounded-xl border border-slate-200 px-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="history-tracking-mobile-end"
+                      className="mb-2 block text-xs font-semibold uppercase text-slate-500"
+                    >
+                      End Date & Time
+                    </label>
+                    <input
+                      id="history-tracking-mobile-end"
+                      type="datetime-local"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      className="h-12 w-full rounded-xl border border-slate-200 px-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={fetchHistoryData}
+                    disabled={isLoading}
+                    className="flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white disabled:opacity-50"
+                    style={{ backgroundColor: selectedColor }}
+                  >
+                    <Navigation className="h-4 w-4" />
+                    {isLoading ? "Loading..." : "RE-PLOT ROUTE"}
+                  </button>
                 </div>
-              )}
-
-              {/* Error states */}
-              {error && (
-                <div className="absolute left-4 right-4 top-20 rounded-xl bg-red-500 p-3 text-center text-sm font-semibold text-white shadow-lg">
-                  {error}
-                </div>
-              )}
-            </>
-          )}
-        </main>
-
-        {/* Mobile Date Picker Modal */}
-        {showDatePicker && (
-          <div className="fixed inset-0 z-50 flex items-end bg-black/50">
-            <div className="w-full rounded-t-3xl bg-white p-6 dark:bg-slate-900">
-              <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-lg font-black text-slate-900">
-                  Select Time Period
-                </h3>
-                <button
-                  onClick={() => setShowDatePicker(false)}
-                  className="rounded-full p-1 hover:bg-slate-100"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase text-slate-500">
-                    Start Date & Time
-                  </label>
-                  <input
-                    type="datetime-local"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="h-12 w-full rounded-xl border border-slate-200 px-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase text-slate-500">
-                    End Date & Time
-                  </label>
-                  <input
-                    type="datetime-local"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="h-12 w-full rounded-xl border border-slate-200 px-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
-                  />
-                </div>
-
-                <button
-                  onClick={fetchHistoryData}
-                  disabled={isLoading}
-                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white disabled:opacity-50"
-                  style={{ backgroundColor: selectedColor }}
-                >
-                  <Navigation className="h-4 w-4" />
-                  {isLoading ? "Loading..." : "RE-PLOT ROUTE"}
-                </button>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Mobile Sidebar Modal */}
-        {showSidebar && (
-          <div className="fixed inset-0 z-50 flex bg-black/50">
-            <div className="ml-auto h-full w-[85%] max-w-sm overflow-y-auto bg-white dark:bg-slate-900">
-              <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
-                <h3 className="text-lg font-black text-slate-900">
-                  Trip Details
-                </h3>
-                <button
-                  onClick={() => setShowSidebar(false)}
-                  className="rounded-full p-1 hover:bg-slate-100"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              <div className="space-y-4 p-4">
-                {/* Movement Stats */}
-                <div className="rounded-xl border border-slate-200 bg-white p-4">
-                  <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-600">
-                    Movement Stats
-                  </h4>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <div className="text-[10px] font-semibold uppercase text-slate-500">
-                        Distance
-                      </div>
-                      <div className="text-2xl font-black text-slate-900">
-                        {stats.distance}
-                      </div>
-                      <div className="text-xs text-slate-500">KM</div>
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-semibold uppercase text-slate-500">
-                        Time
-                      </div>
-                      <div className="text-2xl font-black text-slate-900">
-                        {stats.movingTime}
-                      </div>
-                    </div>
-                  </div>
+          {/* Mobile Sidebar Modal */}
+          {showSidebar && (
+            <div className="fixed inset-0 z-50 flex bg-black/50">
+              <div className="ml-auto h-full w-[85%] max-w-sm overflow-y-auto bg-white dark:bg-slate-900">
+                <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+                  <h3 className="text-lg font-black text-slate-900">
+                    Trip Details
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setShowSidebar(false)}
+                    className="rounded-full p-1 hover:bg-slate-100"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
                 </div>
 
-                {/* Violations */}
-                {violations.length > 0 && (
+                <div className="space-y-4 p-4">
+                  {/* Movement Stats */}
                   <div className="rounded-xl border border-slate-200 bg-white p-4">
                     <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-600">
-                      Violations ({violations.length})
+                      Movement Stats
                     </h4>
-                    <div className="space-y-2">
-                      {violations.map((violation, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => {
-                            setCurrentIndex(violation.index);
-                            setIsPlaying(false);
-                            setShowSidebar(false);
-                          }}
-                          className="w-full rounded-lg border border-red-200 bg-red-50 p-3 text-left"
-                        >
-                          <div className="mb-1 flex items-center gap-2">
-                            <AlertTriangle className="h-4 w-4 text-red-600" />
-                            <span className="text-sm font-bold text-red-600">
-                              {violation.overSpeed && "Over-speeding"}
-                              {violation.collision && "Collision"}
-                              {violation.fatigue && "Fatigue"}
-                            </span>
-                          </div>
-                          <div className="text-xs text-slate-500">
-                            {formatTime(violation.gpsDate)} • {violation.speed}{" "}
-                            KM/H
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Current Position */}
-                {currentPoint && (
-                  <div className="rounded-xl border border-slate-200 bg-white p-4">
-                    <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-600">
-                      Current Position
-                    </h4>
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <div className="flex items-center gap-1 text-[10px] font-semibold uppercase text-slate-500">
-                            <Gauge className="h-3 w-3" />
-                            Speed
-                          </div>
-                          <div className="text-lg font-black text-slate-900">
-                            {currentPoint.speed} KM/H
-                          </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <div className="text-[10px] font-semibold uppercase text-slate-500">
+                          Distance
                         </div>
-                        <div>
-                          <div className="flex items-center gap-1 text-[10px] font-semibold uppercase text-slate-500">
-                            <Zap className="h-3 w-3" />
-                            Ignition
-                          </div>
-                          <div
-                            className={`text-lg font-black ${
-                              currentPoint.ignition
-                                ? "text-emerald-500"
-                                : "text-slate-400"
-                            }`}
-                          >
-                            {currentPoint.ignition ? "ON" : "OFF"}
-                          </div>
+                        <div className="text-2xl font-black text-slate-900">
+                          {stats.distance}
                         </div>
+                        <div className="text-xs text-slate-500">KM</div>
                       </div>
                       <div>
-                        <div className="flex items-center gap-1 text-[10px] font-semibold uppercase text-slate-500">
-                          <Clock className="h-3 w-3" />
-                          Timestamp
+                        <div className="text-[10px] font-semibold uppercase text-slate-500">
+                          Time
                         </div>
-                        <div className="text-sm font-bold text-slate-700">
-                          {formatDateTime(currentPoint.gpsDate)}
+                        <div className="text-2xl font-black text-slate-900">
+                          {stats.movingTime}
                         </div>
                       </div>
                     </div>
                   </div>
-                )}
+
+                  {/* Violations */}
+                  {violations.length > 0 && (
+                    <div className="rounded-xl border border-slate-200 bg-white p-4">
+                      <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-600">
+                        Violations ({violations.length})
+                      </h4>
+                      <div className="space-y-2">
+                        {violations.map((violation, idx) => (
+                          <button
+                            type="button"
+                            key={`${violation.id}-${violation.index}-${idx}`}
+                            onClick={() => {
+                              setCurrentIndex(violation.index);
+                              setIsPlaying(false);
+                              setShowSidebar(false);
+                            }}
+                            className="w-full rounded-lg border border-red-200 bg-red-50 p-3 text-left"
+                          >
+                            <div className="mb-1 flex items-center gap-2">
+                              <AlertTriangle className="h-4 w-4 text-red-600" />
+                              <span className="text-sm font-bold text-red-600">
+                                {violation.overSpeed && "Over-speeding"}
+                                {violation.collision && "Collision"}
+                                {violation.fatigue && "Fatigue"}
+                              </span>
+                            </div>
+                            <div className="text-xs text-slate-500">
+                              {formatTime(violation.gpsDate)} •{" "}
+                              {violation.speed} KM/H
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Current Position */}
+                  {currentPoint && (
+                    <div className="rounded-xl border border-slate-200 bg-white p-4">
+                      <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-600">
+                        Current Position
+                      </h4>
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <div className="flex items-center gap-1 text-[10px] font-semibold uppercase text-slate-500">
+                              <Gauge className="h-3 w-3" />
+                              Speed
+                            </div>
+                            <div className="text-lg font-black text-slate-900">
+                              {currentPoint.speed} KM/H
+                            </div>
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-1 text-[10px] font-semibold uppercase text-slate-500">
+                              <Zap className="h-3 w-3" />
+                              Ignition
+                            </div>
+                            <div
+                              className={`text-lg font-black ${
+                                currentPoint.ignition
+                                  ? "text-emerald-500"
+                                  : "text-slate-400"
+                              }`}
+                            >
+                              {currentPoint.ignition ? "ON" : "OFF"}
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1 text-[10px] font-semibold uppercase text-slate-500">
+                            <Clock className="h-3 w-3" />
+                            Timestamp
+                          </div>
+                          <div className="text-sm font-bold text-slate-700">
+                            {formatDateTime(currentPoint.gpsDate)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
-  </div>
   );
 }
