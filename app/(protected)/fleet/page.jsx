@@ -3,7 +3,9 @@
 import { GoogleMap, MarkerF, PolylineF } from "@react-google-maps/api";
 import {
   Activity,
+  Building2,
   CarFront,
+  ChevronDown,
   CircleDotDashed,
   CircleX,
   Clock3,
@@ -34,6 +36,7 @@ import PageHeader from "@/components/PageHeader";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useGoogleMapsSdk } from "@/hooks/useGoogleMapsSdk";
+import { getAllAccounts } from "@/services/commonServie";
 import { getLiveTrackingBatch } from "@/services/liveTrackingService";
 // import { getCarMarkerSvg } from "@/utils/carMarkerIcon";
 import bus from "../../../assets/vechileImages/bus.png";
@@ -57,6 +60,8 @@ export default function FleetDashboard() {
   const router = useRouter();
   const { isDark } = useTheme();
   const { selectedColor } = useColor();
+  const [accounts, setAccounts] = useState([]);
+  const [selectedAccountId, setSelectedAccountId] = useState(null);
   const [fleetData, setFleetData] = useState([]);
   const [selectedVehicleId, setSelectedVehicleId] = useState(null);
   const [popupVehicleId, setPopupVehicleId] = useState(null);
@@ -72,66 +77,125 @@ export default function FleetDashboard() {
   const isBatchFetchInProgressRef = useRef(false);
 
   useEffect(() => {
+    if (!selectedAccountId) return;
+    setFleetData([]);
+    setVehicleTrails({});
+    setSelectedVehicleId(null);
+    setPopupVehicleId(null);
+    setFilterStatus("ALL");
+    setFleetError("");
+  }, [selectedAccountId]);
+
+  useEffect(() => {
+    const resolveAccountId = () => {
+      if (typeof window === "undefined") return 0;
+
+      try {
+        const selected = Number(localStorage.getItem("accountId") || 0);
+        if (selected > 0) return selected;
+
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        const accountId = Number(user?.accountId || user?.AccountId || 0);
+        return Number.isFinite(accountId) ? accountId : 0;
+      } catch {
+        return 0;
+      }
+    };
+
+    const accountId = resolveAccountId();
+    if (accountId > 0) {
+      setIsFleetLoading(true);
+      setSelectedAccountId(accountId);
+    }
+
+    (async () => {
+      try {
+        const response = await getAllAccounts();
+        if (response?.statusCode === 200 && Array.isArray(response?.data)) {
+          setAccounts(response.data);
+          if ((!accountId || accountId <= 0) && response.data.length > 0) {
+            const fallbackAccountId = Number(response.data[0]?.id || 0);
+            if (fallbackAccountId > 0) {
+              setIsFleetLoading(true);
+              setSelectedAccountId(fallbackAccountId);
+              try {
+                localStorage.setItem("accountId", String(fallbackAccountId));
+              } catch {
+                // Ignore storage errors (e.g. blocked in private mode).
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch accounts:", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchInput);
     }, SEARCH_DEBOUNCE_MS);
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  const loadFleet = useCallback(async (cancelledRef, force = false) => {
-    const now = Date.now();
-    const shouldSkip =
-      !force &&
-      (isBatchFetchInProgressRef.current ||
-        now - lastBatchFetchAtRef.current < BATCH_FETCH_THROTTLE_MS);
-    if (shouldSkip) return;
+  const loadFleet = useCallback(
+    async (cancelledRef, force = false) => {
+      const now = Date.now();
+      const shouldSkip =
+        !force &&
+        (isBatchFetchInProgressRef.current ||
+          now - lastBatchFetchAtRef.current < BATCH_FETCH_THROTTLE_MS);
+      if (shouldSkip) return;
 
-    isBatchFetchInProgressRef.current = true;
-    try {
-      setFleetError("");
-      const vehicles = await getLiveTrackingBatch();
+      isBatchFetchInProgressRef.current = true;
+      try {
+        setFleetError("");
+        const vehicles = await getLiveTrackingBatch(selectedAccountId);
 
-      if (!vehicles.length) {
-        throw new Error("No live vehicle data received");
-      }
+        if (!vehicles.length) {
+          throw new Error("No live vehicle data received");
+        }
 
-      if (!cancelledRef.current) {
-        setFleetData(vehicles);
-        setSelectedVehicleId((prev) => {
-          if (prev && vehicles.some((v) => v.id === prev)) return prev;
-          return null;
-        });
-        setPopupVehicleId((prev) => {
-          if (prev && vehicles.some((v) => v.id === prev)) return prev;
-          return null;
-        });
-        setVehicleTrails((prev) => {
-          const next = { ...prev };
-          vehicles.forEach((vehicle) => {
-            const point = {
-              lat: vehicle.position[0],
-              lng: vehicle.position[1],
-            };
-            const trail = next[vehicle.id] ? [...next[vehicle.id]] : [];
-            const last = trail[trail.length - 1];
-            if (!last || last.lat !== point.lat || last.lng !== point.lng) {
-              trail.push(point);
-            }
-            next[vehicle.id] = trail.slice(-40);
+        if (!cancelledRef.current) {
+          setFleetData(vehicles);
+          setSelectedVehicleId((prev) => {
+            if (prev && vehicles.some((v) => v.id === prev)) return prev;
+            return null;
           });
-          return next;
-        });
+          setPopupVehicleId((prev) => {
+            if (prev && vehicles.some((v) => v.id === prev)) return prev;
+            return null;
+          });
+          setVehicleTrails((prev) => {
+            const next = { ...prev };
+            vehicles.forEach((vehicle) => {
+              const point = {
+                lat: vehicle.position[0],
+                lng: vehicle.position[1],
+              };
+              const trail = next[vehicle.id] ? [...next[vehicle.id]] : [];
+              const last = trail[trail.length - 1];
+              if (!last || last.lat !== point.lat || last.lng !== point.lng) {
+                trail.push(point);
+              }
+              next[vehicle.id] = trail.slice(-40);
+            });
+            return next;
+          });
+        }
+      } catch (error) {
+        if (!cancelledRef.current) {
+          setFleetError(error?.message || "Unable to fetch live tracking data");
+        }
+      } finally {
+        lastBatchFetchAtRef.current = Date.now();
+        isBatchFetchInProgressRef.current = false;
+        if (!cancelledRef.current) setIsFleetLoading(false);
       }
-    } catch (error) {
-      if (!cancelledRef.current) {
-        setFleetError(error?.message || "Unable to fetch live tracking data");
-      }
-    } finally {
-      lastBatchFetchAtRef.current = Date.now();
-      isBatchFetchInProgressRef.current = false;
-      if (!cancelledRef.current) setIsFleetLoading(false);
-    }
-  }, []);
+    },
+    [selectedAccountId],
+  );
 
   useEffect(() => {
     const cancelledRef = { current: false };
@@ -237,6 +301,45 @@ export default function FleetDashboard() {
         <div className="mx-auto">
           <header className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-end">
             <div className="flex items-center gap-2">
+              <div className="relative w-full max-w-[240px]">
+                <Building2
+                  className={`pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 ${
+                    isDark ? "text-gray-300" : "text-slate-400"
+                  }`}
+                />
+                <select
+                  value={selectedAccountId ?? ""}
+                  onChange={(e) => {
+                    const nextAccountId = Number(e.target.value);
+                    setIsFleetLoading(true);
+                    setSelectedAccountId(nextAccountId);
+                    try {
+                      localStorage.setItem("accountId", String(nextAccountId));
+                    } catch {
+                      // Ignore storage errors (e.g. blocked in private mode).
+                    }
+                  }}
+                  className={`h-11 w-full appearance-none rounded-xl border pl-10 pr-10 text-sm font-semibold outline-none transition focus:ring-2 ${
+                    isDark
+                      ? "border-gray-700 bg-card text-foreground focus:ring-purple-500/20"
+                      : "border-slate-200 bg-white text-slate-700 focus:border-indigo-300 focus:ring-indigo-100"
+                  }`}
+                >
+                  <option value="" disabled>
+                    Select account
+                  </option>
+                  {accounts.map((account) => (
+                    <option key={account.id} value={account.id}>
+                      {account.value}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown
+                  className={`pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 ${
+                    isDark ? "text-gray-300" : "text-slate-400"
+                  }`}
+                />
+              </div>
               <div className="relative w-full">
                 <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <input
@@ -558,6 +661,7 @@ export default function FleetDashboard() {
                       {/* ✅ Added Buttons */}
                       <div className="mt-4 flex justify-between">
                         <button
+                          type="button"
                           onClick={() =>
                             router.push(
                               `/fleet/live-tracking/${popupVehicle.vehicleId || popupVehicle.id}`,
@@ -568,6 +672,7 @@ export default function FleetDashboard() {
                           Live Tracking
                         </button>
                         <button
+                          type="button"
                           onClick={() =>
                             router.push(
                               `/fleet/history-tracking-smooth/${popupVehicle.vehicleId || popupVehicle.id}`,
