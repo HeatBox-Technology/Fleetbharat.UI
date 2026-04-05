@@ -23,6 +23,43 @@ export const loginUser = async (identifier, password) => {
   }
 };
 
+export const requestLoginOtp = async (phone) => {
+  const trimmedPhone = String(phone || "").trim();
+  try {
+    const res = await api.post("/api/auth/request-login-otp", {
+      phone: trimmedPhone,
+    });
+    return res.data;
+  } catch (error) {
+    return (
+      error.response?.data || {
+        success: false,
+        statusCode: error.response?.status || 500,
+        message:
+          error.response?.data?.message ||
+          "Failed to send OTP. Please try again.",
+        data: null,
+      }
+    );
+  }
+};
+
+export const verifyLoginOtp = async (userId, otp) => {
+  try {
+    const res = await api.post("/api/auth/verify-login-otp", { userId, otp });
+    return res.data;
+  } catch (error) {
+    return (
+      error.response?.data || {
+        success: false,
+        statusCode: error.response?.status || 500,
+        message: error.response?.data?.message || "OTP verification failed",
+        data: null,
+      }
+    );
+  }
+};
+
 export const verify2FA = async (userId, code) => {
   try {
     const res = await api.post("/api/auth/verify-2fa", { userId, code });
