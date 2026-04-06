@@ -28,7 +28,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   FilterbuttonText = "Filters",
   onFilterClick,
   showWriteButton = true,
-  showBulkUpload = false,
+  showBulkUpload,
   bulkUploadModuleKey,
 }) => {
   const { isDark } = useTheme();
@@ -57,7 +57,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   };
   const [mounted, setMounted] = useState(false);
 
-  const [canShowBulkUpload, setCanShowBulkUpload] = useState(showBulkUpload);
+  const [canShowBulkUpload, setCanShowBulkUpload] = useState(
+    Boolean(showBulkUpload),
+  );
   const [canShowWriteButton, setCanShowWriteButton] = useState(showWriteButton);
   const [canShowExportButton, setCanShowExportButton] =
     useState(showExportButton);
@@ -118,10 +120,14 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         ? Boolean(matchedRight.canExport)
         : true;
       const hasBulkAccess = matchedRight ? matchedRight.isBulk !== false : true;
+      const prefersBulkUpload =
+        showBulkUpload !== undefined
+          ? showBulkUpload
+          : Boolean(matchedRight && matchedRight.isBulk !== false);
 
       setCanShowWriteButton(showWriteButton && hasWriteAccess);
       setCanShowExportButton(showExportButton && hasExportAccess);
-      setCanShowBulkUpload(showBulkUpload && hasBulkAccess);
+      setCanShowBulkUpload(Boolean(prefersBulkUpload && hasBulkAccess));
       setMounted(true);
     };
 
