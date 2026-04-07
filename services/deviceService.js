@@ -157,3 +157,61 @@ export const deleteDevice = async (id) => {
     );
   }
 };
+
+export const exportDevices = async (accountId, search) => {
+  try {
+    const query = new URLSearchParams();
+    const resolvedAccountId = Number(accountId ?? getStoredAccountId() ?? 0);
+    if (resolvedAccountId > 0) {
+      query.set("accountId", String(resolvedAccountId));
+    }
+    if (String(search || "").trim()) {
+      query.set("search", String(search).trim());
+    }
+
+    const queryString = query.toString();
+    const res = await api.get(
+      `/api/devices/export${queryString ? `?${queryString}` : ""}`,
+      {
+        responseType: "blob",
+        headers: { Accept: "*/*" },
+      },
+    );
+
+    const contentType = res.headers?.["content-type"] || "text/csv";
+    const blob = new Blob([res.data], { type: contentType });
+    const contentDisposition = res.headers?.["content-disposition"] || "";
+    const fileNameMatch = contentDisposition.match(/filename="?([^"]+)"?/i);
+    const fileName =
+      fileNameMatch?.[1] ||
+      `devices_export_${new Date().toISOString().replace(/[:.]/g, "-")}.csv`;
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: "Devices exported successfully",
+      data: null,
+    };
+  } catch (error) {
+    console.error("API Error in exportDevices:", error);
+    return (
+      error.response?.data || {
+        success: false,
+        statusCode: error.response?.status || 500,
+        message:
+          error.response?.data?.message ||
+          "Failed to export devices. Network or server error.",
+        data: null,
+      }
+    );
+  }
+};

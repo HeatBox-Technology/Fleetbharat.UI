@@ -12,7 +12,8 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import React, { useEffect, useMemo, useState } from "react";
+import type React from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import ActionLoader from "@/components/ActionLoader";
 import { MetricCard } from "@/components/CommonCard";
@@ -22,7 +23,11 @@ import PageHeader from "@/components/PageHeader";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
 import { getAllAccounts } from "@/services/commonServie";
-import { deleteDevice, getdevices } from "@/services/deviceService";
+import {
+  deleteDevice,
+  exportDevices,
+  getdevices,
+} from "@/services/deviceService";
 
 interface Device {
   id: string;
@@ -38,6 +43,21 @@ interface AccountOption {
   id: number;
   value: string;
 }
+
+type DeviceApiItem = {
+  id?: number | string;
+  deviceNo?: string;
+  deviceImeiOrSerial?: string;
+  deviceStatus?: string;
+  deviceTypeName?: string;
+  deviceCategory?: string;
+  displayName?: string;
+  manufacturerName?: string;
+  manufacturer?: string;
+  firmwareVersion?: string;
+  updatedAt?: string;
+  createdAt?: string;
+};
 
 const categoryIcon = (cat: string) => {
   const cls = "w-4 h-4 inline-block mr-1.5";
@@ -86,13 +106,14 @@ const DeviceRegistry: React.FC = () => {
         visible: true,
         render: (value: string, row: Device) => (
           <div>
-            <p
-              className="font-semibold cursor-pointer hover:underline"
+            <button
+              type="button"
+              className="font-semibold cursor-pointer hover:underline bg-transparent p-0 text-left"
               style={{ color: selectedColor }}
               onClick={() => router.push(`/devices/${value}`)}
             >
               {row.serialId}
-            </p>
+            </button>
           </div>
         ),
       },
@@ -120,7 +141,7 @@ const DeviceRegistry: React.FC = () => {
     [isDark, router, selectedColor, t],
   );
 
-  const getAccountIdFromStorage = () => {
+  const getAccountIdFromStorage = useCallback(() => {
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       const userAccountId = Number(user?.accountId || 0);
@@ -133,9 +154,9 @@ const DeviceRegistry: React.FC = () => {
       console.error("Failed to parse user account:", error);
       return 0;
     }
-  };
+  }, []);
 
-  const fetchAccounts = async () => {
+  const fetchAccounts = useCallback(async () => {
     try {
       const response = await getAllAccounts();
       if (response?.statusCode === 200 && Array.isArray(response?.data)) {
@@ -144,9 +165,9 @@ const DeviceRegistry: React.FC = () => {
     } catch (error) {
       console.error("Error fetching accounts:", error);
     }
-  };
+  }, []);
 
-  const fetchDevices = async () => {
+  const fetchDevices = useCallback(async () => {
     if (!selectedAccountId || selectedAccountId <= 0) {
       setLoading(false);
       setDevices([]);
@@ -174,7 +195,7 @@ const DeviceRegistry: React.FC = () => {
           : [];
       const summaryData = response?.data?.summary || {};
 
-      const mappedDevices = items.map((d: any) => {
+      const mappedDevices = (items as DeviceApiItem[]).map((d) => {
         const rawStatus = String(d?.deviceStatus || "")
           .replace(/_/g, " ")
           .toUpperCase();
@@ -190,9 +211,12 @@ const DeviceRegistry: React.FC = () => {
             d?.deviceTypeName ||
             d?.deviceCategory ||
             t("fallback.defaultCategory"),
-          type: d?.deviceTypeName || d?.displayName || t("fallback.defaultType"),
+          type:
+            d?.deviceTypeName || d?.displayName || t("fallback.defaultType"),
           network:
-            d?.manufacturerName || d?.manufacturer || t("fallback.notAvailable"),
+            d?.manufacturerName ||
+            d?.manufacturer ||
+            t("fallback.notAvailable"),
           networkSub: d?.deviceImeiOrSerial || "",
           status: normalizedStatus,
           firmware: d?.firmwareVersion || "N/A",
@@ -222,7 +246,7 @@ const DeviceRegistry: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [debouncedQuery, pageNo, pageSize, selectedAccountId, t]);
 
   const handleEdit = (row: Device) => {
     router.push(`/devices/${row.id}`);
@@ -256,8 +280,8 @@ const DeviceRegistry: React.FC = () => {
   useEffect(() => {
     const accountId = getAccountIdFromStorage();
     setSelectedAccountId(accountId);
-    fetchAccounts();
-  }, []);
+    void fetchAccounts();
+  }, [fetchAccounts, getAccountIdFromStorage]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -268,9 +292,26 @@ const DeviceRegistry: React.FC = () => {
   }, [searchQuery]);
 
   useEffect(() => {
-    if (!selectedAccountId || selectedAccountId <= 0) return;
-    fetchDevices();
-  }, [pageNo, pageSize, debouncedQuery, selectedAccountId]);
+    void fetchDevices();
+  }, [fetchDevices]);
+
+  const handleExport = async () => {
+    if (!selectedAccountId || selectedAccountId <= 0) {
+      toast.error(t("toast.exportFailed"));
+      return;
+    }
+
+    try {
+      const response = await exportDevices(selectedAccountId, searchQuery);
+      if (response?.success || Number(response?.statusCode) === 200) {
+        toast.success(t("toast.exportSuccess"));
+      } else {
+        toast.error(response?.message || t("toast.exportFailed"));
+      }
+    } catch {
+      toast.error(t("toast.exportFailed"));
+    }
+  };
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
@@ -279,11 +320,16 @@ const DeviceRegistry: React.FC = () => {
         <PageHeader
           title={t("title")}
           subtitle={t("subtitle")}
-          breadcrumbs={[{ label: t("breadcrumbs.fleet") }, { label: t("breadcrumbs.current") }]}
+          breadcrumbs={[
+            { label: t("breadcrumbs.fleet") },
+            { label: t("breadcrumbs.current") },
+          ]}
           showButton={true}
           buttonText={t("addButton")}
           buttonRoute="/devices/0"
           showExportButton={true}
+          ExportbuttonText={t("export")}
+          onExportClick={handleExport}
           showFilterButton={false}
         />
 

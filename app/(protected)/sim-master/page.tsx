@@ -1,31 +1,48 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
-import ActionLoader from "@/components/ActionLoader";
-import CommonTable from "@/components/CommonTable";
-import PageHeader from "@/components/PageHeader";
-import { MetricCard } from "@/components/CommonCard";
-import { useTheme } from "@/context/ThemeContext";
-import ConfirmationDialog from "@/components/ConfirmationDialog";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 import {
-  Smartphone,
-  ShieldCheck,
   AlertCircle,
-  Wifi,
   Building2,
   ChevronDown,
+  ShieldCheck,
+  Smartphone,
+  Wifi,
 } from "lucide-react";
-import { SimItem, SimSummary } from "@/interfaces/sim.interface";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import type React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
+import { MetricCard } from "@/components/CommonCard";
+import CommonTable from "@/components/CommonTable";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
+import PageHeader from "@/components/PageHeader";
+import { useTheme } from "@/context/ThemeContext";
+import type { SimItem, SimSummary } from "@/interfaces/sim.interface";
 import { getAllAccounts } from "@/services/commonServie";
-import { getSims, deleteSim } from "@/services/simservice";
+import { deleteSim, exportSims, getSims } from "@/services/simservice";
 
 interface AccountOption {
   id: number;
   value: string;
 }
+
+type SimApiItem = {
+  simId?: number;
+  iccid?: string;
+  msisdn?: string;
+  imsi?: string;
+  networkProviderId?: number | string;
+  statusKey?: string;
+  status?: string;
+  statusLabel?: string;
+  isDeleted?: boolean;
+  isActive?: boolean;
+  expiryAt?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+};
 
 // ── Component ──────────────────────────────────────────────────────────────
 const SimMaster: React.FC = () => {
@@ -55,7 +72,7 @@ const SimMaster: React.FC = () => {
   const [simToDelete, setSimToDelete] = useState<SimItem | null>(null);
   const [isSimsLoading, setIsSimsLoading] = useState(false);
 
-  const getUserAccountIdFromStorage = () => {
+  const getUserAccountIdFromStorage = useCallback(() => {
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       return Number(user?.accountId || 0);
@@ -63,7 +80,7 @@ const SimMaster: React.FC = () => {
       console.error("Failed to parse user account:", error);
       return 0;
     }
-  };
+  }, []);
 
   const columns = [
     {
@@ -106,8 +123,8 @@ const SimMaster: React.FC = () => {
     },
   ];
 
-  const normalizeSimStatus = (sim: any): string => {
-    if (Boolean(sim?.isDeleted)) {
+  const normalizeSimStatus = useCallback((sim: SimApiItem): string => {
+    if (sim?.isDeleted) {
       return "inactive";
     }
 
@@ -130,9 +147,9 @@ const SimMaster: React.FC = () => {
     }
 
     return "active";
-  };
+  }, []);
 
-  const fetchSims = async () => {
+  const fetchSims = useCallback(async () => {
     if (!selectedAccountId || selectedAccountId <= 0) {
       setData([]);
       setTotalRecords(0);
@@ -158,32 +175,38 @@ const SimMaster: React.FC = () => {
 
       const simsData = response.data?.sims;
       const summary = response.data?.summary;
-      const items = Array.isArray(simsData?.items) ? simsData.items : [];
+      const items = (
+        Array.isArray(simsData?.items) ? simsData.items : []
+      ) as SimApiItem[];
 
       if (items.length) {
-        const mappedData = items.map((s: any) => ({
-          simId: s.simId,
-          iccid: s.iccid,
-          msisdn: s.msisdn || "",
-          imsiCode: s.imsi || "",
-          carrier: s.networkProviderId || "",
-          status: normalizeSimStatus(s),
-          contractExpiry: s.expiryAt || null,
-          updatedAt: s.updatedAt || s.createdAt || null,
+        const mappedData = items.map((sim) => ({
+          simId: sim.simId,
+          iccid: sim.iccid,
+          msisdn: sim.msisdn || "",
+          imsiCode: sim.imsi || "",
+          carrier: sim.networkProviderId || "",
+          status: normalizeSimStatus(sim),
+          contractExpiry: sim.expiryAt || null,
+          updatedAt: sim.updatedAt || sim.createdAt || null,
         }));
 
         const derivedEnabled = mappedData.filter(
-          (item: any) => String(item.status || "").toLowerCase() === "active",
+          (item) => String(item.status || "").toLowerCase() === "active",
         ).length;
         const derivedDisabled = mappedData.filter(
-          (item: any) => String(item.status || "").toLowerCase() === "inactive",
+          (item) => String(item.status || "").toLowerCase() === "inactive",
         ).length;
 
         setSummaryData({
-          totalSims: Number(summary?.totalSims || simsData?.totalRecords || items.length || 0),
+          totalSims: Number(
+            summary?.totalSims || simsData?.totalRecords || items.length || 0,
+          ),
           enabled: Number(summary?.active || derivedEnabled || 0),
           disabled: Number(summary?.inactive || derivedDisabled || 0),
-          activeCarriers: Number(summary?.activeCarriers || summary?.active || 0),
+          activeCarriers: Number(
+            summary?.activeCarriers || summary?.active || 0,
+          ),
         });
 
         setData(mappedData);
@@ -195,7 +218,9 @@ const SimMaster: React.FC = () => {
           totalSims: Number(summary?.totalSims || simsData?.totalRecords || 0),
           enabled: Number(summary?.active || 0),
           disabled: Number(summary?.inactive || 0),
-          activeCarriers: Number(summary?.activeCarriers || summary?.active || 0),
+          activeCarriers: Number(
+            summary?.activeCarriers || summary?.active || 0,
+          ),
         });
       }
     } catch (error) {
@@ -203,6 +228,31 @@ const SimMaster: React.FC = () => {
       toast.error(t("toast.loadError"));
     } finally {
       setIsSimsLoading(false);
+    }
+  }, [
+    debouncedQuery,
+    normalizeSimStatus,
+    pageNo,
+    pageSize,
+    selectedAccountId,
+    t,
+  ]);
+
+  const handleExport = async () => {
+    if (!selectedAccountId || selectedAccountId <= 0) {
+      toast.error(t("toast.exportFailed"));
+      return;
+    }
+
+    try {
+      const response = await exportSims(selectedAccountId, searchQuery);
+      if (response?.success || Number(response?.statusCode) === 200) {
+        toast.success(t("toast.exportSuccess"));
+      } else {
+        toast.error(response?.message || t("toast.exportFailed"));
+      }
+    } catch {
+      toast.error(t("toast.exportFailed"));
     }
   };
 
@@ -222,12 +272,12 @@ const SimMaster: React.FC = () => {
     };
 
     initAccounts();
-  }, []);
+  }, [getUserAccountIdFromStorage]);
 
   useEffect(() => {
     if (!selectedAccountId || selectedAccountId <= 0) return;
-    fetchSims();
-  }, [pageNo, pageSize, debouncedQuery, selectedAccountId]);
+    void fetchSims();
+  }, [fetchSims, selectedAccountId]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -275,13 +325,16 @@ const SimMaster: React.FC = () => {
         <PageHeader
           title={t("title")}
           subtitle={t("subtitle")}
-          breadcrumbs={[{ label: t("breadcrumbs.fleet") }, { label: t("breadcrumbs.current") }]}
+          breadcrumbs={[
+            { label: t("breadcrumbs.fleet") },
+            { label: t("breadcrumbs.current") },
+          ]}
           showButton={true}
           buttonText={t("addButton")}
           buttonRoute="/sim-master/0"
           showExportButton={true}
           ExportbuttonText={t("export")}
-          onExportClick={() => toast.info(t("toast.exportSoon"))}
+          onExportClick={handleExport}
           showFilterButton={false}
         />
 
