@@ -560,6 +560,9 @@ const PlansManagement = () => {
                 handleSubmit();
               }
             }}
+            showExportButton={false}
+          showFilterButton={false}
+          showBulkUpload={false}
           />
         </div>
 

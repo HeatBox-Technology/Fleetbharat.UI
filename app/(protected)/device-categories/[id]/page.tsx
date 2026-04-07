@@ -184,6 +184,9 @@ const AddEditDeviceCategoryPage: React.FC = () => {
           }
           onButtonClick={handleSubmit}
           showWriteButton={hasAccess}
+           showExportButton={false}
+            showFilterButton={false}
+            showBulkUpload={false}
         />
 
         <Card isDark={isDark}>

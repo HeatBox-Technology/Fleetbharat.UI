@@ -262,6 +262,9 @@ const NewConfiguration: React.FC = () => {
                   : t("buttons.create")
             }
             onButtonClick={handleSubmit}
+             showExportButton={false}
+            showFilterButton={false}
+            showBulkUpload={false}
           />
         </div>
 

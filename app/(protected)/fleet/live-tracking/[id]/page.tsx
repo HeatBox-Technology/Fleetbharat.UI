@@ -505,6 +505,9 @@ export default function LiveTracking() {
               showButton
               buttonText="Back to Fleet"
               onButtonClick={() => router.push("/fleet")}
+               showExportButton={false}
+            showFilterButton={false}
+            showBulkUpload={false}
             />
           </div>
           <div className="max-w-7xl mx-auto flex items-center justify-center rounded-xl bg-red-50 p-8 text-lg font-semibold text-red-600">

@@ -654,6 +654,9 @@ const EditAccount: React.FC = () => {
             showButton
             buttonText={t("buttons.submit")}
             onButtonClick={handleSubmit}
+             showExportButton={false}
+            showFilterButton={false}
+            showBulkUpload={false}
           />
         </div>
 

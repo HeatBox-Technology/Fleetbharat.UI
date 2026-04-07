@@ -370,6 +370,9 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
                 : "Save Builder"
           }
           onButtonClick={handleSubmit}
+           showExportButton={false}
+            showFilterButton={false}
+            showBulkUpload={false}
         />
 
         <div

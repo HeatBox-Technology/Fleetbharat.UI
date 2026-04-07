@@ -460,6 +460,9 @@ const AddRole: React.FC = () => {
                   : t("buttons.updateRole")
             }
             onButtonClick={handleSubmit}
+            showExportButton={false}
+          showFilterButton={false}
+          showBulkUpload={false}
           />
         </div>
 

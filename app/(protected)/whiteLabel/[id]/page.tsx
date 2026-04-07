@@ -474,6 +474,9 @@ const ProvisionBranding: React.FC = () => {
                   : t("buttons.activate")
             }
             onButtonClick={handleActivate}
+            showExportButton={false}
+          showFilterButton={false}
+          showBulkUpload={false}
           />
         </div>
 

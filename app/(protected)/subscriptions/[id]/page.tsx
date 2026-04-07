@@ -189,6 +189,9 @@ const AddSubscriptionPage = () => {
                 handleSubmit();
               }
             }}
+            showExportButton={false}
+          showFilterButton={false}
+          showBulkUpload={false}
           />
         </div>
 

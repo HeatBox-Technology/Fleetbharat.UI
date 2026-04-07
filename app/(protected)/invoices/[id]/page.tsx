@@ -219,6 +219,9 @@ const AddInvoicePage = () => {
                 handleSubmit();
               }
             }}
+            showExportButton={false}
+          showFilterButton={false}
+          showBulkUpload={false}
           />
         </div>
 

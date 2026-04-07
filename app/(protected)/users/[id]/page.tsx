@@ -592,6 +592,9 @@ const CreateUser: React.FC = () => {
                   : t("buttons.update")
             }
             onButtonClick={handleSubmit}
+            showExportButton={false}
+          showFilterButton={false}
+          showBulkUpload={false}
           />
         </div>
 

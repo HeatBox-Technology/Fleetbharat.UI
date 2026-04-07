@@ -549,6 +549,9 @@ const AddEditDeviceMap: React.FC = () => {
                   : t("buttons.create")
             }
             onButtonClick={handleSubmit}
+             showExportButton={false}
+            showFilterButton={false}
+            showBulkUpload={false}
           />
 
           {/* Form Card */}

@@ -3,7 +3,8 @@
 import { Building2, CheckCircle, Clock, MapPin, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import React, { useEffect, useState } from "react";
+import type React from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ActionLoader from "@/components/ActionLoader";
 import { MetricCard } from "@/components/CommonCard";
@@ -11,9 +12,8 @@ import CommonTable from "@/components/CommonTable";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import PageHeader from "@/components/PageHeader";
 import { useTheme } from "@/context/ThemeContext";
-import { AccountData, FormRights } from "@/interfaces/account.interface";
+import type { AccountData, FormRights } from "@/interfaces/account.interface";
 import { deleteAccount, getAccounts } from "@/services/accountService";
-import { getUserRoleData } from "@/services/commonServie";
 
 const Accounts: React.FC = () => {
   const { isDark } = useTheme();
@@ -67,6 +67,30 @@ const Accounts: React.FC = () => {
       label: t("table.location"),
       type: "icon-text" as const,
       icon: <MapPin className="w-4 h-4" />,
+      render: (_value: unknown, row: AccountData) => {
+        const parts = [
+          row?.countryName,
+          row?.stateName,
+          row?.cityName,
+          row?.address,
+        ]
+          .map((v) => String(v ?? "").trim())
+          .filter(Boolean);
+
+        const merged = parts.join(", ");
+        const display = merged || String(row?.location || row?.address || "-");
+
+        return (
+          <div
+            className={`flex items-center gap-1.5 text-sm ${isDark ? "text-white" : "text-black"}`}
+          >
+            <span className={isDark ? "text-white" : "text-black"}>
+              <MapPin className="w-4 h-4" />
+            </span>
+            {display}
+          </div>
+        );
+      },
       visible: true,
     },
     {
@@ -80,6 +104,24 @@ const Accounts: React.FC = () => {
   const [data, setData] = useState<AccountData[]>([]);
   const isSystemRoleAccount = (row: AccountData) =>
     String(row?.categoryName || "").toLowerCase() === "systemrole";
+
+  const getAccountsList = useCallback(async () => {
+    try {
+      setIsAccountsLoading(true);
+      const response = await getAccounts(pageNo, pageSize, debouncedQuery);
+
+      if (response && response.statusCode === 200) {
+        const pageData = response.data.pageData;
+        setData(pageData.items);
+        setTotalRecords(pageData.totalRecords);
+        setCardCounts(response.data.cardCounts);
+      } else {
+        toast.error(response?.message ?? t("toast.loadFailed"));
+      }
+    } finally {
+      setIsAccountsLoading(false);
+    }
+  }, [debouncedQuery, pageNo, pageSize, t]);
 
   const handleEdit = (row: AccountData) => {
     if (isSystemRoleAccount(row)) return;
@@ -119,24 +161,6 @@ const Accounts: React.FC = () => {
     setPageNo(1);
   };
 
-  async function getAccountsList() {
-    try {
-      setIsAccountsLoading(true);
-      const response = await getAccounts(pageNo, pageSize, debouncedQuery);
-
-      if (response && response.statusCode === 200) {
-        const pageData = response.data.pageData;
-        setData(pageData.items);
-        setTotalRecords(pageData.totalRecords);
-        setCardCounts(response.data.cardCounts);
-      } else {
-        toast.error(response?.message ?? t("toast.loadFailed"));
-      }
-    } finally {
-      setIsAccountsLoading(false);
-    }
-  }
-
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(searchQuery);
@@ -146,8 +170,8 @@ const Accounts: React.FC = () => {
   }, [searchQuery]);
 
   useEffect(() => {
-    getAccountsList();
-  }, [pageNo, pageSize, debouncedQuery]);
+    void getAccountsList();
+  }, [getAccountsList]);
 
   useEffect(() => {
     function getPermissionsList() {

@@ -283,7 +283,7 @@ const DeviceRegistry: React.FC = () => {
           showButton={true}
           buttonText={t("addButton")}
           buttonRoute="/devices/0"
-          showExportButton={false}
+          showExportButton={true}
           showFilterButton={false}
         />
 

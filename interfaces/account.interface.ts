@@ -14,6 +14,9 @@ export interface AccountData {
   accountName?: string;
   accountCode?: string;
   phone?: string;
+  countryName?: string;
+  stateName?: string;
+  cityName?: string;
   address?: string;
   no: number;
   code: string;
