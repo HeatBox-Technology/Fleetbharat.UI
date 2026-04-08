@@ -104,13 +104,13 @@ const SimMaster: React.FC = () => {
       visible: true,
     },
     {
-      key: "status",
+      key: "statusKey",
       label: t("table.status"),
       visible: true,
       type: "badge" as const,
     },
     {
-      key: "contractExpiry",
+      key: "expiryAt",
       label: t("table.contractExpiry"),
       visible: true,
       type: "date" as const,
@@ -181,21 +181,21 @@ const SimMaster: React.FC = () => {
 
       if (items.length) {
         const mappedData = items.map((sim) => ({
-          simId: sim.simId,
-          iccid: sim.iccid,
+          simId: Number(sim.simId || 0),
+          iccid: sim.iccid || "",
           msisdn: sim.msisdn || "",
-          imsiCode: sim.imsi || "",
-          carrier: sim.networkProviderId || "",
-          status: normalizeSimStatus(sim),
-          contractExpiry: sim.expiryAt || null,
+          imsi: sim.imsi || "",
+          carrier: String(sim.networkProviderId || ""),
+          statusKey: normalizeSimStatus(sim),
+          expiryAt: sim.expiryAt || null,
           updatedAt: sim.updatedAt || sim.createdAt || null,
         }));
 
         const derivedEnabled = mappedData.filter(
-          (item) => String(item.status || "").toLowerCase() === "active",
+          (item) => String(item.statusKey || "").toLowerCase() === "active",
         ).length;
         const derivedDisabled = mappedData.filter(
-          (item) => String(item.status || "").toLowerCase() === "inactive",
+          (item) => String(item.statusKey || "").toLowerCase() === "inactive",
         ).length;
 
         setSummaryData({
