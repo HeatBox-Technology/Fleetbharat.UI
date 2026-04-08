@@ -4,7 +4,9 @@ import {
   Activity,
   Building2,
   CalendarDays,
+  ChevronDown,
   Clock,
+  Download,
   Search,
   Shield,
   TrendingUp,
@@ -18,6 +20,10 @@ import { useTheme } from "@/context/ThemeContext";
 import { getAllAccounts, getVehicleDropdown } from "@/services/commonServie";
 import { toast } from "react-toastify";
 import { javaApi } from "@/services/apiService";
+import {
+  downloadReportAsCsv,
+  downloadReportAsXlsx,
+} from "@/utils/reportExport";
 
 type RunReportRow = {
   orgId?: number;
@@ -178,8 +184,27 @@ const escapeHtml = (value: unknown) =>
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
 
+const normalizeDisplayValue = (value?: string | null) => {
+  if (typeof value !== "string") return "";
+
+  const normalized = value.trim();
+  if (!normalized) return "";
+
+  const lowerValue = normalized.toLowerCase();
+  if (lowerValue === "undefined" || lowerValue === "null") {
+    return "";
+  }
+
+  return normalized;
+};
+
+type ExportFormat = "excel" | "csv";
+
 const RunReportPage = () => {
   const { isDark } = useTheme();
+  const maxSelectableDateTime = toDateTimeLocalValue(
+    new Date(new Date().setHours(23, 59, 0, 0)),
+  );
   const [accounts, setAccounts] = useState<OptionType[]>([]);
   const [selectedAccounts, setSelectedAccounts] = useState<OptionType[]>([]);
   const [vehicles, setVehicles] = useState<OptionType[]>([]);
@@ -198,6 +223,7 @@ const RunReportPage = () => {
   const [data, setData] = useState<RunReportRow[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [emptyMessage, setEmptyMessage] = useState("No record found");
+  const [exportFormat, setExportFormat] = useState<ExportFormat>("excel");
 
   const getUserAccountIdFromStorage = () => {
     try {
@@ -375,6 +401,17 @@ const RunReportPage = () => {
       return;
     }
 
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 0, 0);
+    const endOfTodayTime = endOfToday.getTime();
+    if (
+      new Date(startDate).getTime() > endOfTodayTime ||
+      new Date(endDate).getTime() > endOfTodayTime
+    ) {
+      toast.error("Future date cannot be selected");
+      return;
+    }
+
     if (new Date(startDate).getTime() > new Date(endDate).getTime()) {
       toast.error("Start date cannot be after end date");
       return;
@@ -440,15 +477,10 @@ const RunReportPage = () => {
       .map((account) => [Number(account.value), account.label]),
   );
 
-  const handleExport = () => {
-    if (!data.length) {
-      toast.info("No record found");
-      return;
-    }
-
-    const rows = data.map((row) => ({
+  const getExportRows = () =>
+    data.map((row) => ({
       Organization:
-        row.orgName ||
+        normalizeDisplayValue(row.orgName) ||
         (row.orgId ? accountNameById.get(Number(row.orgId)) : "") ||
         "Run Report",
       Vehicle: row.vehicleNo || "NA",
@@ -467,67 +499,21 @@ const RunReportPage = () => {
       "End Address": row.endAddress || "NA",
     }));
 
-    const headers = Object.keys(rows[0]);
-    const tableRows = rows
-      .map(
-        (row) =>
-          `<tr>${headers
-            .map((header) => `<td>${escapeHtml(row[header as keyof typeof row])}</td>`)
-            .join("")}</tr>`,
-      )
-      .join("");
+  const handleExport = () => {
+    if (!data.length) {
+      toast.info("No record found");
+      return;
+    }
 
-    const html = `
-      <html>
-        <head>
-          <meta charset="UTF-8" />
-          <style>
-            table {
-              border-collapse: collapse;
-              width: 100%;
-              font-family: Calibri, Arial, sans-serif;
-              font-size: 12px;
-            }
-            th, td {
-              border: 1px solid #cbd5e1;
-              padding: 8px 10px;
-              vertical-align: top;
-              text-align: left;
-            }
-            th {
-              background: #eef2ff;
-              color: #1e293b;
-              font-weight: 700;
-            }
-            tr:nth-child(even) td {
-              background: #f8fafc;
-            }
-          </style>
-        </head>
-        <body>
-          <table>
-            <thead>
-              <tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join("")}</tr>
-            </thead>
-            <tbody>${tableRows}</tbody>
-          </table>
-        </body>
-      </html>
-    `;
-
-    const blob = new Blob([`\ufeff${html}`], {
-      type: "application/vnd.ms-excel;charset=utf-8;",
-    });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
+    const rows = getExportRows();
     const stamp = new Date().toISOString().slice(0, 19).replaceAll(":", "-");
 
-    link.href = url;
-    link.download = `run-report-${stamp}.xls`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    if (exportFormat === "csv") {
+      downloadReportAsCsv(rows, `run-report-${stamp}.csv`);
+    } else {
+      downloadReportAsXlsx(rows, `run-report-${stamp}.xlsx`);
+    }
+
     toast.success("Export downloaded");
   };
 
@@ -549,26 +535,45 @@ const RunReportPage = () => {
     : 0;
 
   const filteredData = data.filter((row) => {
-    if (!searchQuery.trim()) return true;
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+    if (!normalizedQuery) return true;
+
+    const organizationName =
+      normalizeDisplayValue(row.orgName) ||
+      (row.orgId ? accountNameById.get(Number(row.orgId)) : "") ||
+      (row.orgId ? `Org ${row.orgId}` : "Run Report");
+    const startLocation =
+      normalizeDisplayValue(row.startAddress) ||
+      formatDateTime(row.firstDataTime);
+    const endLocation =
+      normalizeDisplayValue(row.endAddress) || formatDateTime(row.lastDataTime);
+    const hasStartMapLink = !!getGoogleMapsLink(
+      row.startLatitude,
+      row.startLongitude,
+    );
+    const hasEndMapLink = !!getGoogleMapsLink(row.endLatitude, row.endLongitude);
+
     const haystack = [
-      row.orgName,
+      organizationName,
       row.vehicleNo,
-      row.reportDate,
-      row.firstDataTime,
-      row.lastDataTime,
-      row.startAddress,
-      row.endAddress,
-      row.distanceKm,
-      row.movingTimeMinutes,
-      row.idleTimeMinutes,
-      row.ignitionOnMinutes,
-      row.acOnMinutes,
-      row.fleetEfficiency,
+      formatDateOnly(row.reportDate),
+      formatDateTime(row.firstDataTime),
+      formatDateTime(row.lastDataTime),
+      row.distanceKm !== undefined ? Number(row.distanceKm).toFixed(2) : "NA",
+      formatMinutes(row.movingTimeMinutes),
+      formatMinutes(row.idleTimeMinutes),
+      formatMinutes(row.ignitionOnMinutes),
+      formatMinutes(row.acOnMinutes),
+      row.fleetEfficiency !== undefined ? `${row.fleetEfficiency}%` : "NA",
+      startLocation,
+      endLocation,
+      hasStartMapLink ? "Open map" : "",
+      hasEndMapLink ? "Open map" : "",
     ]
       .join(" ")
       .toLowerCase();
 
-    return haystack.includes(searchQuery.toLowerCase());
+    return haystack.includes(normalizedQuery);
   });
 
   return (
@@ -586,11 +591,30 @@ const RunReportPage = () => {
         onButtonClick={() => {
           if (!loading) handleViewReport();
         }}
-        showExportButton={true}
-        ExportbuttonText="Export Excel"
-        onExportClick={handleExport}
+        showExportButton={false}
         showFilterButton={false}
       />
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={handleExport}
+          className="cursor-pointer rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-700 transition-colors hover:bg-gray-50"
+          aria-label={`Download ${exportFormat === "excel" ? "Excel" : "CSV"}`}
+        >
+          <Download className="h-4 w-4" />
+        </button>
+        <div className="relative">
+          <select
+            value={exportFormat}
+            onChange={(e) => setExportFormat(e.target.value as ExportFormat)}
+            className="cursor-pointer appearance-none rounded-xl border border-gray-300 bg-white py-3 pl-4 pr-10 text-sm font-medium text-gray-700 outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+          >
+            <option value="excel">Excel</option>
+            <option value="csv">CSV</option>
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+        </div>
+      </div>
       <div className="mb-6 overflow-visible rounded-[28px] bg-white shadow-[0_18px_40px_rgba(15,23,42,0.12)]">
         <div className="h-1 w-full bg-gradient-to-r from-violet-600 via-sky-500 to-emerald-500" />
         <div className="grid items-start gap-4 p-5 md:grid-cols-2 xl:grid-cols-[minmax(240px,1.15fr)_minmax(260px,1.2fr)_minmax(190px,0.9fr)_minmax(190px,0.9fr)_auto]">
@@ -628,6 +652,7 @@ const RunReportPage = () => {
             </div>
             <input
               type="datetime-local"
+              max={maxSelectableDateTime}
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
@@ -641,6 +666,7 @@ const RunReportPage = () => {
             </div>
             <input
               type="datetime-local"
+              max={maxSelectableDateTime}
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
@@ -703,7 +729,7 @@ const RunReportPage = () => {
         </div>
 
         <div className="overflow-hidden rounded-[24px] border border-slate-200">
-          <div className="grid grid-cols-[1.05fr_0.95fr_0.9fr_0.9fr_0.8fr_0.8fr_0.8fr_1.6fr] gap-4 border-b border-slate-200 bg-slate-50 px-6 py-4 text-xs font-extrabold uppercase tracking-[0.2em] text-slate-600">
+          <div className="grid grid-cols-[1.05fr_0.9fr_0.9fr_0.9fr_0.8fr_0.8fr_0.8fr_0.8fr_1.45fr] gap-4 border-b border-slate-200 bg-slate-50 px-6 py-4 text-xs font-extrabold uppercase tracking-[0.2em] text-slate-600">
             <div>Vehicle</div>
             <div>Report Date</div>
             <div>First Data</div>
@@ -711,6 +737,7 @@ const RunReportPage = () => {
             <div>Dist. (KM)</div>
             <div>Moving</div>
             <div>Idle</div>
+            <div>Efficiency</div>
             <div>Journey</div>
           </div>
 
@@ -722,14 +749,14 @@ const RunReportPage = () => {
             filteredData.map((row, index) => (
               <div
                 key={`${row.vehicleId || row.vehicleNo || "row"}-${index}`}
-                className="grid grid-cols-[1.05fr_0.95fr_0.9fr_0.9fr_0.8fr_0.8fr_0.8fr_1.6fr] gap-4 border-b border-slate-200 px-6 py-5 last:border-b-0"
+                className="grid grid-cols-[1.05fr_0.9fr_0.9fr_0.9fr_0.8fr_0.8fr_0.8fr_0.8fr_1.45fr] gap-4 border-b border-slate-200 px-6 py-5 last:border-b-0"
               >
                 <div>
                   <div className="text-lg font-bold text-slate-900">
                     {row.vehicleNo || "NA"}
                   </div>
                   <div className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
-                    {row.orgName ||
+                    {normalizeDisplayValue(row.orgName) ||
                       (row.orgId
                         ? accountNameById.get(Number(row.orgId)) || `Org ${row.orgId}`
                         : "Run Report")}
@@ -754,6 +781,11 @@ const RunReportPage = () => {
                 </div>
                 <div className="text-lg font-semibold text-amber-600">
                   {formatMinutes(row.idleTimeMinutes)}
+                </div>
+                <div className="text-lg font-semibold text-slate-700">
+                  {row.fleetEfficiency !== undefined
+                    ? `${row.fleetEfficiency}%`
+                    : "NA"}
                 </div>
                 <div className="space-y-1 text-sm text-slate-600">
                   <div>
