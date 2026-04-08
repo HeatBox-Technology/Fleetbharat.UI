@@ -4,7 +4,9 @@ import {
   Activity,
   Building2,
   CalendarDays,
+  ChevronDown,
   Clock,
+  Download,
   Search,
   Shield,
   TrendingUp,
@@ -18,6 +20,10 @@ import { useTheme } from "@/context/ThemeContext";
 import { getAllAccounts, getVehicleDropdown } from "@/services/commonServie";
 import { toast } from "react-toastify";
 import { javaApi } from "@/services/apiService";
+import {
+  downloadReportAsCsv,
+  downloadReportAsXlsx,
+} from "@/utils/reportExport";
 
 type MovementReportRow = {
   orgId?: number;
@@ -157,15 +163,27 @@ const toApiDateTime = (value: string) => {
   )}`;
 };
 
-const escapeHtml = (value: unknown) =>
-  String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
+const normalizeDisplayValue = (value?: string | null) => {
+  if (typeof value !== "string") return "";
+
+  const normalized = value.trim();
+  if (!normalized) return "";
+
+  const lowerValue = normalized.toLowerCase();
+  if (lowerValue === "undefined" || lowerValue === "null") {
+    return "";
+  }
+
+  return normalized;
+};
+
+type ExportFormat = "excel" | "csv";
 
 const MovementReportPage = () => {
   const { isDark } = useTheme();
+  const maxSelectableDateTime = toDateTimeLocalValue(
+    new Date(new Date().setHours(23, 59, 0, 0)),
+  );
   const [accounts, setAccounts] = useState<OptionType[]>([]);
   const [selectedAccounts, setSelectedAccounts] = useState<OptionType[]>([]);
   const [vehicles, setVehicles] = useState<OptionType[]>([]);
@@ -184,6 +202,7 @@ const MovementReportPage = () => {
   const [data, setData] = useState<MovementReportRow[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [emptyMessage, setEmptyMessage] = useState("No record found");
+  const [exportFormat, setExportFormat] = useState<ExportFormat>("excel");
 
   const getUserAccountIdFromStorage = () => {
     try {
@@ -358,6 +377,17 @@ const MovementReportPage = () => {
       return;
     }
 
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 0, 0);
+    const endOfTodayTime = endOfToday.getTime();
+    if (
+      new Date(startDate).getTime() > endOfTodayTime ||
+      new Date(endDate).getTime() > endOfTodayTime
+    ) {
+      toast.error("Future date cannot be selected");
+      return;
+    }
+
     if (new Date(startDate).getTime() > new Date(endDate).getTime()) {
       toast.error("Start date cannot be after end date");
       return;
@@ -417,13 +447,8 @@ const MovementReportPage = () => {
     }
   };
 
-  const handleExport = () => {
-    if (!data.length) {
-      toast.info("No record found");
-      return;
-    }
-
-    const rows = data.map((row) => ({
+  const getExportRows = () =>
+    data.map((row) => ({
       Organization:
         row.orgId
           ? accountNameById.get(Number(row.orgId)) || `Org ${row.orgId}`
@@ -443,67 +468,21 @@ const MovementReportPage = () => {
       "End Address": row.endAddress || "NA",
     }));
 
-    const headers = Object.keys(rows[0]);
-    const tableRows = rows
-      .map(
-        (row) =>
-          `<tr>${headers
-            .map((header) => `<td>${escapeHtml(row[header as keyof typeof row])}</td>`)
-            .join("")}</tr>`,
-      )
-      .join("");
+  const handleExport = () => {
+    if (!data.length) {
+      toast.info("No record found");
+      return;
+    }
 
-    const html = `
-      <html>
-        <head>
-          <meta charset="UTF-8" />
-          <style>
-            table {
-              border-collapse: collapse;
-              width: 100%;
-              font-family: Calibri, Arial, sans-serif;
-              font-size: 12px;
-            }
-            th, td {
-              border: 1px solid #cbd5e1;
-              padding: 8px 10px;
-              vertical-align: top;
-              text-align: left;
-            }
-            th {
-              background: #eef2ff;
-              color: #1e293b;
-              font-weight: 700;
-            }
-            tr:nth-child(even) td {
-              background: #f8fafc;
-            }
-          </style>
-        </head>
-        <body>
-      <table>
-        <thead>
-          <tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join("")}</tr>
-        </thead>
-        <tbody>${tableRows}</tbody>
-      </table>
-        </body>
-      </html>
-    `;
-
-    const blob = new Blob([`\ufeff${html}`], {
-      type: "application/vnd.ms-excel;charset=utf-8;",
-    });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
+    const rows = getExportRows();
     const stamp = new Date().toISOString().slice(0, 19).replaceAll(":", "-");
 
-    link.href = url;
-    link.download = `movement-report-${stamp}.xls`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    if (exportFormat === "csv") {
+      downloadReportAsCsv(rows, `movement-report-${stamp}.csv`);
+    } else {
+      downloadReportAsXlsx(rows, `movement-report-${stamp}.xlsx`);
+    }
+
     toast.success("Export downloaded");
   };
 
@@ -529,24 +508,44 @@ const MovementReportPage = () => {
       .map((account) => [Number(account.value), account.label]),
   );
   const filteredData = data.filter((row) => {
-    if (!searchQuery.trim()) return true;
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+    if (!normalizedQuery) return true;
+
+    const organizationName =
+      normalizeDisplayValue(
+        row.orgId ? accountNameById.get(Number(row.orgId)) : "",
+      ) ||
+      (row.orgId ? `Org ${row.orgId}` : "Movement Report");
+    const startLocation =
+      normalizeDisplayValue(row.startAddress) || formatDateTime(row.startTime);
+    const endLocation =
+      normalizeDisplayValue(row.endAddress) || formatDateTime(row.endTime);
+    const hasStartMapLink = !!getGoogleMapsLink(
+      row.startLatitude,
+      row.startLongitude,
+    );
+    const hasEndMapLink = !!getGoogleMapsLink(row.endLatitude, row.endLongitude);
+
     const haystack = [
+      organizationName,
       row.vehicleNo,
-      row.startTime,
-      row.endTime,
-      row.startAddress,
-      row.endAddress,
-      row.distanceKm,
-      row.movingTimeMinutes,
-      row.idleTimeMinutes,
-      row.ignitionOnMinutes,
-      row.acOnMinutes,
-      row.fleetEfficiency,
+      row.distanceKm !== undefined ? Number(row.distanceKm).toFixed(2) : "NA",
+      formatMinutes(row.movingTimeMinutes),
+      formatMinutes(row.idleTimeMinutes),
+      formatMinutes(row.ignitionOnMinutes),
+      formatMinutes(row.acOnMinutes),
+      row.fleetEfficiency !== undefined ? `${row.fleetEfficiency}%` : "NA",
+      startLocation,
+      endLocation,
+      formatDateTime(row.startTime),
+      formatDateTime(row.endTime),
+      hasStartMapLink ? "Open map" : "",
+      hasEndMapLink ? "Open map" : "",
     ]
       .join(" ")
       .toLowerCase();
 
-    return haystack.includes(searchQuery.toLowerCase());
+    return haystack.includes(normalizedQuery);
   });
 
   return (
@@ -564,11 +563,30 @@ const MovementReportPage = () => {
         onButtonClick={() => {
           if (!loading) handleViewReport();
         }}
-        showExportButton={true}
-        ExportbuttonText="Export Excel"
-        onExportClick={handleExport}
+        showExportButton={false}
         showFilterButton={false}
       />
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={handleExport}
+          className="cursor-pointer rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-700 transition-colors hover:bg-gray-50"
+          aria-label={`Download ${exportFormat === "excel" ? "Excel" : "CSV"}`}
+        >
+          <Download className="h-4 w-4" />
+        </button>
+        <div className="relative">
+          <select
+            value={exportFormat}
+            onChange={(e) => setExportFormat(e.target.value as ExportFormat)}
+            className="cursor-pointer appearance-none rounded-xl border border-gray-300 bg-white py-3 pl-4 pr-10 text-sm font-medium text-gray-700 outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+          >
+            <option value="excel">Excel</option>
+            <option value="csv">CSV</option>
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+        </div>
+      </div>
       {/* Filter Row */}
       <div className="mb-6 overflow-visible rounded-[28px] bg-white shadow-[0_18px_40px_rgba(15,23,42,0.12)]">
         <div className="h-1 w-full bg-gradient-to-r from-violet-600 via-sky-500 to-emerald-500" />
@@ -607,6 +625,7 @@ const MovementReportPage = () => {
             </div>
           <input
             type="datetime-local"
+            max={maxSelectableDateTime}
             className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
@@ -620,6 +639,7 @@ const MovementReportPage = () => {
             </div>
           <input
             type="datetime-local"
+            max={maxSelectableDateTime}
             className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}

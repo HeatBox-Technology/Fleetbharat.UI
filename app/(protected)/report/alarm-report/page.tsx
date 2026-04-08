@@ -11,12 +11,18 @@ import {
   BellRing,
   Building2,
   CalendarDays,
+  ChevronDown,
+  Download,
   Search,
   Shield,
   Truck,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import {
+  downloadReportAsCsv,
+  downloadReportAsXlsx,
+} from "@/utils/reportExport";
 
 type AlarmReportRow = {
   orgId?: number;
@@ -52,20 +58,27 @@ const ALL_ALERTS_OPTION: OptionType = {
   value: ALL_ALERTS_VALUE,
 };
 
+const BACKEND_ALERT_KEYS = [
+  "Ignition",
+  "AC",
+  "Door Lock",
+  "Door Open",
+  "Low Power",
+  "Power Cut",
+  "Idle AC",
+  "Idle Start",
+  "Rollover",
+  "Fatigue",
+  "SOS",
+  "Case Tampering",
+] as const;
+
 const ALERT_OPTIONS: OptionType[] = [
   ALL_ALERTS_OPTION,
-  { label: "Ignition", value: "Ignition" },
-  { label: "AC", value: "AC" },
-  { label: "Door Lock", value: "Door Lock" },
-  { label: "Door Open", value: "Door Open" },
-  { label: "Low Power", value: "Low Power" },
-  { label: "Power Cut", value: "Power Cut" },
-  { label: "Idle AC", value: "Idle AC" },
-  { label: "Idle Start", value: "Idle Start" },
-  { label: "Rollover", value: "Rollover" },
-  { label: "Fatigue", value: "Fatigue" },
-  { label: "SOS", value: "SOS" },
-  { label: "Case Tampering", value: "Case Tampering" },
+  ...BACKEND_ALERT_KEYS.map((alertKey) => ({
+    label: alertKey,
+    value: alertKey,
+  })),
 ];
 
 const toOptionLabel = (item: {
@@ -163,12 +176,19 @@ const toApiDateTime = (value: string) => {
   )}`;
 };
 
-const escapeHtml = (value: unknown) =>
-  String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
+const normalizeDisplayValue = (value?: string | null) => {
+  if (typeof value !== "string") return "";
+
+  const normalized = value.trim();
+  if (!normalized) return "";
+
+  const lowerValue = normalized.toLowerCase();
+  if (lowerValue === "undefined" || lowerValue === "null") {
+    return "";
+  }
+
+  return normalized;
+};
 
 const ALERT_SEVERITY_MAP: Record<string, "Critical" | "Warning" | "Info"> = {
   "power cut": "Critical",
@@ -227,8 +247,13 @@ const getSeverityBadgeClassName = (severity: string) => {
   return "bg-slate-100 text-slate-700";
 };
 
+type ExportFormat = "excel" | "csv";
+
 const AlarmReportPage = () => {
   const { isDark } = useTheme();
+  const maxSelectableDateTime = toDateTimeLocalValue(
+    new Date(new Date().setHours(23, 59, 0, 0)),
+  );
   const [accounts, setAccounts] = useState<OptionType[]>([]);
   const [selectedAccounts, setSelectedAccounts] = useState<OptionType[]>([]);
   const [vehicles, setVehicles] = useState<OptionType[]>([]);
@@ -248,6 +273,7 @@ const AlarmReportPage = () => {
   const [data, setData] = useState<AlarmReportRow[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [emptyMessage, setEmptyMessage] = useState("No record found");
+  const [exportFormat, setExportFormat] = useState<ExportFormat>("excel");
 
   const getUserAccountIdFromStorage = () => {
     try {
@@ -459,6 +485,17 @@ const AlarmReportPage = () => {
       return;
     }
 
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 0, 0);
+    const endOfTodayTime = endOfToday.getTime();
+    if (
+      new Date(startDate).getTime() > endOfTodayTime ||
+      new Date(endDate).getTime() > endOfTodayTime
+    ) {
+      toast.error("Future date cannot be selected");
+      return;
+    }
+
     if (new Date(startDate).getTime() > new Date(endDate).getTime()) {
       toast.error("Start date cannot be after end date");
       return;
@@ -485,7 +522,12 @@ const AlarmReportPage = () => {
         ? ALERT_OPTIONS.filter((alert) => alert.value !== ALL_ALERTS_VALUE)
         : selectedAlerts
     )
-      .map((alert) => String(alert.value))
+      .map((alert) => String(alert.value).trim())
+      .filter((alertValue): alertValue is (typeof BACKEND_ALERT_KEYS)[number] =>
+        BACKEND_ALERT_KEYS.includes(
+          alertValue as (typeof BACKEND_ALERT_KEYS)[number],
+        ),
+      )
       .filter(Boolean);
 
     if (!orgIds.length) {
@@ -527,15 +569,10 @@ const AlarmReportPage = () => {
     }
   };
 
-  const handleExport = () => {
-    if (!data.length) {
-      toast.info("No record found");
-      return;
-    }
-
-    const rows = data.map((row) => ({
+  const getExportRows = () =>
+    data.map((row) => ({
       Organization:
-        row.orgName ||
+        normalizeDisplayValue(row.orgName) ||
         (row.orgId ? accountNameById.get(Number(row.orgId)) : "") ||
         "NA",
       Vehicle: row.vehicleNo || "NA",
@@ -552,72 +589,21 @@ const AlarmReportPage = () => {
       "Received Time": formatDateTime(row.receivedTime),
     }));
 
-    const headers = Object.keys(rows[0]);
-    const tableRows = rows
-      .map(
-        (row) =>
-          `<tr>${headers
-            .map(
-              (header) =>
-                `<td>${escapeHtml(row[header as keyof typeof row])}</td>`,
-            )
-            .join("")}</tr>`,
-      )
-      .join("");
+  const handleExport = () => {
+    if (!data.length) {
+      toast.info("No record found");
+      return;
+    }
 
-    const html = `
-      <html>
-        <head>
-          <meta charset="UTF-8" />
-          <style>
-            table {
-              border-collapse: collapse;
-              width: 100%;
-              font-family: Calibri, Arial, sans-serif;
-              font-size: 12px;
-            }
-            th, td {
-              border: 1px solid #cbd5e1;
-              padding: 8px 10px;
-              vertical-align: top;
-              text-align: left;
-            }
-            th {
-              background: #eef2ff;
-              color: #1e293b;
-              font-weight: 700;
-            }
-            tr:nth-child(even) td {
-              background: #f8fafc;
-            }
-          </style>
-        </head>
-        <body>
-          <table>
-            <thead>
-              <tr>${headers
-                .map((header) => `<th>${escapeHtml(header)}</th>`)
-                .join("")}</tr>
-            </thead>
-            <tbody>${tableRows}</tbody>
-          </table>
-        </body>
-      </html>
-    `;
-
-    const blob = new Blob([`\ufeff${html}`], {
-      type: "application/vnd.ms-excel;charset=utf-8;",
-    });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
+    const rows = getExportRows();
     const stamp = new Date().toISOString().slice(0, 19).replaceAll(":", "-");
 
-    link.href = url;
-    link.download = `alarm-report-${stamp}.xls`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    if (exportFormat === "csv") {
+      downloadReportAsCsv(rows, `alarm-report-${stamp}.csv`);
+    } else {
+      downloadReportAsXlsx(rows, `alarm-report-${stamp}.xlsx`);
+    }
+
     toast.success("Export downloaded");
   };
 
@@ -636,27 +622,37 @@ const AlarmReportPage = () => {
   );
 
   const filteredData = data.filter((row) => {
-    if (!searchQuery.trim()) return true;
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+    if (!normalizedQuery) return true;
+
+    const organizationName =
+      normalizeDisplayValue(row.orgName) ||
+      (row.orgId ? accountNameById.get(Number(row.orgId)) : "") ||
+      "NA";
+    const severityLabel = getSeverityLabel(row.severity, row.type);
+    const mapLink = getGoogleMapsLink(row.latitude, row.longitude);
+    const locationText = row.address?.trim() || (mapLink ? "Open map" : "NA");
+    const coordinateText =
+      row.latitude !== undefined && row.longitude !== undefined
+        ? `${Number(row.latitude).toFixed(6)}, ${Number(row.longitude).toFixed(6)}`
+        : "Coordinates unavailable";
 
     const haystack = [
-      row.orgName,
-      row.orgId ? accountNameById.get(Number(row.orgId)) : "",
-      row.vehicleNo,
-      row.vehicleId,
-      row.deviceNo,
-      row.imei,
-      row.type,
-      row.status,
-      row.severity,
-      row.address,
-      row.receivedTime,
-      row.latitude,
-      row.longitude,
+      organizationName,
+      row.vehicleNo || "NA",
+      row.deviceNo || "NA",
+      row.imei || "NA",
+      row.type || "NA",
+      row.status || "NA",
+      severityLabel,
+      formatDateTime(row.receivedTime),
+      locationText,
+      coordinateText,
     ]
       .join(" ")
       .toLowerCase();
 
-    return haystack.includes(searchQuery.toLowerCase());
+    return haystack.includes(normalizedQuery);
   });
 
   return (
@@ -674,11 +670,30 @@ const AlarmReportPage = () => {
         onButtonClick={() => {
           if (!loading) handleViewReport();
         }}
-        showExportButton={true}
-        ExportbuttonText="Export Excel"
-        onExportClick={handleExport}
+        showExportButton={false}
         showFilterButton={false}
       />
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={handleExport}
+          className="cursor-pointer rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-700 transition-colors hover:bg-gray-50"
+          aria-label={`Download ${exportFormat === "excel" ? "Excel" : "CSV"}`}
+        >
+          <Download className="h-4 w-4" />
+        </button>
+        <div className="relative">
+          <select
+            value={exportFormat}
+            onChange={(e) => setExportFormat(e.target.value as ExportFormat)}
+            className="cursor-pointer appearance-none rounded-xl border border-gray-300 bg-white py-3 pl-4 pr-10 text-sm font-medium text-gray-700 outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+          >
+            <option value="excel">Excel</option>
+            <option value="csv">CSV</option>
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+        </div>
+      </div>
 
       <div className="mb-6 overflow-visible rounded-[28px] bg-white shadow-[0_18px_40px_rgba(15,23,42,0.12)]">
         <div className="h-1 w-full bg-gradient-to-r from-violet-600 via-sky-500 to-emerald-500" />
@@ -730,6 +745,7 @@ const AlarmReportPage = () => {
             </div>
             <input
               type="datetime-local"
+              max={maxSelectableDateTime}
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
@@ -743,6 +759,7 @@ const AlarmReportPage = () => {
             </div>
             <input
               type="datetime-local"
+              max={maxSelectableDateTime}
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
