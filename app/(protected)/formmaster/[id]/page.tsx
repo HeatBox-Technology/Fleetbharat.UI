@@ -476,21 +476,10 @@ const AddEditFormMasterPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3">
-                <button
-                  onClick={handleSubmit}
-                  disabled={loading}
-                  className="px-8 py-3 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
-                  style={{ backgroundColor: selectedColor }}
-                >
-                  {loading
-                    ? isEditMode
-                      ? t("buttons.updating")
-                      : t("buttons.creating")
-                    : isEditMode
-                      ? t("buttons.update")
-                      : t("buttons.create")}
-                </button>
+              <div
+                id="form-footer-actions"
+                className="form-footer-actions flex justify-end gap-3"
+              >
                 <button
                   onClick={() => router.push("/formmaster")}
                   disabled={loading}

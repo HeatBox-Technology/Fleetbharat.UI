@@ -19,38 +19,27 @@ const ActionLoader: React.FC<ActionLoaderProps> = ({
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/35 backdrop-blur-[1px]">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-transparent">
       <div
-        className="rounded-2xl px-8 py-6 flex flex-col items-center gap-4 "
-        style={{ borderColor: `${selectedColor}33` }}
-      >
-        <div className="relative w-16 h-16 flex items-center justify-center">
-          {segmentIndexes.map((index) => (
-            <span
-              key={index}
-              className="absolute w-1.5 h-4 rounded-full geofence-loader-segment"
-              style={{
-                transform: `rotate(${index * 30}deg) translateY(-20px)`,
-                animationDelay: `${index * 0.08}s`,
-                backgroundColor: selectedColor,
-              }}
-            />
-          ))}
-        </div>
-      </div>
+        className="vts-simple-spinner"
+        style={{ borderTopColor: selectedColor }}
+        aria-label={text}
+      />
 
       <style jsx>{`
-        .geofence-loader-segment {
-          transform-origin: center 20px;
-          animation: geofence-spin-fade 1s linear infinite;
+        .vts-simple-spinner {
+          width: 36px;
+          height: 36px;
+          border-radius: 9999px;
+          border: 3px solid rgba(0, 0, 0, 0.12);
+          animation: vts-spin 0.8s linear infinite;
         }
-
-        @keyframes geofence-spin-fade {
-          0% {
-            opacity: 1;
-          }
-          100% {
-            opacity: 0.15;
+        :global(.dark) .vts-simple-spinner {
+          border-color: rgba(255, 255, 255, 0.18);
+        }
+        @keyframes vts-spin {
+          to {
+            transform: rotate(360deg);
           }
         }
       `}</style>

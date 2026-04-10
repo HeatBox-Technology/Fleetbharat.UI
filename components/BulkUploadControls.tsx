@@ -207,11 +207,11 @@ const BulkUploadControls: React.FC<BulkUploadControlsProps> = ({ moduleKey }) =>
         <select
           value={format}
           onChange={(event) => setFormat(event.target.value as TemplateFormat)}
-          className={`appearance-none pl-3 pr-8 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm border ${
-            isDark
-              ? "bg-gray-800 border-gray-700 text-gray-300"
-              : "bg-white border-gray-300 text-gray-700"
-          }`}
+        className={`appearance-none pl-2.5 pr-8 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm border ${
+          isDark
+            ? "bg-gray-800 border-gray-700 text-gray-300"
+            : "bg-white border-gray-300 text-gray-700"
+        }`}
         >
           <option value="excel">Excel</option>
           <option value="csv">CSV</option>
@@ -222,7 +222,7 @@ const BulkUploadControls: React.FC<BulkUploadControlsProps> = ({ moduleKey }) =>
       <button
         onClick={onTemplateDownload}
         disabled={downloadingTemplate || uploading}
-        className={`cursor-pointer px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-colors border disabled:opacity-60 ${
+        className={`cursor-pointer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-colors border disabled:opacity-60 ${
           isDark
             ? "bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700"
             : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -235,7 +235,7 @@ const BulkUploadControls: React.FC<BulkUploadControlsProps> = ({ moduleKey }) =>
       <button
         onClick={onPickFile}
         disabled={uploading || downloadingTemplate}
-        className={`cursor-pointer px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-colors border disabled:opacity-60 ${
+        className={`cursor-pointer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-colors border disabled:opacity-60 ${
           isDark
             ? "bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700"
             : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -253,13 +253,13 @@ const BulkUploadControls: React.FC<BulkUploadControlsProps> = ({ moduleKey }) =>
 
       {errorReportAvailable && jobId && (
         <button
-          onClick={onErrorReportDownload}
-          disabled={downloadingErrorReport}
-          className={`cursor-pointer px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-colors border disabled:opacity-60 ${
-            isDark
-              ? "bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700"
-              : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
-          }`}
+        onClick={onErrorReportDownload}
+        disabled={downloadingErrorReport}
+        className={`cursor-pointer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-colors border disabled:opacity-60 ${
+          isDark
+            ? "bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700"
+            : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+        }`}
         >
           <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           Errors

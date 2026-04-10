@@ -38,7 +38,14 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   HeaderClasses,
   SidebarClasses,
@@ -106,6 +113,22 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
   const [locale, setLocale] = useState(activeLocale);
   const [globalSearchInput, setGlobalSearchInput] = useState<string>("");
   const [globalSearchQuery, setGlobalSearchQuery] = useState<string>("");
+  const sidebarScrollRef = useRef<HTMLElement | null>(null);
+  const sidebarScrollTopRef = useRef(0);
+  const sidebarScrollKey = "vts.sidebar.scrollTop";
+
+  const setSidebarRef = useCallback((node: HTMLElement | null) => {
+    sidebarScrollRef.current = node;
+    if (!node || typeof window === "undefined") return;
+    const saved = window.sessionStorage.getItem(sidebarScrollKey);
+    if (saved) {
+      const next = Number.parseInt(saved, 10);
+      if (Number.isFinite(next)) {
+        node.scrollTop = next;
+        sidebarScrollTopRef.current = next;
+      }
+    }
+  }, []);
 
   useEffect(() => {
     setLocale(activeLocale);
@@ -118,6 +141,48 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
 
     return () => window.clearTimeout(debounceTimer);
   }, [globalSearchInput]);
+
+  useEffect(() => {
+    const el = sidebarScrollRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      sidebarScrollTopRef.current = el.scrollTop;
+    };
+
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useLayoutEffect(() => {
+    const el = sidebarScrollRef.current;
+    if (!el || typeof window === "undefined") return;
+
+    const saved = window.sessionStorage.getItem(sidebarScrollKey);
+    if (saved) {
+      const next = Number.parseInt(saved, 10);
+      if (Number.isFinite(next)) {
+        el.scrollTop = next;
+        sidebarScrollTopRef.current = next;
+      }
+    }
+
+    return () => {
+      window.sessionStorage.setItem(
+        sidebarScrollKey,
+        String(sidebarScrollTopRef.current || 0),
+      );
+    };
+  }, []);
+
+  const captureSidebarScroll = () => {
+    const el = sidebarScrollRef.current;
+    const next = el ? el.scrollTop : sidebarScrollTopRef.current;
+    sidebarScrollTopRef.current = next;
+    if (typeof window !== "undefined") {
+      window.sessionStorage.setItem(sidebarScrollKey, String(next || 0));
+    }
+  };
 
   const handleLocaleChange = (nextLocale: string) => {
     setLocale(nextLocale);
@@ -294,6 +359,7 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const handleMenuClick = (itemId: string) => {
+    captureSidebarScroll();
     if (!isMobile && !isSidebarOpen) {
       setIsSidebarOpen(true);
     }
@@ -301,6 +367,7 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const handleExpandableMenuClick = (menuId: string) => {
+    captureSidebarScroll();
     if (!isMobile && !isSidebarOpen) {
       setIsSidebarOpen(true);
       setExpandedMenus((prev) =>
@@ -710,6 +777,24 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
       })
       .filter((section) => section.items.length > 0);
   }, [filteredSections, globalSearchQuery]);
+
+  useLayoutEffect(() => {
+    const el = sidebarScrollRef.current;
+    if (!el) return;
+    const next = sidebarScrollTopRef.current;
+
+    if (Math.abs(el.scrollTop - next) > 1) {
+      el.scrollTop = next;
+    }
+  }, [
+    expandedMenus,
+    selectedItemId,
+    visibleSections,
+    isSidebarOpen,
+    isMobileSidebarOpen,
+    isLoadingPermissions,
+    pathname,
+  ]);
 
   const getTopNavHeaderClasses = (): HeaderClasses => {
     if (isDark) {
@@ -1155,18 +1240,19 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
     return (
       <div className={isDark ? "dark" : ""}>
         <aside
-          className={`${width} ${sidebarClasses.bg} border-r ${
+          ref={setSidebarRef}
+          className={`sidebar-scroll ${width} ${sidebarClasses.bg} border-r ${
             sidebarClasses.border
           } h-screen fixed left-0 top-0 overflow-y-auto transition-all duration-300 z-50 ${
             isMobile && !isMobileSidebarOpen
               ? "-translate-x-full"
               : "translate-x-0"
           }`}
-          style={
-            sidebarClasses.useCustomBg && sidebarClasses.customBg
+          style={{
+            ...(sidebarClasses.useCustomBg && sidebarClasses.customBg
               ? { backgroundColor: sidebarClasses.customBg }
-              : {}
-          }
+              : {}),
+          }}
         >
           <div className="p-4 pb-20">
             {/* Logo Section */}
@@ -1289,12 +1375,13 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                                       <Link
                                         key={child.id}
                                         href={child.path}
+                                        onMouseDown={captureSidebarScroll}
                                         onClick={() => {
                                           handleMenuClick(child.id);
                                           if (isMobile)
                                             setIsMobileSidebarOpen(false);
                                         }}
-                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium ${
+                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium no-underline visited:text-inherit focus-visible:outline-none ${
                                           isChildActive
                                             ? ""
                                             : `${sidebarClasses.menuText} ${sidebarClasses.menuHover}`
@@ -1320,12 +1407,13 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                                       <Link
                                         key={child.id}
                                         href={child.path}
+                                        onMouseDown={captureSidebarScroll}
                                         onClick={() => {
                                           handleMenuClick(child.id);
                                           if (isMobile)
                                             setIsMobileSidebarOpen(false);
                                         }}
-                                        className={`flex flex-col items-center justify-center gap-1 px-2 py-2 rounded-lg font-medium ${
+                                        className={`flex flex-col items-center justify-center gap-1 px-2 py-2 rounded-lg font-medium no-underline visited:text-inherit focus-visible:outline-none ${
                                           isChildActive
                                             ? ""
                                             : `${sidebarClasses.menuText} ${sidebarClasses.menuHover}`
@@ -1346,7 +1434,8 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                             // Non-expandable top-level item
                             <Link
                               href={item.path || "#"}
-                              className={`flex ${
+                              onMouseDown={captureSidebarScroll}
+                              className={`flex no-underline visited:text-inherit focus-visible:outline-none ${
                                 isOpen
                                   ? "flex-row items-center gap-3"
                                   : "flex-col items-center gap-1"
@@ -1382,6 +1471,18 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
             )}
           </div>
         </aside>
+        <style jsx global>{`
+          .sidebar-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            overflow-anchor: none;
+            scroll-behavior: auto;
+          }
+          .sidebar-scroll::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+          }
+        `}</style>
       </div>
     );
   };

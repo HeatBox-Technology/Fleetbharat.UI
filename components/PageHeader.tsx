@@ -2,7 +2,8 @@
 
 import { Download, Filter, Home } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import BulkUploadControls from "@/components/BulkUploadControls";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
@@ -56,6 +57,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     }
   };
   const [mounted, setMounted] = useState(false);
+  const [footerTarget, setFooterTarget] = useState<HTMLElement | null>(null);
+  const [footerResolved, setFooterResolved] = useState(false);
 
   const [canShowBulkUpload, setCanShowBulkUpload] = useState(
     Boolean(showBulkUpload),
@@ -82,7 +85,15 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
   const resolvedModuleKey = bulkUploadModuleKey || getModuleKeyFromPath();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (typeof window !== "undefined") {
+      setFooterTarget(
+        (document.getElementById("form-footer-actions") as HTMLElement | null) ||
+          null,
+      );
+      setFooterResolved(true);
+    }
+
     const resolveActionPermissions = () => {
       if (typeof window === "undefined") {
         setCanShowBulkUpload(false);
@@ -177,7 +188,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       )}
 
       {/* Header */}
-      <div className="flex flex-col gap-4 mb-4 sm:mb-6 md:mb-8">
+      <div className="flex flex-col gap-4 mb-4 sm:mb-6 md:mb-8 md:flex-row md:items-center md:justify-between">
         {/* Title Section */}
         <div className="flex-1 min-w-0">
           <h1
@@ -199,12 +210,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           canShowExportButton ||
           (showButton && canShowWriteButton) ||
           canShowBulkUpload) && (
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:ml-auto">
             {/* Filters Button */}
             {showFilterButton && (
               <button
                 onClick={handleFilterClick}
-                className={`cursor-pointer px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-colors border ${
+                className={`cursor-pointer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-colors border ${
                   isDark
                     ? "bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700"
                     : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -219,7 +230,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             {canShowExportButton && (
               <button
                 onClick={handleExportClick}
-                className={`cursor-pointer px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-colors border ${
+                className={`cursor-pointer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-colors border ${
                   isDark
                     ? "bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700"
                     : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -236,17 +247,46 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
             {/* Primary Action Button */}
             {showButton && canShowWriteButton && (
-              <button
-                onClick={handleButtonClick}
-                style={{ background: selectedColor }}
-                className="cursor-pointer hover:opacity-90 text-white px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-opacity ml-auto"
-              >
-                <span className="whitespace-nowrap">{buttonText}</span>
-              </button>
+              <>
+                {footerResolved && !footerTarget && (
+                  <button
+                    onClick={handleButtonClick}
+                    style={{ background: selectedColor }}
+                    className="cursor-pointer hover:opacity-90 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-opacity"
+                  >
+                    <span className="whitespace-nowrap">{buttonText}</span>
+                  </button>
+                )}
+                {footerTarget &&
+                  createPortal(
+                    <button
+                      onClick={handleButtonClick}
+                      style={{ background: selectedColor }}
+                      className="cursor-pointer hover:opacity-90 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-opacity"
+                    >
+                      <span className="whitespace-nowrap">{buttonText}</span>
+                    </button>,
+                    footerTarget,
+                  )}
+              </>
             )}
           </div>
         )}
       </div>
+
+      <style jsx global>{`
+        .form-footer-actions button {
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          border-radius: 0.5rem;
+          line-height: 1.25rem;
+        }
+        .form-footer-actions {
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.75rem;
+        }
+      `}</style>
     </>
   );
 };

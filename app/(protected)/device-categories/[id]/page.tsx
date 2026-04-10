@@ -316,7 +316,10 @@ const AddEditDeviceCategoryPage: React.FC = () => {
               </button>
             </div>
 
-            <div className="flex justify-end">
+            <div
+              id="form-footer-actions"
+              className="form-footer-actions flex justify-end"
+            >
               <button
                 type="button"
                 onClick={() => router.push("/device-categories")}

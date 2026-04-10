@@ -958,7 +958,10 @@ export default function GeofenceDetailPage() {
           googleMapsApiKey={getGoogleMapsApiKey()}
         />
 
-        <div className="mt-4 flex justify-end">
+        <div
+          id="form-footer-actions"
+          className="form-footer-actions mt-4 flex justify-end"
+        >
           <button
             type="button"
             onClick={() => router.push(safeReturnPath)}

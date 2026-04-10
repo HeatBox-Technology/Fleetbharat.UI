@@ -597,7 +597,10 @@ const ProvisionSim: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-end">
+            <div
+              id="form-footer-actions"
+              className="form-footer-actions flex justify-end"
+            >
               <button
                 onClick={() => router.push("/sim-master")}
                 className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${

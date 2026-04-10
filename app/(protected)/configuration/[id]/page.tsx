@@ -681,7 +681,10 @@ const NewConfiguration: React.FC = () => {
             </Card>
 
             {/* Save Button */}
-            <div className="flex justify-end gap-4">
+            <div
+              id="form-footer-actions"
+              className="form-footer-actions flex justify-end gap-4"
+            >
               <button
                 className={`px-4 sm:px-6 py-2 rounded-lg font-medium transition-colors ${
                   isDark

@@ -344,7 +344,10 @@ const AddSubscriptionPage = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 mt-6">
+          <div
+            id="form-footer-actions"
+            className="form-footer-actions flex items-center justify-end gap-3 mt-6"
+          >
             <button
               onClick={() => router.push("/subscriptions")}
               className={`px-5 py-2.5 rounded-lg border ${

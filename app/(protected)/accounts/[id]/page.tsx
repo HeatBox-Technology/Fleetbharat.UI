@@ -1302,7 +1302,10 @@ const EditAccount: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="flex justify-end gap-4">
+            <div
+              id="form-footer-actions"
+              className="form-footer-actions flex justify-end gap-4"
+            >
               <button
                 className={`px-6 py-3 rounded-lg font-medium transition-colors ${
                   isDark

@@ -1246,7 +1246,10 @@ const CreateUser: React.FC = () => {
             )}
           </div>
 
-          <div className="mt-4 sm:mt-6 flex justify-end">
+          <div
+            id="form-footer-actions"
+            className="form-footer-actions mt-4 sm:mt-6 flex justify-end"
+          >
             <button
               onClick={() => router.push("/users")}
               className={`px-4 sm:px-6 py-2.5 rounded-lg font-medium transition-colors ${

@@ -778,6 +778,11 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        <div
+          id="form-footer-actions"
+          className="form-footer-actions mt-6 flex justify-end gap-3"
+        />
       </div>
     </div>
   );

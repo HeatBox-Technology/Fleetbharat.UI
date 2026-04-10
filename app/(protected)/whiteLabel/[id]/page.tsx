@@ -994,10 +994,13 @@ const ProvisionBranding: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="px-6 pb-6 space-y-3">
+                <div
+                  id="form-footer-actions"
+                  className="form-footer-actions px-6 pb-6 flex justify-end gap-3"
+                >
                   <button
                     onClick={handleCancel}
-                    className={`w-full py-3 rounded-lg font-semibold transition-colors ${
+                    className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
                       isDark
                         ? "bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700"
                         : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
