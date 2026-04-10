@@ -1704,7 +1704,10 @@ const PlansManagement = () => {
             </div>
           </div>
 
-          <div className="mt-6 flex justify-end">
+          <div
+            id="form-footer-actions"
+            className="form-footer-actions mt-6 flex justify-end"
+          >
             <button
               onClick={() => router.push("/manage-plans")}
               className={`px-6 py-2.5 rounded-lg border ${

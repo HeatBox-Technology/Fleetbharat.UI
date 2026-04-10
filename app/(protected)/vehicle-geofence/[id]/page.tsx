@@ -524,7 +524,10 @@ const AddEditVehicleGeofence: React.FC = () => {
               </div>
             )}
 
-            <div className="flex justify-end gap-3">
+            <div
+              id="form-footer-actions"
+              className="form-footer-actions flex justify-end gap-3"
+            >
               <button
                 onClick={() => router.push("/vehicle-geofence")}
                 disabled={loading}

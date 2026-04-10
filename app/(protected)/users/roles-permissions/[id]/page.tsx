@@ -790,7 +790,10 @@ const AddRole: React.FC = () => {
             </div>
           </Card>
 
-          <div className="flex justify-end">
+          <div
+            id="form-footer-actions"
+            className="form-footer-actions flex justify-end"
+          >
             <button
               className={`px-6 py-3 rounded-lg text-sm font-medium transition-colors ${
                 isDark
