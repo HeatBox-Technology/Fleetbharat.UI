@@ -9,6 +9,7 @@
           "current": "Device"
         },
         "addButton": "Add Device",
+        "export": "Export",
         "fields": {
           "selectAccount": "Select Account"
         },

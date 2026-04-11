@@ -25,6 +25,7 @@ import {
   resolveVehicleGeofenceDeviceNo,
   syncVehicleGeofenceToJava,
 } from "@/services/vehicleGeofenceJavaSyncService";
+import MultiSelect from "@/components/MultiSelect";
 
 interface DropdownOption {
   id: number;
@@ -33,7 +34,7 @@ interface DropdownOption {
 
 interface VehicleGeofenceFormData {
   accountId: number;
-  vehicleId: number;
+  vehicleIds: number[];
   geofenceId: number;
   remarks: string;
   isActive: boolean;
@@ -63,7 +64,7 @@ const AddEditVehicleGeofence: React.FC = () => {
 
   const [formData, setFormData] = useState<VehicleGeofenceFormData>({
     accountId: 0,
-    vehicleId: 0,
+    vehicleIds: [],
     geofenceId: 0,
     remarks: "",
     isActive: true,
@@ -158,7 +159,7 @@ const AddEditVehicleGeofence: React.FC = () => {
 
       setFormData({
         accountId: Number(data.accountId || 0),
-        vehicleId: Number(data.vehicleId || 0),
+        vehicleIds: Array.isArray(data.vehicleIds) ? data.vehicleIds : [Number(data.vehicleId || 0)],
         geofenceId: Number(data.geofenceId || 0),
         remarks: String(data.remarks || ""),
         isActive: Boolean(data.isActive),
@@ -218,7 +219,7 @@ const AddEditVehicleGeofence: React.FC = () => {
     >,
   ) => {
     const { name, value } = e.target;
-    const numberFields = ["accountId", "vehicleId", "geofenceId"];
+    const numberFields = ["accountId", "vehicleIds", "geofenceId"];
     setFormData((prev) => ({
       ...prev,
       [name]: numberFields.includes(name) ? Number(value) : value,
@@ -234,7 +235,7 @@ const AddEditVehicleGeofence: React.FC = () => {
     }
 
     if (!formData.accountId) return toast.error(t("toast.selectAccount"));
-    if (!formData.vehicleId) return toast.error(t("toast.selectVehicle"));
+    if (!formData.vehicleIds.length) return toast.error(t("toast.selectVehicle"));
     if (!formData.geofenceId) return toast.error(t("toast.selectGeofence"));
 
     const { userId } = getUserData();
@@ -245,7 +246,7 @@ const AddEditVehicleGeofence: React.FC = () => {
 
       if (isEditMode) {
         const payload = {
-          vehicleId: Number(formData.vehicleId),
+          vehicleIds: formData.vehicleIds,
           geofenceId: Number(formData.geofenceId),
           remarks: String(formData.remarks || ""),
           isActive: Boolean(formData.isActive),
@@ -255,7 +256,7 @@ const AddEditVehicleGeofence: React.FC = () => {
       } else {
         const payload = {
           accountId: Number(formData.accountId),
-          vehicleId: Number(formData.vehicleId),
+          vehicleIds: formData.vehicleIds,
           geofenceId: Number(formData.geofenceId),
           remarks: String(formData.remarks || ""),
           createdBy: Number(userId || 0),
@@ -267,14 +268,14 @@ const AddEditVehicleGeofence: React.FC = () => {
         try {
           const resolvedDeviceNo = await resolveVehicleGeofenceDeviceNo({
             accountId: Number(formData.accountId),
-            vehicleId: Number(formData.vehicleId),
-            vehicleNo: getVehicleLabelById(formData.vehicleId),
+            vehicleId: Number(formData.vehicleIds[0]),
+            vehicleNo: getVehicleLabelById(formData.vehicleIds[0]),
           });
 
           await syncVehicleGeofenceToJava({
             accountId: Number(formData.accountId),
-            vehicleId: Number(formData.vehicleId),
-            vehicleNo: getVehicleLabelById(formData.vehicleId),
+            vehicleId: Number(formData.vehicleIds[0]),
+            vehicleNo: getVehicleLabelById(formData.vehicleIds[0]),
             deviceNo: resolvedDeviceNo,
             geofenceId: Number(formData.geofenceId),
           });
@@ -419,17 +420,17 @@ const AddEditVehicleGeofence: React.FC = () => {
                 <label className="block text-sm font-semibold text-foreground mb-2">
                   {t("fields.vehicle")} <span className="text-red-500">*</span>
                 </label>
-                <SearchableDropdown
+                <MultiSelect
                   options={vehicleOptions}
                   value={
-                    vehicleOptions.find(
-                      (option) => Number(option.value) === Number(formData.vehicleId),
-                    ) || null
+                    vehicleOptions.filter(
+                      (option) => formData.vehicleIds.includes(Number(option.value))
+                    )
                   }
-                  onChange={(option) =>
+                  onChange={(option : any) =>
                     setFormData((prev) => ({
                       ...prev,
-                      vehicleId: Number(option?.value || 0),
+                      vehicleIds: Array.isArray(option) ? option.map((o) => Number(o.value)) : [Number(option?.value || 0)],
                     }))
                   }
                   isDisabled={loading}

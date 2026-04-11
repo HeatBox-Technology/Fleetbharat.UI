@@ -910,19 +910,35 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                         );
                       }
                       return (
-                        <Link
-                          key={item.id}
-                          href={item.path || "#"}
-                          className={`text-sm py-1 font-medium ${
-                            selectedItemId === item.id
-                              ? "font-semibold"
-                              : `${headerClasses.textSecondary} ${headerClasses.hover}`
-                          }`}
-                          onClick={() => setSelectedItemId(item.id)}
-                          style={getActiveItemStyle(item.id)}
-                        >
-                          {item.label}
-                        </Link>
+                        item.path ? (
+                          <Link
+                            key={item.id}
+                            href={item.path}
+                            className={`text-sm py-1 font-medium ${
+                              selectedItemId === item.id
+                                ? "font-semibold"
+                                : `${headerClasses.textSecondary} ${headerClasses.hover}`
+                            }`}
+                            onClick={() => setSelectedItemId(item.id)}
+                            style={getActiveItemStyle(item.id)}
+                          >
+                            {item.label}
+                          </Link>
+                        ) : (
+                          <button
+                            key={item.id}
+                            type="button"
+                            className={`text-sm py-1 font-medium ${
+                              selectedItemId === item.id
+                                ? "font-semibold"
+                                : `${headerClasses.textSecondary} ${headerClasses.hover}`
+                            }`}
+                            onClick={() => setSelectedItemId(item.id)}
+                            style={getActiveItemStyle(item.id)}
+                          >
+                            {item.label}
+                          </button>
+                        )
                       );
                     }),
                   )
@@ -1321,10 +1337,14 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                       const isExpanded =
                         forceExpand || expandedMenus.includes(item.id);
                       const isItemSelected = selectedItemId === item.id;
+                      const isExpandableItem = Boolean(
+                        item.expandable ||
+                          (item.children && item.children.length > 0),
+                      );
 
                       return (
                         <div key={item.id}>
-                          {item.expandable ? (
+                          {isExpandableItem ? (
                             <>
                               {/* Parent expandable button — never gets active styling */}
                               <button

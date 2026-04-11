@@ -1,3 +1,4 @@
+import { getStoredAccountId, getStoredUserId } from "@/utils/storage";
 import { tmsApi } from "./apiService";
 
 const buildErrorResponse = (
@@ -11,31 +12,50 @@ const buildErrorResponse = (
     data: null,
   };
 
-const getStoredAccountId = (accountId) => {
-  const resolved = Number(accountId || 0);
-  if (resolved > 0) return resolved;
-  if (typeof window === "undefined") return 0;
+const normalizeFrequency = (value) => {
+  const normalized = String(value || "")
+    .trim()
+    .toUpperCase();
+  if (normalized === "ONE-TIME" || normalized === "ONE_TIME") return "ONE-TIME";
+  if (normalized === "RECURRING") return "RECURRING";
+  if (normalized === "ONE-TIME" || normalized === "ONE-TIME") return "ONE-TIME";
 
-  const selectedAccountId = Number(localStorage.getItem("accountId") || 0);
-  if (selectedAccountId > 0) return selectedAccountId;
-
-  try {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const userAccountId = Number(user?.accountId || user?.AccountId || 0);
-    return userAccountId > 0 ? userAccountId : 0;
-  } catch {
-    return 0;
+  const lower = String(value || "")
+    .trim()
+    .toLowerCase();
+  if (lower === "one-time" || lower === "one_time" || lower === "onetime") {
+    return "ONE-TIME";
   }
+  if (lower === "recurring") return "RECURRING";
+  return "";
 };
 
-const getStoredUserId = () => {
-  if (typeof window === "undefined") return "";
-  try {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    return user?.userId || user?.UserId || "";
-  } catch {
-    return "";
-  }
+const normalizeRoutingModel = (value) => {
+  const normalized = String(value || "")
+    .trim()
+    .toUpperCase();
+  if (normalized === "STANDARD") return "STANDARD";
+  if (normalized === "DYNAMIC") return "DYNAMIC";
+  const lower = String(value || "")
+    .trim()
+    .toLowerCase();
+  if (lower === "standard") return "STANDARD";
+  if (lower === "dynamic") return "DYNAMIC";
+  return "";
+};
+
+const normalizeFleetSource = (value) => {
+  const normalized = String(value || "")
+    .trim()
+    .toUpperCase();
+  if (normalized === "INTERNAL") return "INTERNAL";
+  if (normalized === "EXTERNAL") return "EXTERNAL";
+  const lower = String(value || "")
+    .trim()
+    .toLowerCase();
+  if (lower === "master" || lower === "internal") return "INTERNAL";
+  if (lower === "adhoc" || lower === "external") return "EXTERNAL";
+  return "";
 };
 
 const parseTripStartTime = (travelDate, etd, createdDatetime) => {
@@ -138,30 +158,63 @@ export const getTripPlans = async ({
   }
 };
 
-const buildTripPlanRequestBody = (payload = {}) => ({
-  planId: Number(payload?.planId || 0),
-  accountId: Number(payload?.accountId || getStoredAccountId() || 0),
-  driverId: Number(payload?.driverId || 0),
-  vehicleId: Number(payload?.vehicleId || 0),
-  tripType: String(payload?.tripType || "").toLowerCase(),
-  travelDate: payload?.travelDate || null,
-  etd: String(payload?.etd || ""),
-  routeId: Number(payload?.routeId || 0),
-  startGeoId: Number(payload?.startGeoId || 0),
-  endGeoId: Number(payload?.endGeoId || 0),
-  createdBy: payload?.createdBy || getStoredUserId(),
-  weekDays: String(payload?.weekDays || ""),
-  routeDetails: Array.isArray(payload?.routeDetails)
+const buildTripPlanRequestBody = (payload = {}) => {
+  const resolvedAccountId = Number(
+    payload?.accountId || getStoredAccountId() || 0,
+  );
+
+  const fleetSource = normalizeFleetSource(payload?.fleetSource);
+  const routingModel = normalizeRoutingModel(payload?.routingModel);
+  const frequency = normalizeFrequency(payload?.frequency);
+
+  // Updated route details mapping with leadTime and eta (rta)
+  const routeDetails = Array.isArray(payload?.routeDetails)
     ? payload.routeDetails.map((item, index) => ({
         fromGeoId: Number(item?.fromGeoId || 0),
+        fromGeoName: item?.fromGeoName ?? null,
+        fromLatitude: item?.fromLatitude ?? null,
+        fromLongitude: item?.fromLongitude ?? null,
         toGeoId: Number(item?.toGeoId || 0),
+        toGeoName: item?.toGeoName ?? null,
+        toLatitude: item?.toLatitude ?? null,
+        toLongitude: item?.toLongitude ?? null,
         sequence: Number(item?.sequence || index + 1),
-        distance: String(item?.distance || "0"),
-        leadTime: Number(item?.leadTime || 0),
-        rta: Number(item?.rta || 0),
+        distance: String(item?.distance ?? "0"),
+        leadTime: Number(item?.leadTime || 0), // NEW - Maps from node.leadTime
+        rta: Number(item?.rta || 0), // NEW - Maps from node.eta
       }))
-    : [],
-});
+    : [];
+
+  return {
+    planId: Number(payload?.planId || 0),
+    accountId: resolvedAccountId,
+    driverId: Number(payload?.driverId || 0),
+    driverName: String(payload?.driverName || ""),
+    driverPhone: String(payload?.driverPhone || ""),
+    fleetSource,
+    vehicleId: Number(payload?.vehicleId || 0),
+    vehicleNumber: String(payload?.vehicleNumber || payload?.vehicleNo || ""),
+    frequency,
+    travelDate:
+      frequency === "ONE-TIME" ? String(payload?.travelDate || "") : "",
+    etd: String(payload?.etd || ""),
+    routingModel,
+    routeId: Number(payload?.routeId || 0),
+    routePath: String(payload?.routePath || ""),
+    startGeoId: Number(payload?.startGeoId || 0),
+    endGeoId: Number(payload?.endGeoId || 0),
+    createdBy: String(payload?.createdBy || getStoredUserId() || ""),
+    weekDays: String(payload?.weekDays || ""),
+    isElockTrip: Boolean(payload?.isElockTrip),
+    isGPSTrip: Boolean(payload?.isGPSTrip),
+    primaryDevice: String(payload?.primaryDevice || ""),
+    secondaryDevice: String(payload?.secondaryDevice || ""),
+    vehicleCategory: String(payload?.vehicleCategory || ""),
+    consignee: Number(payload?.consignee || 0), // Party account ID
+    consignor: Number(payload?.consignor || 0), // Party account ID
+    routeDetails,
+  };
+};
 
 export const createTripPlan = async (payload = {}) => {
   try {
@@ -192,7 +245,7 @@ export const updateTripPlan = async (planId, payload = {}) => {
 export const upsertTripPlan = async (payload = {}) => {
   const resolvedPlanId = Number(payload?.planId || 0);
   if (resolvedPlanId > 0) {
-    console.log("resolvedPlanId",resolvedPlanId)
+    console.log("resolvedPlanId", resolvedPlanId);
     return updateTripPlan(resolvedPlanId, payload);
   }
   return createTripPlan(payload);
@@ -258,7 +311,15 @@ export const getTripPlanById = async (planId, accountId) => {
         planId: Number(item?.planId || 0),
         accountId: Number(item?.accountId || accountId || 0),
         driverId: Number(item?.driverId || 0),
+        driverName: String(item?.driverName || ""),
+        driverPhone: String(item?.driverPhone || ""),
         vehicleId: Number(item?.vehicleId || 0),
+        vehicleNumber: String(item?.vehicleNumber || item?.vehicleNo || ""),
+        vehicleNo: String(item?.vehicleNo || ""),
+        fleetSource: String(item?.fleetSource || ""),
+        routingModel: String(item?.routingModel || ""),
+        routePath: String(item?.routePath || ""),
+        frequency: item?.frequency ?? null,
         tripType,
         tripTypeLabel: toCycleLabel(tripType),
         travelDate: item?.travelDate || null,
@@ -270,14 +331,22 @@ export const getTripPlanById = async (planId, accountId) => {
         endGeoId: Number(item?.endGeoId || 0),
         weekDays: String(item?.weekDays || ""),
         createdDatetime: String(item?.createdDatetime || ""),
+        consignor: Number(item?.consignor || 0), // NEW
+        consignee: Number(item?.consignee || 0), // NEW
         routeDetails: Array.isArray(item?.routeDetails)
           ? item.routeDetails.map((detail, index) => ({
               fromGeoId: Number(detail?.fromGeoId || 0),
+              fromGeoName: detail?.fromGeoName ?? null,
+              fromLatitude: detail?.fromLatitude ?? null,
+              fromLongitude: detail?.fromLongitude ?? null,
               toGeoId: Number(detail?.toGeoId || 0),
+              toGeoName: detail?.toGeoName ?? null,
+              toLatitude: detail?.toLatitude ?? null,
+              toLongitude: detail?.toLongitude ?? null,
               sequence: Number(detail?.sequence || index + 1),
               distance: String(detail?.distance || "0"),
-              leadTime: Number(detail?.leadTime || 0),
-              rta: Number(detail?.rta || 0),
+              leadTime: Number(detail?.leadTime || 0), // NEW
+              rta: Number(detail?.rta || 0), // NEW (eta)
             }))
           : [],
       },

@@ -1,3 +1,4 @@
+import { getStoredAccountId } from "@/utils/storage";
 import api from "./apiService";
 
 export const getAllAccounts = async () => {
@@ -176,16 +177,18 @@ export const getFormModulesDropdown = async () => {
 };
 
 export const getVehicleDropdown = async (accountId) => {
-  const endpoint = accountId
-    ? `/api/common/dropdowns/vehicles/${accountId}`
+  const resolvedAccountId = getStoredAccountId(accountId);
+  const endpoint = resolvedAccountId
+    ? `/api/common/dropdowns/vehicles/${resolvedAccountId}`
     : `/api/common/dropdowns/vehicles`;
   const res = await api.get(endpoint);
   return res.data;
 };
 
 export const getDriverDropdown = async (accountId) => {
-  const endpoint = accountId
-    ? `/api/common/dropdowns/drivers/${accountId}`
+  const resolvedAccountId = getStoredAccountId(accountId);
+  const endpoint = resolvedAccountId
+    ? `/api/common/dropdowns/drivers?accountId=${resolvedAccountId}`
     : `/api/common/dropdowns/drivers`;
   const res = await api.get(endpoint);
   return res.data;
@@ -206,19 +209,47 @@ export const getLookupDeviceTypeDropdown = async () => {
   return res.data;
 };
 
-export const getHardwareDropdown = async (deviceTypeId, accountId) => {
-  const endpoint = accountId
-    ? `/api/common/dropdowns/devices/${accountId}`
+export const getHardwareDropdown = async (_deviceTypeId, accountId) => {
+  const resolvedAccountId = getStoredAccountId(accountId);
+  const endpoint = resolvedAccountId
+    ? `/api/common/dropdowns/devices/${resolvedAccountId}`
     : `/api/common/dropdowns/devices`;
   const res = await api.get(endpoint);
   return res.data;
 };
 
 export const getDeviceDropdown = async (accountId) => {
-  const endpoint = accountId
-    ? `/api/common/dropdowns/devices/${accountId}`
+  const resolvedAccountId = getStoredAccountId(accountId);
+  const endpoint = resolvedAccountId
+    ? `/api/common/dropdowns/devices/${resolvedAccountId}`
     : `/api/common/dropdowns/devices`;
   const res = await api.get(endpoint);
+  return res.data;
+};
+
+export const getTripTypeDropdown = async () => {
+  const res = await api.get(`/api/common/dropdowns/trip-types`);
+  return res.data;
+};
+
+export const getVehicleTypeDropdown = async () => {
+  const res = await api.get(`/api/common/dropdowns/vehicle-types`);
+  return res.data;
+};
+
+export const getCategoryDropdown = async (limit = 20) => {
+  const resolvedLimit = Number.isFinite(Number(limit)) ? Number(limit) : 20;
+  const res = await api.get(`/api/common/dropdowns/categories`, {
+    params: { limit: resolvedLimit },
+  });
+  return res.data;
+};
+
+export const getAccountsDropdownByCategory = async (categoryId) => {
+  const resolvedCategoryId = Number(categoryId || 0);
+  const res = await api.get(`/api/common/dropdowns/accounts/filter`, {
+    params: { categoryId: resolvedCategoryId },
+  });
   return res.data;
 };
 

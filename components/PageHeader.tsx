@@ -236,6 +236,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                     : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
                 }`}
               >
+                <span className="xs:inline">{ExportbuttonText}</span>
                 <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span className="hidden xs:inline">{ExportbuttonText}</span>
               </button>

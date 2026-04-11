@@ -1,10 +1,13 @@
 "use client";
 
-import { DirectionsRenderer, GoogleMap } from "@react-google-maps/api";
+import {
+  DirectionsRenderer,
+  GoogleMap,
+  Polyline,
+} from "@react-google-maps/api";
 import {
   AlertCircle,
   ArrowLeft,
-  Clock3,
   Flag,
   Map as MapIcon,
   MapPin,
@@ -13,17 +16,38 @@ import {
   Route as RouteIcon,
   Save,
   Trash2,
-  Zap,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import type React from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import SearchableDropdown, {
   type SearchableOption,
 } from "@/components/SearchableDropdown";
 import { useGoogleMapsSdk } from "@/hooks/useGoogleMapsSdk";
 import { getAccountHierarchy } from "@/services/accountService";
-import { getGeofenceDropdownByAccount } from "@/services/commonServie";
-import { getRouteDropdown } from "@/services/tripMasterService";
+import {
+  getAccountsDropdownByCategory,
+  getCategoryDropdown,
+  getDeviceDropdown,
+  getDriverDropdown,
+  getGeofenceDropdownByAccount,
+  getTripTypeDropdown,
+  getVehicleDropdown,
+  getVehicleTypeDropdown,
+} from "@/services/commonServie";
+import { getGeofenceById } from "@/services/geofenceService";
+import { getRouteMasterById } from "@/services/routeMasterService";
+import {
+  getRouteDropdown,
+  getTripPlanById,
+  upsertTripPlan,
+} from "@/services/tripMasterService";
+import {
+  getStoredAccountId,
+  getStoredUserId,
+  persistSelectedAccountId,
+} from "@/utils/storage";
 
 type NodeType = "START" | "VIA" | "END";
 
@@ -34,11 +58,8 @@ interface RouteNode {
   address: string;
   latitude: number | null;
   longitude: number | null;
-  plannedEntry: string;
-  plannedExit: string;
-  distanceFromPrev: number;
-  timeFromPrev: number;
-  haltTime: number;
+  leadTime: number;
+  eta: number;
 }
 
 interface AccountOption {
@@ -46,65 +67,136 @@ interface AccountOption {
   value: string;
 }
 
+interface DriverMeta {
+  name?: string;
+  mobile?: string;
+  phone?: string;
+}
+
+interface DriverOption extends SearchableOption {
+  meta?: DriverMeta;
+}
+
 const WEEK_DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
-const VEHICLES = [
-  { label: "ABC-1234 - FleetCorp", reg: "ABC-1234", device: "ELOCK-ALPHA-01" },
-  {
-    label: "XYZ-5678 - LogisticsPlus",
-    reg: "XYZ-5678",
-    device: "ELOCK-BETA-02",
-  },
-  {
-    label: "DEF-9012 - TransportCo",
-    reg: "DEF-9012",
-    device: "ELOCK-GAMMA-03",
-  },
-];
-
-const DEVICES = [
-  "ELOCK-ALPHA-01",
-  "ELOCK-BETA-02",
-  "ELOCK-GAMMA-03",
-  "ELOCK-DELTA-04",
-];
-
-const PARTIES = [
-  { name: "Global Logistics Solutions", phone: "+91 99999 88888" },
-  { name: "FastTrack Express", phone: "+91 77777 66666" },
-  { name: "Metro Distribution", phone: "+91 88888 77777" },
-];
 const DEFAULT_CENTER = { lat: 28.6139, lng: 77.209 };
 
 const cn = (...classes: (string | undefined | boolean)[]) =>
   classes.filter(Boolean).join(" ");
 
-const toSearchableOptions = (values: string[]): SearchableOption[] =>
-  values.map((value) => ({ value, label: value }));
-
-const toServiceDropdownOptions = (response: any): SearchableOption[] => {
-  const data = Array.isArray(response?.data)
-    ? response.data
-    : Array.isArray(response)
-      ? response
-      : [];
+const toServiceDropdownOptions = (response: unknown): SearchableOption[] => {
+  let data: unknown[] = [];
+  if (Array.isArray(response)) {
+    data = response;
+  } else if (response && typeof response === "object" && "data" in response) {
+    const maybe = (response as { data?: unknown }).data;
+    if (Array.isArray(maybe)) data = maybe;
+  }
 
   return data
-    .map((item: any) => ({
-      value: String(item?.id ?? item?.value ?? ""),
-      label: String(item?.value ?? item?.name ?? item?.label ?? ""),
-    }))
+    .map((item) => {
+      const record =
+        item && typeof item === "object"
+          ? (item as Record<string, unknown>)
+          : {};
+
+      return {
+        value: String(record.id ?? record.accountId ?? record.value ?? ""),
+        label: String(
+          record.value ??
+            record.name ??
+            record.label ??
+            record.vehicleTypeName ??
+            record.accountName ??
+            "",
+        ),
+      };
+    })
     .filter((item: SearchableOption) => item.value && item.label);
 };
 
-const getUserAccountId = (): number => {
-  if (typeof window === "undefined") return 0;
-  try {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    return Number(user?.accountId || 0);
-  } catch {
-    return 0;
+const getEncodedPathFromDirections = (
+  response: google.maps.DirectionsResult | null,
+): string => {
+  const route = response?.routes?.[0];
+  const overviewPolyline = route?.overview_polyline;
+  const fromOverview =
+    typeof overviewPolyline === "string"
+      ? overviewPolyline.trim()
+      : String(
+          (overviewPolyline as { points?: string } | undefined)?.points || "",
+        ).trim();
+  if (fromOverview) return fromOverview;
+
+  const canEncode = Boolean(
+    window?.google?.maps?.geometry?.encoding?.encodePath,
+  );
+  if (!canEncode) return "";
+
+  const overviewPath = Array.isArray(route?.overview_path)
+    ? route.overview_path
+    : [];
+  if (overviewPath.length > 1) {
+    return window.google.maps.geometry.encoding.encodePath(overviewPath);
   }
+
+  return "";
+};
+
+const decodePolylineToPath = (
+  encodedPolyline: string,
+): google.maps.LatLngLiteral[] => {
+  if (!encodedPolyline?.trim()) return [];
+  if (!window?.google?.maps?.geometry?.encoding?.decodePath) return [];
+  const decoded =
+    window.google.maps.geometry.encoding.decodePath(encodedPolyline);
+  return decoded.map((p) => ({ lat: p.lat(), lng: p.lng() }));
+};
+
+const toApiTravelDate = (value: string): string => {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) return "";
+
+  // UI input date: yyyy-MM-dd
+  const isoMatch = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (isoMatch) {
+    const [, year, month, day] = isoMatch;
+    return `${day}/${month}/${year}`;
+  }
+
+  // Already dd/MM/yyyy
+  const ddmmyyyyMatch = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (ddmmyyyyMatch) {
+    const [, day, month, year] = ddmmyyyyMatch;
+    return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+  }
+
+  return trimmed;
+};
+
+const fromApiTravelDate = (value: string): string => {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) return "";
+
+  // API: yyyy-MM-ddTHH:mm:ss...
+  const isoDateTimeMatch = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})T/);
+  if (isoDateTimeMatch) {
+    const [, year, month, day] = isoDateTimeMatch;
+    return `${year}-${month}-${day}`;
+  }
+
+  // API: dd/MM/yyyy -> UI: yyyy-MM-dd
+  const ddmmyyyyMatch = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (ddmmyyyyMatch) {
+    const [, day, month, year] = ddmmyyyyMatch;
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  }
+
+  // Already yyyy-MM-dd
+  const isoMatch = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (isoMatch) return trimmed;
+
+  return "";
 };
 
 const SectionHeader = ({
@@ -125,10 +217,10 @@ const SectionHeader = ({
 );
 
 const Label = ({ text, required }: { text: string; required?: boolean }) => (
-  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-1.5">
+  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-1.5">
     {text}
     {required && <span className="text-red-500">*</span>}
-  </label>
+  </div>
 );
 
 const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
@@ -142,15 +234,25 @@ const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
 );
 
 export default function TripPlannerPage() {
+  const params = useParams<{ id?: string }>();
   const router = useRouter();
   const { isLoaded, loadError } = useGoogleMapsSdk();
   const mapRef = useRef<google.maps.Map | null>(null);
+  const geofenceLatLngCacheRef = useRef<Map<number, google.maps.LatLngLiteral>>(
+    new Map(),
+  );
+  const planId = Number(params?.id || 0);
 
   // States - Shipment Details
   const [accounts, setAccounts] = useState<AccountOption[]>([]);
   const [selectedAccountId, setSelectedAccountId] = useState<number>(0);
-  const [assignedDriver, setAssignedDriver] = useState("");
+  const [assignedDriverId, setAssignedDriverId] = useState<number>(0);
+  const [assignedDriverName, setAssignedDriverName] = useState("");
+  const [assignedDriverPhone, setAssignedDriverPhone] = useState("");
   const [tripType, setTripType] = useState("");
+  const [tripTypeOptions, setTripTypeOptions] = useState<SearchableOption[]>(
+    [],
+  );
 
   // States - Routing & Schedule
   const [routingModel, setRoutingModel] = useState<"standard" | "dynamic">(
@@ -167,9 +269,14 @@ export default function TripPlannerPage() {
     "FRI",
   ]);
   const [oneTimeDate, setOneTimeDate] = useState("");
+  const [etd, setEtd] = useState("");
   const [selectedRoute, setSelectedRoute] = useState("");
   const [routeMasterOptions, setRouteMasterOptions] = useState<
     SearchableOption[]
+  >([]);
+  const [predefinedRoutePath, setPredefinedRoutePath] = useState("");
+  const [predefinedRoutePolyline, setPredefinedRoutePolyline] = useState<
+    google.maps.LatLngLiteral[]
   >([]);
 
   // States - Asset Allocation
@@ -177,9 +284,15 @@ export default function TripPlannerPage() {
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [adhocRegNo, setAdhocRegNo] = useState("");
   const [vehicleCategory, setVehicleCategory] = useState("");
+  const [vehicleCategoryOptions, setVehicleCategoryOptions] = useState<
+    SearchableOption[]
+  >([]);
   const [assetOwner, setAssetOwner] = useState("");
   const [primaryDevice, setPrimaryDevice] = useState("");
   const [secondaryDevice, setSecondaryDevice] = useState("");
+  const [vehicleOptions, setVehicleOptions] = useState<SearchableOption[]>([]);
+  const [deviceOptions, setDeviceOptions] = useState<SearchableOption[]>([]);
+  const [driverOptions, setDriverOptions] = useState<DriverOption[]>([]);
 
   // States - Route Nodes
   const [nodes, setNodes] = useState<RouteNode[]>([
@@ -190,11 +303,8 @@ export default function TripPlannerPage() {
       address: "Mahipalpur, New Delhi",
       latitude: null,
       longitude: null,
-      plannedEntry: "10:00",
-      plannedExit: "11:00",
-      distanceFromPrev: 0,
-      timeFromPrev: 0,
-      haltTime: 30,
+      leadTime: 0,
+      eta: 0,
     },
     {
       id: "2",
@@ -203,11 +313,8 @@ export default function TripPlannerPage() {
       address: "Hinjewadi Phase 3, Pune",
       latitude: null,
       longitude: null,
-      plannedEntry: "18:00",
-      plannedExit: "19:00",
-      distanceFromPrev: 1450,
-      timeFromPrev: 1800,
-      haltTime: 60,
+      leadTime: 0,
+      eta: 0,
     },
   ]);
   const [showAutocomplete, setShowAutocomplete] = useState<string | null>(null);
@@ -220,13 +327,15 @@ export default function TripPlannerPage() {
   const [directionsResult, setDirectionsResult] =
     useState<google.maps.DirectionsResult | null>(null);
   const [mapPreviewLoading, setMapPreviewLoading] = useState(false);
+  const [optimizeLoading, setOptimizeLoading] = useState(false);
 
   // States - Pickup & Delivery
   const [consignor, setConsignor] = useState("");
   const [consignee, setConsignee] = useState("");
-
-  const driverOptions = useMemo(
-    () => toSearchableOptions(["John Doe", "Jane Smith", "Mike Ross"]),
+  const [consignorOptions, setConsignorOptions] = useState<SearchableOption[]>(
+    [],
+  );
+  const [consigneeOptions, setConsigneeOptions] = useState<SearchableOption[]>(
     [],
   );
   const accountOptions = useMemo<SearchableOption[]>(
@@ -237,65 +346,41 @@ export default function TripPlannerPage() {
       })),
     [accounts],
   );
-  const tripTypeOptions = useMemo(
-    () => toSearchableOptions(["E-lock", "GPS", "Camera"]),
-    [],
-  );
-  const vehicleAssetOptions = useMemo(
-    () => toSearchableOptions(VEHICLES.map((v) => v.label)),
-    [],
-  );
-  const vehicleCategoryOptions = useMemo(
-    () => toSearchableOptions(["Truck", "Van", "Trailer"]),
-    [],
-  );
-  const deviceOptions = useMemo(() => toSearchableOptions(DEVICES), []);
-  const partyOptions = useMemo(
-    () =>
-      PARTIES.map((party) => ({
-        value: party.name,
-        label: `${party.name} (${party.phone})`,
-      })),
-    [],
-  );
 
   // Computed Values
   const totalDistance = useMemo(
-    () => nodes.reduce((sum, n) => sum + n.distanceFromPrev, 0),
-    [nodes],
+    () =>
+      directionsResult?.routes?.[0]?.legs?.reduce((sum, leg) => {
+        const distanceMeters = Number(leg?.distance?.value || 0);
+        return sum + distanceMeters / 1000;
+      }, 0) ?? 0,
+    [directionsResult],
   );
-
-  const selectedVehicleData = VEHICLES.find((v) => v.label === selectedVehicle);
   const selectedAccountOption =
     accountOptions.find(
       (opt) => Number(opt.value) === Number(selectedAccountId),
     ) || null;
   const selectedDriverOption =
-    driverOptions.find((opt) => String(opt.value) === assignedDriver) || null;
+    driverOptions.find((opt) => Number(opt.value) === assignedDriverId) || null;
   const selectedTripTypeOption =
     tripTypeOptions.find((opt) => String(opt.value) === tripType) || null;
   const selectedVehicleOption =
-    vehicleAssetOptions.find((opt) => String(opt.value) === selectedVehicle) ||
-    null;
+    vehicleOptions.find((opt) => String(opt.value) === selectedVehicle) || null;
   const selectedVehicleCategoryOption =
     vehicleCategoryOptions.find(
       (opt) => String(opt.value) === vehicleCategory,
     ) || null;
-  const currentDevice =
-    vehicleMode === "master" && selectedVehicleData
-      ? selectedVehicleData.device
-      : primaryDevice;
   const selectedPrimaryDeviceOption =
-    deviceOptions.find((opt) => String(opt.value) === currentDevice) || null;
+    deviceOptions.find((opt) => String(opt.value) === primaryDevice) || null;
   const selectedSecondaryDeviceOption =
     deviceOptions.find((opt) => String(opt.value) === secondaryDevice) || null;
   const selectedRouteOption =
     routeMasterOptions.find((opt) => String(opt.value) === selectedRoute) ||
     null;
   const selectedConsignorOption =
-    partyOptions.find((opt) => String(opt.value) === consignor) || null;
+    consignorOptions.find((opt) => String(opt.value) === consignor) || null;
   const selectedConsigneeOption =
-    partyOptions.find((opt) => String(opt.value) === consignee) || null;
+    consigneeOptions.find((opt) => String(opt.value) === consignee) || null;
 
   // Functions
   const addViaNode = (index: number) => {
@@ -306,11 +391,8 @@ export default function TripPlannerPage() {
       address: "",
       latitude: null,
       longitude: null,
-      plannedEntry: "",
-      plannedExit: "",
-      distanceFromPrev: 0,
-      timeFromPrev: 0,
-      haltTime: 15,
+      leadTime: 0,
+      eta: 0,
     };
     const newNodes = [...nodes];
     newNodes.splice(index + 1, 0, newNode);
@@ -399,40 +481,271 @@ export default function TripPlannerPage() {
     }
   };
 
-  const areNodesValid = nodes.every(
-    (node) => node.geofence && node.plannedEntry && node.plannedExit,
-  );
-  const isFormValid = !!(
+  const areNodesValid = nodes.every((node) => node.geofence);
+  const routePathForSave = useMemo(() => {
+    if (routingModel === "standard") return String(predefinedRoutePath || "");
+    return getEncodedPathFromDirections(directionsResult);
+  }, [directionsResult, predefinedRoutePath, routingModel]);
+  const _isFormValid = !!(
     selectedAccountId > 0 &&
-    assignedDriver &&
+    assignedDriverId > 0 &&
     tripType &&
+    etd &&
+    consignor &&
+    consignee &&
     (vehicleMode === "master" ? selectedVehicle : adhocRegNo) &&
-    currentDevice &&
     areNodesValid &&
     (frequency === "recurring" ? selectedDays.length > 0 : oneTimeDate)
   );
+
+  const resolveGeofenceLatLng = useCallback(
+    async (geoId: number): Promise<google.maps.LatLngLiteral | null> => {
+      if (geoId <= 0) return null;
+      const cached = geofenceLatLngCacheRef.current.get(geoId);
+      if (cached) return cached;
+
+      const res = await getGeofenceById(geoId);
+      if (!res?.success) return null;
+      const zone = res?.data?.zone || res?.data?.geofence || res?.data;
+      const coordinates = Array.isArray(zone?.coordinates)
+        ? zone.coordinates
+        : [];
+      const first = coordinates[0];
+      const lat = Number(first?.latitude ?? 0);
+      const lng = Number(first?.longitude ?? 0);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng) || !lat || !lng) {
+        return null;
+      }
+
+      const point = { lat, lng };
+      geofenceLatLngCacheRef.current.set(geoId, point);
+      return point;
+    },
+    [],
+  );
+
+  const buildRoutePointsForDirections = useCallback(async (): Promise<
+    (string | google.maps.LatLngLiteral)[]
+  > => {
+    const routePoints: (string | google.maps.LatLngLiteral)[] = [];
+
+    if (routingModel === "standard") {
+      for (const node of nodes) {
+        const rawGeoValue = String(node.geofence || "").trim();
+        const numericGeoId = Number(rawGeoValue || 0);
+        const geoId =
+          Number.isFinite(numericGeoId) && numericGeoId > 0
+            ? numericGeoId
+            : Number(
+                geofenceOptions.find(
+                  (opt) =>
+                    String(opt.label || "")
+                      .trim()
+                      .toLowerCase() ===
+                    String(node.address || rawGeoValue || "")
+                      .trim()
+                      .toLowerCase(),
+                )?.value || 0,
+              );
+        const point = await resolveGeofenceLatLng(geoId);
+        if (point) {
+          routePoints.push(point);
+          continue;
+        }
+
+        const fallback = String(node.address || node.geofence || "").trim();
+        if (fallback) routePoints.push(fallback);
+      }
+      return routePoints;
+    }
+
+    for (const node of nodes) {
+      if (
+        typeof node.latitude === "number" &&
+        typeof node.longitude === "number"
+      ) {
+        routePoints.push({ lat: node.latitude, lng: node.longitude });
+        continue;
+      }
+      const fallback = String(node.geofence || "").trim();
+      if (fallback) routePoints.push(fallback);
+    }
+
+    return routePoints;
+  }, [geofenceOptions, nodes, resolveGeofenceLatLng, routingModel]);
+
+  const calculatePreviewRoute = useCallback(
+    async ({ optimizeWaypoints = false } = {}) => {
+      try {
+        if (!isLoaded || !window?.google?.maps) return;
+        if (routingModel === "standard" && Number(selectedRoute || 0) > 0)
+          return;
+
+        const routePoints = await buildRoutePointsForDirections();
+        if (routePoints.length < 2) {
+          setDirectionsResult(null);
+          return;
+        }
+
+        setMapPreviewLoading(true);
+        const directionsService = new window.google.maps.DirectionsService();
+        const response = await directionsService.route({
+          origin: routePoints[0],
+          destination: routePoints[routePoints.length - 1],
+          waypoints: routePoints.slice(1, -1).map((location) => ({
+            location,
+            stopover: true,
+          })),
+          optimizeWaypoints,
+          travelMode: window.google.maps.TravelMode.DRIVING,
+        });
+        setDirectionsResult(response);
+      } catch (error) {
+        console.error("Map preview route error:", error);
+        setDirectionsResult(null);
+      } finally {
+        setMapPreviewLoading(false);
+      }
+    },
+    [buildRoutePointsForDirections, isLoaded, routingModel, selectedRoute],
+  );
+
+  useEffect(() => {
+    const loadDropdowns = async () => {
+      try {
+        const [tripTypesRes, vehicleTypesRes] = await Promise.all([
+          getTripTypeDropdown(),
+          getVehicleTypeDropdown(),
+        ]);
+
+        const tripTypesRaw = Array.isArray(tripTypesRes?.data)
+          ? tripTypesRes.data
+          : [];
+        setTripTypeOptions(
+          tripTypesRaw
+            .map((item: unknown) => {
+              const record =
+                item && typeof item === "object"
+                  ? (item as Record<string, unknown>)
+                  : {};
+              const label = String(record?.value ?? "");
+              return label ? { value: label, label } : null;
+            })
+            .filter(Boolean) as SearchableOption[],
+        );
+
+        const vehicleTypesRaw = Array.isArray(vehicleTypesRes?.data)
+          ? vehicleTypesRes.data
+          : [];
+        setVehicleCategoryOptions(
+          vehicleTypesRaw
+            .map((item: unknown) => {
+              const record =
+                item && typeof item === "object"
+                  ? (item as Record<string, unknown>)
+                  : {};
+              const label = String(
+                record?.vehicleTypeName ?? record?.value ?? "",
+              );
+              return label ? { value: label, label } : null;
+            })
+            .filter(Boolean) as SearchableOption[],
+        );
+      } catch (error) {
+        console.error("Error fetching trip/vehicle dropdowns:", error);
+        setTripTypeOptions([]);
+        setVehicleCategoryOptions([]);
+      }
+    };
+
+    loadDropdowns();
+  }, []);
+
+  useEffect(() => {
+    const loadParties = async () => {
+      try {
+        const categoriesRes = await getCategoryDropdown(20);
+        const categories = Array.isArray(categoriesRes?.data)
+          ? categoriesRes.data
+          : [];
+
+        const findCategoryId = (label: string) => {
+          const target = String(label).trim().toLowerCase();
+          const found = categories.find((item) => {
+            const record =
+              item && typeof item === "object"
+                ? (item as Record<string, unknown>)
+                : {};
+            return (
+              String(record?.value || "")
+                .trim()
+                .toLowerCase() === target
+            );
+          });
+          const record =
+            found && typeof found === "object"
+              ? (found as Record<string, unknown>)
+              : {};
+          return Number(record?.id || 0);
+        };
+
+        const consigneeCategoryId = findCategoryId("consignee");
+        const consignorCategoryId =
+          findCategoryId("consigner") || findCategoryId("consignor");
+
+        const [consigneeRes, consignorRes] = await Promise.all([
+          consigneeCategoryId > 0
+            ? getAccountsDropdownByCategory(consigneeCategoryId)
+            : Promise.resolve({ data: [] }),
+          consignorCategoryId > 0
+            ? getAccountsDropdownByCategory(consignorCategoryId)
+            : Promise.resolve({ data: [] }),
+        ]);
+
+        setConsigneeOptions(toServiceDropdownOptions(consigneeRes));
+        setConsignorOptions(toServiceDropdownOptions(consignorRes));
+      } catch (error) {
+        console.error("Error fetching consignor/consignee dropdowns:", error);
+        setConsignorOptions([]);
+        setConsigneeOptions([]);
+      }
+    };
+
+    loadParties();
+  }, []);
 
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
         const response = await getAccountHierarchy();
         const accountRows = Array.isArray(response?.data) ? response.data : [];
-        setAccounts(
-          accountRows.map((item: any) => ({
-            id: Number(item?.id || 0),
-            value: String(item?.value || item?.name || item?.id || ""),
-          })),
-        );
+        const mapped = accountRows.map((item) => {
+          const record =
+            item && typeof item === "object"
+              ? (item as Record<string, unknown>)
+              : {};
+
+          return {
+            id: Number(record.id ?? 0),
+            value: String(record.value ?? record.name ?? record.id ?? ""),
+          };
+        });
+        setAccounts(mapped);
+
+        const storedId = getStoredAccountId();
+        if (storedId > 0) {
+          setSelectedAccountId(storedId);
+          persistSelectedAccountId(storedId);
+        } else if (mapped.length > 0) {
+          setSelectedAccountId(Number(mapped[0].id));
+          persistSelectedAccountId(Number(mapped[0].id));
+        }
       } catch (error) {
         console.error("Error fetching accounts:", error);
       }
     };
 
     fetchAccounts();
-    const accountId = getUserAccountId();
-    if (accountId > 0) {
-      setSelectedAccountId(accountId);
-    }
   }, []);
 
   useEffect(() => {
@@ -440,19 +753,55 @@ export default function TripPlannerPage() {
     if (accountId <= 0) {
       setRouteMasterOptions([]);
       setGeofenceOptions([]);
+      setDriverOptions([]);
+      setVehicleOptions([]);
+      setDeviceOptions([]);
       return;
     }
 
     const fetchDropdowns = async () => {
       try {
-        const [routeRes, geofenceRes] = await Promise.all([
-          getRouteDropdown(accountId),
-          getGeofenceDropdownByAccount(accountId),
-        ]);
+        const [driversRes, vehiclesRes, devicesRes, routeRes, geofenceRes] =
+          await Promise.all([
+            getDriverDropdown(accountId),
+            getVehicleDropdown(accountId),
+            getDeviceDropdown(accountId),
+            getRouteDropdown(accountId),
+            getGeofenceDropdownByAccount(accountId),
+          ]);
+
+        const driverData = Array.isArray(driversRes?.data)
+          ? driversRes.data
+          : Array.isArray(driversRes)
+            ? driversRes
+            : [];
+        setDriverOptions(
+          driverData
+            .map((d) => {
+              const record =
+                d && typeof d === "object"
+                  ? (d as Record<string, unknown>)
+                  : {};
+
+              return {
+                value: Number(record.driverId ?? record.id ?? 0),
+                label: String(record.name ?? record.value ?? ""),
+                meta: {
+                  name: String(record.name ?? ""),
+                  mobile: String(record.mobile ?? ""),
+                  phone: String(record.phone ?? ""),
+                },
+              } satisfies DriverOption;
+            })
+            .filter((opt) => Number(opt.value) > 0 && opt.label),
+        );
+
+        setVehicleOptions(toServiceDropdownOptions(vehiclesRes));
+        setDeviceOptions(toServiceDropdownOptions(devicesRes));
         setRouteMasterOptions(toServiceDropdownOptions(routeRes));
         setGeofenceOptions(toServiceDropdownOptions(geofenceRes));
       } catch (error) {
-        console.error("Error fetching route/geofence dropdowns:", error);
+        console.error("Error fetching dropdowns:", error);
       }
     };
 
@@ -466,56 +815,360 @@ export default function TripPlannerPage() {
   }, [routingModel]);
 
   useEffect(() => {
-    if (!isLoaded || !window?.google?.maps) return;
-
-    const routePoints = nodes
-      .map((node) => {
-        if (
-          typeof node.latitude === "number" &&
-          typeof node.longitude === "number"
-        ) {
-          return { lat: node.latitude, lng: node.longitude };
-        }
-        const fallback = node.geofence.trim();
-        return fallback.length > 0 ? fallback : null;
-      })
-      .filter(Boolean) as (string | google.maps.LatLngLiteral)[];
-
-    if (routePoints.length < 2) {
-      setDirectionsResult(null);
-      return;
-    }
-
-    const calculatePreviewRoute = async () => {
-      try {
-        setMapPreviewLoading(true);
-        const directionsService = new window.google.maps.DirectionsService();
-        const response = await directionsService.route({
-          origin: routePoints[0],
-          destination: routePoints[routePoints.length - 1],
-          waypoints: routePoints.slice(1, -1).map((location) => ({
-            location,
-            stopover: true,
-          })),
-          optimizeWaypoints: false,
-          travelMode: window.google.maps.TravelMode.DRIVING,
-        });
-        setDirectionsResult(response);
-      } catch (error) {
-        console.error("Map preview route error:", error);
-        setDirectionsResult(null);
-      } finally {
-        setMapPreviewLoading(false);
-      }
-    };
+    if (!isLoaded) return;
+    if (nodes.length < 2) return;
+    if (routingModel === "standard" && Number(selectedRoute || 0) > 0) return;
 
     calculatePreviewRoute();
-  }, [isLoaded, nodes]);
+  }, [
+    calculatePreviewRoute,
+    isLoaded,
+    nodes.length,
+    routingModel,
+    selectedRoute,
+  ]);
 
   useEffect(() => {
     if (!mapRef.current || !directionsResult?.routes?.[0]?.bounds) return;
     mapRef.current.fitBounds(directionsResult.routes[0].bounds);
   }, [directionsResult]);
+
+  useEffect(() => {
+    if (!mapRef.current || predefinedRoutePolyline.length < 2) return;
+    const bounds = new window.google.maps.LatLngBounds();
+    for (const point of predefinedRoutePolyline) {
+      bounds.extend(point);
+    }
+    mapRef.current.fitBounds(bounds);
+  }, [predefinedRoutePolyline]);
+
+  useEffect(() => {
+    const resolvedRouteId = Number(selectedRoute || 0);
+    if (routingModel !== "standard") return;
+
+    if (resolvedRouteId <= 0) {
+      setPredefinedRoutePath("");
+      setPredefinedRoutePolyline([]);
+      setDirectionsResult(null);
+      return;
+    }
+
+    const loadRoute = async () => {
+      try {
+        const res = await getRouteMasterById(resolvedRouteId);
+        const data = res?.data;
+        if (!data) return;
+
+        const encodedPath = String(data?.routePath || "").trim();
+        setPredefinedRoutePath(encodedPath);
+        setPredefinedRoutePolyline(decodePolylineToPath(encodedPath));
+        setDirectionsResult(null);
+
+        const resolveLabel = (geoId: number) =>
+          String(
+            geofenceOptions.find((opt) => Number(opt.value) === geoId)?.label ||
+              "",
+          );
+
+        const startGeoId = Number(data?.startGeoId || 0);
+        const endGeoId = Number(data?.endGeoId || 0);
+        const stopIds = Array.isArray(data?.stopGeofenceIds)
+          ? data.stopGeofenceIds.map((id: unknown) => Number(id || 0))
+          : [];
+
+        const pathIds = [startGeoId, ...stopIds, endGeoId].filter(
+          (id) => id > 0,
+        );
+        if (pathIds.length < 2) return;
+
+        setNodes(
+          pathIds.map((id, index) => ({
+            id: `${id}-${index}`,
+            type:
+              index === 0
+                ? "START"
+                : index === pathIds.length - 1
+                  ? "END"
+                  : "VIA",
+            geofence: String(id),
+            address: resolveLabel(id),
+            latitude: null,
+            longitude: null,
+            leadTime: 0,
+            eta: 0,
+          })),
+        );
+      } catch (error) {
+        console.error("Error loading predefined route:", error);
+        setPredefinedRoutePath("");
+        setPredefinedRoutePolyline([]);
+      }
+    };
+
+    loadRoute();
+  }, [geofenceOptions, routingModel, selectedRoute]);
+
+  useEffect(() => {
+    const resolvedPlanId = Number(planId || 0);
+    if (!resolvedPlanId) return;
+
+    const load = async () => {
+      try {
+        const res = await getTripPlanById(resolvedPlanId, selectedAccountId);
+        const data = res?.data;
+        if (!data) return;
+
+        setSelectedAccountId(Number(data?.accountId || selectedAccountId || 0));
+        setAssignedDriverId(Number(data?.driverId || 0));
+        setAssignedDriverName(String(data?.driverName || ""));
+        setAssignedDriverPhone(String(data?.driverPhone || ""));
+        setConsignor(String(data?.consignor || ""));
+        setConsignee(String(data?.consignee || ""));
+        setTripType(
+          String(data?.routingModel || "").toUpperCase() === "DYNAMIC"
+            ? "Dynamic"
+            : "Fix",
+        );
+        setVehicleMode(
+          String(data?.fleetSource || "").toUpperCase() === "EXTERNAL"
+            ? "adhoc"
+            : "master",
+        );
+        setSelectedVehicle(String(data?.vehicleId || ""));
+        setAdhocRegNo(String(data?.vehicleNumber || data?.vehicleNo || ""));
+        setVehicleCategory(String(data?.vehicleCategory || ""));
+        setPrimaryDevice(String(data?.primaryDevice || ""));
+        setSecondaryDevice(String(data?.secondaryDevice || ""));
+
+        const frequencyRaw = String(data?.frequency || "").toUpperCase();
+        const resolvedFrequency =
+          frequencyRaw === "RECURRING"
+            ? "recurring"
+            : frequencyRaw === "ONE-TIME"
+              ? "one-time"
+              : String(data?.weekDays || "").trim()
+                ? "recurring"
+                : data?.travelDate
+                  ? "one-time"
+                  : "recurring";
+
+        setFrequency(resolvedFrequency);
+        setOneTimeDate(fromApiTravelDate(String(data?.travelDate || "")));
+        setEtd(String(data?.etd || ""));
+        setRoutingModel(
+          String(data?.routingModel || "").toUpperCase() === "DYNAMIC"
+            ? "dynamic"
+            : "standard",
+        );
+        setSelectedRoute(String(data?.routeId || ""));
+        setPredefinedRoutePath(String(data?.routePath || ""));
+        setPredefinedRoutePolyline(
+          decodePolylineToPath(String(data?.routePath || "")),
+        );
+
+        const details = Array.isArray(data?.routeDetails)
+          ? data.routeDetails
+          : [];
+        if (details.length > 0) {
+          const mapped: RouteNode[] = [];
+
+          details.forEach((detail: unknown, index: number) => {
+            const record =
+              detail && typeof detail === "object"
+                ? (detail as Record<string, unknown>)
+                : {};
+
+            if (index === 0) {
+              mapped.push({
+                id: "1",
+                type: "START",
+                geofence: String(record?.fromGeoId || ""),
+                address: String(record?.fromGeoName || ""),
+                latitude:
+                  record?.fromLatitude !== null &&
+                  record?.fromLatitude !== undefined
+                    ? Number(record?.fromLatitude)
+                    : null,
+                longitude:
+                  record?.fromLongitude !== null &&
+                  record?.fromLongitude !== undefined
+                    ? Number(record?.fromLongitude)
+                    : null,
+                leadTime: 0,
+                eta: 0,
+              });
+            }
+
+            mapped.push({
+              id: Math.random().toString(36).slice(2, 9),
+              type: index === details.length - 1 ? "END" : "VIA",
+              geofence: String(record?.toGeoId || ""),
+              address: String(record?.toGeoName || ""),
+              latitude:
+                record?.toLatitude !== null && record?.toLatitude !== undefined
+                  ? Number(record?.toLatitude)
+                  : null,
+              longitude:
+                record?.toLongitude !== null &&
+                record?.toLongitude !== undefined
+                  ? Number(record?.toLongitude)
+                  : null,
+              leadTime: Number(record?.leadTime || 0),
+              eta: Number(record?.rta || 0),
+            });
+          });
+
+          setNodes((prev) => (mapped.length >= 2 ? mapped : prev));
+        }
+      } catch (error) {
+        console.error("Error loading trip plan:", error);
+      }
+    };
+
+    load();
+  }, [planId, selectedAccountId]);
+
+  const buildRouteDetailsPayload = () => {
+    if (nodes.length < 2) return [];
+
+    return nodes.slice(0, -1).map((fromNode, index) => {
+      const toNode = nodes[index + 1];
+
+      const fromGeoId =
+        routingModel === "standard" ? Number(fromNode.geofence || 0) : 0;
+      const toGeoId =
+        routingModel === "standard" ? Number(toNode.geofence || 0) : 0;
+
+      return {
+        fromGeoId,
+        fromGeoName:
+          routingModel === "dynamic"
+            ? String(fromNode.address || fromNode.geofence || "")
+            : null,
+        fromLatitude:
+          routingModel === "dynamic" && typeof fromNode.latitude === "number"
+            ? String(fromNode.latitude)
+            : null,
+        fromLongitude:
+          routingModel === "dynamic" && typeof fromNode.longitude === "number"
+            ? String(fromNode.longitude)
+            : null,
+        toGeoId,
+        toGeoName:
+          routingModel === "dynamic"
+            ? String(toNode.address || toNode.geofence || "")
+            : null,
+        toLatitude:
+          routingModel === "dynamic" && typeof toNode.latitude === "number"
+            ? String(toNode.latitude)
+            : null,
+        toLongitude:
+          routingModel === "dynamic" && typeof toNode.longitude === "number"
+            ? String(toNode.longitude)
+            : null,
+        sequence: index + 1,
+        distance: "0",
+        leadTime: Number(toNode.leadTime || 0),
+        rta: Number(toNode.eta || 0),
+      };
+    });
+  };
+
+  const handleSave = async () => {
+    const missing: string[] = [];
+    if (!(selectedAccountId > 0)) missing.push("Account");
+    if (!(assignedDriverId > 0)) missing.push("Driver");
+    if (!String(tripType || "").trim()) missing.push("Trip Type");
+    if (!String(etd || "").trim()) missing.push("ETD");
+    if (!String(consignor || "").trim()) missing.push("Consignor");
+    if (!String(consignee || "").trim()) missing.push("Consignee");
+
+    if (vehicleMode === "master") {
+      if (!String(selectedVehicle || "").trim()) missing.push("Vehicle");
+    } else {
+      if (!String(adhocRegNo || "").trim()) missing.push("Vehicle Number");
+      if (!String(vehicleCategory || "").trim())
+        missing.push("Vehicle Category");
+    }
+
+    if (frequency === "recurring") {
+      if (selectedDays.length === 0) missing.push("Week Days");
+    } else {
+      if (!String(oneTimeDate || "").trim()) missing.push("Travel Date");
+    }
+
+    const normalizedTripType = String(tripType || "").toLowerCase();
+    const isElockTrip =
+      normalizedTripType.includes("e-lock") ||
+      normalizedTripType.includes("elock") ||
+      normalizedTripType.includes("lock");
+    const isGPSTrip = normalizedTripType.includes("gps");
+    if (isElockTrip && !String(primaryDevice || "").trim()) {
+      missing.push("Primary Device");
+    }
+
+    if (!areNodesValid) missing.push("Route Geofences/Locations");
+    if (!String(routePathForSave || "").trim()) missing.push("Route Path");
+
+    if (missing.length > 0) {
+      toast.error(`Missing: ${missing.join(", ")}`);
+      return;
+    }
+
+    const fleetSource = vehicleMode === "master" ? "INTERNAL" : "EXTERNAL";
+
+    const routeDetails = buildRouteDetailsPayload();
+
+    const startGeoId =
+      routingModel === "standard" ? Number(nodes?.[0]?.geofence || 0) : 0;
+    const endGeoId =
+      routingModel === "standard"
+        ? Number(nodes?.[nodes.length - 1]?.geofence || 0)
+        : 0;
+
+    const payload = {
+      planId,
+      accountId: selectedAccountId,
+      driverId: assignedDriverId,
+      driverName: assignedDriverName,
+      driverPhone: assignedDriverPhone,
+      fleetSource,
+      vehicleId: vehicleMode === "master" ? Number(selectedVehicle || 0) : 0,
+      vehicleNumber:
+        vehicleMode === "master"
+          ? String(selectedVehicleOption?.label || "")
+          : String(adhocRegNo || ""),
+      frequency: frequency === "one-time" ? "ONE-TIME" : "RECURRING",
+      travelDate: frequency === "one-time" ? toApiTravelDate(oneTimeDate) : "",
+      etd,
+      routingModel: routingModel === "standard" ? "STANDARD" : "DYNAMIC",
+      routeId: routingModel === "standard" ? Number(selectedRoute || 0) : 0,
+      routePath: routePathForSave,
+      startGeoId,
+      endGeoId,
+      createdBy: getStoredUserId(),
+      weekDays: frequency === "recurring" ? selectedDays.join(",") : "",
+      isElockTrip,
+      isGPSTrip,
+      primaryDevice: isElockTrip ? primaryDevice : "",
+      secondaryDevice,
+      vehicleCategory: vehicleMode === "adhoc" ? vehicleCategory : "",
+      consignee: Number(consignee || 0),
+      consignor: Number(consignor || 0),
+      routeDetails,
+    };
+
+    try {
+      const res = await upsertTripPlan(payload);
+      if (res?.success === false) {
+        console.error("Trip plan save failed:", res);
+        return;
+      }
+      router.push("/trip-master");
+    } catch (error) {
+      console.error("Error saving trip plan:", error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
@@ -532,6 +1185,7 @@ export default function TripPlannerPage() {
               </h1>
             </div>
             <button
+              type="button"
               onClick={() => router.back()}
               className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold text-sm transition-colors"
             >
@@ -554,9 +1208,11 @@ export default function TripPlannerPage() {
                 <SearchableDropdown
                   options={accountOptions}
                   value={selectedAccountOption}
-                  onChange={(option) =>
-                    setSelectedAccountId(Number(option?.value || 0))
-                  }
+                  onChange={(option) => {
+                    const id = Number(option?.value || 0);
+                    setSelectedAccountId(id);
+                    persistSelectedAccountId(id);
+                  }}
                   placeholder="Select account..."
                   isDark={false}
                   isClearable={false}
@@ -567,9 +1223,18 @@ export default function TripPlannerPage() {
                 <SearchableDropdown
                   options={driverOptions}
                   value={selectedDriverOption}
-                  onChange={(option) =>
-                    setAssignedDriver(String(option?.value || ""))
-                  }
+                  onChange={(option) => {
+                    const selected = option as DriverOption | null;
+                    const id = Number(selected?.value || 0);
+                    setAssignedDriverId(id);
+                    const meta = selected?.meta || {};
+                    setAssignedDriverName(
+                      String(meta?.name || selected?.label || ""),
+                    );
+                    setAssignedDriverPhone(
+                      String(meta?.mobile || meta?.phone || ""),
+                    );
+                  }}
                   placeholder="Select driver..."
                   isDark={false}
                   isClearable={false}
@@ -632,7 +1297,7 @@ export default function TripPlannerPage() {
                     <div>
                       <Label text="Vehicle Asset" required />
                       <SearchableDropdown
-                        options={vehicleAssetOptions}
+                        options={vehicleOptions}
                         value={selectedVehicleOption}
                         onChange={(option) =>
                           setSelectedVehicle(String(option?.value || ""))
@@ -643,9 +1308,9 @@ export default function TripPlannerPage() {
                       />
                     </div>
                     <div>
-                      <Label text="Registration Number" />
+                      <Label text="Vehicle Number" />
                       <Input
-                        value={selectedVehicleData?.reg || ""}
+                        value={String(selectedVehicleOption?.label || "")}
                         readOnly
                         className="bg-slate-50 font-bold text-slate-500 border-slate-100"
                       />
@@ -709,15 +1374,7 @@ export default function TripPlannerPage() {
                     placeholder="Select Device..."
                     isDark={false}
                     isClearable={false}
-                    isDisabled={
-                      vehicleMode === "master" && !!selectedVehicleData
-                    }
                   />
-                  {vehicleMode === "master" && selectedVehicleData && (
-                    <p className="text-[9px] font-bold text-emerald-600 mt-2 uppercase tracking-wider">
-                      Auto-assigned from fleet mapping
-                    </p>
-                  )}
                   {vehicleMode === "adhoc" && (
                     <p className="text-[11px] italic text-slate-500 mt-2">
                       Manual device assignment required for external assets.
@@ -759,6 +1416,7 @@ export default function TripPlannerPage() {
                       {(["standard", "dynamic"] as const).map((model) => (
                         <button
                           key={model}
+                          type="button"
                           onClick={() => setRoutingModel(model)}
                           className={cn(
                             "px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all",
@@ -782,6 +1440,7 @@ export default function TripPlannerPage() {
                       {(["recurring", "one-time"] as const).map((freq) => (
                         <button
                           key={freq}
+                          type="button"
                           onClick={() => setFrequency(freq)}
                           className={cn(
                             "px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all",
@@ -809,6 +1468,7 @@ export default function TripPlannerPage() {
                         return (
                           <button
                             key={day}
+                            type="button"
                             onClick={() => toggleDay(day)}
                             className={cn(
                               "px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all",
@@ -823,6 +1483,7 @@ export default function TripPlannerPage() {
                       })}
                       <div className="w-px h-8 bg-slate-200" />
                       <button
+                        type="button"
                         onClick={toggleAllDays}
                         className={cn(
                           "px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all",
@@ -846,6 +1507,15 @@ export default function TripPlannerPage() {
                   </div>
                 )}
 
+                <div className="mt-6">
+                  <Label text="ETD" required />
+                  <Input
+                    type="time"
+                    value={etd}
+                    onChange={(e) => setEtd(e.target.value)}
+                  />
+                </div>
+
                 {/* Route Selection */}
                 {routingModel === "standard" && (
                   <div className="mt-6 flex gap-4 items-end">
@@ -862,7 +1532,10 @@ export default function TripPlannerPage() {
                         isClearable={false}
                       />
                     </div>
-                    <button className="px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-slate-600 hover:border-indigo-500 hover:text-indigo-600 transition-colors flex items-center gap-2">
+                    <button
+                      type="button"
+                      className="px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-slate-600 hover:border-indigo-500 hover:text-indigo-600 transition-colors flex items-center gap-2"
+                    >
                       <Plus size={16} />
                       <span className="text-xs font-bold uppercase">
                         New Route
@@ -883,37 +1556,37 @@ export default function TripPlannerPage() {
                     <div key={node.id} className="relative mb-4 pl-20">
                       <div className="absolute left-7 top-16 bottom-0 w-px bg-slate-200" />
                       <div className="absolute left-0 top-6 flex flex-col items-center gap-2">
-                          <div
-                            className={cn(
-                              "w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm",
-                              node.type === "START"
-                                ? "bg-emerald-500 text-white"
-                                : node.type === "END"
-                                  ? "bg-rose-500 text-white"
-                                  : "bg-white text-slate-500 border border-slate-200",
-                            )}
-                          >
-                            {node.type === "VIA" ? (
-                              <MapPin size={20} />
-                            ) : (
-                              <Flag size={20} />
-                            )}
-                          </div>
-                          {nodeIdx < nodes.length - 1 && (
-                            <button
-                              type="button"
-                              onClick={() => addViaNode(nodeIdx)}
-                              className="w-8 h-8 rounded-full border border-slate-300 bg-slate-50 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 transition-colors"
-                            >
-                              <Plus size={14} className="mx-auto" />
-                            </button>
+                        <div
+                          className={cn(
+                            "w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm",
+                            node.type === "START"
+                              ? "bg-emerald-500 text-white"
+                              : node.type === "END"
+                                ? "bg-rose-500 text-white"
+                                : "bg-white text-slate-500 border border-slate-200",
                           )}
-                          {nodeIdx < nodes.length - 1 && (
-                            <div className="w-0.5 h-8 bg-gradient-to-b from-slate-300 to-slate-200" />
+                        >
+                          {node.type === "VIA" ? (
+                            <MapPin size={20} />
+                          ) : (
+                            <Flag size={20} />
                           )}
                         </div>
-                        <div className="border border-slate-200 rounded-2xl bg-slate-50/40 shadow-sm p-6">
-                          <div className="flex-1">
+                        {nodeIdx < nodes.length - 1 && (
+                          <button
+                            type="button"
+                            onClick={() => addViaNode(nodeIdx)}
+                            className="w-8 h-8 rounded-full border border-slate-300 bg-slate-50 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 transition-colors"
+                          >
+                            <Plus size={14} className="mx-auto" />
+                          </button>
+                        )}
+                        {nodeIdx < nodes.length - 1 && (
+                          <div className="w-0.5 h-8 bg-gradient-to-b from-slate-300 to-slate-200" />
+                        )}
+                      </div>
+                      <div className="border border-slate-200 rounded-2xl bg-slate-50/40 shadow-sm p-6">
+                        <div className="flex-1">
                           <div className="flex items-start justify-between mb-3">
                             <div>
                               <p
@@ -938,6 +1611,7 @@ export default function TripPlannerPage() {
                             </div>
                             {node.type === "VIA" && (
                               <button
+                                type="button"
                                 onClick={() => removeNode(node.id)}
                                 className="p-2 hover:bg-red-50 rounded-lg text-red-600 transition-colors"
                                 title="Remove stop"
@@ -1040,13 +1714,13 @@ export default function TripPlannerPage() {
                                   value={
                                     geofenceOptions.find(
                                       (opt) =>
-                                        String(opt.label) ===
+                                        String(opt.value) ===
                                         String(node.geofence),
                                     ) || null
                                   }
                                   onChange={(option) =>
                                     updateNode(node.id, {
-                                      geofence: String(option?.label || ""),
+                                      geofence: String(option?.value || ""),
                                       address: String(option?.label || ""),
                                       latitude: null,
                                       longitude: null,
@@ -1066,88 +1740,36 @@ export default function TripPlannerPage() {
                                   </p>
                                 )}
                             </div>
-                            <div>
-                              <Label text="Planned Entry" required />
-                              <Input
-                                type={
-                                  frequency === "one-time"
-                                    ? "datetime-local"
-                                    : "time"
-                                }
-                                value={node.plannedEntry}
-                                onChange={(e) =>
-                                  updateNode(node.id, {
-                                    plannedEntry: e.target.value,
-                                  })
-                                }
-                              />
-                            </div>
-                            <div className="md:max-w-[340px]">
-                              <Label text="Planned Exit" required />
-                              <Input
-                                type={
-                                  frequency === "one-time"
-                                    ? "datetime-local"
-                                    : "time"
-                                }
-                                value={node.plannedExit}
-                                onChange={(e) =>
-                                  updateNode(node.id, {
-                                    plannedExit: e.target.value,
-                                  })
-                                }
-                              />
-                            </div>
                           </div>
 
-                          <div className="mt-6 pt-5 border-t border-slate-200 grid grid-cols-3 gap-4">
-                            <div className="flex items-end gap-2">
-                              <Clock3
-                                size={14}
-                                className="text-slate-400 mb-1"
+                          <div className="mt-6 pt-5 border-t border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <Label text="Lead Time (mins)" />
+                              <Input
+                                type="number"
+                                min={0}
+                                value={String(node.leadTime ?? 0)}
+                                onChange={(e) =>
+                                  updateNode(node.id, {
+                                    leadTime: Number(e.target.value || 0),
+                                  })
+                                }
+                                placeholder="0"
                               />
-                              <div>
-                                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                  Halt Time
-                                </p>
-                                <p className="text-xl font-black text-slate-800 leading-none">
-                                  {node.haltTime}
-                                  <span className="text-[11px] font-bold text-slate-500 ml-2">
-                                    MINS
-                                  </span>
-                                </p>
-                              </div>
                             </div>
-                            <div className="flex items-end gap-2">
-                              <Navigation
-                                size={14}
-                                className="text-slate-400 mb-1"
+                            <div>
+                              <Label text="ETA (mins)" />
+                              <Input
+                                type="number"
+                                min={0}
+                                value={String(node.eta ?? 0)}
+                                onChange={(e) =>
+                                  updateNode(node.id, {
+                                    eta: Number(e.target.value || 0),
+                                  })
+                                }
+                                placeholder="0"
                               />
-                              <div>
-                                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                  Distance From Prev
-                                </p>
-                                <p className="text-xl font-black text-slate-800 leading-none">
-                                  {node.distanceFromPrev}
-                                  <span className="text-[11px] font-bold text-slate-500 ml-2">
-                                    KM
-                                  </span>
-                                </p>
-                              </div>
-                            </div>
-                            <div className="flex items-end gap-2">
-                              <Zap size={14} className="text-slate-400 mb-1" />
-                              <div>
-                                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                  Transit Time
-                                </p>
-                                <p className="text-xl font-black text-slate-800 leading-none">
-                                  {node.timeFromPrev}
-                                  <span className="text-[11px] font-bold text-slate-500 ml-2">
-                                    MINS
-                                  </span>
-                                </p>
-                              </div>
                             </div>
                           </div>
                         </div>
@@ -1166,7 +1788,7 @@ export default function TripPlannerPage() {
               <div className="p-5 bg-slate-50 rounded-xl border border-slate-100">
                 <Label text="Consignor (Pickup Point)" required />
                 <SearchableDropdown
-                  options={partyOptions}
+                  options={consignorOptions}
                   value={selectedConsignorOption}
                   onChange={(option) =>
                     setConsignor(String(option?.value || ""))
@@ -1179,7 +1801,7 @@ export default function TripPlannerPage() {
               <div className="p-5 bg-slate-50 rounded-xl border border-slate-100">
                 <Label text="Consignee (Delivery Point)" required />
                 <SearchableDropdown
-                  options={partyOptions}
+                  options={consigneeOptions}
                   value={selectedConsigneeOption}
                   onChange={(option) =>
                     setConsignee(String(option?.value || ""))
@@ -1194,13 +1816,12 @@ export default function TripPlannerPage() {
 
           {/* Submit Button */}
           <button
+            type="button"
             className={cn(
               "w-full py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-sm transition-all shadow-lg inline-flex items-center justify-center gap-2",
-              isFormValid
-                ? "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white hover:from-indigo-700 hover:to-indigo-800 hover:shadow-xl"
-                : "bg-slate-100 text-slate-400 cursor-not-allowed",
+              "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white hover:from-indigo-700 hover:to-indigo-800 hover:shadow-xl",
             )}
-            disabled={!isFormValid}
+            onClick={handleSave}
           >
             <Save size={18} />
             Plan & Dispatch Trip
@@ -1309,17 +1930,28 @@ export default function TripPlannerPage() {
                       fullscreenControl: false,
                     }}
                   >
-                    <DirectionsRenderer
-                      directions={directionsResult}
-                      options={{
-                        suppressMarkers: false,
-                        polylineOptions: {
+                    {directionsResult ? (
+                      <DirectionsRenderer
+                        directions={directionsResult}
+                        options={{
+                          suppressMarkers: false,
+                          polylineOptions: {
+                            strokeColor: "#4f46e5",
+                            strokeWeight: 5,
+                            strokeOpacity: 0.9,
+                          },
+                        }}
+                      />
+                    ) : predefinedRoutePolyline.length > 1 ? (
+                      <Polyline
+                        path={predefinedRoutePolyline}
+                        options={{
                           strokeColor: "#4f46e5",
                           strokeWeight: 5,
                           strokeOpacity: 0.9,
-                        },
-                      }}
-                    />
+                        }}
+                      />
+                    ) : null}
                   </GoogleMap>
                 ) : (
                   <div className="h-full flex items-center justify-center text-slate-600 text-sm">
@@ -1334,8 +1966,30 @@ export default function TripPlannerPage() {
                       <span className="inline-block w-2 h-2 rounded-full bg-indigo-600" />
                       {totalDistance} KM • 30 HRS
                     </div>
-                    <button className="px-3 py-1 bg-indigo-600 text-white rounded text-[9px] font-black hover:bg-indigo-700 transition-colors whitespace-nowrap">
-                      Optimize
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          if (
+                            routingModel === "standard" &&
+                            Number(selectedRoute || 0) > 0
+                          ) {
+                            toast.info(
+                              "Pre-defined route selected. Route preview is already available.",
+                            );
+                            return;
+                          }
+                          setOptimizeLoading(true);
+                          await calculatePreviewRoute({
+                            optimizeWaypoints: true,
+                          });
+                        } finally {
+                          setOptimizeLoading(false);
+                        }
+                      }}
+                      className="px-3 py-1 bg-indigo-600 text-white rounded text-[9px] font-black hover:bg-indigo-700 transition-colors whitespace-nowrap"
+                    >
+                      {optimizeLoading ? "Optimizing..." : "Optimize"}
                     </button>
                   </div>
                 </div>
@@ -1371,10 +2025,7 @@ export default function TripPlannerPage() {
                             : `Stop ${idx}`}
                       </p>
                       <p className="text-xs font-bold text-slate-900 truncate">
-                        {node.geofence || "Not Selected"}
-                      </p>
-                      <p className="text-[8px] text-slate-500 mt-0.5 truncate">
-                        {node.plannedEntry}
+                        {node.address || node.geofence || "Not Selected"}
                       </p>
                     </div>
                   </div>

@@ -9,6 +9,7 @@
           "current": "डिवाइस"
         },
         "addButton": "डिवाइस जोड़ें",
+        "export": "निर्यात",
         "fields": {
           "selectAccount": "अकाउंट चुनें"
         },

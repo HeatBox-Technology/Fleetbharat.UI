@@ -35,6 +35,7 @@
           "removed": "SIM रजिस्ट्री से हटा दिया गया!",
           "deleteFailed": "SIM हटाने में विफल",
           "deleteError": "हटाने के दौरान त्रुटि हुई।",
+          "exportFailed": "SIM एक्सपोर्ट करने में विफल",
           "exportSoon": "एक्सपोर्ट जल्द आएगा!"
         }
       },
