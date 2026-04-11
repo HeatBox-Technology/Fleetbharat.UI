@@ -666,12 +666,12 @@ export default function TripPlannerPage() {
       try {
         const categoriesRes = await getCategoryDropdown(20);
         const categories = Array.isArray(categoriesRes?.data)
-          ? categoriesRes.data
+          ? (categoriesRes.data as unknown[])
           : [];
 
         const findCategoryId = (label: string) => {
           const target = String(label).trim().toLowerCase();
-          const found = categories.find((item) => {
+          const found = categories.find((item: unknown) => {
             const record =
               item && typeof item === "object"
                 ? (item as Record<string, unknown>)
@@ -718,8 +718,10 @@ export default function TripPlannerPage() {
     const fetchAccounts = async () => {
       try {
         const response = await getAccountHierarchy();
-        const accountRows = Array.isArray(response?.data) ? response.data : [];
-        const mapped = accountRows.map((item) => {
+        const accountRows = Array.isArray(response?.data)
+          ? (response.data as unknown[])
+          : [];
+        const mapped = accountRows.map((item: unknown) => {
           const record =
             item && typeof item === "object"
               ? (item as Record<string, unknown>)
@@ -771,13 +773,13 @@ export default function TripPlannerPage() {
           ]);
 
         const driverData = Array.isArray(driversRes?.data)
-          ? driversRes.data
+          ? (driversRes.data as unknown[])
           : Array.isArray(driversRes)
-            ? driversRes
+            ? (driversRes as unknown[])
             : [];
         setDriverOptions(
           driverData
-            .map((d) => {
+            .map((d: unknown) => {
               const record =
                 d && typeof d === "object"
                   ? (d as Record<string, unknown>)
@@ -793,7 +795,7 @@ export default function TripPlannerPage() {
                 },
               } satisfies DriverOption;
             })
-            .filter((opt) => Number(opt.value) > 0 && opt.label),
+            .filter((opt: DriverOption) => Number(opt.value) > 0 && opt.label),
         );
 
         setVehicleOptions(toServiceDropdownOptions(vehiclesRes));

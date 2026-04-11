@@ -70,15 +70,15 @@ const AddEditVehicleGeofence: React.FC = () => {
     isActive: true,
   });
   const accountOptions = accounts.map((option) => ({
-    value: option.id,
+    value: String(option.id),
     label: option.value,
   }));
   const vehicleOptions = vehicles.map((option) => ({
-    value: option.id,
+    value: String(option.id),
     label: option.value,
   }));
   const geofenceOptions = geofences.map((option) => ({
-    value: option.id,
+    value: String(option.id),
     label: option.value,
   }));
 
@@ -435,8 +435,6 @@ const AddEditVehicleGeofence: React.FC = () => {
                   }
                   isDisabled={loading}
                   placeholder={t("fields.selectVehicle")}
-                  isDark={isDark}
-                  noOptionsMessage={t("fields.selectVehicle")}
                 />
               </div>
 
