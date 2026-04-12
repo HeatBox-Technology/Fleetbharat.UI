@@ -164,7 +164,11 @@ export const exportSims = async (accountId, search, format = "csv") => {
       },
     );
 
-    const contentType = res.headers?.["content-type"] || "text/csv";
+    const contentType =
+      res.headers?.["content-type"] ||
+      (format === "excel"
+        ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        : "text/csv;charset=utf-8;");
     const blob = new Blob([res.data], { type: contentType });
     const contentDisposition = res.headers?.["content-disposition"] || "";
     const fileNameMatch = contentDisposition.match(/filename="?([^"]+)"?/i);
