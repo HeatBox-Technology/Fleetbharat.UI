@@ -46,11 +46,12 @@ export const createManualInvoice = async (payload) => {
   }
 };
 
-export const exportInvoices = async (page = 1, pageSize = 500) => {
+export const exportInvoices = async (page = 1, pageSize = 500, format = "csv") => {
   const skip = Math.max((Number(page || 1) - 1) * Number(pageSize || 500), 0);
   const take = Number(pageSize || 500);
+  const params = { skip, take, format };
   const res = await api.get(`/api/billing/invoices/export`, {
-    params: { skip, take },
+    params,
     responseType: "blob",
   });
 
@@ -63,7 +64,11 @@ export const exportInvoices = async (page = 1, pageSize = 500) => {
 
   const contentDisposition = res?.headers?.["content-disposition"] || "";
   const fileNameMatch = contentDisposition.match(/filename="?([^"]+)"?/i);
-  const fileName = fileNameMatch?.[1] || "invoices-export.xlsx";
+  let fileName = fileNameMatch?.[1];
+  if (!fileName) {
+    const ext = format === "excel" ? "xlsx" : "csv";
+    fileName = `invoices-export.${ext}`;
+  }
 
   return {
     success: true,

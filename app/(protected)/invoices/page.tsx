@@ -26,6 +26,7 @@ const Invoices: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [loadingExport, setLoadingExport] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [exportFormat, setExportFormat] = useState<"excel" | "csv">("csv");
 
   const columns = [
     {
@@ -80,7 +81,7 @@ const Invoices: React.FC = () => {
   const handleExport = async () => {
     setLoadingExport(true);
     try {
-      const response = await exportInvoices(1, 500);
+      const response = await exportInvoices(1, 500, exportFormat);
       if (!response?.success) {
         toast.error(response?.message || t("toast.exportFailed"));
         return;
@@ -176,6 +177,8 @@ const Invoices: React.FC = () => {
             showExportButton={true}
             ExportbuttonText={loadingExport ? t("exportingButton") : t("exportButton")}
             onExportClick={handleExport}
+            exportFormat={exportFormat}
+            onExportFormatChange={setExportFormat}
           />
         </div>
 
