@@ -1,10 +1,15 @@
 export interface VehicleType {
   id: number;
+  accountId?: number;
+  accountName?: string;
   vehicleTypeName: string;
   category: string;
-  defaultVehicleIcon: string;
-  defaultAlarmIcon: string;
-  defaultIconColor: string;
+  movingIcon: string | null;
+  stoppedIcon: string | null;
+  idleIcon: string | null;
+  parkedIcon: string | null;
+  offlineIcon: string | null;
+  breakdownIcon: string | null;
   seatingCapacity: number;
   wheelsCount: number;
   fuelCategory: string;
@@ -20,12 +25,14 @@ export interface VehicleType {
 export interface VehicleTypeFormData {
   code: string;
   displayName: string;
+  accountId: number;
+  category: string;
   speedLimit: number;
   idleThreshold: number;
   tankCapacity: number;
-  iconSet: string;
-  colorMode: "per-state" | "single";
-  iconSize: "SM" | "MD" | "LG";
+  seatingCapacity: number;
+  wheelsCount: number;
+  fuelCategory: string;
   description: string;
   isEnabled: boolean;
 }
@@ -34,10 +41,7 @@ export interface VehicleTypeRow {
   id: number;
   code: string;
   name: string;
-  mapVisualization: {
-    dots: string[];
-    label: string;
-  };
+  stateIcons: string[];
   fuel: string;
   capacity: string;
   status: boolean;

@@ -20,11 +20,15 @@ const normalizeStatus = (src) => {
 
 const normalizeVehicleTypePayload = (payload = {}) => ({
   id: Number(payload.id || 0),
+  accountId: Number(payload.accountId || 0),
   vehicleTypeName: payload.vehicleTypeName || "",
   category: payload.category || "",
-  defaultVehicleIcon: payload.defaultVehicleIcon || "",
-  defaultAlarmIcon: payload.defaultAlarmIcon || "",
-  defaultIconColor: payload.defaultIconColor || "",
+  movingIcon: payload.movingIcon ?? null,
+  stoppedIcon: payload.stoppedIcon ?? null,
+  idleIcon: payload.idleIcon ?? null,
+  parkedIcon: payload.parkedIcon ?? null,
+  offlineIcon: payload.offlineIcon ?? null,
+  breakdownIcon: payload.breakdownIcon ?? null,
   seatingCapacity: Number(payload.seatingCapacity || 0),
   wheelsCount: Number(payload.wheelsCount || 0),
   fuelCategory: payload.fuelCategory || "",
@@ -34,9 +38,10 @@ const normalizeVehicleTypePayload = (payload = {}) => ({
   status: normalizeStatus(payload.status),
 });
 
-export const getVehicleTypes = async () => {
+export const getVehicleTypes = async (accountId = 0) => {
   try {
-    const res = await api.get(`/api/VehicleType`);
+    const query = Number(accountId) > 0 ? `?accountId=${Number(accountId)}` : "";
+    const res = await api.get(`/api/VehicleType${query}`);
     return res.data;
   } catch (error) {
     return (
@@ -87,7 +92,7 @@ export const getVehicleTypeById = async (id) => {
 
 export const updateVehicleTypeById = async (id, payload) => {
   try {
-    const requestBody = normalizeVehicleTypePayload({ ...payload, id: 0 });
+    const requestBody = normalizeVehicleTypePayload({ ...payload, id });
     const res = await api.put(`/api/VehicleType/${id}`, requestBody);
     return res.data;
   } catch (error) {
@@ -130,8 +135,54 @@ export const deleteVehicleTypeById = async (id) => {
 export const updateVehicleTypeStatus = async (id, payload, isEnabled) => {
   const statusPayload = {
     ...payload,
-    id: 0,
+    id,
     status: isEnabled ? "Active" : "Inactive",
   };
   return updateVehicleTypeById(id, statusPayload);
+};
+
+export const uploadVehicleTypeIcons = async (accountId, vehicleTypeId, files) => {
+  try {
+    const formData = new FormData();
+    const fieldMap = {
+      movingIconFile: "MovingIcon",
+      stoppedIconFile: "StoppedIcon",
+      idleIconFile: "IdleIcon",
+      parkedIconFile: "ParkedIcon",
+      offlineIconFile: "OfflineIcon",
+      breakdownIconFile: "BreakdownIcon",
+    };
+
+    Object.entries(fieldMap).forEach(([fileKey, fieldName]) => {
+      const file = files?.[fileKey];
+      if (file instanceof File) {
+        formData.append(fieldName, file);
+      }
+    });
+
+    if (![...formData.keys()].length) {
+      return {
+        success: true,
+        statusCode: 200,
+        message: "No icons selected for upload.",
+        data: null,
+      };
+    }
+
+    const res = await api.post(
+      `/api/VehicleType/${accountId}/${vehicleTypeId}/icons`,
+      formData,
+    );
+    return res.data;
+  } catch (error) {
+    console.error("API Error in uploadVehicleTypeIcons:", error);
+    return (
+      error.response?.data || {
+        success: false,
+        statusCode: error.response?.status || 500,
+        message: error.response?.data?.message || "Network or server error",
+        data: null,
+      }
+    );
+  }
 };
