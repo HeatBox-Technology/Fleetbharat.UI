@@ -226,9 +226,10 @@ export const exportGeofences = async (accountId, search, format = "csv") => {
     const blob = new Blob([res.data], { type: contentType });
     const contentDisposition = res.headers?.["content-disposition"] || "";
     const fileNameMatch = contentDisposition.match(/filename="?([^"]+)"?/i);
+    const ext = format === "excel" ? "xlsx" : "csv";
     const fileName =
       fileNameMatch?.[1] ||
-      `geofences_export_${new Date().toISOString().replace(/[:.]/g, "-")}.csv`;
+      `geofences_export_${new Date().toISOString().replace(/[:.]/g, "-")}.${ext}`;
 
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");

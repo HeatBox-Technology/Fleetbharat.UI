@@ -91,11 +91,13 @@ export const exportRoles = async (accountId, search, format = "csv") => {
     });
 
     // Convert blob to downloadable file
-    const blob = new Blob([res.data], { type: "text/csv" });
+    const contentType = res.headers?.["content-type"] || "text/csv";
+    const blob = new Blob([res.data], { type: contentType });
+    const ext = format === "excel" ? "xlsx" : "csv";
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `roles_export_${new Date().toISOString()}.csv`;
+    a.download = `roles_export_${new Date().toISOString().replace(/[:.]/g, "-")}.${ext}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
