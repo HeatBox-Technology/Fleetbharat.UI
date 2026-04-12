@@ -125,3 +125,61 @@ export const deleteUser = async (id) => {
     );
   }
 };
+
+export const exportUsers = async (search = "", format = "csv") => {
+  try {
+    const query = new URLSearchParams();
+    if (String(search || "").trim()) {
+      query.set("search", String(search).trim());
+    }
+    if (format && ["excel", "csv"].includes(format)) {
+      query.set("format", format);
+    }
+
+    const queryString = query.toString();
+    const res = await api.get(
+      `/api/users/export${queryString ? `?${queryString}` : ""}`,
+      {
+        responseType: "blob",
+        headers: { Accept: "*/*" },
+      },
+    );
+
+    const contentType = res.headers?.["content-type"] || "text/csv";
+    const blob = new Blob([res.data], { type: contentType });
+    const contentDisposition = res.headers?.["content-disposition"] || "";
+    const fileNameMatch = contentDisposition.match(/filename="?([^"]+)"?/i);
+    const ext = format === "excel" ? "xlsx" : "csv";
+    const fileName =
+      fileNameMatch?.[1] ||
+      `users_export_${new Date().toISOString().replace(/[:.]/g, "-")}.${ext}`;
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: "Users exported successfully",
+      data: null,
+    };
+  } catch (error) {
+    console.error("API Error in exportUsers:", error);
+    return (
+      error.response?.data || {
+        success: false,
+        statusCode: error.response?.status || 500,
+        message:
+          error.response?.data?.message ||
+          "Failed to export users. Network or server error.",
+        data: null,
+      }
+    );
+  }
+};
