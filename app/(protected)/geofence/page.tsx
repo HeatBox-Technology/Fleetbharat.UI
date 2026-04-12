@@ -154,6 +154,7 @@ export default function GeofencePage() {
     enabled: 0,
     disabled: 0,
   });
+  const [exportFormat, setExportFormat] = useState<"excel" | "csv">("csv");
 
   const mapApiZoneToUi = useCallback(
     (zone: ApiZone, index: number): GeofenceZone => {
@@ -355,7 +356,7 @@ export default function GeofencePage() {
 
   const handleExport = async () => {
     try {
-      const response = await exportGeofences(selectedAccountId, debouncedQuery);
+      const response = await exportGeofences(selectedAccountId, debouncedQuery, exportFormat);
       if (response?.success || Number(response?.statusCode) === 200) {
         toast.success(t("toast.exportSuccess"));
       } else {
@@ -844,6 +845,8 @@ export default function GeofencePage() {
             showExportButton={true}
             ExportbuttonText={t("export")}
             onExportClick={handleExport}
+            exportFormat={exportFormat}
+            onExportFormatChange={setExportFormat}
             showFilterButton={false}
           />
         </div>

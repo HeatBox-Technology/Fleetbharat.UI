@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Filter, Home } from "lucide-react";
+import { Download, Filter, Home, ChevronDown } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -31,6 +31,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   showWriteButton = true,
   showBulkUpload,
   bulkUploadModuleKey,
+  exportFormat = "csv",
+  onExportFormatChange,
 }) => {
   const { isDark } = useTheme();
   const { selectedColor } = useColor();
@@ -226,20 +228,41 @@ const PageHeader: React.FC<PageHeaderProps> = ({
               </button>
             )}
 
-            {/* Export Button */}
+            {/* Export Button with Format Dropdown */}
             {canShowExportButton && (
-              <button
-                onClick={handleExportClick}
-                className={`cursor-pointer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-colors border ${
-                  isDark
-                    ? "bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700"
-                    : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
-                }`}
-              >
-                <span className="xs:inline">{ExportbuttonText}</span>
-                <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="hidden xs:inline">{ExportbuttonText}</span>
-              </button>
+              <div className="flex items-center gap-2">
+                {/* Format Dropdown */}
+                <div className="relative">
+                  <select
+                    value={exportFormat}
+                    onChange={(e) =>
+                      onExportFormatChange?.(e.target.value as "excel" | "csv")
+                    }
+                    className={`appearance-none pl-2.5 pr-8 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm border ${
+                      isDark
+                        ? "bg-gray-800 border-gray-700 text-gray-300"
+                        : "bg-white border-gray-300 text-gray-700"
+                    }`}
+                  >
+                    <option value="csv">CSV</option>
+                    <option value="excel">Excel</option>
+                  </select>
+                  <ChevronDown className="w-3.5 h-3.5 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+
+                {/* Export Button */}
+                <button
+                  onClick={handleExportClick}
+                  className={`cursor-pointer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium transition-colors border ${
+                    isDark
+                      ? "bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700"
+                      : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  <span className="xs:inline">{ExportbuttonText}</span>
+                  <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                </button>
+              </div>
             )}
 
             {mounted && canShowBulkUpload && (

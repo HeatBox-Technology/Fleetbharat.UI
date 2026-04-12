@@ -69,6 +69,7 @@ const Vehicles: React.FC = () => {
     null,
   );
   const [isVehiclesLoading, setIsVehiclesLoading] = useState(false);
+  const [exportFormat, setExportFormat] = useState<"excel" | "csv">("csv");
   const columns = [
     {
       key: "registrationNumber",
@@ -288,7 +289,7 @@ const Vehicles: React.FC = () => {
     }
 
     try {
-      const response = await exportVehicles(selectedAccountId, searchQuery);
+      const response = await exportVehicles(selectedAccountId, searchQuery, exportFormat);
       if (response?.success || Number(response?.statusCode) === 200) {
         toast.success(t("toast.exportSuccess"));
       } else {
@@ -336,6 +337,8 @@ const Vehicles: React.FC = () => {
           showExportButton={true}
           ExportbuttonText={t("export")}
           onExportClick={handleExport}
+          exportFormat={exportFormat}
+          onExportFormatChange={setExportFormat}
           showFilterButton={false}
         />
 

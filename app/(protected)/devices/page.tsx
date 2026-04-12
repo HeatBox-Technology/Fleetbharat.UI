@@ -96,6 +96,7 @@ const DeviceRegistry: React.FC = () => {
     inService: 0,
     outOfService: 0,
   });
+  const [exportFormat, setExportFormat] = useState<"excel" | "csv">("csv");
 
   const columns = useMemo(
     () => [
@@ -302,7 +303,7 @@ const DeviceRegistry: React.FC = () => {
     }
 
     try {
-      const response = await exportDevices(selectedAccountId, searchQuery);
+      const response = await exportDevices(selectedAccountId, searchQuery, exportFormat);
       if (response?.success || Number(response?.statusCode) === 200) {
         toast.success(t("toast.exportSuccess"));
       } else {
@@ -330,6 +331,8 @@ const DeviceRegistry: React.FC = () => {
           showExportButton={true}
           ExportbuttonText={t("export")}
           onExportClick={handleExport}
+          exportFormat={exportFormat}
+          onExportFormatChange={setExportFormat}
           showFilterButton={false}
         />
 

@@ -141,7 +141,7 @@ export const deleteSim = async (simId) => {
   }
 };
 
-export const exportSims = async (accountId, search) => {
+export const exportSims = async (accountId, search, format = "csv") => {
   try {
     const query = new URLSearchParams();
     const resolvedAccountId = Number(accountId || getStoredAccountId() || 0);
@@ -150,6 +150,9 @@ export const exportSims = async (accountId, search) => {
     }
     if (String(search || "").trim()) {
       query.set("search", String(search).trim());
+    }
+    if (format && ["excel", "csv"].includes(format)) {
+      query.set("format", format);
     }
 
     const queryString = query.toString();

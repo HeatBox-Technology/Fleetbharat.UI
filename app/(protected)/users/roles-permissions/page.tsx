@@ -38,6 +38,7 @@ const Roles: React.FC = () => {
   // Confirmation dialog states
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [roleToDelete, setRoleToDelete] = useState<RoleAccount | null>(null);
+  const [exportFormat, setExportFormat] = useState<"excel" | "csv">("csv");
 
   const columns = [
     { key: "no", label: t("table.no"), visible: true },
@@ -95,7 +96,7 @@ const Roles: React.FC = () => {
 
   const handleExport = async () => {
     try {
-      await exportRoles();
+      await exportRoles(undefined, undefined, exportFormat);
       toast.success(t("toast.exportSuccess"));
     } catch {
       toast.error(t("toast.exportFailed"));
@@ -140,6 +141,8 @@ const Roles: React.FC = () => {
           buttonRoute="/users/roles-permissions/0"
           showExportButton={true}
           ExportbuttonText={t("export")}
+          exportFormat={exportFormat}
+          onExportFormatChange={setExportFormat}
           showWriteButton={true}
           onExportClick={handleExport}
         />

@@ -71,6 +71,7 @@ const SimMaster: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [simToDelete, setSimToDelete] = useState<SimItem | null>(null);
   const [isSimsLoading, setIsSimsLoading] = useState(false);
+  const [exportFormat, setExportFormat] = useState<"excel" | "csv">("csv");
 
   const getUserAccountIdFromStorage = useCallback(() => {
     try {
@@ -245,7 +246,7 @@ const SimMaster: React.FC = () => {
     }
 
     try {
-      const response = await exportSims(selectedAccountId, searchQuery);
+      const response = await exportSims(selectedAccountId, searchQuery, exportFormat);
       if (response?.success || Number(response?.statusCode) === 200) {
         toast.success(t("toast.exportSuccess"));
       } else {
@@ -335,6 +336,8 @@ const SimMaster: React.FC = () => {
           showExportButton={true}
           ExportbuttonText={t("export")}
           onExportClick={handleExport}
+          exportFormat={exportFormat}
+          onExportFormatChange={setExportFormat}
           showFilterButton={false}
         />
 

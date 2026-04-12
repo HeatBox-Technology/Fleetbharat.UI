@@ -78,10 +78,14 @@ export const deleteRole = async (id) => {
   return res.data;
 };
 
-export const exportRoles = async (accountId, search) => {
+export const exportRoles = async (accountId, search, format = "csv") => {
   try {
     const res = await api.get(`/api/roles/export`, {
-      params: { accountId, search },
+      params: { 
+        accountId, 
+        search,
+        format: format && ["excel", "csv"].includes(format) ? format : "csv",
+      },
       responseType: "blob", // for file download
       headers: { Accept: "*/*" },
     });

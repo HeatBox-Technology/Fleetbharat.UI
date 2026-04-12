@@ -98,7 +98,7 @@ export const deleteVehicle = async (id) => {
   }
 };
 
-export const exportVehicles = async (accountId, search) => {
+export const exportVehicles = async (accountId, search, format = "csv") => {
   try {
     const query = new URLSearchParams();
     const resolvedAccountId = Number(accountId || 0);
@@ -107,6 +107,9 @@ export const exportVehicles = async (accountId, search) => {
     }
     if (String(search || "").trim()) {
       query.set("search", String(search).trim());
+    }
+    if (format && ["excel", "csv"].includes(format)) {
+      query.set("format", format);
     }
 
     const queryString = query.toString();

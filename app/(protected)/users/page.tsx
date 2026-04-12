@@ -56,6 +56,7 @@ const Users: React.FC = () => {
     roles: [] as { label: string; value: string }[],
     statuses: [] as { label: string; value: string }[],
   });
+  const [exportFormat, setExportFormat] = useState<"excel" | "csv">("csv");
 
   const columns = [
     { key: "fullName", label: t("table.fullName"), visible: true },
@@ -172,6 +173,8 @@ const Users: React.FC = () => {
           showExportButton={true}
           ExportbuttonText={t("export")}
           onExportClick={handleExport}
+          exportFormat={exportFormat}
+          onExportFormatChange={setExportFormat}
           showFilterButton={false}
           FilterbuttonText={t("filter")}
           onFilterClick={handleFilter}

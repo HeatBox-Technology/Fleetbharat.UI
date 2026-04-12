@@ -93,13 +93,14 @@ export const deleteDriver = async (id) => {
   }
 };
 
-export const exportDrivers = async (accountId, search) => {
+export const exportDrivers = async (accountId, search, format = "csv") => {
   try {
     const resolvedAccountId = getAccountId(accountId);
     const res = await api.get(`/api/drivers/export`, {
       params: {
         accountId: resolvedAccountId,
         search,
+        format: format && ["excel", "csv"].includes(format) ? format : "csv",
       },
       responseType: "blob",
       headers: { Accept: "*/*" },

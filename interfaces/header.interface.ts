@@ -21,4 +21,6 @@ export interface PageHeaderProps {
   showWriteButton?: boolean;
   showBulkUpload?: boolean;
   bulkUploadModuleKey?: string;
+  exportFormat?: "excel" | "csv";
+  onExportFormatChange?: (format: "excel" | "csv") => void;
 }

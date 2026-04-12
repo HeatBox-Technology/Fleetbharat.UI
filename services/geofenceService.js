@@ -208,7 +208,7 @@ export const deleteGeofence = async (id) => {
   }
 };
 
-export const exportGeofences = async (accountId, search) => {
+export const exportGeofences = async (accountId, search, format = "csv") => {
   try {
     const { accountId: userAccountId } = getUserData();
     const resolvedAccountId = Number(accountId || userAccountId || 0);
@@ -216,6 +216,7 @@ export const exportGeofences = async (accountId, search) => {
       params: {
         accountId: resolvedAccountId > 0 ? resolvedAccountId : undefined,
         search,
+        format: format && ["excel", "csv"].includes(format) ? format : "csv",
       },
       responseType: "blob",
       headers: { Accept: "*/*" },

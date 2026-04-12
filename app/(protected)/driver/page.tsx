@@ -55,6 +55,7 @@ const Drivers: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [totalRecords, setTotalRecords] = useState(0);
   const [categoryRights, setCategoryRights] = useState<FormRights | null>(null);
+  const [exportFormat, setExportFormat] = useState<"excel" | "csv">("csv");
   const [cardCounts, setCardCounts] = useState({
     totalDrivers: 0,
     activeDrivers: 0,
@@ -193,7 +194,7 @@ const Drivers: React.FC = () => {
 
   const handleExport = async () => {
     try {
-      const response = await exportDrivers(selectedAccountId, searchQuery);
+      const response = await exportDrivers(selectedAccountId, searchQuery, exportFormat);
       if (response?.success || Number(response?.statusCode) === 200) {
         toast.success(t("toast.exportSuccess"));
       } else {
@@ -282,8 +283,8 @@ const Drivers: React.FC = () => {
           buttonRoute="/driver/0"
           showExportButton={true}
           ExportbuttonText={t("export")}
-          onExportClick={handleExport}
-          // showWriteButton={driverRights?.canWrite || false}
+          onExportClick={handleExport}          exportFormat={exportFormat}
+          onExportFormatChange={setExportFormat}          // showWriteButton={driverRights?.canWrite || false}
         />
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4 sm:mb-6">
           <div className="relative w-full sm:w-auto sm:min-w-[220px]">
