@@ -164,13 +164,31 @@ export const exportSims = async (accountId, search, format = "csv") => {
       },
     );
 
-    const contentType = res.headers?.["content-type"] || "text/csv";
+    const contentType =
+      res.headers?.["content-type"] ||
+      (format === "excel"
+        ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        : "text/csv;charset=utf-8;");
     const blob = new Blob([res.data], { type: contentType });
     const contentDisposition = res.headers?.["content-disposition"] || "";
-    const fileNameMatch = contentDisposition.match(/filename="?([^"]+)"?/i);
-    const fileName =
-      fileNameMatch?.[1] ||
-      `sims_export_${new Date().toISOString().replace(/[:.]/g, "-")}.csv`;
+    const fileNameMatch =
+      contentDisposition.match(/filename\*=(?:UTF-8'')?([^;\n]+)/i) ||
+      contentDisposition.match(/filename="?([^"]+)"?/i);
+    let fileName = fileNameMatch?.[1]
+      ? fileNameMatch[1].replace(/(^"|"$)/g, "")
+      : null;
+    if (fileName) {
+      try {
+        fileName = decodeURIComponent(fileName);
+      } catch {
+        // keep raw filename if decoding fails
+      }
+    }
+    fileName =
+      fileName ||
+      `sims_export_${new Date().toISOString().replace(/[:.]/g, "-")}.${
+        format === "excel" ? "xlsx" : "csv"
+      }`;
 
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
