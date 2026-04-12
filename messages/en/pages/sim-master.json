@@ -35,6 +35,7 @@
           "removed": "SIM removed from registry!",
           "deleteFailed": "Failed to delete SIM",
           "deleteError": "An error occurred while deleting.",
+          "exportSuccess": "SIM exported successfully!",
           "exportFailed": "Failed to export SIMs",
           "exportSoon": "Export coming soon!"
         }
