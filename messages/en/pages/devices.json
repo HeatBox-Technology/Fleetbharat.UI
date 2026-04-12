@@ -46,7 +46,9 @@
           "loadError": "An error occurred while loading devices",
           "removed": "Device removed successfully",
           "deleteFailed": "Failed to delete device.",
-          "deleteError": "An error occurred while deleting."
+          "deleteError": "An error occurred while deleting.",
+          "exportSuccess": "Devices exported successfully!",
+          "exportFailed": "Failed to export devices"
         }
       },
       "detail": {

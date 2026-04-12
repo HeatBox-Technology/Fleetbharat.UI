@@ -9,7 +9,7 @@ import { MetricCard } from "@/components/CommonCard";
 import { useTheme } from "@/context/ThemeContext";
 import MultiSelect from "@/components/MultiSelect";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
-import { getUsers, deleteUser } from "@/services/userService";
+import { getUsers, deleteUser, exportUsers } from "@/services/userService";
 import { UserItem } from "@/interfaces/user.interface";
 import { Users as UsersIcon, CheckCircle, Lock, Shield } from "lucide-react";
 import { toast } from "react-toastify";
@@ -147,8 +147,18 @@ const Users: React.FC = () => {
     setPageNo(1);
   };
 
-  const handleExport = () => {
-    toast.info(t("toast.exportSoon"));
+  const handleExport = async () => {
+    try {
+      const res = await exportUsers(searchQuery, exportFormat);
+      if (res.success) {
+        toast.success(t("toast.exportSuccess"));
+      } else {
+        toast.error(res.message || t("toast.exportFailed"));
+      }
+    } catch (error) {
+      console.error("Export error:", error);
+      toast.error(t("toast.exportFailed"));
+    }
   };
 
   const handleFilter = () => {

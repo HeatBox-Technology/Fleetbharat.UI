@@ -52,6 +52,8 @@
           "deleteError": "An error occurred while deleting.",
           "fetchFailed": "Failed to fetch users",
           "exportSoon": "Export functionality coming soon!",
+          "exportSuccess": "Users exported successfully!",
+          "exportFailed": "Failed to export users",
           "filtersReset": "Filters reset"
         }
       },
