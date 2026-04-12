@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CommonTable from "@/components/CommonTable";
 import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
@@ -13,19 +13,32 @@ import {
   VehicleTypeCardCounts,
   VehicleTypeRow,
 } from "@/interfaces/vehicleType.interface";
-import { CircleAlert, Database, ShieldCheck } from "lucide-react";
+import { Building2, ChevronDown, CircleAlert, Database, ShieldCheck } from "lucide-react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import {
   deleteVehicleTypeById,
   getVehicleTypes,
 } from "@/services/vehicletypeService";
+import { getAccountHierarchy } from "@/services/accountService";
 
-const dotPalette = ["#10b981", "#ef4444", "#f59e0b", "#3b82f6", "#71717a"];
+const resolveAssetUrl = (path?: string | null) => {
+  const value = String(path || "").trim();
+  if (!value) return "";
+  if (/^https?:\/\//i.test(value)) return value;
+  const baseUrl = String(process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/+$/,
+    "",
+  );
+  const normalizedPath = value.startsWith("/") ? value : `/${value}`;
+  return baseUrl ? `${baseUrl}${normalizedPath}` : normalizedPath;
+};
 
 const VehicleTypes: React.FC = () => {
   const { isDark } = useTheme();
   const router = useRouter();
+  const [accounts, setAccounts] = useState<Array<{ id: number; value: string }>>([]);
+  const [selectedAccountId, setSelectedAccountId] = useState<number>(0);
   const [pageNo, setPageNo] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -43,6 +56,17 @@ const VehicleTypes: React.FC = () => {
   });
   const [data, setData] = useState<VehicleTypeRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const latestFetchIdRef = useRef(0);
+
+  const getLocalAccountId = (): number => {
+    if (typeof window === "undefined") return 0;
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      return Number(user?.accountId || 0);
+    } catch {
+      return 0;
+    }
+  };
 
   const columns = [
     {
@@ -66,23 +90,28 @@ const VehicleTypes: React.FC = () => {
       visible: true,
     },
     {
-      key: "mapVisualization",
-      label: "MAP VISUALIZATION",
-      render: (value: { dots: string[]; label: string }) => (
+      key: "stateIcons",
+      label: "STATE ICONS",
+      render: (value: string[]) => (
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            {value.dots.map((dot, idx) => (
-              <span
-                key={`${dot}-${idx}`}
-                className="inline-block w-3.5 h-3.5 rounded-full"
-                style={{ backgroundColor: dot }}
-              />
+            {value.map((icon, idx) => (
+              <div
+                key={`${icon}-${idx}`}
+                className="w-10 h-10 rounded-xl overflow-hidden border border-cyan-200 shadow-sm bg-white shrink-0"
+              >
+                {icon ? (
+                  <img
+                    src={icon}
+                    alt={`State icon ${idx + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-100" />
+                )}
+              </div>
             ))}
           </div>
-          <span className="text-gray-300">|</span>
-          <span className="text-[#5f7693] font-semibold text-sm">
-            {value.label}
-          </span>
         </div>
       ),
       visible: true,
@@ -140,8 +169,9 @@ const VehicleTypes: React.FC = () => {
       st === "active" ||
       st === "true" ||
       st === "enabled";
+    const fuel = String(item.fuelCategory || "").toLowerCase();
     const capUnit =
-      String(item.fuelCategory || "").toLowerCase() === "ev" ? "kWh" : "L";
+      fuel.includes("electric") || fuel === "ev" ? "kWh" : "L";
     const capacityValue = item.tankCapacity ? `${item.tankCapacity} ${capUnit}` : "-";
 
     return {
@@ -150,10 +180,14 @@ const VehicleTypes: React.FC = () => {
         ? `${item.vehicleTypeName.slice(0, 3).toUpperCase()}-${item.id}`
         : `VT-${item.id}`,
       name: item.vehicleTypeName || "-",
-      mapVisualization: {
-        dots: [item.defaultIconColor || dotPalette[0], ...dotPalette.slice(1)],
-        label: String(item.category || "").toUpperCase() || "VEHICLE",
-      },
+      stateIcons: [
+        resolveAssetUrl(item.movingIcon),
+        resolveAssetUrl(item.stoppedIcon),
+        resolveAssetUrl(item.idleIcon),
+        resolveAssetUrl(item.parkedIcon),
+        resolveAssetUrl(item.offlineIcon),
+        resolveAssetUrl(item.breakdownIcon),
+      ],
       fuel: item.fuelCategory || "-",
       capacity: capacityValue,
       status: isEnabled,
@@ -162,13 +196,36 @@ const VehicleTypes: React.FC = () => {
     };
   };
 
+  const fetchAccounts = async () => {
+    try {
+      const response = await getAccountHierarchy();
+      const accountList = Array.isArray(response?.data) ? response.data : [];
+      setAccounts(
+        accountList.map((item: { id?: number; value?: string; name?: string }) => ({
+          id: Number(item?.id || 0),
+          value: String(item?.value || item?.name || item?.id || ""),
+        })),
+      );
+    } catch (error) {
+      console.error("Error fetching accounts:", error);
+    }
+  };
+
   const fetchVehicleTypes = async () => {
+    const fetchId = ++latestFetchIdRef.current;
     setLoading(true);
     try {
-      const response = await getVehicleTypes();
+      const response = await getVehicleTypes(selectedAccountId);
 
       if (Array.isArray(response)) {
-        const mapped = response.map(mapVehicleTypeToRow);
+        const filtered =
+          selectedAccountId > 0
+            ? response.filter(
+                (item) => Number(item?.accountId || 0) === selectedAccountId,
+              )
+            : response;
+        const mapped = filtered.map(mapVehicleTypeToRow);
+        if (fetchId !== latestFetchIdRef.current) return;
         setData(mapped);
         setTotalRecords(mapped.length);
         setCardCounts({
@@ -181,7 +238,14 @@ const VehicleTypes: React.FC = () => {
       }
 
       if (response?.success && Array.isArray(response?.data)) {
-        const mapped = response.data.map(mapVehicleTypeToRow);
+        const filtered =
+          selectedAccountId > 0
+            ? response.data.filter(
+                (item:any) => Number(item?.accountId || 0) === selectedAccountId,
+              )
+            : response.data;
+        const mapped = filtered.map(mapVehicleTypeToRow);
+        if (fetchId !== latestFetchIdRef.current) return;
         setData(mapped);
         setTotalRecords(mapped.length);
         setCardCounts({
@@ -193,11 +257,15 @@ const VehicleTypes: React.FC = () => {
         return;
       }
 
+      if (fetchId !== latestFetchIdRef.current) return;
       toast.error(response?.message || "Failed to load vehicle types");
     } catch (error) {
+      if (fetchId !== latestFetchIdRef.current) return;
       toast.error("Failed to load vehicle types");
     } finally {
-      setLoading(false);
+      if (fetchId === latestFetchIdRef.current) {
+        setLoading(false);
+      }
     }
   };
 
@@ -230,8 +298,14 @@ const VehicleTypes: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchVehicleTypes();
+    const accountId = getLocalAccountId();
+    setSelectedAccountId(accountId);
+    fetchAccounts();
   }, []);
+
+  useEffect(() => {
+    fetchVehicleTypes();
+  }, [selectedAccountId]);
 
   useEffect(() => {
     function getPermissionsList() {
@@ -270,6 +344,33 @@ const VehicleTypes: React.FC = () => {
             buttonRoute="/vehicle-types/0"
             showWriteButton={vehicleTypeRight?.canWrite || false}
           />
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4 sm:mb-6">
+          <div className="relative w-full sm:w-auto sm:min-w-[220px]">
+            <Building2
+              className={`w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 ${isDark ? "text-gray-300" : "text-gray-500"}`}
+            />
+            <select
+              value={selectedAccountId}
+              onChange={(e) => setSelectedAccountId(Number(e.target.value))}
+              className={`w-full appearance-none pl-10 pr-10 py-2.5 rounded-xl border text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-500/20 ${
+                isDark
+                  ? "bg-card border-gray-700 text-foreground"
+                  : "bg-white border-gray-200 text-gray-900"
+              }`}
+            >
+              <option value={0}>Select Account</option>
+              {accounts.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.value}
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              className={`w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none ${isDark ? "text-gray-300" : "text-gray-500"}`}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">

@@ -516,7 +516,7 @@ export default function GeofencePage() {
     );
 
     if (rowsToSync.length === 0) {
-      toast.info("All visible rows are already synced to Java");
+      toast.info("Sync Completed");
       return;
     }
 
