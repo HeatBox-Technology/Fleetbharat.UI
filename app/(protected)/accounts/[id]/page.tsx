@@ -531,7 +531,7 @@ const EditAccount: React.FC = () => {
           stateId: data.stateId?.toString() || "",
           cityId: data.cityId?.toString() || "",
           zipcode: data.zipcode || "",
-          address: data.address || data.hierarchyPath || "",
+          address: data.address || "",
           businessCountryCode: parsedBusinessPhone.countryCode,
           contactNumber: parsedBusinessPhone.phone,
           supportTimings: data.businessHours || "",
