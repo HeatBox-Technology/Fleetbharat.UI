@@ -41,11 +41,18 @@ const toStatusText = (payload: any): string => {
 const hasErrors = (payload: any): boolean => {
   const failedCount = Number(
     payload?.failedCount ||
+      payload?.failedRows ||
       payload?.data?.failedCount ||
+      payload?.data?.failedRows ||
       payload?.data?.summary?.failedCount ||
       0,
   );
-  return failedCount > 0 || toStatusText(payload) === "FAILED";
+
+  const status = toStatusText(payload);
+  return (
+    failedCount > 0 ||
+    ["FAILED", "PARTIAL_SUCCESS", "COMPLETED_WITH_ERRORS"].includes(status)
+  );
 };
 
 const downloadBlobFile = (blob: Blob, fileName: string) => {
@@ -89,7 +96,15 @@ const BulkUploadControls: React.FC<BulkUploadControlsProps> = ({ moduleKey }) =>
           setErrorReportAvailable(true);
         }
 
-        if (["COMPLETED", "SUCCESS", "FAILED", "PARTIAL_SUCCESS"].includes(status)) {
+         if (
+  [
+    "COMPLETED",
+    "SUCCESS",
+    "FAILED",
+    "PARTIAL_SUCCESS",
+    "COMPLETED_WITH_ERRORS",
+  ].includes(status)
+) {
           clearInterval(interval);
           setPolling(false);
           if (typeof window !== "undefined") {
@@ -105,6 +120,8 @@ const BulkUploadControls: React.FC<BulkUploadControlsProps> = ({ moduleKey }) =>
           }
           if (status === "FAILED") {
             toast.error(`Bulk upload failed for ${normalizedModule}`);
+            } else if (status === "COMPLETED_WITH_ERRORS") {
+  toast.warning(`Bulk upload completed with errors for ${normalizedModule}`);
           } else {
             toast.success(`Bulk upload finished for ${normalizedModule}`);
           }
