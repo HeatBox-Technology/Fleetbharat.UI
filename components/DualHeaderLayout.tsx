@@ -422,6 +422,12 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
               icon: FileText,
               path: "/report/alarm-report",
             },
+            {
+              id: "geofence-report",
+              label: "Geofence Report",
+              icon: FileText,
+              path: "/report/geofence-report",
+            },
           ],
         },
       ],
