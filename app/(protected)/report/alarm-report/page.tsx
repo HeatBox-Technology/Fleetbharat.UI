@@ -459,24 +459,33 @@ const AlarmReportPage = () => {
     const realAlerts = ALERT_OPTIONS.filter(
       (alert) => alert.value !== ALL_ALERTS_VALUE,
     );
+    const nextAlertsWithoutAll = nextAlerts.filter(
+      (alert) => alert.value !== ALL_ALERTS_VALUE,
+    );
 
-    if (hasAllSelected && !hadAllSelected) {
+    if (!hadAllSelected && hasAllSelected) {
       setSelectedAlerts([ALL_ALERTS_OPTION, ...realAlerts]);
       return;
     }
 
-    if (!hasAllSelected && hadAllSelected) {
-      setSelectedAlerts([]);
+    if (hadAllSelected && !hasAllSelected) {
+      if (nextAlertsWithoutAll.length === realAlerts.length) {
+        setSelectedAlerts([]);
+        return;
+      }
+      setSelectedAlerts(nextAlertsWithoutAll);
       return;
     }
 
-    if (nextAlerts.length === realAlerts.length && realAlerts.length > 0) {
+    if (
+      nextAlertsWithoutAll.length === realAlerts.length &&
+      realAlerts.length > 0
+    ) {
       setSelectedAlerts([ALL_ALERTS_OPTION, ...realAlerts]);
-    } else {
-      setSelectedAlerts(
-        nextAlerts.filter((alert) => alert.value !== ALL_ALERTS_VALUE),
-      );
+      return;
     }
+
+    setSelectedAlerts(nextAlertsWithoutAll);
   };
 
   const handleViewReport = async () => {

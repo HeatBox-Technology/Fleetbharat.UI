@@ -351,24 +351,33 @@ const MovementReportPage = () => {
     const realVehicles = vehicles.filter(
       (vehicle) => vehicle.value !== ALL_VEHICLES_VALUE,
     );
+    const nextVehiclesWithoutAll = nextVehicles.filter(
+      (vehicle) => vehicle.value !== ALL_VEHICLES_VALUE,
+    );
 
-    if (hasAllSelected && !hadAllSelected) {
+    if (!hadAllSelected && hasAllSelected) {
       setSelectedVehicles([ALL_VEHICLES_OPTION, ...realVehicles]);
       return;
     }
 
-    if (!hasAllSelected && hadAllSelected) {
-      setSelectedVehicles([]);
+    if (hadAllSelected && !hasAllSelected) {
+      if (nextVehiclesWithoutAll.length === realVehicles.length) {
+        setSelectedVehicles([]);
+        return;
+      }
+      setSelectedVehicles(nextVehiclesWithoutAll);
       return;
     }
 
-    if (nextVehicles.length === realVehicles.length && realVehicles.length > 0) {
+    if (
+      nextVehiclesWithoutAll.length === realVehicles.length &&
+      realVehicles.length > 0
+    ) {
       setSelectedVehicles([ALL_VEHICLES_OPTION, ...realVehicles]);
-    } else {
-      setSelectedVehicles(
-        nextVehicles.filter((vehicle) => vehicle.value !== ALL_VEHICLES_VALUE),
-      );
+      return;
     }
+
+    setSelectedVehicles(nextVehiclesWithoutAll);
   };
 
   const handleViewReport = async () => {
