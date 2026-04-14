@@ -215,8 +215,11 @@ const Vehicles: React.FC = () => {
         debouncedQuery,
         selectedAccountId,
       );
-      const vehiclesData = response.data?.vehicles; // ✅ corrected
-      const summary = response.data?.summary; // ✅ corrected
+
+      const vehiclesData =
+        response?.data?.data?.vehicles ?? response?.data?.vehicles ?? response?.vehicles;
+      const summary =
+        response?.data?.data?.summary ?? response?.data?.summary ?? response?.summary;
 
       if (vehiclesData?.items?.length) {
         const mappedData = vehiclesData.items.map((v: any) => ({
@@ -234,16 +237,23 @@ const Vehicles: React.FC = () => {
         }));
 
         setSummaryData({
-          totalFleetSize: summary.totalFleetSize,
-          inService: summary.inService,
-          offRoadOrOutOfService: summary.outOfService,
-          activeAccounts: summary.inService,
+          totalFleetSize: summary?.totalFleetSize ?? 0,
+          inService: summary?.inService ?? 0,
+          offRoadOrOutOfService: summary?.outOfService ?? 0,
+          activeAccounts: summary?.inService ?? 0,
         });
 
         setData(mappedData);
-        setTotalRecords(vehiclesData.totalRecords);
+        setTotalRecords(vehiclesData.totalRecords ?? 0);
       } else {
-        // toast.error("No vehicles found");
+        setData([]);
+        setTotalRecords(vehiclesData?.totalRecords ?? 0);
+        setSummaryData({
+          totalFleetSize: summary?.totalFleetSize ?? 0,
+          inService: summary?.inService ?? 0,
+          offRoadOrOutOfService: summary?.outOfService ?? 0,
+          activeAccounts: summary?.inService ?? 0,
+        });
       }
     } catch (error) {
       console.error("Error fetching vehicles:", error);
