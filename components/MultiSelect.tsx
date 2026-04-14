@@ -182,7 +182,7 @@ const MultiSelect = ({
           </div>
 
           <div className="max-h-64 overflow-auto">
-            {/* <label
+            <label
               className="flex cursor-pointer items-center gap-3 px-3 py-2 m-2 rounded-lg"
               style={{
                 backgroundColor: allSelected ? optionHoverBg : "transparent",
@@ -205,7 +205,7 @@ const MultiSelect = ({
               <span style={{ color: textColor, fontWeight: 600 }}>
                 (Select All - {options.length} options)
               </span>
-            </label> */}
+            </label>
 
             {filteredOptions.length === 0 && (
               <p className="px-3 py-2 text-sm" style={{ color: mutedColor }}>
