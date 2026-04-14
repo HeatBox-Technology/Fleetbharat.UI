@@ -37,17 +37,6 @@ type GeofenceReportRow = {
   receivedAt?: string;
 };
 
-const ALL_ACCOUNTS_VALUE = "__all_accounts__";
-const ALL_VEHICLES_VALUE = "__all_vehicles__";
-const ALL_ACCOUNTS_OPTION: OptionType = {
-  label: "All Organizations",
-  value: ALL_ACCOUNTS_VALUE,
-};
-const ALL_VEHICLES_OPTION: OptionType = {
-  label: "All Vehicles",
-  value: ALL_VEHICLES_VALUE,
-};
-
 const toOptionLabel = (item: {
   label?: string;
   value?: string | number;
@@ -227,7 +216,7 @@ const GeofenceReportPage = () => {
             );
             setSelectedAccounts(defaultAccount ? [defaultAccount] : []);
           } else {
-            setSelectedAccounts([ALL_ACCOUNTS_OPTION]);
+            setSelectedAccounts([]);
           }
         }
       } catch (error: any) {
@@ -293,11 +282,7 @@ const GeofenceReportPage = () => {
 
   useEffect(() => {
     fetchVehiclesForOrganization(
-      (
-        selectedAccounts.some((account) => account.value === ALL_ACCOUNTS_VALUE)
-          ? accounts.filter((account) => account.value !== ALL_ACCOUNTS_VALUE)
-          : selectedAccounts
-      )
+      selectedAccounts
         .map((account) => Number(account.value))
         .filter((value) => Number.isFinite(value) && value > 0),
     );
@@ -305,81 +290,11 @@ const GeofenceReportPage = () => {
   }, [selectedAccounts, accounts]);
 
   const handleAccountChange = (nextAccounts: OptionType[]) => {
-    const hadAllSelected = selectedAccounts.some(
-      (account) => account.value === ALL_ACCOUNTS_VALUE,
-    );
-    const hasAllSelected = nextAccounts.some(
-      (account) => account.value === ALL_ACCOUNTS_VALUE,
-    );
-    const realAccounts = accounts.filter(
-      (account) => account.value !== ALL_ACCOUNTS_VALUE,
-    );
-    const nextAccountsWithoutAll = nextAccounts.filter(
-      (account) => account.value !== ALL_ACCOUNTS_VALUE,
-    );
-
-    if (!hadAllSelected && hasAllSelected) {
-      setSelectedAccounts([ALL_ACCOUNTS_OPTION, ...realAccounts]);
-      return;
-    }
-
-    if (hadAllSelected && !hasAllSelected) {
-      if (nextAccountsWithoutAll.length === realAccounts.length) {
-        setSelectedAccounts([]);
-        return;
-      }
-      setSelectedAccounts(nextAccountsWithoutAll);
-      return;
-    }
-
-    if (
-      nextAccountsWithoutAll.length === realAccounts.length &&
-      realAccounts.length > 0
-    ) {
-      setSelectedAccounts([ALL_ACCOUNTS_OPTION, ...realAccounts]);
-      return;
-    }
-
-    setSelectedAccounts(nextAccountsWithoutAll);
+    setSelectedAccounts(nextAccounts);
   };
 
   const handleVehicleChange = (nextVehicles: OptionType[]) => {
-    const hadAllSelected = selectedVehicles.some(
-      (vehicle) => vehicle.value === ALL_VEHICLES_VALUE,
-    );
-    const hasAllSelected = nextVehicles.some(
-      (vehicle) => vehicle.value === ALL_VEHICLES_VALUE,
-    );
-    const realVehicles = vehicles.filter(
-      (vehicle) => vehicle.value !== ALL_VEHICLES_VALUE,
-    );
-    const nextVehiclesWithoutAll = nextVehicles.filter(
-      (vehicle) => vehicle.value !== ALL_VEHICLES_VALUE,
-    );
-
-    if (!hadAllSelected && hasAllSelected) {
-      setSelectedVehicles([ALL_VEHICLES_OPTION, ...realVehicles]);
-      return;
-    }
-
-    if (hadAllSelected && !hasAllSelected) {
-      if (nextVehiclesWithoutAll.length === realVehicles.length) {
-        setSelectedVehicles([]);
-        return;
-      }
-      setSelectedVehicles(nextVehiclesWithoutAll);
-      return;
-    }
-
-    if (
-      nextVehiclesWithoutAll.length === realVehicles.length &&
-      realVehicles.length > 0
-    ) {
-      setSelectedVehicles([ALL_VEHICLES_OPTION, ...realVehicles]);
-      return;
-    }
-
-    setSelectedVehicles(nextVehiclesWithoutAll);
+    setSelectedVehicles(nextVehicles);
   };
 
   const handleViewReport = async () => {
@@ -404,19 +319,11 @@ const GeofenceReportPage = () => {
       return;
     }
 
-    const orgIds = (
-      selectedAccounts.some((account) => account.value === ALL_ACCOUNTS_VALUE)
-        ? accounts.filter((account) => account.value !== ALL_ACCOUNTS_VALUE)
-        : selectedAccounts
-    )
+    const orgIds = selectedAccounts
       .map((account) => Number(account.value))
       .filter((value) => Number.isFinite(value) && value > 0);
 
-    const vehicleIds = (
-      selectedVehicles.some((vehicle) => vehicle.value === ALL_VEHICLES_VALUE)
-        ? vehicles.filter((vehicle) => vehicle.value !== ALL_VEHICLES_VALUE)
-        : selectedVehicles
-    )
+    const vehicleIds = selectedVehicles
       .map((vehicle) => Number(vehicle.value))
       .filter((value) => Number.isFinite(value) && value > 0);
 
@@ -459,9 +366,7 @@ const GeofenceReportPage = () => {
   };
 
   const accountNameById = new Map(
-    accounts
-      .filter((account) => account.value !== ALL_ACCOUNTS_VALUE)
-      .map((account) => [Number(account.value), account.label]),
+    accounts.map((account) => [Number(account.value), account.label]),
   );
 
   const getExportRows = () =>

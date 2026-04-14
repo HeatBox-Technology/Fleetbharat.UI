@@ -41,23 +41,6 @@ type AlarmReportRow = {
   receivedTime?: string;
 };
 
-const ALL_ACCOUNTS_VALUE = "__all_accounts__";
-const ALL_VEHICLES_VALUE = "__all_vehicles__";
-const ALL_ALERTS_VALUE = "__all_alerts__";
-
-const ALL_ACCOUNTS_OPTION: OptionType = {
-  label: "All Organizations",
-  value: ALL_ACCOUNTS_VALUE,
-};
-const ALL_VEHICLES_OPTION: OptionType = {
-  label: "All Vehicles",
-  value: ALL_VEHICLES_VALUE,
-};
-const ALL_ALERTS_OPTION: OptionType = {
-  label: "All Alerts",
-  value: ALL_ALERTS_VALUE,
-};
-
 const BACKEND_ALERT_KEYS = [
   "Ignition",
   "AC",
@@ -310,7 +293,7 @@ const AlarmReportPage = () => {
             );
             setSelectedAccounts(defaultAccount ? [defaultAccount] : []);
           } else {
-            setSelectedAccounts([ALL_ACCOUNTS_OPTION]);
+            setSelectedAccounts([]);
           }
         }
       } catch (error: any) {
@@ -376,11 +359,7 @@ const AlarmReportPage = () => {
 
   useEffect(() => {
     fetchVehiclesForOrganization(
-      (
-        selectedAccounts.some((account) => account.value === ALL_ACCOUNTS_VALUE)
-          ? accounts.filter((account) => account.value !== ALL_ACCOUNTS_VALUE)
-          : selectedAccounts
-      )
+      selectedAccounts
         .map((account) => Number(account.value))
         .filter((value) => Number.isFinite(value) && value > 0),
     );
@@ -388,102 +367,15 @@ const AlarmReportPage = () => {
   }, [selectedAccounts, accounts]);
 
   const handleAccountChange = (nextAccounts: OptionType[]) => {
-    const hadAllSelected = selectedAccounts.some(
-      (account) => account.value === ALL_ACCOUNTS_VALUE,
-    );
-    const hasAllSelected = nextAccounts.some(
-      (account) => account.value === ALL_ACCOUNTS_VALUE,
-    );
-    const realAccounts = accounts.filter(
-      (account) => account.value !== ALL_ACCOUNTS_VALUE,
-    );
-
-    if (hasAllSelected && !hadAllSelected) {
-      setSelectedAccounts([ALL_ACCOUNTS_OPTION, ...realAccounts]);
-      return;
-    }
-
-    if (!hasAllSelected && hadAllSelected) {
-      setSelectedAccounts([]);
-      return;
-    }
-
-    if (nextAccounts.length === realAccounts.length && realAccounts.length > 0) {
-      setSelectedAccounts([ALL_ACCOUNTS_OPTION, ...realAccounts]);
-    } else {
-      setSelectedAccounts(
-        nextAccounts.filter((account) => account.value !== ALL_ACCOUNTS_VALUE),
-      );
-    }
+    setSelectedAccounts(nextAccounts);
   };
 
   const handleVehicleChange = (nextVehicles: OptionType[]) => {
-    const hadAllSelected = selectedVehicles.some(
-      (vehicle) => vehicle.value === ALL_VEHICLES_VALUE,
-    );
-    const hasAllSelected = nextVehicles.some(
-      (vehicle) => vehicle.value === ALL_VEHICLES_VALUE,
-    );
-    const realVehicles = vehicles.filter(
-      (vehicle) => vehicle.value !== ALL_VEHICLES_VALUE,
-    );
-
-    if (hasAllSelected && !hadAllSelected) {
-      setSelectedVehicles([ALL_VEHICLES_OPTION, ...realVehicles]);
-      return;
-    }
-
-    if (!hasAllSelected && hadAllSelected) {
-      setSelectedVehicles([]);
-      return;
-    }
-
-    if (nextVehicles.length === realVehicles.length && realVehicles.length > 0) {
-      setSelectedVehicles([ALL_VEHICLES_OPTION, ...realVehicles]);
-    } else {
-      setSelectedVehicles(
-        nextVehicles.filter((vehicle) => vehicle.value !== ALL_VEHICLES_VALUE),
-      );
-    }
+    setSelectedVehicles(nextVehicles);
   };
 
   const handleAlertChange = (nextAlerts: OptionType[]) => {
-    const hadAllSelected = selectedAlerts.some(
-      (alert) => alert.value === ALL_ALERTS_VALUE,
-    );
-    const hasAllSelected = nextAlerts.some(
-      (alert) => alert.value === ALL_ALERTS_VALUE,
-    );
-    const realAlerts = ALERT_OPTIONS.filter(
-      (alert) => alert.value !== ALL_ALERTS_VALUE,
-    );
-    const nextAlertsWithoutAll = nextAlerts.filter(
-      (alert) => alert.value !== ALL_ALERTS_VALUE,
-    );
-
-    if (!hadAllSelected && hasAllSelected) {
-      setSelectedAlerts([...realAlerts]);
-      return;
-    }
-
-    if (hadAllSelected && !hasAllSelected) {
-      if (nextAlertsWithoutAll.length === realAlerts.length) {
-        setSelectedAlerts([]);
-        return;
-      }
-      setSelectedAlerts(nextAlertsWithoutAll);
-      return;
-    }
-
-    if (
-      nextAlertsWithoutAll.length === realAlerts.length &&
-      realAlerts.length > 0
-    ) {
-      setSelectedAlerts([...realAlerts]);
-      return;
-    }
-
-    setSelectedAlerts(nextAlertsWithoutAll);
+    setSelectedAlerts(nextAlerts);
   };
 
   const handleViewReport = async () => {
@@ -508,27 +400,15 @@ const AlarmReportPage = () => {
       return;
     }
 
-    const orgIds = (
-      selectedAccounts.some((account) => account.value === ALL_ACCOUNTS_VALUE)
-        ? accounts.filter((account) => account.value !== ALL_ACCOUNTS_VALUE)
-        : selectedAccounts
-    )
+    const orgIds = selectedAccounts
       .map((account) => Number(account.value))
       .filter((value) => Number.isFinite(value) && value > 0);
 
-    const vehicleIds = (
-      selectedVehicles.some((vehicle) => vehicle.value === ALL_VEHICLES_VALUE)
-        ? vehicles.filter((vehicle) => vehicle.value !== ALL_VEHICLES_VALUE)
-        : selectedVehicles
-    )
+    const vehicleIds = selectedVehicles
       .map((vehicle) => String(vehicle.value))
       .filter(Boolean);
 
-    const alertValues = (
-      selectedAlerts.some((alert) => alert.value === ALL_ALERTS_VALUE)
-        ? ALERT_OPTIONS.filter((alert) => alert.value !== ALL_ALERTS_VALUE)
-        : selectedAlerts
-    )
+    const alertValues = selectedAlerts
       .map((alert) => String(alert.value).trim())
       .filter((alertValue): alertValue is (typeof BACKEND_ALERT_KEYS)[number] =>
         BACKEND_ALERT_KEYS.includes(
@@ -623,9 +503,7 @@ const AlarmReportPage = () => {
   const uniqueDevices = new Set(data.map((row) => row.deviceNo).filter(Boolean))
     .size;
   const accountNameById = new Map(
-    accounts
-      .filter((account) => account.value !== ALL_ACCOUNTS_VALUE)
-      .map((account) => [Number(account.value), account.label]),
+    accounts.map((account) => [Number(account.value), account.label]),
   );
 
   const filteredData = data.filter((row) => {
