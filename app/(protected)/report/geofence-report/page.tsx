@@ -561,7 +561,7 @@ const GeofenceReportPage = () => {
               onChange={handleAccountChange}
               placeholder="Select Account"
               searchPlaceholder="Search account..."
-              name="All accounts"
+              name="All Accounts"
             />
           </div>
           <div>

@@ -221,7 +221,6 @@ const MovementReportPage = () => {
         const response = await getAllAccounts();
         if (response?.statusCode === 200 && Array.isArray(response?.data)) {
           const accountOptions = [
-            ALL_ACCOUNTS_OPTION,
             ...response.data.map(
             (account: { id?: number | string; value?: string; label?: string }) => ({
               label: toOptionLabel(account),
@@ -594,6 +593,7 @@ const MovementReportPage = () => {
             onChange={handleAccountChange}
             placeholder="Select Account"
             searchPlaceholder="Search account..."
+            name="All Accounts"
           />
           </div>
           <div>

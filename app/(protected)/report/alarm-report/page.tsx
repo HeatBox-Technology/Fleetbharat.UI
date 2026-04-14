@@ -74,7 +74,6 @@ const BACKEND_ALERT_KEYS = [
 ] as const;
 
 const ALERT_OPTIONS: OptionType[] = [
-  ALL_ALERTS_OPTION,
   ...BACKEND_ALERT_KEYS.map((alertKey) => ({
     label: alertKey,
     value: alertKey,
@@ -292,7 +291,6 @@ const AlarmReportPage = () => {
         const response = await getAllAccounts();
         if (response?.statusCode === 200 && Array.isArray(response?.data)) {
           const accountOptions = [
-            ALL_ACCOUNTS_OPTION,
             ...response.data.map(
               (account: {
                 id?: number | string;
@@ -701,6 +699,7 @@ const AlarmReportPage = () => {
               onChange={handleAccountChange}
               placeholder="Select Account"
               searchPlaceholder="Search account..."
+              name="All Accounts"
             />
           </div>
           <div>
