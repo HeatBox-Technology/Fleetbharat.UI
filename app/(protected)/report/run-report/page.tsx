@@ -242,7 +242,6 @@ const RunReportPage = () => {
         const response = await getAllAccounts();
         if (response?.statusCode === 200 && Array.isArray(response?.data)) {
           const accountOptions = [
-            ALL_ACCOUNTS_OPTION,
             ...response.data.map(
               (account: { id?: number | string; value?: string; label?: string }) => ({
                 label: toOptionLabel(account),
@@ -310,7 +309,7 @@ const RunReportPage = () => {
       });
 
       setVehicles(
-        vehicleOptions.length ? [ALL_VEHICLES_OPTION, ...vehicleOptions] : [],
+        vehicleOptions.length ? [...vehicleOptions] : [],
       );
       setSelectedVehicles((previous) =>
         previous.filter((vehicle) =>
@@ -621,6 +620,7 @@ const RunReportPage = () => {
               onChange={handleAccountChange}
               placeholder="Select Account"
               searchPlaceholder="Search account..."
+              name="All Accounts"
             />
           </div>
           <div>
@@ -635,6 +635,7 @@ const RunReportPage = () => {
               placeholder="Select Vehicle"
               searchPlaceholder="Search vehicle..."
               isDisabled={!selectedAccounts.length}
+              name="All Vehicles"
             />
           </div>
           <div>

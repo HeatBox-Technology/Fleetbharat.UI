@@ -212,7 +212,6 @@ const GeofenceReportPage = () => {
         const response = await getAllAccounts();
         if (response?.statusCode === 200 && Array.isArray(response?.data)) {
           const accountOptions = [
-            ALL_ACCOUNTS_OPTION,
             ...response.data.map(
               (account: { id?: number | string; value?: string; label?: string }) => ({
                 label: toOptionLabel(account),
@@ -280,7 +279,7 @@ const GeofenceReportPage = () => {
       });
 
       setVehicles(
-        vehicleOptions.length ? [ALL_VEHICLES_OPTION, ...vehicleOptions] : [],
+        vehicleOptions.length ? [...vehicleOptions] : [],
       );
       setSelectedVehicles((previous) =>
         previous.filter((vehicle) =>
@@ -562,6 +561,7 @@ const GeofenceReportPage = () => {
               onChange={handleAccountChange}
               placeholder="Select Account"
               searchPlaceholder="Search account..."
+              name="All accounts"
             />
           </div>
           <div>
@@ -576,6 +576,7 @@ const GeofenceReportPage = () => {
               placeholder="Select Vehicle"
               searchPlaceholder="Search vehicle..."
               isDisabled={!selectedAccounts.length}
+              name="All Vehicles"
             />
           </div>
           <div>

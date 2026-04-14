@@ -364,7 +364,7 @@ const AlarmReportPage = () => {
       });
 
       setVehicles(
-        vehicleOptions.length ? [ALL_VEHICLES_OPTION, ...vehicleOptions] : [],
+        vehicleOptions.length ? [...vehicleOptions] : [],
       );
       setSelectedVehicles((previous) =>
         previous.filter((vehicle) =>
@@ -464,7 +464,7 @@ const AlarmReportPage = () => {
     );
 
     if (!hadAllSelected && hasAllSelected) {
-      setSelectedAlerts([ALL_ALERTS_OPTION, ...realAlerts]);
+      setSelectedAlerts([...realAlerts]);
       return;
     }
 
@@ -481,7 +481,7 @@ const AlarmReportPage = () => {
       nextAlertsWithoutAll.length === realAlerts.length &&
       realAlerts.length > 0
     ) {
-      setSelectedAlerts([ALL_ALERTS_OPTION, ...realAlerts]);
+      setSelectedAlerts([...realAlerts]);
       return;
     }
 
@@ -715,6 +715,7 @@ const AlarmReportPage = () => {
               placeholder="Select Vehicle"
               searchPlaceholder="Search vehicle..."
               isDisabled={!selectedAccounts.length}
+              name="All Vehicles"
             />
           </div>
           <div>
@@ -728,6 +729,7 @@ const AlarmReportPage = () => {
               onChange={handleAlertChange}
               placeholder="Select Alert"
               searchPlaceholder="Search alert..."
+              name="All Alerts"
             />
           </div>
           <div>

@@ -17,6 +17,7 @@ interface MultiSelectProps {
   placeholder?: string;
   searchPlaceholder?: string;
   isDisabled?: boolean;
+  name?:string
 }
 
 const hexToRgba = (hex: string, alpha: number) => {
@@ -38,6 +39,7 @@ const MultiSelect = ({
   placeholder = "Select options",
   searchPlaceholder = "Search...",
   isDisabled = false,
+  name="Select All"
 }: MultiSelectProps) => {
   const { selectedColor } = useColor();
   const { isDark } = useTheme();
@@ -203,7 +205,7 @@ const MultiSelect = ({
                 style={{ accentColor: primaryColor }}
               />
               <span style={{ color: textColor, fontWeight: 600 }}>
-                (Select All - {options.length} options)
+               {name} - {options.length} options
               </span>
             </label>
 

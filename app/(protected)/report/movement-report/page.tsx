@@ -286,7 +286,7 @@ const MovementReportPage = () => {
       });
 
       setVehicles(
-        vehicleOptions.length ? [ALL_VEHICLES_OPTION, ...vehicleOptions] : [],
+        vehicleOptions.length ? [...vehicleOptions] : [],
       );
       setSelectedVehicles((previous) =>
         previous.filter((vehicle) =>
@@ -608,6 +608,7 @@ const MovementReportPage = () => {
             placeholder="Select Vehicle"
             searchPlaceholder="Search vehicle..."
             isDisabled={!selectedAccounts.length}
+            name="All Vehicles"
           />
           </div>
           <div>
