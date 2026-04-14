@@ -36,6 +36,7 @@ const AddEditDriver: React.FC = () => {
   // Form fields
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [countryCode, setCountryCode] = useState("+91");
   const [mobile, setMobile] = useState("");
   const [licenceNo, setLicenceNo] = useState("");
   const [licenceExpiry, setLicenceExpiry] = useState("");
@@ -53,6 +54,49 @@ const AddEditDriver: React.FC = () => {
     value: account.id,
     label: account.value,
   }));
+
+  const countryCodeOptions = [
+    { value: "+91", label: "+91 (India)" },
+    { value: "+1", label: "+1 (USA/Canada)" },
+    { value: "+44", label: "+44 (UK)" },
+    { value: "+971", label: "+971 (UAE)" },
+    { value: "+61", label: "+61 (Australia)" },
+    { value: "+65", label: "+65 (Singapore)" },
+  ];
+
+  const bloodGroupOptions = [
+    { value: "A+", label: "A+" },
+    { value: "A-", label: "A-" },
+    { value: "B+", label: "B+" },
+    { value: "B-", label: "B-" },
+    { value: "O+", label: "O+" },
+    { value: "O-", label: "O-" },
+    { value: "AB+", label: "AB+" },
+    { value: "AB-", label: "AB-" },
+  ];
+
+  const splitPhoneNumber = (rawPhone?: string) => {
+    const value = (rawPhone || "").trim();
+    if (!value) {
+      return { countryCode: "+91", phone: "" };
+    }
+
+    const matchedCode = countryCodeOptions.find((item) =>
+      value.startsWith(item.value),
+    );
+
+    if (matchedCode) {
+      return {
+        countryCode: matchedCode.value,
+        phone: value.slice(matchedCode.value.length).replace(/\D/g, ""),
+      };
+    }
+
+    return {
+      countryCode: "+91",
+      phone: value.replace(/\D/g, ""),
+    };
+  };
 
   const getLocalStorageAccountId = () => {
     if (typeof window === "undefined") return 0;
@@ -116,7 +160,9 @@ const AddEditDriver: React.FC = () => {
         setDriverCode(driver.driverCode || "");
         setFirstName(driver.firstName || first);
         setLastName(driver.lastName || rest.join(" "));
-        setMobile(driver.mobile || "");
+        const parsedPhone = splitPhoneNumber(driver.mobile || "");
+        setCountryCode(parsedPhone.countryCode);
+        setMobile(parsedPhone.phone);
         setLicenceNo(driver.licenceNo || driver.licenseNumber || "");
         setLicenceExpiry(
           driver.licenceExpiry || driver.licenseExpiry
@@ -146,7 +192,7 @@ const AddEditDriver: React.FC = () => {
       toast.error(t("validation.firstNameRequired"));
       return;
     }
-    if (!mobile.trim()) {
+    if (!countryCode.trim() || !mobile.trim()) {
       toast.error(t("validation.mobileRequired"));
       return;
     }
@@ -163,6 +209,7 @@ const AddEditDriver: React.FC = () => {
       return;
     }
 
+    const normalizedMobile = `${countryCode}${mobile.replace(/\D/g, "")}`;
     const accountIdNumber = Number(organisationId);
     const actorAccountId = Number(
       getLocalStorageAccountId() || accountIdNumber,
@@ -170,7 +217,7 @@ const AddEditDriver: React.FC = () => {
     const payload = {
       accountId: accountIdNumber,
       name: `${firstName.trim()} ${lastName.trim()}`.trim(),
-      mobile: mobile.trim(),
+      mobile: normalizedMobile,
       licenseNumber: licenceNo.trim(),
       licenseExpiry: licenceExpiry
         ? new Date(`${licenceExpiry}T00:00:00.000Z`).toISOString()
@@ -361,18 +408,39 @@ const AddEditDriver: React.FC = () => {
                   <label className="block text-sm font-semibold text-foreground mb-2">
                     {t("fields.mobile")} <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="tel"
-                    placeholder={t("fields.mobilePlaceholder")}
-                    value={mobile}
-                    onChange={(e) => setMobile(e.target.value)}
-                    disabled={loading}
-                    className={inputClass}
-                    onFocus={(e) =>
-                      (e.target.style.borderColor = selectedColor)
-                    }
-                    onBlur={(e) => (e.target.style.borderColor = "")}
-                  />
+                  <div className="flex min-w-0 gap-2">
+                    <div className="w-40 shrink-0 sm:w-48">
+                      <SearchableDropdown
+                        options={countryCodeOptions}
+                        value={
+                          countryCodeOptions.find(
+                            (option) => option.value === countryCode,
+                          ) || null
+                        }
+                        onChange={(option) =>
+                          setCountryCode(option?.value as string || "+91")
+                        }
+                        placeholder={t("fields.countryCode")}
+                        isDisabled={loading}
+                        isDark={isDark}
+                        noOptionsMessage={t("fields.noCountryCode")}
+                      />
+                    </div>
+                    <input
+                      type="tel"
+                      placeholder={t("fields.mobilePlaceholder")}
+                      value={mobile}
+                      onChange={(e) =>
+                        setMobile(e.target.value.replace(/\D/g, ""))
+                      }
+                      disabled={loading}
+                      className={inputClass}
+                      onFocus={(e) =>
+                        (e.target.style.borderColor = selectedColor)
+                      }
+                      onBlur={(e) => (e.target.style.borderColor = "")}
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-foreground mb-2">
@@ -394,7 +462,7 @@ const AddEditDriver: React.FC = () => {
               </div>
 
               {/* Licence No, Licence Expiry & Blood Group */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
                 <div>
                   <label className="block text-sm font-semibold text-foreground mb-2">
                     {t("fields.licenceNo")}{" "}
@@ -437,17 +505,21 @@ const AddEditDriver: React.FC = () => {
                   <label className="block text-sm font-semibold text-foreground mb-2">
                     {t("fields.bloodGroup")}
                   </label>
-                  <input
-                    type="text"
-                    placeholder={t("fields.bloodGroupPlaceholder")}
-                    value={bloodGroup}
-                    onChange={(e) => setBloodGroup(e.target.value)}
-                    disabled={loading}
-                    className={inputClass}
-                    onFocus={(e) =>
-                      (e.target.style.borderColor = selectedColor)
+                  <SearchableDropdown
+                    options={bloodGroupOptions}
+                    value={
+                      bloodGroupOptions.find(
+                        (option) => option.value === bloodGroup,
+                      ) || null
                     }
-                    onBlur={(e) => (e.target.style.borderColor = "")}
+                    onChange={(option) =>
+                      setBloodGroup(option?.value as string || "")
+                    }
+                    placeholder={t("fields.bloodGroupPlaceholder")}
+                    isDisabled={loading}
+                    isDark={isDark}
+                    isClearable={true}
+                    noOptionsMessage={t("fields.noBloodGroup")}
                   />
                 </div>
               </div>

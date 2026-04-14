@@ -63,15 +63,18 @@
           "firstNamePlaceholder": "e.g. Vikram",
           "lastName": "Last Name",
           "lastNamePlaceholder": "e.g. Rathore",
-          "mobile": "Mobile (E.164)",
-          "mobilePlaceholder": "+00 0000000000",
+          "mobile": "Mobile Number",
+          "mobilePlaceholder": "1234567890",
+          "countryCode": "Country Code",
+          "noCountryCode": "No country code found",
           "emergencyContact": "Emergency Contact",
           "emergencyPlaceholder": "Emergency mobile number",
           "licenceNo": "Licence No.",
           "licenceNoPlaceholder": "e.g. DL-90021-X",
           "licenceExpiry": "Licence Expiry",
           "bloodGroup": "Blood Group",
-          "bloodGroupPlaceholder": "e.g. O+"
+          "bloodGroupPlaceholder": "e.g. O+",
+          "noBloodGroup": "No blood group found"
         },
         "status": {
           "title": "Driver Status",
