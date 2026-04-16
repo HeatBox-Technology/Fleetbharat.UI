@@ -167,21 +167,34 @@ const buildTripPlanRequestBody = (payload = {}) => {
   const routingModel = normalizeRoutingModel(payload?.routingModel);
   const frequency = normalizeFrequency(payload?.frequency);
 
-  // Updated route details mapping with leadTime and eta (rta)
+  const secondaryDevice = Array.isArray(payload?.secondaryDevice)
+    ? payload.secondaryDevice
+        .map((value) => String(value || ""))
+        .filter(Boolean)
+    : typeof payload?.secondaryDevice === "string" && payload.secondaryDevice
+      ? [payload.secondaryDevice]
+      : [];
+
   const routeDetails = Array.isArray(payload?.routeDetails)
     ? payload.routeDetails.map((item, index) => ({
-        fromGeoId: Number(item?.fromGeoId || 0),
-        fromGeoName: item?.fromGeoName ?? null,
-        fromLatitude: item?.fromLatitude ?? null,
-        fromLongitude: item?.fromLongitude ?? null,
-        toGeoId: Number(item?.toGeoId || 0),
-        toGeoName: item?.toGeoName ?? null,
-        toLatitude: item?.toLatitude ?? null,
-        toLongitude: item?.toLongitude ?? null,
+        geofenceId: Number(item?.geofenceId || 0),
+        geofenceType: String(item?.geofenceType || ""),
+        pointType: String(item?.pointType || ""),
+        geofenceAddress: String(item?.geofenceAddress || ""),
+        geofenceCenterLatitude: String(item?.geofenceCenterLatitude || ""),
+        geofenceCenterLongitude: String(item?.geofenceCenterLongitude || ""),
+        geofenceRadius: String(item?.geofenceRadius || ""),
+        plannedEntryTime: String(item?.plannedEntryTime || ""),
+        plannedExitTime: String(item?.plannedExitTime || ""),
         sequence: Number(item?.sequence || index + 1),
         distance: String(item?.distance ?? "0"),
-        leadTime: Number(item?.leadTime || 0), // NEW - Maps from node.leadTime
-        rta: Number(item?.rta || 0), // NEW - Maps from node.eta
+        googleSuggestedTime: Number(item?.googleSuggestedTime || 0),
+        geofenceDetails: Array.isArray(item?.geofenceDetails)
+          ? item.geofenceDetails.map((point) => ({
+              latitude: String(point?.latitude ?? ""),
+              longitude: String(point?.longitude ?? ""),
+            }))
+          : [],
       }))
     : [];
 
@@ -197,7 +210,6 @@ const buildTripPlanRequestBody = (payload = {}) => {
     frequency,
     travelDate:
       frequency === "ONE-TIME" ? String(payload?.travelDate || "") : "",
-    etd: String(payload?.etd || ""),
     routingModel,
     routeId: Number(payload?.routeId || 0),
     routePath: String(payload?.routePath || ""),
@@ -208,7 +220,7 @@ const buildTripPlanRequestBody = (payload = {}) => {
     isElockTrip: Boolean(payload?.isElockTrip),
     isGPSTrip: Boolean(payload?.isGPSTrip),
     primaryDevice: String(payload?.primaryDevice || ""),
-    secondaryDevice: String(payload?.secondaryDevice || ""),
+    secondaryDevice,
     vehicleCategory: String(payload?.vehicleCategory || ""),
     consignee: Number(payload?.consignee || 0), // Party account ID
     consignor: Number(payload?.consignor || 0), // Party account ID
@@ -323,9 +335,13 @@ export const getTripPlanById = async (planId, accountId) => {
         tripType,
         tripTypeLabel: toCycleLabel(tripType),
         travelDate: item?.travelDate || null,
-        etd: String(item?.etd || ""),
-        leadTime: Number(item?.leadTime || 0),
-        eta: Number(item?.eta || 0),
+        secondaryDevice: Array.isArray(item?.secondaryDevice)
+          ? item.secondaryDevice
+              .map((value) => String(value || ""))
+              .filter(Boolean)
+          : typeof item?.secondaryDevice === "string" && item.secondaryDevice
+            ? [String(item.secondaryDevice)]
+            : [],
         routeId: Number(item?.routeId || 0),
         startGeoId: Number(item?.startGeoId || 0),
         endGeoId: Number(item?.endGeoId || 0),
@@ -335,18 +351,28 @@ export const getTripPlanById = async (planId, accountId) => {
         consignee: Number(item?.consignee || 0), // NEW
         routeDetails: Array.isArray(item?.routeDetails)
           ? item.routeDetails.map((detail, index) => ({
-              fromGeoId: Number(detail?.fromGeoId || 0),
-              fromGeoName: detail?.fromGeoName ?? null,
-              fromLatitude: detail?.fromLatitude ?? null,
-              fromLongitude: detail?.fromLongitude ?? null,
-              toGeoId: Number(detail?.toGeoId || 0),
-              toGeoName: detail?.toGeoName ?? null,
-              toLatitude: detail?.toLatitude ?? null,
-              toLongitude: detail?.toLongitude ?? null,
+              geofenceId: Number(detail?.geofenceId || 0),
+              geofenceType: String(detail?.geofenceType || ""),
+              pointType: String(detail?.pointType || ""),
+              geofenceAddress: String(detail?.geofenceAddress || ""),
+              geofenceCenterLatitude: String(
+                detail?.geofenceCenterLatitude || "",
+              ),
+              geofenceCenterLongitude: String(
+                detail?.geofenceCenterLongitude || "",
+              ),
+              geofenceRadius: String(detail?.geofenceRadius || ""),
+              plannedEntryTime: String(detail?.plannedEntryTime || ""),
+              plannedExitTime: String(detail?.plannedExitTime || ""),
               sequence: Number(detail?.sequence || index + 1),
               distance: String(detail?.distance || "0"),
-              leadTime: Number(detail?.leadTime || 0), // NEW
-              rta: Number(detail?.rta || 0), // NEW (eta)
+              googleSuggestedTime: Number(detail?.googleSuggestedTime || 0),
+              geofenceDetails: Array.isArray(detail?.geofenceDetails)
+                ? detail.geofenceDetails.map((point) => ({
+                    latitude: String(point?.latitude ?? ""),
+                    longitude: String(point?.longitude ?? ""),
+                  }))
+                : [],
             }))
           : [],
       },

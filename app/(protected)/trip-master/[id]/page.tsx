@@ -1,12 +1,6 @@
 "use client";
 
 import {
-  DirectionsRenderer,
-  GoogleMap,
-  Polyline,
-} from "@react-google-maps/api";
-import {
-  AlertCircle,
   ArrowLeft,
   Flag,
   Map as MapIcon,
@@ -17,10 +11,12 @@ import {
   Save,
   Trash2,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import MultiSelect, { type OptionType } from "@/components/MultiSelect";
 import SearchableDropdown, {
   type SearchableOption,
 } from "@/components/SearchableDropdown";
@@ -32,7 +28,6 @@ import {
   getDeviceDropdown,
   getDriverDropdown,
   getGeofenceDropdownByAccount,
-  getTripTypeDropdown,
   getVehicleDropdown,
   getVehicleTypeDropdown,
 } from "@/services/commonServie";
@@ -58,9 +53,25 @@ interface RouteNode {
   address: string;
   latitude: number | null;
   longitude: number | null;
-  leadTime: number;
-  eta: number;
+  plannedEntryTime: string;
+  plannedExitTime: string;
 }
+
+type GeofenceOverlay =
+  | {
+      geoId: number;
+      geometry: "circle";
+      center: google.maps.LatLngLiteral;
+      radiusM: number;
+      paths?: undefined;
+    }
+  | {
+      geoId: number;
+      geometry: "polygon";
+      center: google.maps.LatLngLiteral;
+      radiusM?: undefined;
+      paths: google.maps.LatLngLiteral[];
+    };
 
 interface AccountOption {
   id: number;
@@ -76,6 +87,16 @@ interface DriverMeta {
 interface DriverOption extends SearchableOption {
   meta?: DriverMeta;
 }
+
+interface LegMetric {
+  distanceMetres: number;
+  durationSeconds: number;
+}
+
+const TripPlannerMapPreview = dynamic(
+  () => import("@/components/TripPlannerMapPreview"),
+  { ssr: false },
+);
 
 const WEEK_DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
@@ -199,6 +220,99 @@ const fromApiTravelDate = (value: string): string => {
   return "";
 };
 
+const toApiDateTime = (value: string): string => {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) return "";
+
+  // Backend expects dd/MM/yyyy HH:mm:ss (based on travelDate format).
+  // HTML datetime-local: yyyy-MM-ddTHH:mm or yyyy-MM-ddTHH:mm:ss
+  const localMatch = trimmed.match(
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/,
+  );
+  if (localMatch) {
+    const [, year, month, day, hour, minute, second] = localMatch;
+    return `${day}/${month}/${year} ${hour}:${minute}:${second || "00"}`;
+  }
+
+  // dd/MM/yyyy HH:mm or dd/MM/yyyy HH:mm:ss
+  const ddmmyyyyMatch = trimmed.match(
+    /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?$/,
+  );
+  if (ddmmyyyyMatch) {
+    const [, day, month, year, hour, minute, second] = ddmmyyyyMatch;
+    return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year} ${hour.padStart(2, "0")}:${minute}:${second || "00"}`;
+  }
+
+  return trimmed;
+};
+
+const fromApiDateTimeToLocalInput = (value: string): string => {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) return "";
+
+  // API: dd/MM/yyyy HH:mm:ss -> UI: yyyy-MM-ddTHH:mm
+  const ddmmyyyy = trimmed.match(
+    /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?$/,
+  );
+  if (ddmmyyyy) {
+    const [, day, month, year, hour, minute] = ddmmyyyy;
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${hour.padStart(2, "0")}:${minute}`;
+  }
+
+  // API: yyyy-MM-ddTHH:mm:ss... -> UI: yyyy-MM-ddTHH:mm
+  const iso = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+  if (iso) {
+    const [, year, month, day, hour, minute] = iso;
+    return `${year}-${month}-${day}T${hour}:${minute}`;
+  }
+
+  return "";
+};
+
+const parseComparableDateTime = (value: string): Date | null => {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) return null;
+
+  // UI input: yyyy-MM-ddTHH:mm
+  const local = trimmed.match(
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/,
+  );
+  if (local) {
+    const [, year, month, day, hour, minute, second] = local;
+    const date = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hour),
+      Number(minute),
+      Number(second || "0"),
+      0,
+    );
+    return Number.isFinite(date.getTime()) ? date : null;
+  }
+
+  // API format: dd/MM/yyyy HH:mm:ss
+  const ddmmyyyy = trimmed.match(
+    /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?$/,
+  );
+  if (ddmmyyyy) {
+    const [, day, month, year, hour, minute, second] = ddmmyyyy;
+    const date = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hour),
+      Number(minute),
+      Number(second || "0"),
+      0,
+    );
+    return Number.isFinite(date.getTime()) ? date : null;
+  }
+
+  const date = new Date(trimmed);
+  return Number.isFinite(date.getTime()) ? date : null;
+};
+
 const SectionHeader = ({
   number,
   title,
@@ -249,10 +363,7 @@ export default function TripPlannerPage() {
   const [assignedDriverId, setAssignedDriverId] = useState<number>(0);
   const [assignedDriverName, setAssignedDriverName] = useState("");
   const [assignedDriverPhone, setAssignedDriverPhone] = useState("");
-  const [tripType, setTripType] = useState("");
-  const [tripTypeOptions, setTripTypeOptions] = useState<SearchableOption[]>(
-    [],
-  );
+  const [tripKind, setTripKind] = useState<"ELOCK" | "GPS">("ELOCK");
 
   // States - Routing & Schedule
   const [routingModel, setRoutingModel] = useState<"standard" | "dynamic">(
@@ -269,7 +380,6 @@ export default function TripPlannerPage() {
     "FRI",
   ]);
   const [oneTimeDate, setOneTimeDate] = useState("");
-  const [etd, setEtd] = useState("");
   const [selectedRoute, setSelectedRoute] = useState("");
   const [routeMasterOptions, setRouteMasterOptions] = useState<
     SearchableOption[]
@@ -289,7 +399,7 @@ export default function TripPlannerPage() {
   >([]);
   const [assetOwner, setAssetOwner] = useState("");
   const [primaryDevice, setPrimaryDevice] = useState("");
-  const [secondaryDevice, setSecondaryDevice] = useState("");
+  const [secondaryDevice, setSecondaryDevice] = useState<string[]>([]);
   const [vehicleOptions, setVehicleOptions] = useState<SearchableOption[]>([]);
   const [deviceOptions, setDeviceOptions] = useState<SearchableOption[]>([]);
   const [driverOptions, setDriverOptions] = useState<DriverOption[]>([]);
@@ -303,8 +413,8 @@ export default function TripPlannerPage() {
       address: "Mahipalpur, New Delhi",
       latitude: null,
       longitude: null,
-      leadTime: 0,
-      eta: 0,
+      plannedEntryTime: "",
+      plannedExitTime: "",
     },
     {
       id: "2",
@@ -313,8 +423,8 @@ export default function TripPlannerPage() {
       address: "Hinjewadi Phase 3, Pune",
       latitude: null,
       longitude: null,
-      leadTime: 0,
-      eta: 0,
+      plannedEntryTime: "",
+      plannedExitTime: "",
     },
   ]);
   const [showAutocomplete, setShowAutocomplete] = useState<string | null>(null);
@@ -327,7 +437,12 @@ export default function TripPlannerPage() {
   const [directionsResult, setDirectionsResult] =
     useState<google.maps.DirectionsResult | null>(null);
   const [mapPreviewLoading, setMapPreviewLoading] = useState(false);
-  const [optimizeLoading, setOptimizeLoading] = useState(false);
+  const [geofenceOverlays, setGeofenceOverlays] = useState<GeofenceOverlay[]>(
+    [],
+  );
+  const [standardPolyline, setStandardPolyline] = useState<
+    google.maps.LatLngLiteral[]
+  >([]);
 
   // States - Pickup & Delivery
   const [consignor, setConsignor] = useState("");
@@ -362,8 +477,6 @@ export default function TripPlannerPage() {
     ) || null;
   const selectedDriverOption =
     driverOptions.find((opt) => Number(opt.value) === assignedDriverId) || null;
-  const selectedTripTypeOption =
-    tripTypeOptions.find((opt) => String(opt.value) === tripType) || null;
   const selectedVehicleOption =
     vehicleOptions.find((opt) => String(opt.value) === selectedVehicle) || null;
   const selectedVehicleCategoryOption =
@@ -372,8 +485,23 @@ export default function TripPlannerPage() {
     ) || null;
   const selectedPrimaryDeviceOption =
     deviceOptions.find((opt) => String(opt.value) === primaryDevice) || null;
-  const selectedSecondaryDeviceOption =
-    deviceOptions.find((opt) => String(opt.value) === secondaryDevice) || null;
+  const secondaryDeviceMultiOptions: OptionType[] = useMemo(
+    () =>
+      deviceOptions
+        .map((opt) => ({
+          label: String(opt.label || ""),
+          value: String(opt.value ?? ""),
+        }))
+        .filter((opt) => opt.value && opt.label),
+    [deviceOptions],
+  );
+  const secondaryDeviceMultiValue: OptionType[] = useMemo(
+    () =>
+      secondaryDeviceMultiOptions.filter((opt) =>
+        secondaryDevice.includes(String(opt.value)),
+      ),
+    [secondaryDevice, secondaryDeviceMultiOptions],
+  );
   const selectedRouteOption =
     routeMasterOptions.find((opt) => String(opt.value) === selectedRoute) ||
     null;
@@ -391,8 +519,8 @@ export default function TripPlannerPage() {
       address: "",
       latitude: null,
       longitude: null,
-      leadTime: 0,
-      eta: 0,
+      plannedEntryTime: "",
+      plannedExitTime: "",
     };
     const newNodes = [...nodes];
     newNodes.splice(index + 1, 0, newNode);
@@ -489,8 +617,6 @@ export default function TripPlannerPage() {
   const _isFormValid = !!(
     selectedAccountId > 0 &&
     assignedDriverId > 0 &&
-    tripType &&
-    etd &&
     consignor &&
     consignee &&
     (vehicleMode === "master" ? selectedVehicle : adhocRegNo) &&
@@ -498,6 +624,7 @@ export default function TripPlannerPage() {
     (frequency === "recurring" ? selectedDays.length > 0 : oneTimeDate)
   );
 
+  const geofenceShapeCacheRef = useRef<Map<number, unknown>>(new Map());
   const resolveGeofenceLatLng = useCallback(
     async (geoId: number): Promise<google.maps.LatLngLiteral | null> => {
       if (geoId <= 0) return null;
@@ -507,17 +634,45 @@ export default function TripPlannerPage() {
       const res = await getGeofenceById(geoId);
       if (!res?.success) return null;
       const zone = res?.data?.zone || res?.data?.geofence || res?.data;
+      geofenceShapeCacheRef.current.set(geoId, zone);
       const coordinates = Array.isArray(zone?.coordinates)
         ? zone.coordinates
         : [];
-      const first = coordinates[0];
-      const lat = Number(first?.latitude ?? 0);
-      const lng = Number(first?.longitude ?? 0);
-      if (!Number.isFinite(lat) || !Number.isFinite(lng) || !lat || !lng) {
-        return null;
-      }
+      if (coordinates.length === 0) return null;
 
-      const point = { lat, lng };
+      const geometryType = String(zone?.geometryType || "").toUpperCase();
+      let point: google.maps.LatLngLiteral | null = null;
+
+      if (geometryType === "POLYGON" && coordinates.length > 1) {
+        const lat =
+          coordinates.reduce((sum: number, point: unknown) => {
+            const record =
+              point && typeof point === "object"
+                ? (point as Record<string, unknown>)
+                : {};
+            return sum + Number(record?.latitude ?? 0);
+          }, 0) / coordinates.length;
+        const lng =
+          coordinates.reduce((sum: number, point: unknown) => {
+            const record =
+              point && typeof point === "object"
+                ? (point as Record<string, unknown>)
+                : {};
+            return sum + Number(record?.longitude ?? 0);
+          }, 0) / coordinates.length;
+        if (Number.isFinite(lat) && Number.isFinite(lng)) {
+          point = { lat, lng };
+        }
+      } else {
+        const first = coordinates[0];
+        const lat = Number(first?.latitude ?? 0);
+        const lng = Number(first?.longitude ?? 0);
+        if (Number.isFinite(lat) && Number.isFinite(lng) && lat && lng) {
+          point = { lat, lng };
+        }
+      }
+      if (!point) return null;
+
       geofenceLatLngCacheRef.current.set(geoId, point);
       return point;
     },
@@ -613,27 +768,7 @@ export default function TripPlannerPage() {
   useEffect(() => {
     const loadDropdowns = async () => {
       try {
-        const [tripTypesRes, vehicleTypesRes] = await Promise.all([
-          getTripTypeDropdown(),
-          getVehicleTypeDropdown(),
-        ]);
-
-        const tripTypesRaw = Array.isArray(tripTypesRes?.data)
-          ? tripTypesRes.data
-          : [];
-        setTripTypeOptions(
-          tripTypesRaw
-            .map((item: unknown) => {
-              const record =
-                item && typeof item === "object"
-                  ? (item as Record<string, unknown>)
-                  : {};
-              const label = String(record?.value ?? "");
-              return label ? { value: label, label } : null;
-            })
-            .filter(Boolean) as SearchableOption[],
-        );
-
+        const vehicleTypesRes = await getVehicleTypeDropdown();
         const vehicleTypesRaw = Array.isArray(vehicleTypesRes?.data)
           ? vehicleTypesRes.data
           : [];
@@ -652,8 +787,7 @@ export default function TripPlannerPage() {
             .filter(Boolean) as SearchableOption[],
         );
       } catch (error) {
-        console.error("Error fetching trip/vehicle dropdowns:", error);
-        setTripTypeOptions([]);
+        console.error("Error fetching vehicle dropdowns:", error);
         setVehicleCategoryOptions([]);
       }
     };
@@ -819,16 +953,10 @@ export default function TripPlannerPage() {
   useEffect(() => {
     if (!isLoaded) return;
     if (nodes.length < 2) return;
-    if (routingModel === "standard" && Number(selectedRoute || 0) > 0) return;
+    if (routingModel !== "dynamic") return;
 
     calculatePreviewRoute();
-  }, [
-    calculatePreviewRoute,
-    isLoaded,
-    nodes.length,
-    routingModel,
-    selectedRoute,
-  ]);
+  }, [calculatePreviewRoute, isLoaded, nodes.length, routingModel]);
 
   useEffect(() => {
     if (!mapRef.current || !directionsResult?.routes?.[0]?.bounds) return;
@@ -843,6 +971,114 @@ export default function TripPlannerPage() {
     }
     mapRef.current.fitBounds(bounds);
   }, [predefinedRoutePolyline]);
+
+  useEffect(() => {
+    if (!isLoaded || !window?.google?.maps) return;
+    if (routingModel !== "standard") {
+      setGeofenceOverlays([]);
+      setStandardPolyline([]);
+      return;
+    }
+
+    // When a predefined route is selected we already have an encoded routePath to render.
+    // Building overlays + fetching geofence shapes for every stop becomes expensive and
+    // makes the page feel heavy, so skip this preview work in that case.
+    if (Number(selectedRoute || 0) > 0) {
+      setGeofenceOverlays([]);
+      setStandardPolyline([]);
+      return;
+    }
+
+    let cancelled = false;
+    const buildStandardPreview = async () => {
+      try {
+        const overlays: GeofenceOverlay[] = [];
+        const polyline: google.maps.LatLngLiteral[] = [];
+        const nodeCenterUpdates = new Map<string, google.maps.LatLngLiteral>();
+
+        for (const node of nodes) {
+          const geoId = Number(node.geofence || 0);
+          if (!(geoId > 0)) continue;
+
+          const center = await resolveGeofenceLatLng(geoId);
+          if (!center) continue;
+          polyline.push(center);
+          nodeCenterUpdates.set(node.id, center);
+
+          const zoneRaw = geofenceShapeCacheRef.current.get(geoId);
+          const zone =
+            zoneRaw && typeof zoneRaw === "object"
+              ? (zoneRaw as Record<string, unknown>)
+              : {};
+          const geometryType = String(zone?.geometryType || "").toUpperCase();
+          const coordinates = Array.isArray(zone?.coordinates)
+            ? (zone.coordinates as unknown[])
+            : [];
+
+          if (geometryType === "POLYGON" && coordinates.length >= 3) {
+            const paths = coordinates
+              .map((point: unknown) => {
+                const record =
+                  point && typeof point === "object"
+                    ? (point as Record<string, unknown>)
+                    : {};
+                return {
+                  lat: Number(record?.latitude ?? 0),
+                  lng: Number(record?.longitude ?? 0),
+                };
+              })
+              .filter((p) => Number.isFinite(p.lat) && Number.isFinite(p.lng));
+            overlays.push({ geoId, geometry: "polygon", center, paths });
+          } else {
+            const radiusM = Math.max(
+              1,
+              Number(zone?.radiusM ?? zone?.radius ?? 100),
+            );
+            overlays.push({ geoId, geometry: "circle", center, radiusM });
+          }
+        }
+
+        if (cancelled) return;
+        setGeofenceOverlays(overlays);
+        setStandardPolyline(polyline);
+
+        if (nodeCenterUpdates.size > 0) {
+          setNodes((prev) =>
+            prev.map((n) => {
+              const nextCenter = nodeCenterUpdates.get(n.id);
+              if (!nextCenter) return n;
+              return {
+                ...n,
+                latitude: nextCenter.lat,
+                longitude: nextCenter.lng,
+              };
+            }),
+          );
+        }
+
+        if (mapRef.current && polyline.length >= 2) {
+          const bounds = new window.google.maps.LatLngBounds();
+          for (const point of polyline) bounds.extend(point);
+          for (const overlay of overlays) {
+            if (overlay.geometry === "polygon") {
+              for (const p of overlay.paths) bounds.extend(p);
+            }
+          }
+          mapRef.current.fitBounds(bounds);
+        }
+      } catch (error) {
+        console.error("Standard map preview error:", error);
+        if (cancelled) return;
+        setGeofenceOverlays([]);
+        setStandardPolyline([]);
+      }
+    };
+
+    buildStandardPreview();
+    return () => {
+      cancelled = true;
+    };
+  }, [isLoaded, nodes, resolveGeofenceLatLng, routingModel, selectedRoute]);
 
   useEffect(() => {
     const resolvedRouteId = Number(selectedRoute || 0);
@@ -896,8 +1132,8 @@ export default function TripPlannerPage() {
             address: resolveLabel(id),
             latitude: null,
             longitude: null,
-            leadTime: 0,
-            eta: 0,
+            plannedEntryTime: "",
+            plannedExitTime: "",
           })),
         );
       } catch (error) {
@@ -926,10 +1162,12 @@ export default function TripPlannerPage() {
         setAssignedDriverPhone(String(data?.driverPhone || ""));
         setConsignor(String(data?.consignor || ""));
         setConsignee(String(data?.consignee || ""));
-        setTripType(
-          String(data?.routingModel || "").toUpperCase() === "DYNAMIC"
-            ? "Dynamic"
-            : "Fix",
+        setTripKind(
+          data?.isElockTrip === true
+            ? "ELOCK"
+            : data?.isGPSTrip === true
+              ? "GPS"
+              : "GPS",
         );
         setVehicleMode(
           String(data?.fleetSource || "").toUpperCase() === "EXTERNAL"
@@ -940,7 +1178,13 @@ export default function TripPlannerPage() {
         setAdhocRegNo(String(data?.vehicleNumber || data?.vehicleNo || ""));
         setVehicleCategory(String(data?.vehicleCategory || ""));
         setPrimaryDevice(String(data?.primaryDevice || ""));
-        setSecondaryDevice(String(data?.secondaryDevice || ""));
+        setSecondaryDevice(
+          Array.isArray(data?.secondaryDevice)
+            ? (data.secondaryDevice as string[])
+            : typeof data?.secondaryDevice === "string" && data.secondaryDevice
+              ? [String(data.secondaryDevice)]
+              : [],
+        );
 
         const frequencyRaw = String(data?.frequency || "").toUpperCase();
         const resolvedFrequency =
@@ -956,7 +1200,6 @@ export default function TripPlannerPage() {
 
         setFrequency(resolvedFrequency);
         setOneTimeDate(fromApiTravelDate(String(data?.travelDate || "")));
-        setEtd(String(data?.etd || ""));
         setRoutingModel(
           String(data?.routingModel || "").toUpperCase() === "DYNAMIC"
             ? "dynamic"
@@ -972,53 +1215,49 @@ export default function TripPlannerPage() {
           ? data.routeDetails
           : [];
         if (details.length > 0) {
-          const mapped: RouteNode[] = [];
+          const mapped: RouteNode[] = details
+            .map((detail: unknown, index: number) => {
+              const record =
+                detail && typeof detail === "object"
+                  ? (detail as Record<string, unknown>)
+                  : {};
 
-          details.forEach((detail: unknown, index: number) => {
-            const record =
-              detail && typeof detail === "object"
-                ? (detail as Record<string, unknown>)
-                : {};
+              const pointTypeRaw = String(
+                record?.pointType || "",
+              ).toUpperCase();
+              const type: NodeType =
+                pointTypeRaw === "START" ||
+                pointTypeRaw === "END" ||
+                pointTypeRaw === "VIA"
+                  ? (pointTypeRaw as NodeType)
+                  : index === 0
+                    ? "START"
+                    : index === details.length - 1
+                      ? "END"
+                      : "VIA";
 
-            if (index === 0) {
-              mapped.push({
-                id: "1",
-                type: "START",
-                geofence: String(record?.fromGeoId || ""),
-                address: String(record?.fromGeoName || ""),
-                latitude:
-                  record?.fromLatitude !== null &&
-                  record?.fromLatitude !== undefined
-                    ? Number(record?.fromLatitude)
-                    : null,
-                longitude:
-                  record?.fromLongitude !== null &&
-                  record?.fromLongitude !== undefined
-                    ? Number(record?.fromLongitude)
-                    : null,
-                leadTime: 0,
-                eta: 0,
-              });
-            }
-
-            mapped.push({
-              id: Math.random().toString(36).slice(2, 9),
-              type: index === details.length - 1 ? "END" : "VIA",
-              geofence: String(record?.toGeoId || ""),
-              address: String(record?.toGeoName || ""),
-              latitude:
-                record?.toLatitude !== null && record?.toLatitude !== undefined
-                  ? Number(record?.toLatitude)
+              return {
+                id: index === 0 ? "1" : Math.random().toString(36).slice(2, 9),
+                type,
+                geofence: String(record?.geofenceId || ""),
+                address: String(record?.geofenceAddress || ""),
+                latitude: record?.geofenceCenterLatitude
+                  ? Number(record.geofenceCenterLatitude)
                   : null,
-              longitude:
-                record?.toLongitude !== null &&
-                record?.toLongitude !== undefined
-                  ? Number(record?.toLongitude)
+                longitude: record?.geofenceCenterLongitude
+                  ? Number(record.geofenceCenterLongitude)
                   : null,
-              leadTime: Number(record?.leadTime || 0),
-              eta: Number(record?.rta || 0),
-            });
-          });
+                plannedEntryTime: fromApiDateTimeToLocalInput(
+                  String(record?.plannedEntryTime || ""),
+                ),
+                plannedExitTime: fromApiDateTimeToLocalInput(
+                  String(record?.plannedExitTime || ""),
+                ),
+              } satisfies RouteNode;
+            })
+            .filter(
+              (n) => String(n.geofence || "").trim() || n.latitude !== null,
+            );
 
           setNodes((prev) => (mapped.length >= 2 ? mapped : prev));
         }
@@ -1030,48 +1269,104 @@ export default function TripPlannerPage() {
     load();
   }, [planId, selectedAccountId]);
 
-  const buildRouteDetailsPayload = () => {
-    if (nodes.length < 2) return [];
+  const extractLegMetrics = (
+    response: google.maps.DirectionsResult | null,
+  ): LegMetric[] => {
+    const legs = response?.routes?.[0]?.legs;
+    if (!Array.isArray(legs) || legs.length === 0) return [];
 
-    return nodes.slice(0, -1).map((fromNode, index) => {
-      const toNode = nodes[index + 1];
+    return legs.map((leg) => ({
+      distanceMetres: Number(leg?.distance?.value || 0),
+      durationSeconds: Number(leg?.duration?.value || 0),
+    }));
+  };
 
-      const fromGeoId =
-        routingModel === "standard" ? Number(fromNode.geofence || 0) : 0;
-      const toGeoId =
-        routingModel === "standard" ? Number(toNode.geofence || 0) : 0;
+  const extractNodeLatLngFromDirections = (
+    response: google.maps.DirectionsResult | null,
+    expectedStops: number,
+  ): (google.maps.LatLngLiteral | null)[] => {
+    const legs = response?.routes?.[0]?.legs;
+    if (!Array.isArray(legs) || legs.length === 0) return [];
+
+    const coords: (google.maps.LatLngLiteral | null)[] = [];
+    const start = legs[0]?.start_location;
+    coords[0] = start ? { lat: start.lat(), lng: start.lng() } : null;
+
+    for (let index = 1; index < expectedStops; index += 1) {
+      const end = legs[index - 1]?.end_location;
+      coords[index] = end ? { lat: end.lat(), lng: end.lng() } : null;
+    }
+
+    return coords;
+  };
+
+  const buildRouteDetailsPayload = (
+    routeNodes: RouteNode[],
+    legMetrics: LegMetric[] = [],
+  ) => {
+    return routeNodes.map((node, index) => {
+      const geoId =
+        routingModel === "standard" ? Number(node.geofence || 0) : 0;
+      const zoneRaw =
+        geoId > 0 ? geofenceShapeCacheRef.current.get(geoId) : null;
+      const zone =
+        zoneRaw && typeof zoneRaw === "object"
+          ? (zoneRaw as Record<string, unknown>)
+          : {};
+      const geometryType = String(zone?.geometryType || "").toUpperCase();
+      const geometry = geometryType === "POLYGON" ? "polygon" : "circle";
+      const coordinates = Array.isArray(zone?.coordinates)
+        ? (zone.coordinates as unknown[])
+        : [];
+      const radiusM = Number(zone?.radiusM ?? zone?.radius ?? 0);
+
+      const geofenceDetails =
+        routingModel === "standard" && coordinates.length > 0
+          ? coordinates.map((point: unknown) => {
+              const record =
+                point && typeof point === "object"
+                  ? (point as Record<string, unknown>)
+                  : {};
+              return {
+                latitude: String(record?.latitude ?? ""),
+                longitude: String(record?.longitude ?? ""),
+              };
+            })
+          : typeof node.latitude === "number" &&
+              typeof node.longitude === "number"
+            ? [
+                {
+                  latitude: String(node.latitude),
+                  longitude: String(node.longitude),
+                },
+              ]
+            : [];
+
+      const metrics =
+        index === 0
+          ? { distanceMetres: 0, durationSeconds: 0 }
+          : legMetrics[index - 1] || { distanceMetres: 0, durationSeconds: 0 };
 
       return {
-        fromGeoId,
-        fromGeoName:
-          routingModel === "dynamic"
-            ? String(fromNode.address || fromNode.geofence || "")
-            : null,
-        fromLatitude:
-          routingModel === "dynamic" && typeof fromNode.latitude === "number"
-            ? String(fromNode.latitude)
-            : null,
-        fromLongitude:
-          routingModel === "dynamic" && typeof fromNode.longitude === "number"
-            ? String(fromNode.longitude)
-            : null,
-        toGeoId,
-        toGeoName:
-          routingModel === "dynamic"
-            ? String(toNode.address || toNode.geofence || "")
-            : null,
-        toLatitude:
-          routingModel === "dynamic" && typeof toNode.latitude === "number"
-            ? String(toNode.latitude)
-            : null,
-        toLongitude:
-          routingModel === "dynamic" && typeof toNode.longitude === "number"
-            ? String(toNode.longitude)
-            : null,
+        geofenceId: geoId,
+        geofenceType:
+          routingModel === "standard" ? geometry.toUpperCase() : "LOCATION",
+        pointType: node.type,
+        geofenceAddress: String(node.address || node.geofence || ""),
+        geofenceCenterLatitude:
+          typeof node.latitude === "number" ? String(node.latitude) : "",
+        geofenceCenterLongitude:
+          typeof node.longitude === "number" ? String(node.longitude) : "",
+        geofenceRadius:
+          routingModel === "standard" && geometry === "circle"
+            ? String(radiusM || "")
+            : "",
+        plannedEntryTime: toApiDateTime(String(node.plannedEntryTime || "")),
+        plannedExitTime: toApiDateTime(String(node.plannedExitTime || "")),
         sequence: index + 1,
-        distance: "0",
-        leadTime: Number(toNode.leadTime || 0),
-        rta: Number(toNode.eta || 0),
+        distance: String(metrics.distanceMetres || 0),
+        googleSuggestedTime: Number(metrics.durationSeconds || 0),
+        geofenceDetails,
       };
     });
   };
@@ -1080,8 +1375,6 @@ export default function TripPlannerPage() {
     const missing: string[] = [];
     if (!(selectedAccountId > 0)) missing.push("Account");
     if (!(assignedDriverId > 0)) missing.push("Driver");
-    if (!String(tripType || "").trim()) missing.push("Trip Type");
-    if (!String(etd || "").trim()) missing.push("ETD");
     if (!String(consignor || "").trim()) missing.push("Consignor");
     if (!String(consignee || "").trim()) missing.push("Consignee");
 
@@ -1099,12 +1392,8 @@ export default function TripPlannerPage() {
       if (!String(oneTimeDate || "").trim()) missing.push("Travel Date");
     }
 
-    const normalizedTripType = String(tripType || "").toLowerCase();
-    const isElockTrip =
-      normalizedTripType.includes("e-lock") ||
-      normalizedTripType.includes("elock") ||
-      normalizedTripType.includes("lock");
-    const isGPSTrip = normalizedTripType.includes("gps");
+    const isElockTrip = tripKind === "ELOCK";
+    const isGPSTrip = tripKind === "GPS";
     if (isElockTrip && !String(primaryDevice || "").trim()) {
       missing.push("Primary Device");
     }
@@ -1117,9 +1406,119 @@ export default function TripPlannerPage() {
       return;
     }
 
+    const timeIssues: string[] = [];
+    nodes.forEach((node, idx) => {
+      const label =
+        node.type === "START"
+          ? "Start"
+          : node.type === "END"
+            ? "End"
+            : `Stop ${idx}`;
+      const entry = String(node.plannedEntryTime || "").trim();
+      const exit = String(node.plannedExitTime || "").trim();
+      if ((entry && !exit) || (!entry && exit)) {
+        timeIssues.push(`${label}: planned entry and exit both required`);
+        return;
+      }
+      if (entry && exit) {
+        const entryDate = parseComparableDateTime(entry);
+        const exitDate = parseComparableDateTime(exit);
+        if (entryDate && exitDate && entryDate.getTime() > exitDate.getTime()) {
+          timeIssues.push(
+            `${label}: planned entry must be before planned exit`,
+          );
+        }
+      }
+    });
+    if (timeIssues.length > 0) {
+      toast.error(timeIssues[0]);
+      return;
+    }
+
     const fleetSource = vehicleMode === "master" ? "INTERNAL" : "EXTERNAL";
 
-    const routeDetails = buildRouteDetailsPayload();
+    let legMetrics: LegMetric[] = [];
+    let directionsForMetrics: google.maps.DirectionsResult | null =
+      routingModel === "dynamic" ? directionsResult : null;
+
+    if (routingModel === "dynamic") {
+      if (!directionsForMetrics && isLoaded && window?.google?.maps) {
+        try {
+          const routePoints = await buildRoutePointsForDirections();
+          if (routePoints.length >= 2) {
+            const directionsService =
+              new window.google.maps.DirectionsService();
+            directionsForMetrics = await directionsService.route({
+              origin: routePoints[0],
+              destination: routePoints[routePoints.length - 1],
+              waypoints: routePoints.slice(1, -1).map((location) => ({
+                location,
+                stopover: true,
+              })),
+              travelMode: window.google.maps.TravelMode.DRIVING,
+            });
+          }
+        } catch (error) {
+          console.warn("Unable to compute Google suggested metrics:", error);
+        }
+      }
+
+      legMetrics = extractLegMetrics(directionsForMetrics);
+    } else if (
+      isLoaded &&
+      typeof window !== "undefined" &&
+      window?.google?.maps &&
+      nodes.length >= 2
+    ) {
+      try {
+        const routePoints = await buildRoutePointsForDirections();
+        if (routePoints.length >= 2) {
+          const directionsService = new window.google.maps.DirectionsService();
+          const response = await directionsService.route({
+            origin: routePoints[0],
+            destination: routePoints[routePoints.length - 1],
+            waypoints: routePoints.slice(1, -1).map((location) => ({
+              location,
+              stopover: true,
+            })),
+            travelMode: window.google.maps.TravelMode.DRIVING,
+          });
+          legMetrics = extractLegMetrics(response);
+        }
+      } catch (error) {
+        console.warn("Unable to compute Google suggested metrics:", error);
+      }
+    }
+
+    const nodeCoordsFromDirections =
+      routingModel === "dynamic"
+        ? extractNodeLatLngFromDirections(directionsForMetrics, nodes.length)
+        : [];
+
+    const nodesForPayload =
+      routingModel === "dynamic" && nodeCoordsFromDirections.length > 0
+        ? nodes.map((node, index) => {
+            const coord = nodeCoordsFromDirections[index];
+            if (!coord) return node;
+            return { ...node, latitude: coord.lat, longitude: coord.lng };
+          })
+        : nodes;
+
+    if (
+      routingModel === "dynamic" &&
+      nodesForPayload.some(
+        (node) =>
+          typeof node.latitude !== "number" ||
+          typeof node.longitude !== "number",
+      )
+    ) {
+      toast.error(
+        "Please select location from suggestions (lat/long missing).",
+      );
+      return;
+    }
+
+    const routeDetails = buildRouteDetailsPayload(nodesForPayload, legMetrics);
 
     const startGeoId =
       routingModel === "standard" ? Number(nodes?.[0]?.geofence || 0) : 0;
@@ -1142,7 +1541,6 @@ export default function TripPlannerPage() {
           : String(adhocRegNo || ""),
       frequency: frequency === "one-time" ? "ONE-TIME" : "RECURRING",
       travelDate: frequency === "one-time" ? toApiTravelDate(oneTimeDate) : "",
-      etd,
       routingModel: routingModel === "standard" ? "STANDARD" : "DYNAMIC",
       routeId: routingModel === "standard" ? Number(selectedRoute || 0) : 0,
       routePath: routePathForSave,
@@ -1244,16 +1642,32 @@ export default function TripPlannerPage() {
               </div>
               <div className="p-5 bg-slate-50 rounded-xl border border-slate-100">
                 <Label text="Trip Type" required />
-                <SearchableDropdown
-                  options={tripTypeOptions}
-                  value={selectedTripTypeOption}
-                  onChange={(option) =>
-                    setTripType(String(option?.value || ""))
-                  }
-                  placeholder="Select type..."
-                  isDark={false}
-                  isClearable={false}
-                />
+                <div className="inline-flex rounded-xl p-1 bg-slate-100 w-full">
+                  <button
+                    type="button"
+                    onClick={() => setTripKind("ELOCK")}
+                    className={cn(
+                      "flex-1 px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all",
+                      tripKind === "ELOCK"
+                        ? "bg-indigo-600 text-white shadow-sm"
+                        : "text-slate-600 hover:text-slate-800",
+                    )}
+                  >
+                    E-LOCK
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTripKind("GPS")}
+                    className={cn(
+                      "flex-1 px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all",
+                      tripKind === "GPS"
+                        ? "bg-indigo-600 text-white shadow-sm"
+                        : "text-slate-600 hover:text-slate-800",
+                    )}
+                  >
+                    GPS
+                  </button>
+                </div>
               </div>
             </div>
           </section>
@@ -1386,15 +1800,19 @@ export default function TripPlannerPage() {
 
                 <div>
                   <Label text="Secondary Device (Optional)" />
-                  <SearchableDropdown
-                    options={deviceOptions}
-                    value={selectedSecondaryDeviceOption}
-                    onChange={(option) =>
-                      setSecondaryDevice(String(option?.value || ""))
+                  <MultiSelect
+                    options={secondaryDeviceMultiOptions}
+                    value={secondaryDeviceMultiValue}
+                    onChange={(selected) =>
+                      setSecondaryDevice(
+                        (Array.isArray(selected) ? selected : [])
+                          .map((opt) => String(opt.value))
+                          .filter(Boolean),
+                      )
                     }
                     placeholder="Select Secondary Device..."
-                    isDark={false}
-                    isClearable={false}
+                    searchPlaceholder="Search device..."
+                    name="Select All"
                   />
                 </div>
               </div>
@@ -1509,15 +1927,6 @@ export default function TripPlannerPage() {
                   </div>
                 )}
 
-                <div className="mt-6">
-                  <Label text="ETD" required />
-                  <Input
-                    type="time"
-                    value={etd}
-                    onChange={(e) => setEtd(e.target.value)}
-                  />
-                </div>
-
                 {/* Route Selection */}
                 {routingModel === "standard" && (
                   <div className="mt-6 flex gap-4 items-end">
@@ -1536,6 +1945,7 @@ export default function TripPlannerPage() {
                     </div>
                     <button
                       type="button"
+                      onClick={() => router.push("/route-master/0")}
                       className="px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-slate-600 hover:border-indigo-500 hover:text-indigo-600 transition-colors flex items-center gap-2"
                     >
                       <Plus size={16} />
@@ -1746,31 +2156,27 @@ export default function TripPlannerPage() {
 
                           <div className="mt-6 pt-5 border-t border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                              <Label text="Lead Time (mins)" />
+                              <Label text="Planned Entry Time" />
                               <Input
-                                type="number"
-                                min={0}
-                                value={String(node.leadTime ?? 0)}
+                                type="datetime-local"
+                                value={String(node.plannedEntryTime || "")}
                                 onChange={(e) =>
                                   updateNode(node.id, {
-                                    leadTime: Number(e.target.value || 0),
+                                    plannedEntryTime: e.target.value,
                                   })
                                 }
-                                placeholder="0"
                               />
                             </div>
                             <div>
-                              <Label text="ETA (mins)" />
+                              <Label text="Planned Exit Time" />
                               <Input
-                                type="number"
-                                min={0}
-                                value={String(node.eta ?? 0)}
+                                type="datetime-local"
+                                value={String(node.plannedExitTime || "")}
                                 onChange={(e) =>
                                   updateNode(node.id, {
-                                    eta: Number(e.target.value || 0),
+                                    plannedExitTime: e.target.value,
                                   })
                                 }
-                                placeholder="0"
                               />
                             </div>
                           </div>
@@ -1908,91 +2314,29 @@ export default function TripPlannerPage() {
 
             {/* Live Route Preview */}
             <div className="px-6 py-6 border-r border-slate-200">
-              <div className="relative h-[320px] bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
-                {loadError ? (
-                  <div className="h-full flex items-center justify-center bg-rose-50 text-rose-600 text-sm">
-                    <AlertCircle className="w-4 h-4 mr-2" />
-                    Maps failed to load
-                  </div>
-                ) : !isLoaded ? (
-                  <div className="h-full flex items-center justify-center text-slate-600 text-sm">
-                    Loading map...
-                  </div>
-                ) : directionsResult ? (
-                  <GoogleMap
-                    mapContainerStyle={{ width: "100%", height: "100%" }}
-                    center={DEFAULT_CENTER}
-                    zoom={6}
-                    onLoad={(map) => {
-                      mapRef.current = map;
-                    }}
-                    options={{
-                      mapTypeControl: false,
-                      streetViewControl: false,
-                      fullscreenControl: false,
-                    }}
-                  >
-                    {directionsResult ? (
-                      <DirectionsRenderer
-                        directions={directionsResult}
-                        options={{
-                          suppressMarkers: false,
-                          polylineOptions: {
-                            strokeColor: "#4f46e5",
-                            strokeWeight: 5,
-                            strokeOpacity: 0.9,
-                          },
-                        }}
-                      />
-                    ) : predefinedRoutePolyline.length > 1 ? (
-                      <Polyline
-                        path={predefinedRoutePolyline}
-                        options={{
-                          strokeColor: "#4f46e5",
-                          strokeWeight: 5,
-                          strokeOpacity: 0.9,
-                        }}
-                      />
-                    ) : null}
-                  </GoogleMap>
-                ) : (
-                  <div className="h-full flex items-center justify-center text-slate-600 text-sm">
-                    {mapPreviewLoading
-                      ? "Building route preview..."
-                      : "Select start and end locations to preview route"}
-                  </div>
-                )}
+              <div className="relative">
+                <TripPlannerMapPreview
+                  loadError={loadError}
+                  isLoaded={isLoaded}
+                  center={DEFAULT_CENTER}
+                  routingModel={routingModel}
+                  directionsResult={directionsResult}
+                  geofenceOverlays={geofenceOverlays}
+                  predefinedRoutePolyline={predefinedRoutePolyline}
+                  standardPolyline={standardPolyline}
+                  onMapLoad={(map) => {
+                    mapRef.current = map;
+                  }}
+                />
                 <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur px-3 py-2 rounded-lg border border-white shadow-lg">
                   <div className="flex items-center justify-between gap-2">
                     <div className="text-[11px] font-black text-slate-800 flex items-center gap-2">
                       <span className="inline-block w-2 h-2 rounded-full bg-indigo-600" />
                       {totalDistance} KM • 30 HRS
                     </div>
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        try {
-                          if (
-                            routingModel === "standard" &&
-                            Number(selectedRoute || 0) > 0
-                          ) {
-                            toast.info(
-                              "Pre-defined route selected. Route preview is already available.",
-                            );
-                            return;
-                          }
-                          setOptimizeLoading(true);
-                          await calculatePreviewRoute({
-                            optimizeWaypoints: true,
-                          });
-                        } finally {
-                          setOptimizeLoading(false);
-                        }
-                      }}
-                      className="px-3 py-1 bg-indigo-600 text-white rounded text-[9px] font-black hover:bg-indigo-700 transition-colors whitespace-nowrap"
-                    >
-                      {optimizeLoading ? "Optimizing..." : "Optimize"}
-                    </button>
+                    <div className="text-[9px] font-black text-slate-500 uppercase tracking-wider">
+                      {mapPreviewLoading ? "Building..." : "Live Preview"}
+                    </div>
                   </div>
                 </div>
               </div>
