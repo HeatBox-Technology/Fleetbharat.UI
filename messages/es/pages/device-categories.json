@@ -1,0 +1,83 @@
+{
+  "pages": {
+    "deviceCategories": {
+      "list": {
+        "noReadPermission": "You do not have read access.",
+        "title": "Device Categories",
+        "subtitle": "Manage device category masters.",
+        "breadcrumbs": {
+          "fleet": "Fleet",
+          "current": "Device Categories"
+        },
+        "addButton": "Add Category",
+        "searchPlaceholder": "Search categories...",
+        "table": {
+          "no": "No",
+          "name": "Category Name",
+          "code": "Code",
+          "protocol": "Default Protocol",
+          "status": "Status",
+          "updatedAt": "Last Updated"
+        },
+        "metrics": {
+          "total": "Total Categories",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "delete": {
+          "title": "Delete Device Category",
+          "message": "Delete \"{name}\"?",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        },
+        "toast": {
+          "deleted": "Device category removed."
+        }
+      },
+      "detail": {
+        "noPermission": "You do not have permission to perform this action.",
+        "title": {
+          "edit": "Update Device Category",
+          "create": "Add Device Category"
+        },
+        "subtitle": {
+          "edit": "Update and maintain category metadata for devices",
+          "create": "Create and maintain category metadata for devices"
+        },
+        "breadcrumbs": {
+          "edit": "Update",
+          "create": "Add"
+        },
+        "section": {
+          "title": "Category Details"
+        },
+        "fields": {
+          "name": "Category Name",
+          "namePlaceholder": "Enter category name",
+          "code": "Category Code",
+          "codePlaceholder": "Enter code (e.g. GPS)",
+          "protocol": "Default Protocol",
+          "description": "Description",
+          "descriptionPlaceholder": "Write a short description"
+        },
+        "status": {
+          "title": "Active Status",
+          "subtitle": "Toggle whether this category can be used for new devices."
+        },
+        "buttons": {
+          "saving": "Saving...",
+          "update": "Update Category",
+          "create": "Create",
+          "cancel": "Cancel"
+        },
+        "toast": {
+          "notFound": "Category not found in static data.",
+          "nameRequired": "Category name is required.",
+          "codeRequired": "Category code is required.",
+          "updated": "Device category updated.",
+          "created": "Device category created."
+        }
+      }
+    }
+  }
+}

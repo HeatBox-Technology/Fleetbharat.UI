@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "../context/ThemeContext";
 import { useLayout } from "../context/LayoutContext";
 import { useColor } from "../context/ColorContext";
+import { buildLocalePath } from "@/i18n/localePath";
 
 const presetColors = [
   "#6366f1", // indigo
@@ -54,19 +55,7 @@ export default function ThemeCustomizer() {
   const handleLocaleChange = (nextLocale) => {
     setLocale(nextLocale);
     document.cookie = `locale=${nextLocale}; path=/; max-age=31536000; samesite=lax`;
-    const currentPath = window.location.pathname || "/";
-    const segments = currentPath.split("/").filter(Boolean);
-    const firstSegment = segments[0]?.toLowerCase();
-    const isPrefixed =
-      firstSegment === "en" ||
-      firstSegment === "hi" ||
-      firstSegment === "te" ||
-      firstSegment === "ta" ||
-      firstSegment === "kn";
-    const restPath = isPrefixed ? `/${segments.slice(1).join("/")}` : currentPath;
-    const normalizedRest = restPath === "/" ? "" : restPath;
-    const nextPath =
-      nextLocale === "en" ? normalizedRest || "/" : `/${nextLocale}${normalizedRest}`;
+    const nextPath = buildLocalePath(nextLocale, window.location.pathname || "/");
     window.location.href = `${nextPath}${window.location.search}`;
   };
 

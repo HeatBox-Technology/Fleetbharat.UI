@@ -118,8 +118,6 @@ const ProvisionVehicle: React.FC = () => {
         ] = await Promise.all([
           getAllAccounts(),
           getVehicleType(),
-          // getVehicleBrands(),
-          // getLeasedVendors(),
         ]);
 
         if (accRes.statusCode === 200) setAccounts(accRes.data);

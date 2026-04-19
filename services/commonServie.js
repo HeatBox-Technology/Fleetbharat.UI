@@ -194,10 +194,6 @@ export const getDriverDropdown = async (accountId) => {
   return res.data;
 };
 
-export const getVehicleBrandOemDropdown = async () => {
-  const res = await api.get(`/api/Lookup/vehicle-brand-oems`);
-  return res.data;
-};
 
 export const getDeviceTypeDropdown = async () => {
   const res = await api.get(`/api/common/dropdowns/device-types`);

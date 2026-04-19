@@ -1,0 +1,126 @@
+{
+  "pages": {
+    "configuration": {
+      "list": {
+        "title": "Configuration",
+        "subtitle": "Paramètres globaux pour la gestion des comptes.",
+        "breadcrumbs": {
+          "accounts": "Comptes",
+          "current": "Configuration"
+        },
+        "addButton": "Nouvelle Configuration",
+        "loading": "Chargement des configurations...",
+        "searchPlaceholder": "Rechercher dans tous les champs...",
+        "table": {
+          "id": "ID",
+          "account": "COMPTE",
+          "mapProvider": "FOURNISSEUR DE CARTE",
+          "dateFormat": "FORMAT DE DATE",
+          "language": "LANGUE",
+          "lastUpdated": "DERNIÈRE MISE À JOUR"
+        },
+        "delete": {
+          "title": "Supprimer la Configuration",
+          "message": "Êtes-vous sûr de vouloir supprimer la configuration de \"{account}\" ? Cette action ne peut pas être annulée.",
+          "confirm": "Supprimer",
+          "cancel": "Annuler"
+        },
+        "toast": {
+          "deleted": "Configuration supprimée avec succès !",
+          "deleteFailed": "Échec de la suppression : {message}",
+          "deleteError": "Erreur lors de la suppression de la configuration"
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "Modifier la Configuration",
+          "create": "Nouvelle Configuration"
+        },
+        "buttons": {
+          "cancel": "Annuler",
+          "saving": "Enregistrement...",
+          "update": "Mettre à Jour la Configuration",
+          "create": "Enregistrer la Configuration",
+          "addMoreLanguages": "Ajouter Plus de Langues"
+        },
+        "loading": {
+          "edit": "Chargement de la configuration..."
+        },
+        "sections": {
+          "mapConfiguration": "Configuration de la Carte",
+          "internationalization": "Internationalisation et Configuration des Unités",
+          "languageConfiguration": "Configuration de la Langue"
+        },
+        "fields": {
+          "accountId": "ID du Compte",
+          "selectAccount": "Sélectionner un Compte",
+          "mapProvider": "Fournisseur de Carte",
+          "licenseKey": "Clé de Licence",
+          "licenseKeyPlaceholder": "Entrer la Clé de Licence",
+          "addressKey": "Clé d'Adresse",
+          "addressKeyPlaceholder": "Entrer la Clé d'Adresse",
+          "dateFormat": "Format de Date",
+          "timeFormat": "Format d'Heure",
+          "distanceUnit": "Unité de Distance",
+          "speedUnit": "Unité de Vitesse",
+          "fuelUnit": "Unité de Carburant",
+          "temperature": "Température",
+          "addressDisplay": "Afficher l'Adresse",
+          "defaultLanguage": "Langue par Défaut",
+          "additionalLanguage": "Langue Supplémentaire {index}",
+          "selectLanguage": "Sélectionner une Langue"
+        },
+        "options": {
+          "mapProvider": {
+            "googleMaps": "Google Maps",
+            "hereMaps": "Here Maps",
+            "openStreetMap": "OpenStreetMap"
+          },
+          "timeFormat": {
+            "h12": "12 Heures (AM/PM)",
+            "h24": "24 Heures"
+          },
+          "distanceUnit": {
+            "km": "Kilomètres",
+            "mile": "Miles"
+          },
+          "speedUnit": {
+            "kmh": "Km/h",
+            "mph": "Mph"
+          },
+          "fuelUnit": {
+            "litre": "Litre",
+            "gallon": "Gallon"
+          },
+          "temperature": {
+            "celsius": "Celsius",
+            "fahrenheit": "Fahrenheit"
+          },
+          "addressDisplay": {
+            "show": "Afficher l'Adresse",
+            "hide": "Masquer l'Adresse"
+          },
+          "language": {
+            "en": "Anglais",
+            "es": "Espagnol",
+            "fr": "Français",
+            "de": "Allemand",
+            "hi": "Hindi",
+            "te": "Telugu",
+            "ta": "Tamil",
+            "kn": "Kannada"
+          }
+        },
+        "toast": {
+          "accountRequired": "Veuillez saisir un ID de compte valide",
+          "duplicateLanguage": "Langue en double non autorisée",
+          "updated": "Configuration mise à jour avec succès !",
+          "created": "Configuration créée avec succès !",
+          "saveFailed": "Échec de l'enregistrement : {message}",
+          "saveError": "Une erreur s'est produite lors de l'enregistrement",
+          "loadFailed": "Échec du chargement de la configuration"
+        }
+      }
+    }
+  }
+}

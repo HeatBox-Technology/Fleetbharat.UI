@@ -15,7 +15,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { UserFormData } from "@/interfaces/user.interface";
 import { getAllAccounts, getAllRoles } from "@/services/commonServie";
 import { getRoleById } from "@/services/rolesService";
-import { createUser, getUserById, updateUser } from "@/services/userService";
+import { createUser, getUserById, updateUser, resetPassword } from "@/services/userService";
 
 type TabType = "profile" | "access" | "security";
 
@@ -62,6 +62,7 @@ const CreateUser: React.FC = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(false);
+  const [resetPasswordLoading, setResetPasswordLoading] = useState(false);
   const [formData, setFormData] = useState<UserFormData>({
     accountName: "",
     accountCode: "",
@@ -539,6 +540,33 @@ const CreateUser: React.FC = () => {
       toast.error(t("toast.loadAccountsFailed"));
     }
   }
+
+  const handleResetPassword = async () => {
+    if (!id || String(id) === "0") {
+      toast.error(t("toast.userNotFound") || "User not found");
+      return;
+    }
+
+    // if (!window.confirm(t("toast.resetPasswordConfirm") || "Are you sure you want to send a password reset link to this user?")) {
+    //   return;
+    // }
+
+    try {
+      setResetPasswordLoading(true);
+      const response = await resetPassword(id as string);
+
+      if (response.statusCode === 200) {
+        toast.success(response.message || "Password reset link sent successfully!");
+      } else {
+        toast.error(response.message || "Failed to send reset password link");
+      }
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      toast.error("An error occurred while sending the reset link");
+    } finally {
+      setResetPasswordLoading(false);
+    }
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -1227,7 +1255,7 @@ const CreateUser: React.FC = () => {
                         </div>
                         <button
                           onClick={() =>
-                            toast.info(t("toast.passwordResetSent"))
+                            handleResetPassword()
                           }
                           className={`w-full sm:w-auto px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg font-medium transition-colors ${
                             isDark

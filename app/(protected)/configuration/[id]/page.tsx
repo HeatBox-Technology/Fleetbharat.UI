@@ -159,6 +159,11 @@ const NewConfiguration: React.FC = () => {
   };
 
   const handleLanguageChange = (index: number, value: string) => {
+    const trimmedValue = value.trim();
+    if (trimmedValue && additionalLanguages.some((lang, i) => i !== index && lang.trim().toLowerCase() === trimmedValue.toLowerCase())) {
+      toast.error(t("toast.duplicateLanguage"));
+      return;
+    }
     const updated = [...additionalLanguages];
     updated[index] = value;
     setAdditionalLanguages(updated);
@@ -253,7 +258,7 @@ const NewConfiguration: React.FC = () => {
               { label: tList("breadcrumbs.current"), href: "/configuration" },
               { label: isEditMode ? t("title.edit") : t("title.create") },
             ]}
-            showButton
+            showButton={false}
             buttonText={
               loading
                 ? t("buttons.saving")
@@ -695,6 +700,18 @@ const NewConfiguration: React.FC = () => {
                 disabled={loading}
               >
                 {t("buttons.cancel")}
+              </button>
+              <button
+                onClick={handleSubmit}
+                disabled={loading}
+                style={{ backgroundColor: selectedColor }}
+                className="px-4 sm:px-6 py-2 rounded-lg font-medium text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+              >
+                {loading
+                  ? t("buttons.saving")
+                  : isEditMode
+                    ? t("buttons.update")
+                    : t("buttons.create")}
               </button>
             </div>
           </div>

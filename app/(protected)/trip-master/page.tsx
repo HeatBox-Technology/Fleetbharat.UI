@@ -28,7 +28,7 @@ type TripPlanApiItem = {
   planId?: number;
   routeName?: string;
   vehicleNo?: string;
-  driverId?: number;
+  driverName?: string;
   tripTypeLabel?: TripListRow["cycle"];
   isActive?: boolean;
   startTime?: string;
@@ -78,7 +78,7 @@ const TripMasterPage: React.FC = () => {
       tripName: `Trip Plan #${Number(item?.planId || 0)}`,
       routeName: String(item?.routeName || "-"),
       vehicleNo: String(item?.vehicleNo || "-"),
-      driverName: item?.driverId ? `Driver #${item.driverId}` : "-",
+      driverName: item?.driverName || "-",
       cycle: item?.tripTypeLabel || "One-Off",
       status: item?.isActive ? "Active" : "Completed",
       startTime: String(item?.startTime || item?.createdDatetime || ""),
@@ -97,7 +97,7 @@ const TripMasterPage: React.FC = () => {
       const listData = response?.data?.trips || {};
       const items = Array.isArray(listData?.items) ? listData.items : [];
       const summaryData = response?.data?.summary || {};
-
+      console.log(listData, summaryData);
       setRows(items.map(mapRow));
       setTotalRecords(Number(listData?.totalRecords || items.length));
       setSummary({

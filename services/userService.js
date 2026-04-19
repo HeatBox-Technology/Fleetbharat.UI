@@ -183,3 +183,31 @@ export const exportUsers = async (search = "", format = "csv") => {
     );
   }
 };
+
+export const resetPassword = async (id) => {
+  try {
+    const userId = String(id ?? "").trim();
+    if (!userId) {
+      return {
+        success: false,
+        statusCode: 400,
+        message: "Invalid user ID",
+        data: null,
+      };
+    }
+
+    const res = await api.patch(`/api/users/${userId}/reset-password`);
+    return res.data;
+  } catch (error) {
+    return (
+      error.response?.data || {
+        success: false,
+        statusCode: error.response?.status || 500,
+        message:
+          error.response?.data?.message ||
+          "Failed to send reset password link. Please try again.",
+        data: null,
+      }
+    );
+  }
+};

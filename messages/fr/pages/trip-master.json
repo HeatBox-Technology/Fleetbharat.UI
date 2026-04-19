@@ -1,0 +1,155 @@
+{
+  "pages": {
+    "tripMaster": {
+      "list": {
+        "title": "Trip Master",
+        "subtitle": "Manage trip schedules and routing templates.",
+        "breadcrumbs": {
+          "fleet": "Fleet",
+          "current": "Trip Master"
+        },
+        "addButton": "Add Trip",
+        "searchPlaceholder": "Search trips...",
+        "metrics": {
+          "totalTrips": "TOTAL TRIPS",
+          "activeTrips": "ACTIVE TRIPS",
+          "inTransit": "IN TRANSIT"
+        },
+        "table": {
+          "no": "NO",
+          "tripName": "TRIP NAME",
+          "route": "ROUTE",
+          "vehicle": "VEHICLE",
+          "driver": "DRIVER",
+          "cycle": "CYCLE",
+          "status": "STATUS",
+          "startTime": "START TIME"
+        },
+        "labels": {
+          "cycle": {
+            "weekly": "Weekly",
+            "monthly": "Monthly",
+            "oneOff": "One-Off"
+          },
+          "status": {
+            "active": "Active",
+            "pending": "Pending",
+            "inTransit": "In Transit",
+            "completed": "Completed"
+          }
+        },
+        "deleteDialog": {
+          "title": "Delete Trip Plan",
+          "message": "Are you sure you want to delete {name}?",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        }
+      },
+      "detail": {
+        "title": "MISSION ARCHITECT",
+        "subtitle": "Trip Master Configuration",
+        "breadcrumbs": {
+          "fleet": "Fleet",
+          "master": "Trip Master",
+          "create": "Create",
+          "edit": "Edit"
+        },
+        "buttons": {
+          "discard": "Discard",
+          "cancel": "Cancel",
+          "deployMission": "DEPLOY MISSION",
+          "remove": "Remove",
+          "prev": "Previous",
+          "next": "Next",
+          "addStop": "Add Stop",
+          "addNumber": "Add Number",
+          "deploying": "Deploying...",
+          "deployMasterMission": "DEPLOY MASTER MISSION"
+        },
+        "sections": {
+          "missionIdentity": "MISSION IDENTITY",
+          "fleetStrategy": "FLEET STRATEGY",
+          "tripCycleTimeline": "TRIP CYCLE & TIMELINE",
+          "timelineRoute": "TIMELINE & ROUTE",
+          "notifications": "NOTIFICATIONS",
+          "liveMapPreview": "LIVE MAP PREVIEW",
+          "missionSummary": "MISSION SUMMARY"
+        },
+        "fields": {
+          "tripName": "TRIP NAME",
+          "tripNamePlaceholder": "e.g. Metro Daily Supply",
+          "assignedOperator": "ASSIGNED OPERATOR",
+          "selectDriver": "Select driver",
+          "account": "ACCOUNT",
+          "selectAccount": "Select account",
+          "vehicle": "VEHICLE",
+          "selectVehicle": "Select vehicle",
+          "vehicleType": "VEHICLE TYPE",
+          "selectVehicleType": "Select vehicle type",
+          "consignee": "CONSIGNEE",
+          "consigneePlaceholder": "e.g. Sharma Traders",
+          "vehicleAssignment": "VEHICLE ASSIGNMENT",
+          "vehicleTypePageInfo": "Vehicle types page {page}/{total}",
+          "noVehicleTypes": "No vehicle types found",
+          "tripType": "TRIP TYPE",
+          "weeklyRotation": "WEEKLY ROTATION",
+          "departureEtd": "DEPARTURE ETD",
+          "expectedArrival": "EXPECTED ARRIVAL",
+          "selectMasterPipeline": "SELECT MASTER PIPELINE",
+          "selectSourceGeofence": "Select source geofence",
+          "selectDestinationGeofence": "Select destination geofence",
+          "selectStopGeofence": "Select stop geofence",
+          "customRouteName": "CUSTOM ROUTE NAME",
+          "customRoutePlaceholder": "Enter custom route",
+          "sourcePlaceholder": "Enter source location",
+          "destinationPlaceholder": "Enter destination location",
+          "stopPlaceholder": "Enter stop location"
+        },
+        "notifications": {
+          "enableOtp": "Enable OTP Notification",
+          "otpHelp": "Add multiple mobile numbers below when OTP is enabled.",
+          "mobilePlaceholder": "Enter mobile number",
+          "removeNumberAria": "Remove number"
+        },
+        "summary": {
+          "trip": "Trip",
+          "driver": "Driver",
+          "account": "Account",
+          "vehicle": "Vehicle",
+          "assignment": "Assignment",
+          "vehicleType": "Vehicle Type",
+          "cycle": "Cycle",
+          "routeMode": "Route Mode",
+          "route": "Route"
+        },
+        "vehicleClass": {
+          "truck": "Truck",
+          "truckSub": "Freight Titan",
+          "traveller": "Traveller",
+          "travellerSub": "Transit Crew Van",
+          "bus": "Bus",
+          "busSub": "Shuttle Prime"
+        },
+        "scheduling": {
+          "masterRoute": "Master Route",
+          "fixedPath": "Fixed Path",
+          "weekly": "Weekly",
+          "repeatingCycle": "Repeating Cycle",
+          "customRoute": "Custom Route",
+          "onDemand": "On Demand",
+          "oneOff": "One-Off",
+          "scheduled": "Scheduled"
+        },
+        "labels": {
+          "weeklyCycle": "Weekly Cycle",
+          "customRoute": "Custom Route",
+          "oneOffScheduled": "One-off Scheduled",
+          "defaultMapQuery": "Delhi",
+          "sourceLocation": "SOURCE LOCATION",
+          "destinationLocation": "DESTINATION LOCATION",
+          "stop": "STOP {number}"
+        }
+      }
+    }
+  }
+}

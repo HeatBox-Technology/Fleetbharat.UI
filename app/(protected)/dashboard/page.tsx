@@ -295,7 +295,7 @@ const Dashboard: React.FC = () => {
                 <p className="text-sm text-slate-500 dark:text-slate-400">Installed vs Available devices</p>
               </div>
               <div className="h-72">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height={288}>
                   <BarChart data={deviceInventoryData} margin={{ top: 10, right: 0, left: -10, bottom: 10 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#313131" : "#e5e7eb"} vertical={false} />
                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: isDark ? "#94a3b8" : "#64748b", fontSize: 12 }} />
@@ -314,7 +314,7 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="flex flex-col items-center gap-6">
                 <div className="h-72 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height={288}>
                     <PieChart>
                       <Pie data={statusDistribution} innerRadius={72} outerRadius={108} dataKey="value" paddingAngle={4}>
                         {statusDistribution.map((entry) => (
@@ -344,7 +344,7 @@ const Dashboard: React.FC = () => {
                 <p className="text-sm text-slate-500 dark:text-slate-400">Frequency of alert types today</p>
               </div>
               <div className="h-72">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height={288}>
                   <BarChart layout="vertical" data={alertsBreakdownData} margin={{ top: 10, right: 0, left: 10, bottom: 10 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#313131" : "#e5e7eb"} vertical={false} />
                     <XAxis type="number" axisLine={false} tickLine={false} tick={{ fill: isDark ? "#94a3b8" : "#64748b", fontSize: 12 }} />

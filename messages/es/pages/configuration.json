@@ -1,0 +1,126 @@
+{
+  "pages": {
+    "configuration": {
+      "list": {
+        "title": "Configuración",
+        "subtitle": "Configuraciones globales para la gestión de cuentas.",
+        "breadcrumbs": {
+          "accounts": "Cuentas",
+          "current": "Configuración"
+        },
+        "addButton": "Nueva Configuración",
+        "loading": "Cargando configuraciones...",
+        "searchPlaceholder": "Buscar en todos los campos...",
+        "table": {
+          "id": "ID",
+          "account": "CUENTA",
+          "mapProvider": "PROVEEDOR DE MAPAS",
+          "dateFormat": "FORMATO DE FECHA",
+          "language": "IDIOMA",
+          "lastUpdated": "ÚLTIMA ACTUALIZACIÓN"
+        },
+        "delete": {
+          "title": "Eliminar Configuración",
+          "message": "¿Está seguro de que desea eliminar la configuración de \"{account}\"? Esta acción no se puede deshacer.",
+          "confirm": "Eliminar",
+          "cancel": "Cancelar"
+        },
+        "toast": {
+          "deleted": "¡Configuración eliminada exitosamente!",
+          "deleteFailed": "Error al eliminar: {message}",
+          "deleteError": "Error al eliminar configuración"
+        }
+      },
+      "detail": {
+        "title": {
+          "edit": "Editar Configuración",
+          "create": "Nueva Configuración"
+        },
+        "buttons": {
+          "cancel": "Cancelar",
+          "saving": "Guardando...",
+          "update": "Actualizar Configuración",
+          "create": "Guardar Configuración",
+          "addMoreLanguages": "Agregar Más Idiomas"
+        },
+        "loading": {
+          "edit": "Cargando configuración..."
+        },
+        "sections": {
+          "mapConfiguration": "Configuración de Mapa",
+          "internationalization": "Internacionalización y Configuración de Unidades",
+          "languageConfiguration": "Configuración de Idioma"
+        },
+        "fields": {
+          "accountId": "ID de Cuenta",
+          "selectAccount": "Seleccionar Cuenta",
+          "mapProvider": "Proveedor de Mapas",
+          "licenseKey": "Clave de Licencia",
+          "licenseKeyPlaceholder": "Ingrese Clave de Licencia",
+          "addressKey": "Clave de Dirección",
+          "addressKeyPlaceholder": "Ingrese Clave de Dirección",
+          "dateFormat": "Formato de Fecha",
+          "timeFormat": "Formato de Hora",
+          "distanceUnit": "Unidad de Distancia",
+          "speedUnit": "Unidad de Velocidad",
+          "fuelUnit": "Unidad de Combustible",
+          "temperature": "Temperatura",
+          "addressDisplay": "Mostrar Dirección",
+          "defaultLanguage": "Idioma Predeterminado",
+          "additionalLanguage": "Idioma Adicional {index}",
+          "selectLanguage": "Seleccionar Idioma"
+        },
+        "options": {
+          "mapProvider": {
+            "googleMaps": "Google Maps",
+            "hereMaps": "Here Maps",
+            "openStreetMap": "OpenStreetMap"
+          },
+          "timeFormat": {
+            "h12": "12 Horas (AM/PM)",
+            "h24": "24 Horas"
+          },
+          "distanceUnit": {
+            "km": "Kilómetros",
+            "mile": "Millas"
+          },
+          "speedUnit": {
+            "kmh": "Km/h",
+            "mph": "Mph"
+          },
+          "fuelUnit": {
+            "litre": "Litro",
+            "gallon": "Galón"
+          },
+          "temperature": {
+            "celsius": "Celsius",
+            "fahrenheit": "Fahrenheit"
+          },
+          "addressDisplay": {
+            "show": "Mostrar Dirección",
+            "hide": "Ocultar Dirección"
+          },
+          "language": {
+            "en": "Inglés",
+            "es": "Español",
+            "fr": "Francés",
+            "de": "Alemán",
+            "hi": "Hindi",
+            "te": "Telugu",
+            "ta": "Tamil",
+            "kn": "Kannada"
+          }
+        },
+        "toast": {
+          "accountRequired": "Por favor ingrese un ID de cuenta válido",
+          "duplicateLanguage": "Idioma duplicado no permitido",
+          "updated": "¡Configuración actualizada exitosamente!",
+          "created": "¡Configuración creada exitosamente!",
+          "saveFailed": "Error al guardar: {message}",
+          "saveError": "Ocurrió un error al guardar",
+          "loadFailed": "Error al cargar configuración"
+        }
+      }
+    }
+  }
+}

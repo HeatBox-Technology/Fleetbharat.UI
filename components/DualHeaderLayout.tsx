@@ -60,6 +60,7 @@ import { getInitials } from "@/utils/utils";
 import { useColor } from "../context/ColorContext";
 import { useLayout } from "../context/LayoutContext";
 import { useTheme } from "../context/ThemeContext";
+import { buildLocalePath } from "@/i18n/localePath";
 
 const resolveProfileImageUrl = (profileImagePath?: string): string => {
   const path = String(profileImagePath || "").trim();
@@ -191,23 +192,8 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
       path: "/",
       sameSite: "lax",
     });
-    const currentPath = window.location.pathname || "/";
-    const segments = currentPath.split("/").filter(Boolean);
-    const firstSegment = segments[0]?.toLowerCase();
-    const isPrefixed =
-      firstSegment === "en" ||
-      firstSegment === "hi" ||
-      firstSegment === "te" ||
-      firstSegment === "ta" ||
-      firstSegment === "kn";
-    const restPath = isPrefixed
-      ? `/${segments.slice(1).join("/")}`
-      : currentPath;
-    const normalizedRest = restPath === "/" ? "" : restPath;
-    const nextPath =
-      nextLocale === "en"
-        ? normalizedRest || "/"
-        : `/${nextLocale}${normalizedRest}`;
+
+    const nextPath = buildLocalePath(nextLocale, window.location.pathname || "/");
     window.location.href = `${nextPath}${window.location.search}`;
   };
 
@@ -245,14 +231,14 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
 
       const resolvedBrandName = String(
         whiteLabelData?.brandName ||
-          parsedUser?.whiteLabel?.brandName ||
-          "Agentix",
+        parsedUser?.whiteLabel?.brandName ||
+        "Agentix",
       ).trim();
       const resolvedLogo = resolveAssetUrl(
         whiteLabelData?.logoUrl ||
-          whiteLabelData?.logoPath ||
-          parsedUser?.whiteLabel?.logoUrl ||
-          parsedUser?.whiteLabel?.logoPath,
+        whiteLabelData?.logoPath ||
+        parsedUser?.whiteLabel?.logoUrl ||
+        parsedUser?.whiteLabel?.logoPath,
       );
 
       setBrandName(resolvedBrandName || "Agentix");
@@ -898,11 +884,10 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                                   <Link
                                     key={child.id}
                                     href={child.path}
-                                    className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium ${
-                                      isChildActive
-                                        ? ""
-                                        : `${headerClasses.textSecondary} ${headerClasses.dropdownHover}`
-                                    }`}
+                                    className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium ${isChildActive
+                                      ? ""
+                                      : `${headerClasses.textSecondary} ${headerClasses.dropdownHover}`
+                                      }`}
                                     onClick={() => setSelectedItemId(child.id)}
                                     style={getActiveItemStyle(child.id)}
                                   >
@@ -920,11 +905,10 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                           <Link
                             key={item.id}
                             href={item.path}
-                            className={`text-sm py-1 font-medium ${
-                              selectedItemId === item.id
-                                ? "font-semibold"
-                                : `${headerClasses.textSecondary} ${headerClasses.hover}`
-                            }`}
+                            className={`text-sm py-1 font-medium ${selectedItemId === item.id
+                              ? "font-semibold"
+                              : `${headerClasses.textSecondary} ${headerClasses.hover}`
+                              }`}
                             onClick={() => setSelectedItemId(item.id)}
                             style={getActiveItemStyle(item.id)}
                           >
@@ -934,11 +918,10 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                           <button
                             key={item.id}
                             type="button"
-                            className={`text-sm py-1 font-medium ${
-                              selectedItemId === item.id
-                                ? "font-semibold"
-                                : `${headerClasses.textSecondary} ${headerClasses.hover}`
-                            }`}
+                            className={`text-sm py-1 font-medium ${selectedItemId === item.id
+                              ? "font-semibold"
+                              : `${headerClasses.textSecondary} ${headerClasses.hover}`
+                              }`}
                             onClick={() => setSelectedItemId(item.id)}
                             style={getActiveItemStyle(item.id)}
                           >
@@ -974,11 +957,10 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                 <select
                   value={locale}
                   onChange={(e) => handleLocaleChange(e.target.value)}
-                  className={`text-sm border rounded-lg px-2 py-1.5 focus:outline-none ${
-                    isDark
-                      ? "bg-card border-border text-foreground"
-                      : "bg-white border-gray-200 text-gray-900"
-                  }`}
+                  className={`text-sm border rounded-lg px-2 py-1.5 focus:outline-none ${isDark
+                    ? "bg-card border-border text-foreground"
+                    : "bg-white border-gray-200 text-gray-900"
+                    }`}
                   aria-label="Select language"
                 >
                   <option value="en">English</option>
@@ -1163,15 +1145,16 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
               <select
                 value={locale}
                 onChange={(e) => handleLocaleChange(e.target.value)}
-                className={`text-sm border rounded-lg px-2 py-1.5 focus:outline-none ${
-                  isDark
-                    ? "bg-card border-border text-foreground"
-                    : "bg-white border-gray-200 text-gray-900"
-                }`}
+                className={`text-sm border rounded-lg px-2 py-1.5 focus:outline-none ${isDark
+                  ? "bg-card border-border text-foreground"
+                  : "bg-white border-gray-200 text-gray-900"
+                  }`}
                 aria-label="Select language"
               >
                 <option value="en">English</option>
                 <option value="hi">Hindi</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
                 <option value="te">Telugu</option>
                 <option value="ta">Tamil</option>
                 <option value="kn">Kannada</option>
@@ -1217,17 +1200,15 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
 
               {showProfileMenu && (
                 <div
-                  className={`absolute right-0 top-full mt-2 w-56 rounded-lg shadow-lg border z-50 ${
-                    isDark
-                      ? "bg-card border-border text-white"
-                      : "bg-white border-gray-200 text-black"
-                  }`}
+                  className={`absolute right-0 top-full mt-2 w-56 rounded-lg shadow-lg border z-50 ${isDark
+                    ? "bg-card border-border text-white"
+                    : "bg-white border-gray-200 text-black"
+                    }`}
                 >
                   <button
                     onClick={handleLogout}
-                    className={`w-full flex items-center gap-2 px-4 py-2 text-sm rounded ${
-                      isDark ? "hover:bg-white/10" : "hover:bg-gray-100"
-                    }`}
+                    className={`w-full flex items-center gap-2 px-4 py-2 text-sm rounded ${isDark ? "hover:bg-white/10" : "hover:bg-gray-100"
+                      }`}
                   >
                     <LogOut className="w-4 h-4" />
                     Logout
@@ -1263,13 +1244,11 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
       <div className={isDark ? "dark" : ""}>
         <aside
           ref={setSidebarRef}
-          className={`sidebar-scroll ${width} ${sidebarClasses.bg} border-r ${
-            sidebarClasses.border
-          } h-screen fixed left-0 top-0 overflow-y-auto transition-all duration-300 z-50 ${
-            isMobile && !isMobileSidebarOpen
+          className={`sidebar-scroll ${width} ${sidebarClasses.bg} border-r ${sidebarClasses.border
+            } h-screen fixed left-0 top-0 overflow-y-auto transition-all duration-300 z-50 ${isMobile && !isMobileSidebarOpen
               ? "-translate-x-full"
               : "translate-x-0"
-          }`}
+            }`}
           style={{
             ...(sidebarClasses.useCustomBg && sidebarClasses.customBg
               ? { backgroundColor: sidebarClasses.customBg }
@@ -1279,9 +1258,8 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
           <div className="p-4 pb-20">
             {/* Logo Section */}
             <div
-              className={`flex items-center ${
-                isOpen ? "justify-between" : "justify-center"
-              } px-3 py-4 mb-6`}
+              className={`flex items-center ${isOpen ? "justify-between" : "justify-center"
+                } px-3 py-4 mb-6`}
             >
               <div
                 className={`flex items-center gap-2 ${isOpen ? "" : "flex-col"}`}
@@ -1345,7 +1323,7 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                       const isItemSelected = selectedItemId === item.id;
                       const isExpandableItem = Boolean(
                         item.expandable ||
-                          (item.children && item.children.length > 0),
+                        (item.children && item.children.length > 0),
                       );
 
                       return (
@@ -1357,18 +1335,16 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                                 onClick={() =>
                                   handleExpandableMenuClick(item.id)
                                 }
-                                className={`w-full flex ${
-                                  isOpen
-                                    ? "flex-row items-center justify-between"
-                                    : "flex-col items-center justify-center"
-                                } px-3 py-2.5 rounded-lg ${sidebarClasses.menuText} ${sidebarClasses.menuHover}`}
+                                className={`w-full flex ${isOpen
+                                  ? "flex-row items-center justify-between"
+                                  : "flex-col items-center justify-center"
+                                  } px-3 py-2.5 rounded-lg ${sidebarClasses.menuText} ${sidebarClasses.menuHover}`}
                               >
                                 <div
-                                  className={`flex ${
-                                    isOpen
-                                      ? "flex-row items-center gap-3"
-                                      : "flex-col items-center gap-1"
-                                  }`}
+                                  className={`flex ${isOpen
+                                    ? "flex-row items-center gap-3"
+                                    : "flex-col items-center gap-1"
+                                    }`}
                                 >
                                   <IconComponent
                                     className={`w-5 h-5 ${sidebarClasses.menuIcon}`}
@@ -1381,11 +1357,9 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                                 </div>
                                 {isOpen && (
                                   <ChevronDown
-                                    className={`w-4 h-4 ${
-                                      sidebarClasses.chevron
-                                    } transition-transform ${
-                                      isExpanded ? "rotate-180" : ""
-                                    }`}
+                                    className={`w-4 h-4 ${sidebarClasses.chevron
+                                      } transition-transform ${isExpanded ? "rotate-180" : ""
+                                      }`}
                                   />
                                 )}
                               </button>
@@ -1407,11 +1381,10 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                                           if (isMobile)
                                             setIsMobileSidebarOpen(false);
                                         }}
-                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium no-underline visited:text-inherit focus-visible:outline-none ${
-                                          isChildActive
-                                            ? ""
-                                            : `${sidebarClasses.menuText} ${sidebarClasses.menuHover}`
-                                        }`}
+                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium no-underline visited:text-inherit focus-visible:outline-none ${isChildActive
+                                          ? ""
+                                          : `${sidebarClasses.menuText} ${sidebarClasses.menuHover}`
+                                          }`}
                                         style={getActiveItemBgStyle(child.id)}
                                       >
                                         <ChildIcon className="w-4 h-4" />
@@ -1439,11 +1412,10 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                                           if (isMobile)
                                             setIsMobileSidebarOpen(false);
                                         }}
-                                        className={`flex flex-col items-center justify-center gap-1 px-2 py-2 rounded-lg font-medium no-underline visited:text-inherit focus-visible:outline-none ${
-                                          isChildActive
-                                            ? ""
-                                            : `${sidebarClasses.menuText} ${sidebarClasses.menuHover}`
-                                        }`}
+                                        className={`flex flex-col items-center justify-center gap-1 px-2 py-2 rounded-lg font-medium no-underline visited:text-inherit focus-visible:outline-none ${isChildActive
+                                          ? ""
+                                          : `${sidebarClasses.menuText} ${sidebarClasses.menuHover}`
+                                          }`}
                                         style={getActiveItemBgStyle(child.id)}
                                       >
                                         <ChildIcon className="w-4 h-4" />
@@ -1461,15 +1433,13 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                             <Link
                               href={item.path || "#"}
                               onMouseDown={captureSidebarScroll}
-                              className={`flex no-underline visited:text-inherit focus-visible:outline-none ${
-                                isOpen
-                                  ? "flex-row items-center gap-3"
-                                  : "flex-col items-center gap-1"
-                              } px-3 py-2.5 rounded-lg ${
-                                isItemSelected
+                              className={`flex no-underline visited:text-inherit focus-visible:outline-none ${isOpen
+                                ? "flex-row items-center gap-3"
+                                : "flex-col items-center gap-1"
+                                } px-3 py-2.5 rounded-lg ${isItemSelected
                                   ? ""
                                   : `${sidebarClasses.menuText} ${sidebarClasses.menuHover}`
-                              }`}
+                                }`}
                               onClick={() => {
                                 handleMenuClick(item.id);
                                 if (isMobile) setIsMobileSidebarOpen(false);
@@ -1478,11 +1448,10 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                             >
                               <IconComponent className="w-5 h-5" />
                               <span
-                                className={`${isOpen ? "text-sm" : "text-[10px] text-center leading-tight"} ${
-                                  isItemSelected
-                                    ? "font-semibold"
-                                    : "font-medium"
-                                }`}
+                                className={`${isOpen ? "text-sm" : "text-[10px] text-center leading-tight"} ${isItemSelected
+                                  ? "font-semibold"
+                                  : "font-medium"
+                                  }`}
                               >
                                 {item.label}
                               </span>
@@ -1529,12 +1498,11 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
           pt-16
           px-4 md:px-6
           pb-6
-          ${
-            menuLayout === "sidebar" && !isMobile
-              ? isSidebarOpen
-                ? "lg:ml-64"
-                : "lg:ml-20"
-              : ""
+          ${menuLayout === "sidebar" && !isMobile
+            ? isSidebarOpen
+              ? "lg:ml-64"
+              : "lg:ml-20"
+            : ""
           }
           transition-all duration-300
         `}

@@ -1,0 +1,108 @@
+{
+  "pages": {
+    "driver": {
+      "list": {
+        "title": "Personnel Registry",
+        "subtitle": "Register and manage drivers",
+        "breadcrumbs": {
+          "fleet": "Fleet",
+          "current": "Driver"
+        },
+        "addButton": "Add Driver",
+        "export": "Export",
+        "loading": "Loading drivers...",
+        "searchPlaceholder": "Search drivers...",
+        "metrics": {
+          "totalDrivers": "TOTAL DRIVERS",
+          "activeDrivers": "ACTIVE DRIVERS",
+          "inactiveDrivers": "INACTIVE DRIVERS",
+          "licenseExpiringSoon": "LICENSE EXPIRING SOON"
+        },
+        "table": {
+          "driverId": "DRIVER ID",
+          "driverName": "DRIVER NAME",
+          "mobile": "MOBILE",
+          "licenceNo": "LICENCE NO.",
+          "licenceExpiry": "LICENCE EXPIRY",
+          "status": "STATUS"
+        },
+        "labels": {
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "deleteDialog": {
+          "title": "Delete Driver",
+          "message": "Are you sure you want to delete the driver \"{name}\"? This action cannot be undone.",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        },
+        "toast": {
+          "deleted": "Driver deleted successfully!",
+          "deleteFailed": "Failed to delete",
+          "deleteError": "Error deleting driver",
+          "exportSuccess": "Drivers exported successfully",
+          "exportFailed": "Failed to export drivers"
+        }
+      },
+      "detail": {
+        "loading": "Loading driver data...",
+        "title": {
+          "create": "New Driver",
+          "edit": "Edit Driver"
+        },
+        "section": {
+          "title": "Personnel Identity",
+          "createDescription": "Fill in the driver's personal and contact information.",
+          "editDescription": "Update the driver's personal and contact information."
+        },
+        "fields": {
+          "driverCode": "Driver Code",
+          "organisation": "Organisation",
+          "selectAccount": "Select Account",
+          "firstName": "First Name",
+          "firstNamePlaceholder": "e.g. Vikram",
+          "lastName": "Last Name",
+          "lastNamePlaceholder": "e.g. Rathore",
+          "mobile": "Mobile Number",
+          "mobilePlaceholder": "1234567890",
+          "countryCode": "Country Code",
+          "noCountryCode": "No country code found",
+          "emergencyContact": "Emergency Contact",
+          "emergencyPlaceholder": "Emergency mobile number",
+          "licenceNo": "Licence No.",
+          "licenceNoPlaceholder": "e.g. DL-90021-X",
+          "licenceExpiry": "Licence Expiry",
+          "bloodGroup": "Blood Group",
+          "bloodGroupPlaceholder": "e.g. O+",
+          "noBloodGroup": "No blood group found"
+        },
+        "status": {
+          "title": "Driver Status",
+          "description": "Inactive drivers cannot be assigned to new trips."
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "update": "Update Driver",
+          "create": "Create Driver",
+          "updating": "Updating...",
+          "creating": "Creating..."
+        },
+        "validation": {
+          "firstNameRequired": "Please enter first name",
+          "mobileRequired": "Please enter mobile number",
+          "licenceNoRequired": "Please enter licence number",
+          "licenceExpiryRequired": "Please select licence expiry date",
+          "organisationRequired": "Please select an organisation"
+        },
+        "toast": {
+          "fetchFailed": "Failed to fetch driver data",
+          "loadError": "Error loading driver data",
+          "updated": "Driver updated successfully!",
+          "created": "Driver created successfully!",
+          "failed": "Failed",
+          "saveError": "An error occurred while saving the driver"
+        }
+      }
+    }
+  }
+}

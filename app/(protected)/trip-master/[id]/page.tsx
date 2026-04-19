@@ -1256,7 +1256,8 @@ export default function TripPlannerPage() {
               } satisfies RouteNode;
             })
             .filter(
-              (n) => String(n.geofence || "").trim() || n.latitude !== null,
+              (n: RouteNode) =>
+                String(n.geofence || "").trim() || n.latitude !== null,
             );
 
           setNodes((prev) => (mapped.length >= 2 ? mapped : prev));

@@ -75,16 +75,18 @@ const toCycleLabel = (tripType) => {
 
 const mapTripPlan = (item) => {
   const tripType = String(item?.tripType || "").toLowerCase();
+  const travelDate = item?.travelDate ?? item?.travel_date ?? null;
   return {
     planId: Number(item?.planId || 0),
     accountId: Number(item?.accountId || 0),
     accountName: String(item?.accountName || ""),
     driverId: Number(item?.driverId || 0),
+    driverName: String(item?.driverName || ""),
     vehicleId: Number(item?.vehicleId || 0),
     vehicleNo: String(item?.vehicleNo || ""),
     tripType,
     tripTypeLabel: toCycleLabel(tripType),
-    travelDate: item?.travelDate || null,
+    travelDate,
     etd: String(item?.etd || ""),
     leadTime: Number(item?.leadTime || 0),
     eta: Number(item?.eta || 0),
@@ -98,7 +100,7 @@ const mapTripPlan = (item) => {
     isActive: Boolean(item?.isActive ?? true),
     statusLabel: item?.isActive ? "Active" : "Completed",
     startTime: parseTripStartTime(
-      item?.travelDate,
+      travelDate,
       item?.etd,
       item?.createdDatetime,
     ),
@@ -315,6 +317,7 @@ export const getTripPlanById = async (planId, accountId) => {
     }
 
     const tripType = String(item?.tripType || "").toLowerCase();
+    const travelDate = item?.travelDate ?? item?.travel_date ?? null;
     return {
       success: payload?.success ?? true,
       statusCode: Number(payload?.statusCode || 200),
@@ -334,7 +337,7 @@ export const getTripPlanById = async (planId, accountId) => {
         frequency: item?.frequency ?? null,
         tripType,
         tripTypeLabel: toCycleLabel(tripType),
-        travelDate: item?.travelDate || null,
+        travelDate,
         secondaryDevice: Array.isArray(item?.secondaryDevice)
           ? item.secondaryDevice
               .map((value) => String(value || ""))

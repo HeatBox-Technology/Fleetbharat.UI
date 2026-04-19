@@ -1,0 +1,77 @@
+{
+  "pages": {
+    "categories": {
+      "list": {
+        "title": "Categories",
+        "subtitle": "Manage identities, taxonomies, and global parameters.",
+        "breadcrumbs": {
+          "accounts": "Accounts",
+          "current": "Categories"
+        },
+        "addButton": "Add Category",
+        "loading": "Loading categories...",
+        "searchPlaceholder": "Search categories...",
+        "table": {
+          "id": "ID",
+          "label": "LABEL",
+          "description": "DESCRIPTION",
+          "status": "STATUS",
+          "createdAt": "CREATED AT"
+        },
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "delete": {
+          "title": "Delete Category",
+          "message": "Are you sure you want to delete the category \"{label}\"? This action cannot be undone.",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        },
+        "toast": {
+          "deleted": "Category deleted successfully!",
+          "deleteFailed": "Failed to delete: {message}",
+          "deleteError": "Error deleting category"
+        }
+      },
+      "detail": {
+        "loading": "Loading category data...",
+        "title": {
+          "edit": "Edit Classification",
+          "create": "New Classification"
+        },
+        "section": {
+          "title": "Taxonomy Parameters",
+          "subtitleEdit": "Update the grouping for account management and pricing.",
+          "subtitleCreate": "Create a new grouping for account management and pricing."
+        },
+        "fields": {
+          "labelName": "Label Name",
+          "labelPlaceholder": "e.g. Platinum Partner",
+          "description": "Description",
+          "descriptionPlaceholder": "Define the purpose and scope of this account category..."
+        },
+        "status": {
+          "title": "Category Status",
+          "subtitle": "Inactive categories cannot be assigned to new accounts."
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "updating": "Updating...",
+          "creating": "Creating...",
+          "update": "Update Category",
+          "create": "Create Category"
+        },
+        "toast": {
+          "fetchFailed": "Failed to fetch category data",
+          "fetchError": "Error loading category data",
+          "labelRequired": "Please enter a label name",
+          "updated": "Category updated successfully!",
+          "created": "Category created successfully!",
+          "saveFailed": "Failed: {message}",
+          "saveError": "An error occurred while saving the category"
+        }
+      }
+    }
+  }
+}

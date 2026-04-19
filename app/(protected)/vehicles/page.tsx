@@ -27,7 +27,6 @@ import {
 import {
   deleteVehicle,
   exportVehicles,
-  getVehicleBrands,
   getVehicles,
   getVehicleType,
 } from "@/services/vehicleService";
@@ -164,13 +163,11 @@ const Vehicles: React.FC = () => {
 
   useEffect(() => {
     const init = async () => {
-      const [typeRes, brandRes] = await Promise.all([
+      const [typeRes] = await Promise.all([
         getVehicleType(),
-        getVehicleBrands(),
       ]);
 
       if (typeRes) setVehicleTypes(typeRes);
-      if (brandRes) setVehicleBrands(brandRes);
     };
     init();
   }, []);

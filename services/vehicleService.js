@@ -34,11 +34,6 @@ export const getLeasedVendors = async () => {
   return res.data;
 };
 
-export const getVehicleBrands = async () => {
-  const res = await api.get(`/api/Lookup/vehicle-brand-oems`);
-  return res.data;
-};
-
 export const saveVehicle = async (payload) => {
   try {
     const res = await api.post(`/api/vehicles`, payload);

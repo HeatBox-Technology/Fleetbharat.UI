@@ -1,0 +1,72 @@
+{
+  "pages": {
+    "invoices": {
+      "list": {
+        "title": "Invoices",
+        "subtitle": "Financial ledger and billing cycle automation control.",
+        "breadcrumbs": {
+          "billing": "Billing",
+          "current": "Invoices"
+        },
+        "addButton": "Add Invoice",
+        "exportButton": "Export",
+        "exportingButton": "Exporting...",
+        "searchPlaceholder": "Search invoices...",
+        "table": {
+          "no": "NO",
+          "invoiceNumber": "INVOICE #",
+          "account": "ACCOUNT",
+          "amount": "AMOUNT",
+          "invoiceDate": "INVOICE DATE",
+          "dueDate": "DUE DATE",
+          "status": "STATUS"
+        },
+        "labels": {
+          "pending": "Pending",
+          "defaultFileName": "invoices-export.xlsx"
+        },
+        "toast": {
+          "exportFailed": "Export failed",
+          "exportInvalidData": "Export file data is invalid",
+          "exportSuccess": "Invoices exported successfully",
+          "exportCatchFailed": "Failed to export invoices",
+          "fetchFailed": "Failed to fetch invoices"
+        }
+      },
+      "detail": {
+        "title": {
+          "add": "Add Invoice",
+          "edit": "Invoice"
+        },
+        "subtitle": "Create manual billing invoice.",
+        "breadcrumbs": {
+          "billing": "Billing",
+          "current": "Invoices"
+        },
+        "fields": {
+          "account": "Account",
+          "subscription": "Subscription",
+          "amount": "Amount",
+          "currency": "Currency",
+          "invoiceDate": "Invoice Date",
+          "dueDate": "Due Date"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "saving": "Saving...",
+          "submit": "Create Invoice"
+        },
+        "toast": {
+          "editNotEnabled": "Edit invoice is not enabled yet.",
+          "selectAccountSubscription": "Please select Account and Subscription",
+          "selectCurrency": "Please select currency",
+          "amountGreaterThanZero": "Amount must be greater than 0",
+          "validDates": "Please provide valid invoice and due dates",
+          "createdSuccess": "Invoice created successfully",
+          "createFailed": "Failed to create invoice",
+          "dropdownFailed": "Failed to load dropdown data"
+        }
+      }
+    }
+  }
+}

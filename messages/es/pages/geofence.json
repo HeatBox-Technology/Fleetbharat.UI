@@ -1,0 +1,114 @@
+{
+  "pages": {
+    "geofence": {
+      "list": {
+        "noReadPermission": "You do not have permission to view this page.",
+        "title": "Geofence Master",
+        "subtitle": "Manage geofence zones and operational boundaries.",
+        "breadcrumbs": {
+          "fleet": "Fleet",
+          "current": "Geofence Master"
+        },
+        "addButton": "Define Zone",
+        "export": "Export",
+        "loading": "Loading geofences...",
+        "searchPlaceholder": "Search geofence...",
+        "deleteTitle": "Delete Geofence",
+        "deleteMessage": "Are you sure you want to delete \"{name}\"?",
+        "confirmDelete": "Delete",
+        "cancel": "Cancel",
+        "fallback": {
+          "unnamedZone": "Unnamed Zone",
+          "safe": "SAFE"
+        },
+        "table": {
+          "identity": "GEOFENCE IDENTITY",
+          "geometry": "GEOMETRY",
+          "status": "STATUS"
+        },
+        "toast": {
+          "deleted": "Geofence deleted successfully",
+          "deleteFailed": "Failed to delete geofence",
+          "deleteError": "Error deleting geofence",
+          "exportSuccess": "Geofences exported successfully",
+          "exportFailed": "Failed to export geofences"
+        }
+      },
+      "detail": {
+        "loadingDetails": "Loading zone...",
+        "noReadPermission": "You do not have view permission for Geofence Master.",
+        "createTitle": "Create Geofence",
+        "editTitle": "Edit Geofence",
+        "subtitleCreate": "Create new geofence with identity and geometry rules.",
+        "subtitleEdit": "Update geofence identity and operational settings.",
+        "breadcrumbs": {
+          "fleet": "Fleet",
+          "configurations": "Configurations",
+          "routeMaster": "Route Master",
+          "library": "Geofence Library",
+          "create": "Create",
+          "edit": "Edit"
+        },
+        "buttons": {
+          "saving": "Saving...",
+          "create": "Create Geofence",
+          "saveChanges": "Save Changes",
+          "cancel": "Cancel",
+          "pickOnMap": "Pick on Map"
+        },
+        "section": {
+          "identity": "IDENTITY & REGISTRY",
+          "zoneConfig": "ZONE CONFIG"
+        },
+        "fields": {
+          "account": "ACCOUNT",
+          "selectAccount": "Select account",
+          "uniqueCode": "UNIQUE CODE",
+          "displayName": "DISPLAY NAME",
+          "locationCenter": "LOCATION (CENTER)",
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "classification": "CLASSIFICATION",
+          "geometryType": "GEOMETRY TYPE",
+          "geometryChangeHint": "Changing geometry type will require you to redraw the shape.",
+          "radius": "RADIUS (M)",
+          "status": "STATUS",
+          "enabled": "Enabled",
+          "disabled": "Disabled",
+          "colorTheme": "COLOR THEME"
+        },
+        "drawing": {
+          "active": "Drawing mode active - click on the map to draw your",
+          "circle": "circle",
+          "polygon": "polygon",
+          "polygonHelp": "Click to add points, double-click to finish.",
+          "circleHelp": "Click center then drag to set radius.",
+          "cancelRedraw": "Cancel redraw",
+          "shapeReady": "Shape ready.",
+          "redraw": "Redraw Shape",
+          "notDrawn": "No shape drawn yet. Click on the map to begin.",
+          "overlay": "Drawing mode - draw your {geometry} on the map"
+        },
+        "fallback": {
+          "newGeofence": "New Geofence"
+        },
+        "toast": {
+          "loadFailed": "Failed to load geofence",
+          "loadError": "Error loading geofence",
+          "noAddPermission": "You do not have add permission for Geofence",
+          "noUpdatePermission": "You do not have update permission for Geofence",
+          "selectAccount": "Please select an account",
+          "codeNameRequired": "Unique code and display name are required",
+          "drawPolygon": "Please draw a polygon on the map before saving",
+          "drawCircle": "Please draw a circle on the map before saving",
+          "finishDrawing": "Please finish drawing your shape on the map before saving",
+          "drawBeforeSave": "Please draw your geofence on the map before saving",
+          "created": "Geofence created successfully",
+          "updated": "Geofence updated successfully",
+          "saveFailed": "Failed to save geofence",
+          "saveError": "Error saving geofence"
+        }
+      }
+    }
+  }
+}

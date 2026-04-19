@@ -1,0 +1,64 @@
+{
+  "pages": {
+    "dashboard": {
+      "metrics": {
+        "totalCustomers": "Total Customers",
+        "dealersDistributors": "Dealers Distributors",
+        "totalDevices": "Total Devices",
+        "activeSubscriptions": "Active Subscriptions"
+      },
+      "sections": {
+        "revenueSummary": "Revenue Summary",
+        "deviceStatus": "Device Status",
+        "recentAlerts": "Recent Alerts",
+        "serverHealth": "Server Health"
+      },
+      "revenue": {
+        "months": {
+          "jan": "Jan",
+          "feb": "Feb",
+          "mar": "Mar",
+          "apr": "Apr",
+          "may": "May",
+          "jun": "Jun",
+          "jul": "Jul"
+        }
+      },
+      "deviceStatus": {
+        "installed": "Installed",
+        "available": "Available",
+        "faulty": "Faulty",
+        "returned": "Returned"
+      },
+      "alerts": {
+        "cpuHigh": {
+          "title": "High CPU Usage on Server-01",
+          "time": "2 mins ago",
+          "severity": "Critical"
+        },
+        "dbLimit": {
+          "title": "Database connection limit nearing",
+          "time": "15 mins ago",
+          "severity": "Warning"
+        },
+        "devicesOffline": {
+          "title": "15 devices reported offline",
+          "time": "30 mins ago",
+          "severity": "Informational"
+        }
+      },
+      "serverHealth": {
+        "status": {
+          "operational": "Operational",
+          "outage": "Outage"
+        },
+        "services": {
+          "apiServer": "API Server",
+          "databaseCluster": "Database Cluster",
+          "telemetryIngestion": "Telemetry Ingestion",
+          "forwardingService": "Forwarding Service"
+        }
+      }
+    }
+  }
+}

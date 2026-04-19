@@ -1,0 +1,114 @@
+{
+  "pages": {
+    "devices": {
+      "list": {
+        "title": "Device",
+        "subtitle": "Full traceability of device identity, connectivity, and provisioning status.",
+        "breadcrumbs": {
+          "fleet": "Fleet",
+          "current": "Device"
+        },
+        "addButton": "Add Device",
+        "export": "Export",
+        "fields": {
+          "selectAccount": "Select Account"
+        },
+        "table": {
+          "deviceIdentity": "Device Identity",
+          "category": "Category",
+          "type": "Type",
+          "status": "Status",
+          "lastUpdated": "Last Updated"
+        },
+        "status": {
+          "active": "ACTIVE",
+          "inactive": "INACTIVE",
+          "inService": "IN SERVICE",
+          "outOfService": "OUT OF SERVICE"
+        },
+        "metrics": {
+          "totalDevices": "Total Devices",
+          "inService": "In Service",
+          "outOfService": "Out of Service"
+        },
+        "fallback": {
+          "defaultCategory": "GPS",
+          "defaultType": "Tracker",
+          "notAvailable": "N/A"
+        },
+        "loading": "Loading devices...",
+        "searchPlaceholder": "Search devices...",
+        "deleteTitle": "Remove Device",
+        "deleteMessage": "Are you sure you want to remove device \"{device}\" from the registry? This action cannot be undone.",
+        "confirmDelete": "Remove",
+        "cancel": "Cancel",
+        "toast": {
+          "loadError": "An error occurred while loading devices",
+          "removed": "Device removed successfully",
+          "deleteFailed": "Failed to delete device.",
+          "deleteError": "An error occurred while deleting.",
+          "exportSuccess": "Devices exported successfully!",
+          "exportFailed": "Failed to export devices"
+        }
+      },
+      "detail": {
+        "loading": {
+          "edit": "Loading device data...",
+          "create": "Preparing form..."
+        },
+        "title": {
+          "edit": "Edit Device",
+          "create": "Provision Device"
+        },
+        "subtitle": {
+          "edit": "Update registry entry for this device.",
+          "create": "Global Asset Correlation & Device Registry"
+        },
+        "buttons": {
+          "discard": "Discard",
+          "saving": "Saving...",
+          "update": "Update Registry Entry",
+          "create": "Commit Registry Entry"
+        },
+        "sections": {
+          "accountContext": "Account Context",
+          "accountContextSubtitle": "Select the account this device belongs to.",
+          "identityLifecycle": "Identity & Lifecycle",
+          "identityLifecycleSubtitle": "Hardware identification and classification details.",
+          "preview": "Device Identity Preview",
+          "previewSubtitle": "Auto-generated from the fields above."
+        },
+        "fields": {
+          "account": "Account",
+          "selectAccount": "Select Account",
+          "manufacturer": "Device Manufacturer",
+          "selectManufacturer": "Select Device Manufacturer",
+          "deviceType": "Device Type",
+          "selectDeviceType": "Select Device Type",
+          "deviceNo": "Device No.",
+          "deviceNoPlaceholder": "e.g. DEV-001",
+          "serial": "IMEI / Serial",
+          "serialPlaceholder": "Hardware Identity Code"
+        },
+        "preview": {
+          "deviceType": "Device Type",
+          "manufacturer": "Device Manufacturer",
+          "deviceNo": "Device No.",
+          "serial": "IMEI / Serial",
+          "empty": "—"
+        },
+        "toast": {
+          "loadFailed": "Failed to load device data",
+          "selectAccount": "Please select an account",
+          "selectManufacturer": "Please select a device manufacturer",
+          "selectDeviceType": "Please select a device type",
+          "serialRequired": "IMEI / Serial number is required",
+          "serialNumericOnly": "IMEI / Serial number must contain digits only",
+          "saved": "Device saved successfully",
+          "operationFailed": "Operation failed",
+          "errorOccurred": "An error occurred"
+        }
+      }
+    }
+  }
+}
