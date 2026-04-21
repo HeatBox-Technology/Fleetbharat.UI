@@ -2,69 +2,69 @@
   "pages": {
     "invoices": {
       "list": {
-        "title": "Invoices",
-        "subtitle": "Financial ledger and billing cycle automation control.",
+        "title": "Factures",
+        "subtitle": "Grand livre financier et contrôle de l'automatisation du cycle de facturation.",
         "breadcrumbs": {
-          "billing": "Billing",
-          "current": "Invoices"
+          "billing": "Facturation",
+          "current": "Factures"
         },
-        "addButton": "Add Invoice",
-        "exportButton": "Export",
-        "exportingButton": "Exporting...",
-        "searchPlaceholder": "Search invoices...",
+        "addButton": "Ajouter une facture",
+        "exportButton": "Exporter",
+        "exportingButton": "Exportation...",
+        "searchPlaceholder": "Rechercher des factures...",
         "table": {
-          "no": "NO",
-          "invoiceNumber": "INVOICE #",
-          "account": "ACCOUNT",
-          "amount": "AMOUNT",
-          "invoiceDate": "INVOICE DATE",
-          "dueDate": "DUE DATE",
-          "status": "STATUS"
+          "no": "N°",
+          "invoiceNumber": "FACTURE #",
+          "account": "COMPTE",
+          "amount": "MONTANT",
+          "invoiceDate": "DATE DE FACTURE",
+          "dueDate": "DATE D'ÉCHÉANCE",
+          "status": "STATUT"
         },
         "labels": {
-          "pending": "Pending",
-          "defaultFileName": "invoices-export.xlsx"
+          "pending": "En attente",
+          "defaultFileName": "factures-export.xlsx"
         },
         "toast": {
-          "exportFailed": "Export failed",
-          "exportInvalidData": "Export file data is invalid",
-          "exportSuccess": "Invoices exported successfully",
-          "exportCatchFailed": "Failed to export invoices",
-          "fetchFailed": "Failed to fetch invoices"
+          "exportFailed": "Échec de l'exportation",
+          "exportInvalidData": "Les données du fichier exporté sont invalides",
+          "exportSuccess": "Factures exportées avec succès",
+          "exportCatchFailed": "Échec de l'exportation des factures",
+          "fetchFailed": "Échec de la récupération des factures"
         }
       },
       "detail": {
         "title": {
-          "add": "Add Invoice",
-          "edit": "Invoice"
+          "add": "Ajouter une facture",
+          "edit": "Facture"
         },
-        "subtitle": "Create manual billing invoice.",
+        "subtitle": "Créer une facture de facturation manuelle.",
         "breadcrumbs": {
-          "billing": "Billing",
-          "current": "Invoices"
+          "billing": "Facturation",
+          "current": "Factures"
         },
         "fields": {
-          "account": "Account",
-          "subscription": "Subscription",
-          "amount": "Amount",
-          "currency": "Currency",
-          "invoiceDate": "Invoice Date",
-          "dueDate": "Due Date"
+          "account": "Compte",
+          "subscription": "Abonnement",
+          "amount": "Montant",
+          "currency": "Devise",
+          "invoiceDate": "Date de facture",
+          "dueDate": "Date d'échéance"
         },
         "buttons": {
-          "cancel": "Cancel",
-          "saving": "Saving...",
-          "submit": "Create Invoice"
+          "cancel": "Annuler",
+          "saving": "Enregistrement...",
+          "submit": "Créer la facture"
         },
         "toast": {
-          "editNotEnabled": "Edit invoice is not enabled yet.",
-          "selectAccountSubscription": "Please select Account and Subscription",
-          "selectCurrency": "Please select currency",
-          "amountGreaterThanZero": "Amount must be greater than 0",
-          "validDates": "Please provide valid invoice and due dates",
-          "createdSuccess": "Invoice created successfully",
-          "createFailed": "Failed to create invoice",
-          "dropdownFailed": "Failed to load dropdown data"
+          "editNotEnabled": "La modification de la facture n'est pas encore activée.",
+          "selectAccountSubscription": "Veuillez sélectionner le compte et l'abonnement",
+          "selectCurrency": "Veuillez sélectionner la devise",
+          "amountGreaterThanZero": "Le montant doit être supérieur à 0",
+          "validDates": "Veuillez fournir des dates de facture et d'échéance valides",
+          "createdSuccess": "Facture créée avec succès",
+          "createFailed": "Échec de la création de la facture",
+          "dropdownFailed": "Échec du chargement des données de la liste déroulante"
         }
       }
     }

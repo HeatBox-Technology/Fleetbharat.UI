@@ -2,103 +2,103 @@
   "pages": {
     "formmaster": {
       "list": {
-        "title": "Form Master",
-        "subtitle": "Manage application forms, modules, routes, and visibility.",
+        "title": "Gestionnaire de formulaires",
+        "subtitle": "Gérer les formulaires d'application, modules, routes et visibilité.",
         "breadcrumbs": {
           "configurations": "Configurations",
-          "current": "Form Master"
+          "current": "Gestionnaire de formulaires"
         },
-        "addButton": "Add Form",
-        "loading": "Loading forms...",
-        "searchPlaceholder": "Search forms by name, code, or module...",
+        "addButton": "Ajouter un formulaire",
+        "loading": "Chargement des formulaires...",
+        "searchPlaceholder": "Rechercher des formulaires par nom, code ou module...",
         "table": {
-          "no": "NO",
-          "formCode": "FORM CODE",
-          "formName": "FORM NAME",
+          "no": "N°",
+          "formCode": "CODE DU FORMULAIRE",
+          "formName": "NOM DU FORMULAIRE",
           "module": "MODULE",
-          "pageUrl": "PAGE URL",
-          "status": "STATUS"
+          "pageUrl": "URL DE LA PAGE",
+          "status": "STATUT"
         },
         "status": {
-          "active": "Active",
-          "inactive": "Inactive"
+          "active": "Actif",
+          "inactive": "Inactif"
         },
         "delete": {
-          "title": "Delete Form",
-          "message": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
-          "confirm": "Delete",
-          "cancel": "Cancel"
+          "title": "Supprimer le formulaire",
+          "message": "Êtes-vous sûr de vouloir supprimer \"{name}\" ? Cette action est irréversible.",
+          "confirm": "Supprimer",
+          "cancel": "Annuler"
         },
         "toast": {
-          "fetchFailed": "Failed to fetch forms",
-          "deleted": "Form deleted successfully",
-          "deleteFailed": "Failed to delete form"
+          "fetchFailed": "Échec de récupération des formulaires",
+          "deleted": "Formulaire supprimé avec succès",
+          "deleteFailed": "Échec de la suppression du formulaire"
         }
       },
       "detail": {
-        "loading": "Loading form details...",
+        "loading": "Chargement des détails du formulaire...",
         "title": {
-          "edit": "Edit Form",
-          "create": "Create New Form"
+          "edit": "Modifier le formulaire",
+          "create": "Créer un nouveau formulaire"
         },
         "section": {
-          "title": "Form Information",
-          "subtitle": "Configure form code, route, module, and visibility options."
+          "title": "Informations du formulaire",
+          "subtitle": "Configurer le code du formulaire, la route, le module et les options de visibilité."
         },
         "fields": {
-          "formCode": "Form Code",
-          "formCodePlaceholder": "e.g. USER-001",
-          "formName": "Form Name",
-          "formNamePlaceholder": "e.g. Roles & Permissions",
-          "moduleName": "Module Name",
-          "moduleNamePlaceholder": "e.g. User-Management",
-          "pageUrl": "Page URL",
-          "pageUrlPlaceholder": "e.g. /users/roles-permissions",
-          "iconName": "Icon Name",
-          "iconNamePlaceholder": "e.g. Shield",
-          "sortOrder": "Sort Order",
+          "formCode": "Code du formulaire",
+          "formCodePlaceholder": "ex. USER-001",
+          "formName": "Nom du formulaire",
+          "formNamePlaceholder": "ex. Rôles & Permissions",
+          "moduleName": "Nom du module",
+          "moduleNamePlaceholder": "ex. Gestion des utilisateurs",
+          "pageUrl": "URL de la page",
+          "pageUrlPlaceholder": "ex. /users/roles-permissions",
+          "iconName": "Nom de l'icône",
+          "iconNamePlaceholder": "ex. Shield",
+          "sortOrder": "Ordre de tri",
           "sortOrderPlaceholder": "0",
-          "formModuleId": "Form Module Id",
+          "formModuleId": "ID du module du formulaire",
           "formModuleIdPlaceholder": "0",
-          "filterConfigJson": "Filter Config JSON",
-          "filterConfigJsonPlaceholder": "e.g. JSON object string"
+          "filterConfigJson": "JSON de configuration des filtres",
+          "filterConfigJsonPlaceholder": "ex. chaîne JSON"
         },
         "toggles": {
           "isMenu": {
-            "title": "Is Menu",
-            "description": "Enable to include this form in menu."
+            "title": "Afficher dans le menu",
+            "description": "Activer pour inclure ce formulaire dans le menu."
           },
           "isBulk": {
-            "title": "Is Bulk Upload",
-            "description": "Enable if this form supports bulk upload."
+            "title": "Téléversement en masse",
+            "description": "Activer si ce formulaire prend en charge le téléversement en masse."
           },
           "isVisible": {
-            "title": "Is Visible",
-            "description": "Toggle form visibility in UI layers."
+            "title": "Visible",
+            "description": "Basculer la visibilité du formulaire dans l'interface."
           },
           "isActive": {
-            "title": "Is Active",
-            "description": "Inactive form will be treated as disabled."
+            "title": "Actif",
+            "description": "Un formulaire inactif sera considéré comme désactivé."
           }
         },
         "buttons": {
-          "cancel": "Cancel",
-          "creating": "Creating...",
-          "updating": "Updating...",
-          "create": "Create Form",
-          "update": "Update Form"
+          "cancel": "Annuler",
+          "creating": "Création...",
+          "updating": "Mise à jour...",
+          "create": "Créer le formulaire",
+          "update": "Mettre à jour le formulaire"
         },
         "toast": {
-          "fetchFailed": "Failed to fetch form",
-          "fetchDetailsFailed": "Failed to fetch form details",
-          "formCodeRequired": "Form code is required",
-          "formNameRequired": "Form name is required",
-          "moduleNameRequired": "Module name is required",
-          "pageUrlRequired": "Page URL is required",
-          "filterConfigInvalid": "Filter Config JSON must be valid JSON",
-          "created": "Form created successfully",
-          "updated": "Form updated successfully",
-          "saveFailed": "Failed to save form"
+          "fetchFailed": "Échec de récupération du formulaire",
+          "fetchDetailsFailed": "Échec de récupération des détails du formulaire",
+          "formCodeRequired": "Le code du formulaire est requis",
+          "formNameRequired": "Le nom du formulaire est requis",
+          "moduleNameRequired": "Le nom du module est requis",
+          "pageUrlRequired": "L'URL de la page est requise",
+          "filterConfigInvalid": "La configuration JSON du filtre doit être valide",
+          "created": "Formulaire créé avec succès",
+          "updated": "Formulaire mis à jour avec succès",
+          "saveFailed": "Échec de l'enregistrement du formulaire"
         }
       }
     }

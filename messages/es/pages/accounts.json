@@ -1,75 +1,75 @@
 {
-  "pages": {
-    "accounts": {
-      "list": {
-        "title": "Account List",
-        "subtitle": "Manage identities, taxonomies, and global parameters.",
-        "breadcrumbs": {
-          "accounts": "Accounts",
-          "current": "Account List"
-        },
-        "addButton": "Add Account",
-        "searchPlaceholder": "Search accounts...",
-        "table": {
-          "no": "NO",
-          "code": "CODE",
-          "instance": "INSTANCE",
-          "contact": "CONTACT",
-          "location": "LOCATION",
-          "status": "STATUS"
-        },
-        "metrics": {
-          "total": "TOTAL",
-          "active": "ACTIVE",
-          "pending": "PENDING",
-          "inactive": "INACTIVE"
-        },
-        "delete": {
-          "title": "Delete Account",
-          "message": "Are you sure you want to delete \"{instance}\"? This action cannot be undone.",
-          "confirm": "Delete",
-          "cancel": "Cancel"
-        },
-        "toast": {
-          "loadFailed": "Failed to load accounts",
-          "deleteFailed": "Failed to delete account"
-        }
-      },
-      "detail": {
-        "title": {
-          "create": "Add New Account",
-          "edit": "Edit Account"
-        },
-        "loading": "Loading account details...",
-        "sections": {
-          "accountDetails": "Account Details",
-          "addressDetails": "Address Details",
-          "businessProfile": "Business Profile Details",
-          "userPermission": "User Permission & Access Details"
-        },
-        "buttons": {
-          "cancel": "Cancel",
-          "submit": "Submit"
-        },
-        "toast": {
-          "accountNameRequired": "Account Name is required!",
-          "categoryRequired": "Category is required!",
-          "primaryDomainRequired": "Primary Domain is required!",
-          "businessEmailRequired": "Business Email is required!",
-          "businessAddressRequired": "Business Address is required!",
-          "businessTimeZoneRequired": "Business Time Zone is required!",
-          "countryRequired": "Country is required!",
-          "stateRequired": "State is required!",
-          "cityRequired": "City is required!",
-          "createdSuccess": "Account created successfully!",
-          "updatedSuccess": "Account updated successfully!",
-          "alreadyExists": "Account already exists!",
-          "genericError": "Something went wrong!",
-          "submitError": "An error occurred while submitting the form.",
-          "fetchAccountFailed": "Failed to fetch account details!",
-          "fetchAccountError": "An error occurred while fetching account details."
-        }
-      }
-    }
-  }
+"pages": {
+"accounts": {
+"list": {
+"title": "Lista de Cuentas",
+"subtitle": "Gestiona identidades, taxonomías y parámetros globales.",
+"breadcrumbs": {
+"accounts": "Cuentas",
+"current": "Lista de Cuentas"
+},
+"addButton": "Agregar Cuenta",
+"searchPlaceholder": "Buscar cuentas...",
+"table": {
+"no": "Nº",
+"code": "CÓDIGO",
+"instance": "INSTANCIA",
+"contact": "CONTACTO",
+"location": "UBICACIÓN",
+"status": "ESTADO"
+},
+"metrics": {
+"total": "TOTAL",
+"active": "ACTIVO",
+"pending": "PENDIENTE",
+"inactive": "INACTIVO"
+},
+"delete": {
+"title": "Eliminar Cuenta",
+"message": "¿Seguro que deseas eliminar \"{instance}\"? Esta acción no se puede deshacer.",
+"confirm": "Eliminar",
+"cancel": "Cancelar"
+},
+"toast": {
+"loadFailed": "Error al cargar las cuentas",
+"deleteFailed": "Error al eliminar la cuenta"
+}
+},
+"detail": {
+"title": {
+"create": "Agregar Nueva Cuenta",
+"edit": "Editar Cuenta"
+},
+"loading": "Cargando detalles de la cuenta...",
+"sections": {
+"accountDetails": "Detalles de la Cuenta",
+"addressDetails": "Detalles de Dirección",
+"businessProfile": "Detalles del Perfil Empresarial",
+"userPermission": "Permisos de Usuario y Acceso"
+},
+"buttons": {
+"cancel": "Cancelar",
+"submit": "Enviar"
+},
+"toast": {
+"accountNameRequired": "¡El nombre de la cuenta es obligatorio!",
+"categoryRequired": "¡La categoría es obligatoria!",
+"primaryDomainRequired": "¡El dominio principal es obligatorio!",
+"businessEmailRequired": "¡El correo electrónico empresarial es obligatorio!",
+"businessAddressRequired": "¡La dirección empresarial es obligatoria!",
+"businessTimeZoneRequired": "¡La zona horaria empresarial es obligatoria!",
+"countryRequired": "¡El país es obligatorio!",
+"stateRequired": "¡El estado es obligatorio!",
+"cityRequired": "¡La ciudad es obligatoria!",
+"createdSuccess": "¡Cuenta creada correctamente!",
+"updatedSuccess": "¡Cuenta actualizada correctamente!",
+"alreadyExists": "¡La cuenta ya existe!",
+"genericError": "¡Algo salió mal!",
+"submitError": "Ocurrió un error al enviar el formulario.",
+"fetchAccountFailed": "Error al obtener detalles de la cuenta.",
+"fetchAccountError": "Ocurrió un error al obtener detalles de la cuenta."
+}
+}
+}
+}
 }

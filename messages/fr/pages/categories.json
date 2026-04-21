@@ -2,74 +2,74 @@
   "pages": {
     "categories": {
       "list": {
-        "title": "Categories",
-        "subtitle": "Manage identities, taxonomies, and global parameters.",
+        "title": "Catégories",
+        "subtitle": "Gérer les identités, les taxonomies et les paramètres globaux.",
         "breadcrumbs": {
-          "accounts": "Accounts",
-          "current": "Categories"
+          "accounts": "Comptes",
+          "current": "Catégories"
         },
-        "addButton": "Add Category",
-        "loading": "Loading categories...",
-        "searchPlaceholder": "Search categories...",
+        "addButton": "Ajouter une Catégorie",
+        "loading": "Chargement des catégories...",
+        "searchPlaceholder": "Rechercher des catégories...",
         "table": {
           "id": "ID",
-          "label": "LABEL",
+          "label": "LIBELLÉ",
           "description": "DESCRIPTION",
-          "status": "STATUS",
-          "createdAt": "CREATED AT"
+          "status": "STATUT",
+          "createdAt": "CRÉÉ LE"
         },
         "status": {
-          "active": "Active",
-          "inactive": "Inactive"
+          "active": "Actif",
+          "inactive": "Inactif"
         },
         "delete": {
-          "title": "Delete Category",
-          "message": "Are you sure you want to delete the category \"{label}\"? This action cannot be undone.",
-          "confirm": "Delete",
-          "cancel": "Cancel"
+          "title": "Supprimer la Catégorie",
+          "message": "Êtes-vous sûr de vouloir supprimer la catégorie \"{label}\" ? Cette action est irréversible.",
+          "confirm": "Supprimer",
+          "cancel": "Annuler"
         },
         "toast": {
-          "deleted": "Category deleted successfully!",
-          "deleteFailed": "Failed to delete: {message}",
-          "deleteError": "Error deleting category"
+          "deleted": "Catégorie supprimée avec succès !",
+          "deleteFailed": "Échec de la suppression : {message}",
+          "deleteError": "Erreur lors de la suppression de la catégorie"
         }
       },
       "detail": {
-        "loading": "Loading category data...",
+        "loading": "Chargement des données de la catégorie...",
         "title": {
-          "edit": "Edit Classification",
-          "create": "New Classification"
+          "edit": "Modifier la Classification",
+          "create": "Nouvelle Classification"
         },
         "section": {
-          "title": "Taxonomy Parameters",
-          "subtitleEdit": "Update the grouping for account management and pricing.",
-          "subtitleCreate": "Create a new grouping for account management and pricing."
+          "title": "Paramètres de Taxonomie",
+          "subtitleEdit": "Mettre à jour le regroupement pour la gestion des comptes et la tarification.",
+          "subtitleCreate": "Créer un nouveau regroupement pour la gestion des comptes et la tarification."
         },
         "fields": {
-          "labelName": "Label Name",
-          "labelPlaceholder": "e.g. Platinum Partner",
+          "labelName": "Nom du Libellé",
+          "labelPlaceholder": "ex. Partenaire Platinum",
           "description": "Description",
-          "descriptionPlaceholder": "Define the purpose and scope of this account category..."
+          "descriptionPlaceholder": "Définir l'objectif et la portée de cette catégorie de compte..."
         },
         "status": {
-          "title": "Category Status",
-          "subtitle": "Inactive categories cannot be assigned to new accounts."
+          "title": "Statut de la Catégorie",
+          "subtitle": "Les catégories inactives ne peuvent pas être attribuées aux nouveaux comptes."
         },
         "buttons": {
-          "cancel": "Cancel",
-          "updating": "Updating...",
-          "creating": "Creating...",
-          "update": "Update Category",
-          "create": "Create Category"
+          "cancel": "Annuler",
+          "updating": "Mise à jour...",
+          "creating": "Création...",
+          "update": "Mettre à jour la Catégorie",
+          "create": "Créer la Catégorie"
         },
         "toast": {
-          "fetchFailed": "Failed to fetch category data",
-          "fetchError": "Error loading category data",
-          "labelRequired": "Please enter a label name",
-          "updated": "Category updated successfully!",
-          "created": "Category created successfully!",
-          "saveFailed": "Failed: {message}",
-          "saveError": "An error occurred while saving the category"
+          "fetchFailed": "Échec du chargement des données de catégorie",
+          "fetchError": "Erreur lors du chargement des données de catégorie",
+          "labelRequired": "Veuillez saisir un nom de libellé",
+          "updated": "Catégorie mise à jour avec succès !",
+          "created": "Catégorie créée avec succès !",
+          "saveFailed": "Échec : {message}",
+          "saveError": "Une erreur s'est produite lors de l'enregistrement de la catégorie"
         }
       }
     }

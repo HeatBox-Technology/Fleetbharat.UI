@@ -2,111 +2,111 @@
   "pages": {
     "devices": {
       "list": {
-        "title": "Device",
-        "subtitle": "Full traceability of device identity, connectivity, and provisioning status.",
+        "title": "Appareil",
+        "subtitle": "Traçabilité complète de l'identité de l'appareil, de la connectivité et du statut de provisionnement.",
         "breadcrumbs": {
-          "fleet": "Fleet",
-          "current": "Device"
+          "fleet": "Flotte",
+          "current": "Appareil"
         },
-        "addButton": "Add Device",
-        "export": "Export",
+        "addButton": "Ajouter un appareil",
+        "export": "Exporter",
         "fields": {
-          "selectAccount": "Select Account"
+          "selectAccount": "Sélectionner un compte"
         },
         "table": {
-          "deviceIdentity": "Device Identity",
-          "category": "Category",
+          "deviceIdentity": "Identité de l'appareil",
+          "category": "Catégorie",
           "type": "Type",
-          "status": "Status",
-          "lastUpdated": "Last Updated"
+          "status": "Statut",
+          "lastUpdated": "Dernière mise à jour"
         },
         "status": {
-          "active": "ACTIVE",
-          "inactive": "INACTIVE",
-          "inService": "IN SERVICE",
-          "outOfService": "OUT OF SERVICE"
+          "active": "ACTIF",
+          "inactive": "INACTIF",
+          "inService": "EN SERVICE",
+          "outOfService": "HORS SERVICE"
         },
         "metrics": {
-          "totalDevices": "Total Devices",
-          "inService": "In Service",
-          "outOfService": "Out of Service"
+          "totalDevices": "Total des appareils",
+          "inService": "En service",
+          "outOfService": "Hors service"
         },
         "fallback": {
           "defaultCategory": "GPS",
-          "defaultType": "Tracker",
-          "notAvailable": "N/A"
+          "defaultType": "Traceur",
+          "notAvailable": "N/D"
         },
-        "loading": "Loading devices...",
-        "searchPlaceholder": "Search devices...",
-        "deleteTitle": "Remove Device",
-        "deleteMessage": "Are you sure you want to remove device \"{device}\" from the registry? This action cannot be undone.",
-        "confirmDelete": "Remove",
-        "cancel": "Cancel",
+        "loading": "Chargement des appareils...",
+        "searchPlaceholder": "Rechercher des appareils...",
+        "deleteTitle": "Supprimer l'appareil",
+        "deleteMessage": "Êtes-vous sûr de vouloir supprimer l'appareil \"{device}\" du registre ? Cette action est irréversible.",
+        "confirmDelete": "Supprimer",
+        "cancel": "Annuler",
         "toast": {
-          "loadError": "An error occurred while loading devices",
-          "removed": "Device removed successfully",
-          "deleteFailed": "Failed to delete device.",
-          "deleteError": "An error occurred while deleting.",
-          "exportSuccess": "Devices exported successfully!",
-          "exportFailed": "Failed to export devices"
+          "loadError": "Une erreur s'est produite lors du chargement des appareils",
+          "removed": "Appareil supprimé avec succès",
+          "deleteFailed": "Échec de la suppression de l'appareil.",
+          "deleteError": "Une erreur s'est produite lors de la suppression.",
+          "exportSuccess": "Appareils exportés avec succès !",
+          "exportFailed": "Échec de l'exportation des appareils"
         }
       },
       "detail": {
         "loading": {
-          "edit": "Loading device data...",
-          "create": "Preparing form..."
+          "edit": "Chargement des données de l'appareil...",
+          "create": "Préparation du formulaire..."
         },
         "title": {
-          "edit": "Edit Device",
-          "create": "Provision Device"
+          "edit": "Modifier l'appareil",
+          "create": "Provisionner l'appareil"
         },
         "subtitle": {
-          "edit": "Update registry entry for this device.",
-          "create": "Global Asset Correlation & Device Registry"
+          "edit": "Mettre à jour l'entrée du registre pour cet appareil.",
+          "create": "Corrélation globale des actifs et registre des appareils"
         },
         "buttons": {
-          "discard": "Discard",
-          "saving": "Saving...",
-          "update": "Update Registry Entry",
-          "create": "Commit Registry Entry"
+          "discard": "Ignorer",
+          "saving": "Enregistrement...",
+          "update": "Mettre à jour l'entrée du registre",
+          "create": "Valider l'entrée du registre"
         },
         "sections": {
-          "accountContext": "Account Context",
-          "accountContextSubtitle": "Select the account this device belongs to.",
-          "identityLifecycle": "Identity & Lifecycle",
-          "identityLifecycleSubtitle": "Hardware identification and classification details.",
-          "preview": "Device Identity Preview",
-          "previewSubtitle": "Auto-generated from the fields above."
+          "accountContext": "Contexte du compte",
+          "accountContextSubtitle": "Sélectionnez le compte auquel cet appareil appartient.",
+          "identityLifecycle": "Identité et cycle de vie",
+          "identityLifecycleSubtitle": "Détails d'identification matérielle et de classification.",
+          "preview": "Aperçu de l'identité de l'appareil",
+          "previewSubtitle": "Généré automatiquement à partir des champs ci-dessus."
         },
         "fields": {
-          "account": "Account",
-          "selectAccount": "Select Account",
-          "manufacturer": "Device Manufacturer",
-          "selectManufacturer": "Select Device Manufacturer",
-          "deviceType": "Device Type",
-          "selectDeviceType": "Select Device Type",
-          "deviceNo": "Device No.",
-          "deviceNoPlaceholder": "e.g. DEV-001",
-          "serial": "IMEI / Serial",
-          "serialPlaceholder": "Hardware Identity Code"
+          "account": "Compte",
+          "selectAccount": "Sélectionner un compte",
+          "manufacturer": "Fabricant de l'appareil",
+          "selectManufacturer": "Sélectionner le fabricant de l'appareil",
+          "deviceType": "Type d'appareil",
+          "selectDeviceType": "Sélectionner le type d'appareil",
+          "deviceNo": "N° de l'appareil",
+          "deviceNoPlaceholder": "ex. DEV-001",
+          "serial": "IMEI / Série",
+          "serialPlaceholder": "Code d'identité matériel"
         },
         "preview": {
-          "deviceType": "Device Type",
-          "manufacturer": "Device Manufacturer",
-          "deviceNo": "Device No.",
-          "serial": "IMEI / Serial",
+          "deviceType": "Type d'appareil",
+          "manufacturer": "Fabricant de l'appareil",
+          "deviceNo": "N° de l'appareil",
+          "serial": "IMEI / Série",
           "empty": "—"
         },
         "toast": {
-          "loadFailed": "Failed to load device data",
-          "selectAccount": "Please select an account",
-          "selectManufacturer": "Please select a device manufacturer",
-          "selectDeviceType": "Please select a device type",
-          "serialRequired": "IMEI / Serial number is required",
-          "serialNumericOnly": "IMEI / Serial number must contain digits only",
-          "saved": "Device saved successfully",
-          "operationFailed": "Operation failed",
-          "errorOccurred": "An error occurred"
+          "loadFailed": "Échec du chargement des données de l'appareil",
+          "selectAccount": "Veuillez sélectionner un compte",
+          "selectManufacturer": "Veuillez sélectionner un fabricant d'appareil",
+          "selectDeviceType": "Veuillez sélectionner un type d'appareil",
+          "serialRequired": "Le numéro IMEI / Série est requis",
+          "serialNumericOnly": "Le numéro IMEI / Série doit contenir uniquement des chiffres",
+          "saved": "Appareil enregistré avec succès",
+          "operationFailed": "Échec de l'opération",
+          "errorOccurred": "Une erreur s'est produite"
         }
       }
     }

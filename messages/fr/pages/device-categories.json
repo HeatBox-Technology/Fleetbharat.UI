@@ -2,80 +2,80 @@
   "pages": {
     "deviceCategories": {
       "list": {
-        "noReadPermission": "You do not have read access.",
-        "title": "Device Categories",
-        "subtitle": "Manage device category masters.",
+        "noReadPermission": "Vous n'avez pas l'autorisation de lecture.",
+        "title": "Catégories d'appareils",
+        "subtitle": "Gérer les catégories principales des appareils.",
         "breadcrumbs": {
-          "fleet": "Fleet",
-          "current": "Device Categories"
+          "fleet": "Flotte",
+          "current": "Catégories d'appareils"
         },
-        "addButton": "Add Category",
-        "searchPlaceholder": "Search categories...",
+        "addButton": "Ajouter une catégorie",
+        "searchPlaceholder": "Rechercher des catégories...",
         "table": {
-          "no": "No",
-          "name": "Category Name",
+          "no": "N°",
+          "name": "Nom de la catégorie",
           "code": "Code",
-          "protocol": "Default Protocol",
-          "status": "Status",
-          "updatedAt": "Last Updated"
+          "protocol": "Protocole par défaut",
+          "status": "Statut",
+          "updatedAt": "Dernière mise à jour"
         },
         "metrics": {
-          "total": "Total Categories",
-          "active": "Active",
-          "inactive": "Inactive"
+          "total": "Total des catégories",
+          "active": "Actives",
+          "inactive": "Inactives"
         },
         "delete": {
-          "title": "Delete Device Category",
-          "message": "Delete \"{name}\"?",
-          "confirm": "Delete",
-          "cancel": "Cancel"
+          "title": "Supprimer la catégorie d'appareil",
+          "message": "Supprimer \"{name}\" ?",
+          "confirm": "Supprimer",
+          "cancel": "Annuler"
         },
         "toast": {
-          "deleted": "Device category removed."
+          "deleted": "Catégorie d'appareil supprimée."
         }
       },
       "detail": {
-        "noPermission": "You do not have permission to perform this action.",
+        "noPermission": "Vous n'avez pas l'autorisation d'effectuer cette action.",
         "title": {
-          "edit": "Update Device Category",
-          "create": "Add Device Category"
+          "edit": "Mettre à jour la catégorie d'appareil",
+          "create": "Ajouter une catégorie d'appareil"
         },
         "subtitle": {
-          "edit": "Update and maintain category metadata for devices",
-          "create": "Create and maintain category metadata for devices"
+          "edit": "Mettre à jour et maintenir les métadonnées de catégorie pour les appareils",
+          "create": "Créer et maintenir les métadonnées de catégorie pour les appareils"
         },
         "breadcrumbs": {
-          "edit": "Update",
-          "create": "Add"
+          "edit": "Mettre à jour",
+          "create": "Ajouter"
         },
         "section": {
-          "title": "Category Details"
+          "title": "Détails de la catégorie"
         },
         "fields": {
-          "name": "Category Name",
-          "namePlaceholder": "Enter category name",
-          "code": "Category Code",
-          "codePlaceholder": "Enter code (e.g. GPS)",
-          "protocol": "Default Protocol",
+          "name": "Nom de la catégorie",
+          "namePlaceholder": "Entrez le nom de la catégorie",
+          "code": "Code de la catégorie",
+          "codePlaceholder": "Entrez le code (ex. GPS)",
+          "protocol": "Protocole par défaut",
           "description": "Description",
-          "descriptionPlaceholder": "Write a short description"
+          "descriptionPlaceholder": "Écrire une courte description"
         },
         "status": {
-          "title": "Active Status",
-          "subtitle": "Toggle whether this category can be used for new devices."
+          "title": "Statut actif",
+          "subtitle": "Activer ou désactiver l'utilisation de cette catégorie pour de nouveaux appareils."
         },
         "buttons": {
-          "saving": "Saving...",
-          "update": "Update Category",
-          "create": "Create",
-          "cancel": "Cancel"
+          "saving": "Enregistrement...",
+          "update": "Mettre à jour la catégorie",
+          "create": "Créer",
+          "cancel": "Annuler"
         },
         "toast": {
-          "notFound": "Category not found in static data.",
-          "nameRequired": "Category name is required.",
-          "codeRequired": "Category code is required.",
-          "updated": "Device category updated.",
-          "created": "Device category created."
+          "notFound": "Catégorie introuvable dans les données statiques.",
+          "nameRequired": "Le nom de la catégorie est requis.",
+          "codeRequired": "Le code de la catégorie est requis.",
+          "updated": "Catégorie d'appareil mise à jour.",
+          "created": "Catégorie d'appareil créée."
         }
       }
     }

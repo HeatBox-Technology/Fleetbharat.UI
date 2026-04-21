@@ -2,130 +2,130 @@
   "pages": {
     "routeMaster": {
       "list": {
-        "title": "Route Master",
-        "subtitle": "Configure reusable route templates using geofence points and stops.",
+        "title": "Maître des itinéraires",
+        "subtitle": "Configurer des modèles d’itinéraires réutilisables à l’aide de points de géorepérage et d’arrêts.",
         "breadcrumbs": {
-          "fleet": "Fleet",
-          "current": "Route Master"
+          "fleet": "Flotte",
+          "current": "Maître des itinéraires"
         },
-        "addButton": "Add Route",
-        "loading": "Loading route masters...",
-        "searchPlaceholder": "Search routes...",
+        "addButton": "Ajouter un itinéraire",
+        "loading": "Chargement des itinéraires...",
+        "searchPlaceholder": "Rechercher des itinéraires...",
         "metrics": {
-          "totalRoutes": "TOTAL ROUTES",
-          "activeRoutes": "ACTIVE ROUTES",
-          "inactiveRoutes": "INACTIVE ROUTES"
+          "totalRoutes": "TOTAL DES ITINÉRAIRES",
+          "activeRoutes": "ITINÉRAIRES ACTIFS",
+          "inactiveRoutes": "ITINÉRAIRES INACTIFS"
         },
         "filters": {
-          "selectAccount": "Select Account",
-          "selectedAccount": "Selected Account ({id})"
+          "selectAccount": "Sélectionner un compte",
+          "selectedAccount": "Compte sélectionné ({id})"
         },
         "table": {
-          "no": "NO",
-          "routeName": "ROUTE NAME",
-          "account": "ACCOUNT",
-          "startPoint": "START POINT",
-          "endPoint": "END POINT",
-          "stops": "STOPS",
-          "geofence": "GEOFENCE",
-          "status": "STATUS",
-          "createdOn": "CREATED ON"
+          "no": "N°",
+          "routeName": "NOM DE L’ITINÉRAIRE",
+          "account": "COMPTE",
+          "startPoint": "POINT DE DÉPART",
+          "endPoint": "POINT D’ARRIVÉE",
+          "stops": "ARRÊTS",
+          "geofence": "GÉOCLÔTURE",
+          "status": "STATUT",
+          "createdOn": "CRÉÉ LE"
         },
         "labels": {
-          "yes": "Yes",
-          "no": "No",
-          "active": "Active",
-          "inactive": "Inactive"
+          "yes": "Oui",
+          "no": "Non",
+          "active": "Actif",
+          "inactive": "Inactif"
         },
         "deleteDialog": {
-          "title": "Delete Route",
-          "message": "Are you sure you want to delete \"{name}\"?",
-          "confirm": "Delete",
-          "cancel": "Cancel"
+          "title": "Supprimer l’itinéraire",
+          "message": "Êtes-vous sûr de vouloir supprimer \"{name}\" ?",
+          "confirm": "Supprimer",
+          "cancel": "Annuler"
         },
         "toast": {
-          "fetchFailed": "Failed to fetch route master list",
-          "deleted": "Route deleted successfully",
-          "deleteFailed": "Failed to delete route",
-          "deleteError": "Error deleting route"
+          "fetchFailed": "Échec du chargement de la liste des itinéraires",
+          "deleted": "Itinéraire supprimé avec succès",
+          "deleteFailed": "Échec de la suppression de l’itinéraire",
+          "deleteError": "Erreur lors de la suppression de l’itinéraire"
         }
       },
       "detail": {
-        "createTitle": "Create Route",
-        "editTitle": "Edit Route",
-        "subtitle": "Configure route master with geofences and stop points.",
-        "loadingDetails": "Loading route details...",
-        "noReadPermission": "You do not have permission to view this page.",
+        "createTitle": "Créer un itinéraire",
+        "editTitle": "Modifier l’itinéraire",
+        "subtitle": "Configurer le maître d’itinéraire avec géorepérages et points d’arrêt.",
+        "loadingDetails": "Chargement des détails de l’itinéraire...",
+        "noReadPermission": "Vous n'avez pas l'autorisation de voir cette page.",
         "breadcrumbs": {
-          "fleet": "Fleet",
-          "master": "Route Master",
-          "create": "Create",
-          "edit": "Edit"
+          "fleet": "Flotte",
+          "master": "Maître des itinéraires",
+          "create": "Créer",
+          "edit": "Modifier"
         },
         "buttons": {
-          "cancel": "Cancel",
-          "saving": "Saving...",
-          "createRoute": "Create Route",
-          "updateRoute": "Update Route",
-          "loadingRoute": "Loading Route...",
-          "viewRoute": "View Route"
+          "cancel": "Annuler",
+          "saving": "Enregistrement...",
+          "createRoute": "Créer l’itinéraire",
+          "updateRoute": "Mettre à jour l’itinéraire",
+          "loadingRoute": "Chargement de l’itinéraire...",
+          "viewRoute": "Voir l’itinéraire"
         },
         "fields": {
-          "account": "Account",
-          "selectAccount": "Select Account",
-          "selectedAccount": "Selected Account ({id})",
-          "routeName": "Route Name",
-          "routeNamePlaceholder": "Enter route name",
-          "geofenceRelated": "Geofence Related",
-          "yes": "Yes",
-          "no": "No",
-          "startPoint": "Start Point",
-          "addGeofence": "Add Geofence",
-          "selectStartGeofence": "Select Start Geofence",
-          "stopLabel": "Stop {number}",
-          "selectStopGeofence": "Select Stop Geofence",
-          "addStop": "Add Stop",
-          "endPoint": "End Point",
-          "selectEndGeofence": "Select End Geofence",
-          "status": "Status",
-          "active": "Active",
-          "inactive": "Inactive",
-          "geofenceFallback": "Geofence {id}"
+          "account": "Compte",
+          "selectAccount": "Sélectionner un compte",
+          "selectedAccount": "Compte sélectionné ({id})",
+          "routeName": "Nom de l’itinéraire",
+          "routeNamePlaceholder": "Entrer le nom de l’itinéraire",
+          "geofenceRelated": "Lié au géorepérage",
+          "yes": "Oui",
+          "no": "Non",
+          "startPoint": "Point de départ",
+          "addGeofence": "Ajouter une géoclôture",
+          "selectStartGeofence": "Sélectionner la géoclôture de départ",
+          "stopLabel": "Arrêt {number}",
+          "selectStopGeofence": "Sélectionner la géoclôture d’arrêt",
+          "addStop": "Ajouter un arrêt",
+          "endPoint": "Point d’arrivée",
+          "selectEndGeofence": "Sélectionner la géoclôture d’arrivée",
+          "status": "Statut",
+          "active": "Actif",
+          "inactive": "Inactif",
+          "geofenceFallback": "Géoclôture {id}"
         },
         "section": {
-          "routePreview": "Route Preview",
-          "mapsLoadFailed": "Failed to load Google Maps.",
-          "loadingMap": "Loading map..."
+          "routePreview": "Aperçu de l’itinéraire",
+          "mapsLoadFailed": "Échec du chargement de Google Maps.",
+          "loadingMap": "Chargement de la carte..."
         },
         "table": {
-          "startGeofence": "Start Geofence",
-          "endGeofence": "End Geofence",
+          "startGeofence": "Géoclôture de départ",
+          "endGeofence": "Géoclôture d’arrivée",
           "distance": "Distance (Km)",
-          "time": "Time (Min)",
-          "totalDistance": "Total Distance:",
-          "totalTime": "Total Time:"
+          "time": "Temps (Min)",
+          "totalDistance": "Distance totale :",
+          "totalTime": "Temps total :"
         },
         "toast": {
-          "notFound": "Route not found",
-          "fetchFailed": "Failed to fetch route details",
-          "geofenceDropdownFailed": "Failed to load geofence dropdown",
-          "mapsNotLoaded": "Google Maps is not loaded yet",
-          "selectStartEndGeofence": "Please select start and end geofence",
-          "selectAtLeastStartEnd": "Please select at least start and end points",
-          "resolveGeofenceFailed": "Failed to resolve geofence {id}",
-          "encodedPathUnavailable": "Could not derive route polyline from map response",
-          "previewFailed": "Failed to preview route",
-          "selectAccount": "Please select account",
-          "enterRouteName": "Please enter route name",
-          "startEndMustDiffer": "Start and end geofence must be different",
-          "selectGeofenceForEachStop": "Please select geofence for each stop",
-          "noUpdatePermission": "You do not have permission to update route",
-          "noAddPermission": "You do not have permission to add route",
-          "routePathMissing": "Route path is missing. Please preview route first.",
-          "updated": "Route updated successfully",
-          "created": "Route created successfully",
-          "saveFailed": "Failed to save route",
-          "saveError": "Error while saving route"
+          "notFound": "Itinéraire introuvable",
+          "fetchFailed": "Échec du chargement des détails de l’itinéraire",
+          "geofenceDropdownFailed": "Échec du chargement de la liste des géoclôtures",
+          "mapsNotLoaded": "Google Maps n’est pas encore chargé",
+          "selectStartEndGeofence": "Veuillez sélectionner la géoclôture de départ et d’arrivée",
+          "selectAtLeastStartEnd": "Veuillez sélectionner au moins les points de départ et d’arrivée",
+          "resolveGeofenceFailed": "Impossible de résoudre la géoclôture {id}",
+          "encodedPathUnavailable": "Impossible de dériver la polyligne de l’itinéraire à partir de la réponse de la carte",
+          "previewFailed": "Échec de l’aperçu de l’itinéraire",
+          "selectAccount": "Veuillez sélectionner un compte",
+          "enterRouteName": "Veuillez saisir le nom de l’itinéraire",
+          "startEndMustDiffer": "Les géoclôtures de départ et d’arrivée doivent être différentes",
+          "selectGeofenceForEachStop": "Veuillez sélectionner une géoclôture pour chaque arrêt",
+          "noUpdatePermission": "Vous n’avez pas l’autorisation de mettre à jour l’itinéraire",
+          "noAddPermission": "Vous n’avez pas l’autorisation d’ajouter un itinéraire",
+          "routePathMissing": "Le chemin de l’itinéraire est manquant. Veuillez d’abord prévisualiser l’itinéraire.",
+          "updated": "Itinéraire mis à jour avec succès",
+          "created": "Itinéraire créé avec succès",
+          "saveFailed": "Échec de l’enregistrement de l’itinéraire",
+          "saveError": "Erreur lors de l’enregistrement de l’itinéraire"
         }
       }
     }

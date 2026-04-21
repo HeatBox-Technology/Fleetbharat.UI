@@ -2,103 +2,103 @@
   "pages": {
     "simMaster": {
       "list": {
-        "title": "SIM Master",
-        "subtitle": "Manage global SIM inventory, carrier contracts, and MSISDN mappings.",
+        "title": "Gestion des SIM",
+        "subtitle": "Gérer l’inventaire global des SIM, les contrats opérateurs et les correspondances MSISDN.",
         "breadcrumbs": {
-          "fleet": "Fleet",
-          "current": "SIM Master"
+          "fleet": "Flotte",
+          "current": "Gestion des SIM"
         },
-        "addButton": "Add SIM",
-        "export": "Export",
-        "searchPlaceholder": "Search by ICCID or MSISDN...",
+        "addButton": "Ajouter une SIM",
+        "export": "Exporter",
+        "searchPlaceholder": "Rechercher par ICCID ou MSISDN...",
         "table": {
-          "iccid": "ICCID Identification",
-          "msisdn": "Line Number (MSISDN)",
-          "status": "Connectivity Status",
-          "contractExpiry": "Contract Expiry",
-          "lastUpdated": "Last Updated"
+          "iccid": "Identification ICCID",
+          "msisdn": "Numéro de ligne (MSISDN)",
+          "status": "Statut de connectivité",
+          "contractExpiry": "Expiration du contrat",
+          "lastUpdated": "Dernière mise à jour"
         },
         "metrics": {
-          "totalSims": "Total SIMs",
-          "enabled": "Enabled",
-          "disabled": "Disabled",
-          "activeCarriers": "Active Carriers"
+          "totalSims": "Total des SIM",
+          "enabled": "Activées",
+          "disabled": "Désactivées",
+          "activeCarriers": "Opérateurs actifs"
         },
         "delete": {
-          "title": "Remove SIM",
-          "message": "Are you sure you want to remove SIM \"{iccid}\" from the registry? This action cannot be undone.",
-          "confirm": "Remove",
-          "cancel": "Cancel"
+          "title": "Supprimer la SIM",
+          "message": "Êtes-vous sûr de vouloir supprimer la SIM \"{iccid}\" du registre ? Cette action est irréversible.",
+          "confirm": "Supprimer",
+          "cancel": "Annuler"
         },
         "toast": {
-          "loadError": "An error occurred while loading SIMs",
-          "removed": "SIM removed from registry!",
-          "deleteFailed": "Failed to delete SIM",
-          "deleteError": "An error occurred while deleting.",
-          "exportSuccess": "SIM exported successfully!",
-          "exportFailed": "Failed to export SIMs",
-          "exportSoon": "Export coming soon!"
+          "loadError": "Une erreur s'est produite lors du chargement des SIM",
+          "removed": "SIM supprimée du registre !",
+          "deleteFailed": "Échec de la suppression de la SIM",
+          "deleteError": "Une erreur s'est produite lors de la suppression.",
+          "exportSuccess": "SIM exportées avec succès !",
+          "exportFailed": "Échec de l'exportation des SIM",
+          "exportSoon": "Export bientôt disponible !"
         }
       },
       "detail": {
         "loading": {
-          "edit": "Loading SIM data...",
-          "create": "Preparing form..."
+          "edit": "Chargement des données SIM...",
+          "create": "Préparation du formulaire..."
         },
         "title": {
-          "edit": "Edit SIM Card",
-          "create": "Register SIM Card"
+          "edit": "Modifier la carte SIM",
+          "create": "Enregistrer la carte SIM"
         },
         "subtitle": {
-          "edit": "Update SIM registry entry.",
-          "create": "Subscriber Identity Module"
+          "edit": "Mettre à jour l’entrée du registre SIM.",
+          "create": "Module d'identité de l'abonné"
         },
         "buttons": {
-          "discard": "Discard",
-          "saving": "Saving...",
-          "update": "Update SIM File",
-          "create": "Commit SIM File"
+          "discard": "Ignorer",
+          "saving": "Enregistrement...",
+          "update": "Mettre à jour le fichier SIM",
+          "create": "Valider le fichier SIM"
         },
         "sections": {
-          "hardwareIdentity": "Hardware Identity",
-          "carrierDetails": "Carrier Details",
-          "carrierDetailsSubtitle": "Network provider and contract information.",
-          "provisioningStatus": "Provisioning Status"
+          "hardwareIdentity": "Identité matérielle",
+          "carrierDetails": "Détails de l’opérateur",
+          "carrierDetailsSubtitle": "Fournisseur réseau et informations contractuelles.",
+          "provisioningStatus": "Statut de provisionnement"
         },
         "fields": {
-          "accountContext": "Account Context",
-          "selectAccount": "Select Account",
-          "iccid": "ICCID Identification",
+          "accountContext": "Contexte du compte",
+          "selectAccount": "Sélectionner un compte",
+          "iccid": "Identification ICCID",
           "iccidPlaceholder": "89...",
-          "msisdn": "MSISDN Number",
+          "msisdn": "Numéro MSISDN",
           "msisdnPlaceholder": "+00 ...",
-          "imsi": "IMSI Code",
-          "imsiPlaceholder": "Numeric ID",
-          "networkProvider": "Network Provider",
-          "selectCarrier": "Select Carrier",
-          "activatedOn": "Activated On",
-          "contractExpiry": "Contract Expiry"
+          "imsi": "Code IMSI",
+          "imsiPlaceholder": "Identifiant numérique",
+          "networkProvider": "Fournisseur réseau",
+          "selectCarrier": "Sélectionner l’opérateur",
+          "activatedOn": "Activé le",
+          "contractExpiry": "Expiration du contrat"
         },
         "status": {
-          "title": "Connectivity provisioning status",
-          "subtitle": "Only enabled SIMs can be assigned to hardware.",
-          "enabled": "ENABLED",
-          "disabled": "DISABLED"
+          "title": "Statut de provisionnement de la connectivité",
+          "subtitle": "Seules les SIM activées peuvent être attribuées au matériel.",
+          "enabled": "ACTIVÉ",
+          "disabled": "DÉSACTIVÉ"
         },
         "validation": {
-          "iccidRange": "ICCID must be 19-20 numeric digits only ({count} entered)",
-          "imsiLength": "IMSI should be exactly 15 digits ({count}/15)"
+          "iccidRange": "L’ICCID doit contenir uniquement 19 à 20 chiffres ({count} saisis)",
+          "imsiLength": "L’IMSI doit contenir exactement 15 chiffres ({count}/15)"
         },
         "toast": {
-          "notFound": "SIM not found",
-          "loadFailed": "Failed to load data",
-          "selectAccount": "Please select an account",
-          "iccidRequired": "ICCID is required",
-          "iccidRange": "ICCID must be 19 or 20 numeric digits only",
-          "selectProvider": "Please select a network provider",
-          "saved": "SIM saved successfully!",
-          "operationFailed": "Operation failed",
-          "errorOccurred": "An error occurred"
+          "notFound": "SIM introuvable",
+          "loadFailed": "Échec du chargement des données",
+          "selectAccount": "Veuillez sélectionner un compte",
+          "iccidRequired": "L’ICCID est requis",
+          "iccidRange": "L’ICCID doit contenir uniquement 19 ou 20 chiffres",
+          "selectProvider": "Veuillez sélectionner un fournisseur réseau",
+          "saved": "SIM enregistrée avec succès !",
+          "operationFailed": "Échec de l'opération",
+          "errorOccurred": "Une erreur s'est produite"
         }
       }
     }

@@ -2,93 +2,93 @@
   "pages": {
     "whiteLabel": {
       "list": {
-        "title": "White Label",
-        "subtitle": "Manage identities, taxonomies, and global parameters.",
+        "title": "Marca Blanca",
+        "subtitle": "Gestionar identidades, taxonomías y parámetros globales.",
         "breadcrumbs": {
-          "accounts": "Accounts",
-          "current": "White Label"
+          "accounts": "Cuentas",
+          "current": "Marca Blanca"
         },
-        "addButton": "Provision Branding",
-        "loading": "Loading white labels...",
-        "searchPlaceholder": "Search across all fields...",
+        "addButton": "Provisionar Marca",
+        "loading": "Cargando marcas blancas...",
+        "searchPlaceholder": "Buscar en todos los campos...",
         "table": {
-          "account": "ACCOUNT",
-          "domain": "DOMAIN",
-          "theme": "THEME",
-          "status": "STATUS"
+          "account": "CUENTA",
+          "domain": "DOMINIO",
+          "theme": "TEMA",
+          "status": "ESTADO"
         },
         "delete": {
-          "title": "Delete White Label",
-          "message": "Are you sure you want to delete the white label for \"{account}\"? This action cannot be undone.",
-          "confirm": "Delete",
-          "cancel": "Cancel"
+          "title": "Eliminar Marca Blanca",
+          "message": "¿Está seguro de que desea eliminar la marca blanca para \"{account}\"? Esta acción no se puede deshacer.",
+          "confirm": "Eliminar",
+          "cancel": "Cancelar"
         },
         "toast": {
-          "deleted": "White label deleted successfully!",
-          "deleteFailed": "Failed to delete white label",
-          "deleteError": "An error occurred while deleting."
+          "deleted": "¡Marca blanca eliminada correctamente!",
+          "deleteFailed": "Error al eliminar la marca blanca",
+          "deleteError": "Ocurrió un error al eliminar."
         }
       },
       "detail": {
         "title": {
-          "edit": "Edit Branding",
-          "create": "Provision Branding"
+          "edit": "Editar Marca",
+          "create": "Provisionar Marca"
         },
         "buttons": {
-          "cancel": "Cancel",
-          "saving": "Saving...",
-          "update": "Update Whitelabel",
-          "activate": "Activate Whitelabel"
+          "cancel": "Cancelar",
+          "saving": "Guardando...",
+          "update": "Actualizar Marca Blanca",
+          "activate": "Activar Marca Blanca"
         },
-        "loading": "Loading...",
+        "loading": "Cargando...",
         "sections": {
-          "coreInstanceMapping": "Core Instance Mapping",
-          "visualIdentitySystems": "Visual Identity Systems",
-          "identityBlueprint": "IDENTITY BLUEPRINT"
+          "coreInstanceMapping": "Asignación de Instancia Principal",
+          "visualIdentitySystems": "Sistemas de Identidad Visual",
+          "identityBlueprint": "PLANO DE IDENTIDAD"
         },
         "labels": {
-          "account": "Account",
-          "selectAccount": "Select Account",
-          "customEntryFqdn": "Custom Entry FQDN",
+          "account": "Cuenta",
+          "selectAccount": "Seleccionar Cuenta",
+          "customEntryFqdn": "FQDN Personalizado",
           "customEntryFqdnPlaceholder": "portal.partner.com",
-          "brandName": "Brand Name",
-          "brandNamePlaceholder": "Enter brand name",
-          "logoUrl": "Logo URL",
+          "brandName": "Nombre de Marca",
+          "brandNamePlaceholder": "Ingrese el nombre de la marca",
+          "logoUrl": "URL del Logo",
           "logoUrlPlaceholder": "https://cdn.example.com/logo.png",
-          "primaryLogo": "Primary Logo",
-          "appLogo": "App Logo",
-          "mobileLogo": "Mobile Logo",
+          "primaryLogo": "Logo Principal",
+          "appLogo": "Logo de la Aplicación",
+          "mobileLogo": "Logo Móvil",
           "favicon": "Favicon",
-          "logoDark": "Logo Dark",
-          "logoLight": "Logo Light",
-          "uploadedUrlPlaceholder": "Uploaded URL will appear here",
-          "noImagePreview": "No image preview",
-          "primaryColor": "Primary Color",
-          "secondaryColor": "Secondary Color",
-          "activeStatus": "Active Status",
+          "logoDark": "Logo Oscuro",
+          "logoLight": "Logo Claro",
+          "uploadedUrlPlaceholder": "La URL cargada aparecerá aquí",
+          "noImagePreview": "Sin vista previa de imagen",
+          "primaryColor": "Color Primario",
+          "secondaryColor": "Color Secundario",
+          "activeStatus": "Estado Activo",
           "fqdn": "FQDN:",
-          "accountCaps": "ACCOUNT:",
-          "statusCaps": "STATUS:",
-          "colorPreview": "COLOR PREVIEW"
+          "accountCaps": "CUENTA:",
+          "statusCaps": "ESTADO:",
+          "colorPreview": "VISTA PREVIA DE COLOR"
         },
         "summary": {
-          "subtitle": "Visual summary of the rebranded portal.",
-          "notSet": "Not set",
-          "active": "ACTIVE",
-          "inactive": "INACTIVE"
+          "subtitle": "Resumen visual del portal renombrado.",
+          "notSet": "No configurado",
+          "active": "ACTIVO",
+          "inactive": "INACTIVO"
         },
         "modes": {
-          "updated": "updated",
-          "created": "created"
+          "updated": "actualizado",
+          "created": "creado"
         },
         "toast": {
-          "selectAccount": "Please select a target account",
-          "enterFqdn": "Please enter custom FQDN",
-          "logoUploadFailed": "Logo upload failed",
-          "loadFailed": "Failed to load white label data",
-          "saved": "White label {mode} successfully!",
-          "saveFailed": "Failed: {message}",
-          "saveError": "An error occurred while saving"
+          "selectAccount": "Por favor seleccione una cuenta objetivo",
+          "enterFqdn": "Por favor ingrese un FQDN personalizado",
+          "logoUploadFailed": "Error al cargar el logo",
+          "loadFailed": "Error al cargar los datos de marca blanca",
+          "saved": "¡Marca blanca {mode} correctamente!",
+          "saveFailed": "Error: {message}",
+          "saveError": "Ocurrió un error al guardar"
         }
       }
     }

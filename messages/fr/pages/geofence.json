@@ -2,111 +2,111 @@
   "pages": {
     "geofence": {
       "list": {
-        "noReadPermission": "You do not have permission to view this page.",
-        "title": "Geofence Master",
-        "subtitle": "Manage geofence zones and operational boundaries.",
+        "noReadPermission": "Vous n'avez pas l'autorisation de consulter cette page.",
+        "title": "Gestion des géorepérages",
+        "subtitle": "Gérer les zones de géorepérage et les limites opérationnelles.",
         "breadcrumbs": {
-          "fleet": "Fleet",
-          "current": "Geofence Master"
+          "fleet": "Flotte",
+          "current": "Gestion des géorepérages"
         },
-        "addButton": "Define Zone",
-        "export": "Export",
-        "loading": "Loading geofences...",
-        "searchPlaceholder": "Search geofence...",
-        "deleteTitle": "Delete Geofence",
-        "deleteMessage": "Are you sure you want to delete \"{name}\"?",
-        "confirmDelete": "Delete",
-        "cancel": "Cancel",
+        "addButton": "Définir une zone",
+        "export": "Exporter",
+        "loading": "Chargement des géorepérages...",
+        "searchPlaceholder": "Rechercher un géorepérage...",
+        "deleteTitle": "Supprimer le géorepérage",
+        "deleteMessage": "Êtes-vous sûr de vouloir supprimer \"{name}\" ?",
+        "confirmDelete": "Supprimer",
+        "cancel": "Annuler",
         "fallback": {
-          "unnamedZone": "Unnamed Zone",
-          "safe": "SAFE"
+          "unnamedZone": "Zone sans nom",
+          "safe": "SÛR"
         },
         "table": {
-          "identity": "GEOFENCE IDENTITY",
-          "geometry": "GEOMETRY",
-          "status": "STATUS"
+          "identity": "IDENTITÉ DU GÉOREPÉRAGE",
+          "geometry": "GÉOMÉTRIE",
+          "status": "STATUT"
         },
         "toast": {
-          "deleted": "Geofence deleted successfully",
-          "deleteFailed": "Failed to delete geofence",
-          "deleteError": "Error deleting geofence",
-          "exportSuccess": "Geofences exported successfully",
-          "exportFailed": "Failed to export geofences"
+          "deleted": "Géorepérage supprimé avec succès",
+          "deleteFailed": "Échec de la suppression du géorepérage",
+          "deleteError": "Erreur lors de la suppression du géorepérage",
+          "exportSuccess": "Géorepérages exportés avec succès",
+          "exportFailed": "Échec de l'exportation des géorepérages"
         }
       },
       "detail": {
-        "loadingDetails": "Loading zone...",
-        "noReadPermission": "You do not have view permission for Geofence Master.",
-        "createTitle": "Create Geofence",
-        "editTitle": "Edit Geofence",
-        "subtitleCreate": "Create new geofence with identity and geometry rules.",
-        "subtitleEdit": "Update geofence identity and operational settings.",
+        "loadingDetails": "Chargement de la zone...",
+        "noReadPermission": "Vous n'avez pas l'autorisation d'affichage pour le gestionnaire de géorepérage.",
+        "createTitle": "Créer un géorepérage",
+        "editTitle": "Modifier le géorepérage",
+        "subtitleCreate": "Créer un nouveau géorepérage avec identité et règles de géométrie.",
+        "subtitleEdit": "Mettre à jour l'identité du géorepérage et les paramètres opérationnels.",
         "breadcrumbs": {
-          "fleet": "Fleet",
+          "fleet": "Flotte",
           "configurations": "Configurations",
-          "routeMaster": "Route Master",
-          "library": "Geofence Library",
-          "create": "Create",
-          "edit": "Edit"
+          "routeMaster": "Gestion des routes",
+          "library": "Bibliothèque de géorepérage",
+          "create": "Créer",
+          "edit": "Modifier"
         },
         "buttons": {
-          "saving": "Saving...",
-          "create": "Create Geofence",
-          "saveChanges": "Save Changes",
-          "cancel": "Cancel",
-          "pickOnMap": "Pick on Map"
+          "saving": "Enregistrement...",
+          "create": "Créer le géorepérage",
+          "saveChanges": "Enregistrer les modifications",
+          "cancel": "Annuler",
+          "pickOnMap": "Choisir sur la carte"
         },
         "section": {
-          "identity": "IDENTITY & REGISTRY",
-          "zoneConfig": "ZONE CONFIG"
+          "identity": "IDENTITÉ & REGISTRE",
+          "zoneConfig": "CONFIGURATION DE LA ZONE"
         },
         "fields": {
-          "account": "ACCOUNT",
-          "selectAccount": "Select account",
-          "uniqueCode": "UNIQUE CODE",
-          "displayName": "DISPLAY NAME",
-          "locationCenter": "LOCATION (CENTER)",
+          "account": "COMPTE",
+          "selectAccount": "Sélectionner un compte",
+          "uniqueCode": "CODE UNIQUE",
+          "displayName": "NOM D'AFFICHAGE",
+          "locationCenter": "EMPLACEMENT (CENTRE)",
           "latitude": "Latitude",
           "longitude": "Longitude",
           "classification": "CLASSIFICATION",
-          "geometryType": "GEOMETRY TYPE",
-          "geometryChangeHint": "Changing geometry type will require you to redraw the shape.",
-          "radius": "RADIUS (M)",
-          "status": "STATUS",
-          "enabled": "Enabled",
-          "disabled": "Disabled",
-          "colorTheme": "COLOR THEME"
+          "geometryType": "TYPE DE GÉOMÉTRIE",
+          "geometryChangeHint": "Changer le type de géométrie nécessitera de redessiner la forme.",
+          "radius": "RAYON (M)",
+          "status": "STATUT",
+          "enabled": "Activé",
+          "disabled": "Désactivé",
+          "colorTheme": "THÈME DE COULEUR"
         },
         "drawing": {
-          "active": "Drawing mode active - click on the map to draw your",
-          "circle": "circle",
-          "polygon": "polygon",
-          "polygonHelp": "Click to add points, double-click to finish.",
-          "circleHelp": "Click center then drag to set radius.",
-          "cancelRedraw": "Cancel redraw",
-          "shapeReady": "Shape ready.",
-          "redraw": "Redraw Shape",
-          "notDrawn": "No shape drawn yet. Click on the map to begin.",
-          "overlay": "Drawing mode - draw your {geometry} on the map"
+          "active": "Mode dessin actif - cliquez sur la carte pour dessiner votre",
+          "circle": "cercle",
+          "polygon": "polygone",
+          "polygonHelp": "Cliquez pour ajouter des points, double-cliquez pour terminer.",
+          "circleHelp": "Cliquez au centre puis faites glisser pour définir le rayon.",
+          "cancelRedraw": "Annuler le redessin",
+          "shapeReady": "Forme prête.",
+          "redraw": "Redessiner la forme",
+          "notDrawn": "Aucune forme dessinée pour l'instant. Cliquez sur la carte pour commencer.",
+          "overlay": "Mode dessin - dessinez votre {geometry} sur la carte"
         },
         "fallback": {
-          "newGeofence": "New Geofence"
+          "newGeofence": "Nouveau géorepérage"
         },
         "toast": {
-          "loadFailed": "Failed to load geofence",
-          "loadError": "Error loading geofence",
-          "noAddPermission": "You do not have add permission for Geofence",
-          "noUpdatePermission": "You do not have update permission for Geofence",
-          "selectAccount": "Please select an account",
-          "codeNameRequired": "Unique code and display name are required",
-          "drawPolygon": "Please draw a polygon on the map before saving",
-          "drawCircle": "Please draw a circle on the map before saving",
-          "finishDrawing": "Please finish drawing your shape on the map before saving",
-          "drawBeforeSave": "Please draw your geofence on the map before saving",
-          "created": "Geofence created successfully",
-          "updated": "Geofence updated successfully",
-          "saveFailed": "Failed to save geofence",
-          "saveError": "Error saving geofence"
+          "loadFailed": "Échec du chargement du géorepérage",
+          "loadError": "Erreur lors du chargement du géorepérage",
+          "noAddPermission": "Vous n'avez pas l'autorisation d'ajouter un géorepérage",
+          "noUpdatePermission": "Vous n'avez pas l'autorisation de mettre à jour le géorepérage",
+          "selectAccount": "Veuillez sélectionner un compte",
+          "codeNameRequired": "Le code unique et le nom d'affichage sont requis",
+          "drawPolygon": "Veuillez dessiner un polygone sur la carte avant d'enregistrer",
+          "drawCircle": "Veuillez dessiner un cercle sur la carte avant d'enregistrer",
+          "finishDrawing": "Veuillez terminer le dessin de votre forme sur la carte avant d'enregistrer",
+          "drawBeforeSave": "Veuillez dessiner votre géorepérage sur la carte avant d'enregistrer",
+          "created": "Géorepérage créé avec succès",
+          "updated": "Géorepérage mis à jour avec succès",
+          "saveFailed": "Échec de l'enregistrement du géorepérage",
+          "saveError": "Erreur lors de l'enregistrement du géorepérage"
         }
       }
     }

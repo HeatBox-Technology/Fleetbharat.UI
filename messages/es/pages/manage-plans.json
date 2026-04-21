@@ -1,79 +1,79 @@
 {
-  "pages": {
-    "managePlans": {
-      "list": {
-        "title": "Manage Plans",
-        "subtitle": "Design global pricing blueprints for multi-tenant account categories.",
-        "breadcrumbs": {
-          "billing": "Billing",
-          "current": "Manage Plans"
-        },
-        "addButton": "Create Plan",
-        "searchPlaceholder": "Search across all fields...",
-        "table": {
-          "no": "NO",
-          "planName": "PLAN NAME",
-          "category": "CATEGORY",
-          "pricing": "PRICING",
-          "status": "STATUS"
-        },
-        "toast": {
-          "deleteFailed": "Failed to delete plan",
-          "fetchFailed": "Failed to fetch plans",
-          "genericError": "Something went wrong."
-        }
-      },
-      "detail": {
-        "title": {
-          "edit": "Edit Plan",
-          "create": "Create New Plan"
-        },
-        "subtitle": "Configure pricing, features, and subscription details.",
-        "buttons": {
-          "cancel": "Cancel",
-          "saving": "Saving...",
-          "update": "Update Plan",
-          "create": "Create Plan"
-        },
-        "status": {
-          "loading": "Loading...",
-          "updated": "Plan updated successfully!",
-          "created": "Plan created successfully!",
-          "saveFailed": "Failed to save plan",
-          "saveError": "An error occurred while saving the plan",
-          "dropdownFailed": "Failed to load dropdown data",
-          "planLoadFailed": "Failed to load plan details"
-        },
-        "sections": {
-          "structuralDefinitions": "Structural Definitions",
-          "structuralDefinitionsSubtitle": "Fundamental identity and tenant-scope attributes.",
-          "financialDefinitionLayer": "Financial Definition Layer",
-          "financialDefinitionLayerSubtitle": "Define setup and recurring billing parameters.",
-          "entitlementModuleMatrix": "Entitlement Module Matrix",
-          "entitlementModuleMatrixSubtitle": "Enable modules and capabilities included in this plan.",
-          "usageAndScalability": "Usage & Scalability Constraints",
-          "usageAndScalabilitySubtitle": "Set operational limits and resource boundaries.",
-          "dedicatedSupport": "Dedicated Support Line",
-          "dedicatedSupportSubtitle": "Define a specific support channel for this plan tier.",
-          "adminGuard": "Admin Guard Settings",
-          "blueprint": "PLAN BLUEPRINT",
-          "blueprintSubtitle": "Live configuration summary."
-        },
-        "labels": {
-          "category": "Category:",
-          "cycle": "Cycle:",
-          "currency": "Currency:",
-          "usersLimit": "Users Limit:",
-          "activeFeatures": "Active Features:",
-          "setupFee": "SETUP FEE",
-          "contractTerm": "CONTRACT TERM",
-          "recurringCharges": "Recurring Charges (Year 2+)",
-          "amc": "AMC:",
-          "platform": "Platform:",
-          "na": "N/A",
-          "unlimited": "Unlimited"
-        }
-      }
-    }
-  }
+"pages": {
+"managePlans": {
+"list": {
+"title": "Gestionar Planes",
+"subtitle": "Diseña esquemas globales de precios para categorías de cuentas multi-tenant.",
+"breadcrumbs": {
+"billing": "Facturación",
+"current": "Gestionar Planes"
+},
+"addButton": "Crear Plan",
+"searchPlaceholder": "Buscar en todos los campos...",
+"table": {
+"no": "Nº",
+"planName": "NOMBRE DEL PLAN",
+"category": "CATEGORÍA",
+"pricing": "PRECIO",
+"status": "ESTADO"
+},
+"toast": {
+"deleteFailed": "Error al eliminar el plan",
+"fetchFailed": "Error al obtener los planes",
+"genericError": "Algo salió mal."
+}
+},
+"detail": {
+"title": {
+"edit": "Editar Plan",
+"create": "Crear Nuevo Plan"
+},
+"subtitle": "Configura precios, funcionalidades y detalles de suscripción.",
+"buttons": {
+"cancel": "Cancelar",
+"saving": "Guardando...",
+"update": "Actualizar Plan",
+"create": "Crear Plan"
+},
+"status": {
+"loading": "Cargando...",
+"updated": "¡Plan actualizado correctamente!",
+"created": "¡Plan creado correctamente!",
+"saveFailed": "Error al guardar el plan",
+"saveError": "Ocurrió un error al guardar el plan",
+"dropdownFailed": "Error al cargar datos del desplegable",
+"planLoadFailed": "Error al cargar detalles del plan"
+},
+"sections": {
+"structuralDefinitions": "Definiciones Estructurales",
+"structuralDefinitionsSubtitle": "Identidad fundamental y atributos de alcance del tenant.",
+"financialDefinitionLayer": "Capa de Definición Financiera",
+"financialDefinitionLayerSubtitle": "Define parámetros de configuración y facturación recurrente.",
+"entitlementModuleMatrix": "Matriz de Módulos y Permisos",
+"entitlementModuleMatrixSubtitle": "Habilita módulos y capacidades incluidas en este plan.",
+"usageAndScalability": "Uso y Escalabilidad",
+"usageAndScalabilitySubtitle": "Establece límites operativos y restricciones de recursos.",
+"dedicatedSupport": "Soporte Dedicado",
+"dedicatedSupportSubtitle": "Define un canal de soporte específico para este nivel de plan.",
+"adminGuard": "Configuración de Protección Admin",
+"blueprint": "PLANTILLA DEL PLAN",
+"blueprintSubtitle": "Resumen de configuración en tiempo real."
+},
+"labels": {
+"category": "Categoría:",
+"cycle": "Ciclo:",
+"currency": "Moneda:",
+"usersLimit": "Límite de Usuarios:",
+"activeFeatures": "Funciones Activas:",
+"setupFee": "CUOTA DE CONFIGURACIÓN",
+"contractTerm": "PLAZO DE CONTRATO",
+"recurringCharges": "Cargos Recurrentes (Año 2+)",
+"amc": "AMC:",
+"platform": "Plataforma:",
+"na": "N/D",
+"unlimited": "Ilimitado"
+}
+}
+}
+}
 }

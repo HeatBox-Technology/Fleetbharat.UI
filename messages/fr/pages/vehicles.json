@@ -2,99 +2,99 @@
   "pages": {
     "vehicles": {
       "list": {
-        "title": "Vehicle",
-        "subtitle": "Provision and manage organizational vehicles and asset identities.",
+        "title": "Véhicule",
+        "subtitle": "Provisionner et gérer les véhicules organisationnels et les identités des actifs.",
         "breadcrumbs": {
-          "fleet": "Fleet",
-          "current": "Vehicle"
+          "fleet": "Flotte",
+          "current": "Véhicule"
         },
-        "addButton": "Add Vehicle",
-        "export": "Export",
-        "searchPlaceholder": "Search vehicles...",
-        "deleteTitle": "Remove Vehicle",
-        "deleteMessage": "Are you sure you want to remove \"{registration}\" from the registry? This action cannot be undone.",
-        "confirmDelete": "Remove",
-        "cancel": "Cancel",
+        "addButton": "Ajouter un véhicule",
+        "export": "Exporter",
+        "searchPlaceholder": "Rechercher des véhicules...",
+        "deleteTitle": "Supprimer le véhicule",
+        "deleteMessage": "Êtes-vous sûr de vouloir supprimer \"{registration}\" du registre ? Cette action est irréversible.",
+        "confirmDelete": "Supprimer",
+        "cancel": "Annuler",
         "table": {
-          "registration": "Registration",
-          "vin": "VIN / Chassis",
-          "status": "Status",
-          "lastUpdated": "Last Updated"
+          "registration": "Immatriculation",
+          "vin": "VIN / Châssis",
+          "status": "Statut",
+          "lastUpdated": "Dernière mise à jour"
         },
         "metrics": {
-          "totalFleetSize": "Total Fleet Size",
-          "inService": "In Service",
-          "offRoadOutOfService": "Off-Road / Out of Service",
-          "activeVehicles": "Active Vehicles"
+          "totalFleetSize": "Taille totale de la flotte",
+          "inService": "En service",
+          "offRoadOutOfService": "Hors route / Hors service",
+          "activeVehicles": "Véhicules actifs"
         },
         "fallback": {
-          "unknown": "Unknown",
-          "vendor": "Vendor #{id}"
+          "unknown": "Inconnu",
+          "vendor": "Fournisseur #{id}"
         },
         "toast": {
-          "loadError": "An error occurred while loading vehicles",
-          "removed": "Vehicle removed successfully",
-          "deleteFailed": "Failed to delete vehicle",
-          "deleteError": "An error occurred while deleting.",
-          "exportSoon": "Export coming soon!",
-          "exportSuccess": "Vehicles exported successfully",
-          "exportFailed": "Failed to export vehicles"
+          "loadError": "Une erreur s'est produite lors du chargement des véhicules",
+          "removed": "Véhicule supprimé avec succès",
+          "deleteFailed": "Échec de la suppression du véhicule",
+          "deleteError": "Une erreur s'est produite lors de la suppression.",
+          "exportSoon": "Export bientôt disponible !",
+          "exportSuccess": "Véhicules exportés avec succès",
+          "exportFailed": "Échec de l’exportation des véhicules"
         }
       },
       "detail": {
         "loading": {
-          "edit": "Loading vehicle data...",
-          "create": "Preparing form..."
+          "edit": "Chargement des données du véhicule...",
+          "create": "Préparation du formulaire..."
         },
         "title": {
-          "edit": "Edit Vehicle",
-          "create": "Provision Vehicle"
+          "edit": "Modifier le véhicule",
+          "create": "Provisionner un véhicule"
         },
         "subtitle": {
-          "edit": "Update registry entry for this asset.",
-          "create": "Asset Identification & Registry"
+          "edit": "Mettre à jour l'entrée du registre pour cet actif.",
+          "create": "Identification de l’actif et registre"
         },
         "buttons": {
-          "discard": "Discard",
-          "saving": "Saving...",
-          "update": "Update Registry Entry",
-          "create": "Commit Registry Entry"
+          "discard": "Ignorer",
+          "saving": "Enregistrement...",
+          "update": "Mettre à jour l'entrée du registre",
+          "create": "Valider l'entrée du registre"
         },
         "sections": {
-          "identification": "Vehicle Identification",
+          "identification": "Identification du véhicule",
           "classification": "Classification",
-          "classificationSubtitle": "Map icon & thresholds are inherited from Type.",
-          "operationalStatus": "Operational Status"
+          "classificationSubtitle": "L’icône de carte et les seuils sont hérités du type.",
+          "operationalStatus": "Statut opérationnel"
         },
         "fields": {
-          "account": "Account",
-          "selectAccount": "Select Account",
-          "registration": "Registration Number",
-          "registrationPlaceholder": "E.G. HR-26-BY-1234",
-          "registrationHint": "Use letters and digits only; separators may be space, hyphen, slash, or dot",
-          "vin": "VIN / Chassis Number",
-          "vinPlaceholder": "17-Character VIN",
-          "vinHint": "VIN must be exactly 17 characters using A-H, J-N, P, R-Z and digits only",
-          "vehicleType": "Vehicle Type",
-          "selectType": "Select Type"
+          "account": "Compte",
+          "selectAccount": "Sélectionner un compte",
+          "registration": "Numéro d'immatriculation",
+          "registrationPlaceholder": "Ex. HR-26-BY-1234",
+          "registrationHint": "Utilisez uniquement des lettres et des chiffres ; les séparateurs peuvent être espace, tiret, barre oblique ou point",
+          "vin": "Numéro VIN / Châssis",
+          "vinPlaceholder": "VIN à 17 caractères",
+          "vinHint": "Le VIN doit contenir exactement 17 caractères utilisant A-H, J-N, P, R-Z et des chiffres uniquement",
+          "vehicleType": "Type de véhicule",
+          "selectType": "Sélectionner le type"
         },
         "status": {
-          "title": "Operational lifecycle status",
-          "subtitle": "Determines asset visibility in live tracking hubs.",
-          "active": "ACTIVE",
-          "inactive": "INACTIVE"
+          "title": "Statut du cycle de vie opérationnel",
+          "subtitle": "Détermine la visibilité de l’actif dans les hubs de suivi en direct.",
+          "active": "ACTIF",
+          "inactive": "INACTIF"
         },
         "toast": {
-          "notFound": "Vehicle not found",
-          "loadFailed": "Failed to load data",
-          "selectAccount": "Please select an account",
-          "registrationRequired": "Registration number is required",
-          "invalidRegistration": "Registration number may contain only letters, digits, spaces, hyphens, slashes, or dots",
-          "invalidVin": "VIN must be exactly 17 characters and cannot contain I, O, Q, spaces, or symbols",
-          "selectVehicleType": "Please select a vehicle type",
-          "saved": "Vehicle saved successfully!",
-          "operationFailed": "Operation failed",
-          "errorOccurred": "An error occurred"
+          "notFound": "Véhicule introuvable",
+          "loadFailed": "Échec du chargement des données",
+          "selectAccount": "Veuillez sélectionner un compte",
+          "registrationRequired": "Le numéro d'immatriculation est requis",
+          "invalidRegistration": "Le numéro d'immatriculation peut contenir uniquement des lettres, chiffres, espaces, tirets, barres obliques ou points",
+          "invalidVin": "Le VIN doit contenir exactement 17 caractères et ne peut pas contenir I, O, Q, espaces ou symboles",
+          "selectVehicleType": "Veuillez sélectionner un type de véhicule",
+          "saved": "Véhicule enregistré avec succès !",
+          "operationFailed": "Échec de l'opération",
+          "errorOccurred": "Une erreur s'est produite"
         }
       }
     }

@@ -2,89 +2,89 @@
   "pages": {
     "rolesPermissions": {
       "list": {
-        "title": "Roles & Permissions",
-        "subtitle": "Define fine-grained access controls for different user types.",
+        "title": "Rôles et autorisations",
+        "subtitle": "Définir des contrôles d'accès granulaires pour différents types d'utilisateurs.",
         "breadcrumbs": {
-          "users": "Users",
-          "current": "Roles & Permissions"
+          "users": "Utilisateurs",
+          "current": "Rôles et autorisations"
         },
-        "addButton": "New Role",
-        "export": "Export",
-        "searchPlaceholder": "Search across all fields...",
+        "addButton": "Nouveau rôle",
+        "export": "Exporter",
+        "searchPlaceholder": "Rechercher dans tous les champs...",
         "table": {
-          "no": "NO",
-          "account": "Account",
-          "role": "Role",
+          "no": "N°",
+          "account": "Compte",
+          "role": "Rôle",
           "description": "Description",
-          "createdAt": "Created At"
+          "createdAt": "Créé le"
         },
         "metrics": {
-          "totalRoles": "Total Roles",
-          "systemRoles": "System Roles",
-          "customRoles": "Custom Roles"
+          "totalRoles": "Total des rôles",
+          "systemRoles": "Rôles système",
+          "customRoles": "Rôles personnalisés"
         },
         "delete": {
-          "title": "Delete Role",
-          "message": "Are you sure you want to delete role \"{name}\"? This action cannot be undone.",
-          "confirm": "Delete",
-          "cancel": "Cancel"
+          "title": "Supprimer le rôle",
+          "message": "Êtes-vous sûr de vouloir supprimer le rôle \"{name}\" ? Cette action est irréversible.",
+          "confirm": "Supprimer",
+          "cancel": "Annuler"
         },
         "toast": {
-          "deleteFailed": "Failed to delete role",
-          "deleteError": "An error occurred while deleting.",
-          "exportSuccess": "Roles exported successfully!",
-          "exportFailed": "Failed to export roles"
+          "deleteFailed": "Échec de la suppression du rôle",
+          "deleteError": "Une erreur s'est produite lors de la suppression.",
+          "exportSuccess": "Rôles exportés avec succès !",
+          "exportFailed": "Échec de l'exportation des rôles"
         }
       },
       "detail": {
-        "loading": "Loading role data...",
+        "loading": "Chargement des données du rôle...",
         "title": {
-          "edit": "Update Role",
-          "create": "Create New Role"
+          "edit": "Mettre à jour le rôle",
+          "create": "Créer un nouveau rôle"
         },
-        "subtitle": "Define access levels and capabilities for specific accounts.",
+        "subtitle": "Définir les niveaux d'accès et les capacités pour des comptes spécifiques.",
         "buttons": {
-          "cancel": "Cancel",
-          "saving": "Saving...",
-          "updating": "Updating...",
-          "saveRole": "Save Role",
-          "updateRole": "Update Role"
+          "cancel": "Annuler",
+          "saving": "Enregistrement...",
+          "updating": "Mise à jour...",
+          "saveRole": "Enregistrer le rôle",
+          "updateRole": "Mettre à jour le rôle"
         },
         "sections": {
-          "roleInformation": "Role Information",
-          "roleInformationSubtitle": "Basic details about the role and its scope.",
-          "permissionMatrix": "Permission Matrix",
-          "permissionMatrixSubtitle": "Select the resources and actions this role allows."
+          "roleInformation": "Informations sur le rôle",
+          "roleInformationSubtitle": "Détails de base sur le rôle et sa portée.",
+          "permissionMatrix": "Matrice des autorisations",
+          "permissionMatrixSubtitle": "Sélectionnez les ressources et actions autorisées pour ce rôle."
         },
         "fields": {
-          "account": "Account",
-          "selectAccount": "Select Account",
-          "roleName": "Role Name",
-          "roleNamePlaceholder": "e.g. Regional Manager",
+          "account": "Compte",
+          "selectAccount": "Sélectionner un compte",
+          "roleName": "Nom du rôle",
+          "roleNamePlaceholder": "ex. Responsable régional",
           "description": "Description",
-          "descriptionPlaceholder": "Briefly describe the role's purpose"
+          "descriptionPlaceholder": "Décrivez brièvement l'objectif du rôle"
         },
         "permission": {
-          "resource": "RESOURCE",
-          "read": "READ",
-          "write": "WRITE",
-          "update": "UPDATE",
-          "delete": "DELETE",
+          "resource": "RESSOURCE",
+          "read": "LECTURE",
+          "write": "ÉCRITURE",
+          "update": "MISE À JOUR",
+          "delete": "SUPPRESSION",
           "export": "EXPORT",
-          "all": "ALL"
+          "all": "TOUT"
         },
         "toast": {
-          "fetchRoleFailed": "Failed to fetch role data",
-          "loadRoleFailed": "Failed to load role data",
-          "fillRequired": "Please fill in all required fields",
-          "updatedSuccess": "Role and permissions updated successfully!",
-          "updatePermissionsFailed": "Failed to update permissions",
-          "updateRoleFailed": "Failed to update role",
-          "createdSuccess": "Role created successfully!",
-          "createFailed": "Role creation failure!",
-          "saveFailed": "Failed to save role",
-          "fetchFormsFailed": "Failed to fetch forms",
-          "fetchFormsError": "Something went wrong while fetching forms"
+          "fetchRoleFailed": "Échec de la récupération des données du rôle",
+          "loadRoleFailed": "Échec du chargement des données du rôle",
+          "fillRequired": "Veuillez remplir tous les champs obligatoires",
+          "updatedSuccess": "Rôle et autorisations mis à jour avec succès !",
+          "updatePermissionsFailed": "Échec de la mise à jour des autorisations",
+          "updateRoleFailed": "Échec de la mise à jour du rôle",
+          "createdSuccess": "Rôle créé avec succès !",
+          "createFailed": "Échec de la création du rôle !",
+          "saveFailed": "Échec de l'enregistrement du rôle",
+          "fetchFormsFailed": "Échec de la récupération des formulaires",
+          "fetchFormsError": "Une erreur s'est produite lors de la récupération des formulaires"
         }
       }
     }

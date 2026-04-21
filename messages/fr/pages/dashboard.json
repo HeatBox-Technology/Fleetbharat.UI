@@ -2,61 +2,61 @@
   "pages": {
     "dashboard": {
       "metrics": {
-        "totalCustomers": "Total Customers",
-        "dealersDistributors": "Dealers Distributors",
-        "totalDevices": "Total Devices",
-        "activeSubscriptions": "Active Subscriptions"
+        "totalCustomers": "Total Clients",
+        "dealersDistributors": "Concessionnaires / Distributeurs",
+        "totalDevices": "Total des Appareils",
+        "activeSubscriptions": "Abonnements Actifs"
       },
       "sections": {
-        "revenueSummary": "Revenue Summary",
-        "deviceStatus": "Device Status",
-        "recentAlerts": "Recent Alerts",
-        "serverHealth": "Server Health"
+        "revenueSummary": "Résumé des Revenus",
+        "deviceStatus": "Statut des Appareils",
+        "recentAlerts": "Alertes Récentes",
+        "serverHealth": "Santé du Serveur"
       },
       "revenue": {
         "months": {
           "jan": "Jan",
-          "feb": "Feb",
+          "feb": "Fév",
           "mar": "Mar",
-          "apr": "Apr",
-          "may": "May",
-          "jun": "Jun",
-          "jul": "Jul"
+          "apr": "Avr",
+          "may": "Mai",
+          "jun": "Juin",
+          "jul": "Juil"
         }
       },
       "deviceStatus": {
-        "installed": "Installed",
-        "available": "Available",
-        "faulty": "Faulty",
-        "returned": "Returned"
+        "installed": "Installé",
+        "available": "Disponible",
+        "faulty": "Défectueux",
+        "returned": "Retourné"
       },
       "alerts": {
         "cpuHigh": {
-          "title": "High CPU Usage on Server-01",
-          "time": "2 mins ago",
-          "severity": "Critical"
+          "title": "Utilisation CPU élevée sur Server-01",
+          "time": "il y a 2 min",
+          "severity": "Critique"
         },
         "dbLimit": {
-          "title": "Database connection limit nearing",
-          "time": "15 mins ago",
-          "severity": "Warning"
+          "title": "Limite de connexions à la base de données proche",
+          "time": "il y a 15 min",
+          "severity": "Avertissement"
         },
         "devicesOffline": {
-          "title": "15 devices reported offline",
-          "time": "30 mins ago",
-          "severity": "Informational"
+          "title": "15 appareils signalés hors ligne",
+          "time": "il y a 30 min",
+          "severity": "Information"
         }
       },
       "serverHealth": {
         "status": {
-          "operational": "Operational",
-          "outage": "Outage"
+          "operational": "Opérationnel",
+          "outage": "Panne"
         },
         "services": {
-          "apiServer": "API Server",
-          "databaseCluster": "Database Cluster",
-          "telemetryIngestion": "Telemetry Ingestion",
-          "forwardingService": "Forwarding Service"
+          "apiServer": "Serveur API",
+          "databaseCluster": "Cluster de Base de Données",
+          "telemetryIngestion": "Ingestion de Télémétrie",
+          "forwardingService": "Service de Transfert"
         }
       }
     }

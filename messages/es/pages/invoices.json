@@ -1,72 +1,72 @@
 {
-  "pages": {
-    "invoices": {
-      "list": {
-        "title": "Invoices",
-        "subtitle": "Financial ledger and billing cycle automation control.",
-        "breadcrumbs": {
-          "billing": "Billing",
-          "current": "Invoices"
-        },
-        "addButton": "Add Invoice",
-        "exportButton": "Export",
-        "exportingButton": "Exporting...",
-        "searchPlaceholder": "Search invoices...",
-        "table": {
-          "no": "NO",
-          "invoiceNumber": "INVOICE #",
-          "account": "ACCOUNT",
-          "amount": "AMOUNT",
-          "invoiceDate": "INVOICE DATE",
-          "dueDate": "DUE DATE",
-          "status": "STATUS"
-        },
-        "labels": {
-          "pending": "Pending",
-          "defaultFileName": "invoices-export.xlsx"
-        },
-        "toast": {
-          "exportFailed": "Export failed",
-          "exportInvalidData": "Export file data is invalid",
-          "exportSuccess": "Invoices exported successfully",
-          "exportCatchFailed": "Failed to export invoices",
-          "fetchFailed": "Failed to fetch invoices"
-        }
-      },
-      "detail": {
-        "title": {
-          "add": "Add Invoice",
-          "edit": "Invoice"
-        },
-        "subtitle": "Create manual billing invoice.",
-        "breadcrumbs": {
-          "billing": "Billing",
-          "current": "Invoices"
-        },
-        "fields": {
-          "account": "Account",
-          "subscription": "Subscription",
-          "amount": "Amount",
-          "currency": "Currency",
-          "invoiceDate": "Invoice Date",
-          "dueDate": "Due Date"
-        },
-        "buttons": {
-          "cancel": "Cancel",
-          "saving": "Saving...",
-          "submit": "Create Invoice"
-        },
-        "toast": {
-          "editNotEnabled": "Edit invoice is not enabled yet.",
-          "selectAccountSubscription": "Please select Account and Subscription",
-          "selectCurrency": "Please select currency",
-          "amountGreaterThanZero": "Amount must be greater than 0",
-          "validDates": "Please provide valid invoice and due dates",
-          "createdSuccess": "Invoice created successfully",
-          "createFailed": "Failed to create invoice",
-          "dropdownFailed": "Failed to load dropdown data"
-        }
-      }
-    }
-  }
+"pages": {
+"invoices": {
+"list": {
+"title": "Facturas",
+"subtitle": "Libro financiero y control de automatización del ciclo de facturación.",
+"breadcrumbs": {
+"billing": "Facturación",
+"current": "Facturas"
+},
+"addButton": "Agregar Factura",
+"exportButton": "Exportar",
+"exportingButton": "Exportando...",
+"searchPlaceholder": "Buscar facturas...",
+"table": {
+"no": "Nº",
+"invoiceNumber": "FACTURA #",
+"account": "CUENTA",
+"amount": "IMPORTE",
+"invoiceDate": "FECHA DE FACTURA",
+"dueDate": "FECHA DE VENCIMIENTO",
+"status": "ESTADO"
+},
+"labels": {
+"pending": "Pendiente",
+"defaultFileName": "facturas-export.xlsx"
+},
+"toast": {
+"exportFailed": "Error al exportar",
+"exportInvalidData": "Los datos del archivo de exportación no son válidos",
+"exportSuccess": "Facturas exportadas correctamente",
+"exportCatchFailed": "Error al exportar facturas",
+"fetchFailed": "Error al obtener facturas"
+}
+},
+"detail": {
+"title": {
+"add": "Agregar Factura",
+"edit": "Factura"
+},
+"subtitle": "Crear factura manual de facturación.",
+"breadcrumbs": {
+"billing": "Facturación",
+"current": "Facturas"
+},
+"fields": {
+"account": "Cuenta",
+"subscription": "Suscripción",
+"amount": "Importe",
+"currency": "Moneda",
+"invoiceDate": "Fecha de Factura",
+"dueDate": "Fecha de Vencimiento"
+},
+"buttons": {
+"cancel": "Cancelar",
+"saving": "Guardando...",
+"submit": "Crear Factura"
+},
+"toast": {
+"editNotEnabled": "La edición de facturas aún no está habilitada.",
+"selectAccountSubscription": "Por favor selecciona Cuenta y Suscripción",
+"selectCurrency": "Por favor selecciona moneda",
+"amountGreaterThanZero": "El importe debe ser mayor que 0",
+"validDates": "Por favor proporciona fechas válidas de factura y vencimiento",
+"createdSuccess": "Factura creada correctamente",
+"createFailed": "Error al crear la factura",
+"dropdownFailed": "Error al cargar datos del desplegable"
+}
+}
+}
+}
 }

@@ -1,77 +1,77 @@
 {
-  "pages": {
-    "subscriptions": {
-      "list": {
-        "title": "Subscriptions",
-        "subtitle": "Real-time monitoring of active licenses and contract adherence.",
-        "breadcrumbs": {
-          "billing": "Billing",
-          "current": "Subscriptions"
-        },
-        "addButton": "Add Subscription",
-        "searchPlaceholder": "Search subscriptions...",
-        "metrics": {
-          "total": "TOTAL SUBSCRIPTIONS",
-          "active": "ACTIVE",
-          "expiringSoon": "EXPIRING SOON",
-          "managedUnits": "MANAGED UNITS"
-        },
-        "table": {
-          "no": "NO",
-          "account": "ACCOUNT",
-          "planDetails": "PLAN DETAILS",
-          "period": "PERIOD",
-          "status": "STATUS"
-        },
-        "labels": {
-          "start": "Start",
-          "end": "End",
-          "units": "Units",
-          "inactive": "Inactive"
-        },
-        "toast": {
-          "fetchFailed": "Failed to fetch subscriptions"
-        }
-      },
-      "detail": {
-        "title": {
-          "add": "Add Subscription",
-          "edit": "Subscription"
-        },
-        "subtitle": "Map a billing plan to an account.",
-        "breadcrumbs": {
-          "billing": "Billing",
-          "current": "Subscriptions"
-        },
-        "fields": {
-          "account": "Account",
-          "plan": "Plan",
-          "units": "Units",
-          "status": "Status",
-          "startDate": "Start Date",
-          "endDate": "End Date"
-        },
-        "statuses": {
-          "active": "Active",
-          "inactive": "Inactive",
-          "pending": "Pending"
-        },
-        "buttons": {
-          "cancel": "Cancel",
-          "saving": "Saving...",
-          "submit": "Map Subscription"
-        },
-        "toast": {
-          "editNotEnabled": "Edit subscription is not enabled yet.",
-          "selectAccountPlan": "Please select Account and Plan",
-          "unitsGreaterThanZero": "Units must be greater than 0",
-          "validDates": "Please provide valid start and end dates",
-          "endAfterStart": "End date must be after start date",
-          "mappedSuccess": "Subscription mapped successfully",
-          "mapFailed": "Failed to map subscription",
-          "dropdownFailed": "Failed to load account/plan dropdowns"
-        }
-      }
-    }
-  }
+"pages": {
+"subscriptions": {
+"list": {
+"title": "Suscripciones",
+"subtitle": "Monitoreo en tiempo real de licencias activas y cumplimiento de contratos.",
+"breadcrumbs": {
+"billing": "Facturación",
+"current": "Suscripciones"
+},
+"addButton": "Agregar Suscripción",
+"searchPlaceholder": "Buscar suscripciones...",
+"metrics": {
+"total": "TOTAL DE SUSCRIPCIONES",
+"active": "ACTIVAS",
+"expiringSoon": "PRÓXIMAS A VENCER",
+"managedUnits": "UNIDADES GESTIONADAS"
+},
+"table": {
+"no": "Nº",
+"account": "CUENTA",
+"planDetails": "DETALLES DEL PLAN",
+"period": "PERÍODO",
+"status": "ESTADO"
+},
+"labels": {
+"start": "Inicio",
+"end": "Fin",
+"units": "Unidades",
+"inactive": "Inactivo"
+},
+"toast": {
+"fetchFailed": "Error al obtener las suscripciones"
+}
+},
+"detail": {
+"title": {
+"add": "Agregar Suscripción",
+"edit": "Suscripción"
+},
+"subtitle": "Asociar un plan de facturación a una cuenta.",
+"breadcrumbs": {
+"billing": "Facturación",
+"current": "Suscripciones"
+},
+"fields": {
+"account": "Cuenta",
+"plan": "Plan",
+"units": "Unidades",
+"status": "Estado",
+"startDate": "Fecha de Inicio",
+"endDate": "Fecha de Fin"
+},
+"statuses": {
+"active": "Activo",
+"inactive": "Inactivo",
+"pending": "Pendiente"
+},
+"buttons": {
+"cancel": "Cancelar",
+"saving": "Guardando...",
+"submit": "Asignar Suscripción"
+},
+"toast": {
+"editNotEnabled": "La edición de suscripción aún no está habilitada.",
+"selectAccountPlan": "Por favor selecciona Cuenta y Plan",
+"unitsGreaterThanZero": "Las unidades deben ser mayores que 0",
+"validDates": "Por favor proporciona fechas de inicio y fin válidas",
+"endAfterStart": "La fecha de fin debe ser posterior a la fecha de inicio",
+"mappedSuccess": "Suscripción asignada correctamente",
+"mapFailed": "Error al asignar la suscripción",
+"dropdownFailed": "Error al cargar listas de cuentas/planes"
+}
+}
+}
+}
 }

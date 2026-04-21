@@ -1,19 +1,19 @@
 {
   "pages": {
     "hierarchy": {
-      "title": "Hierarchy",
-      "subtitle": "Manage identities, taxonomies, and global parameters.",
+      "title": "Hiérarchie",
+      "subtitle": "Gérer les identités, les taxonomies et les paramètres globaux.",
       "breadcrumbs": {
-        "accounts": "Accounts",
-        "current": "Hierarchy"
+        "accounts": "Comptes",
+        "current": "Hiérarchie"
       },
-      "loading": "Loading hierarchy...",
+      "loading": "Chargement de la hiérarchie...",
       "table": {
-        "title": "RELATIONAL MAPPING",
-        "subtitle": "Recursive visualization of distributor-dealer relationships."
+        "title": "MAPPAGE RELATIONNEL",
+        "subtitle": "Visualisation récursive des relations distributeur-revendeur."
       },
       "toast": {
-        "fetchFailed": "Failed to load hierarchy data"
+        "fetchFailed": "Échec du chargement des données de la hiérarchie"
       }
     }
   }

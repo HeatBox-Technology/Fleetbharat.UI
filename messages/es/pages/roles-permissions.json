@@ -1,92 +1,92 @@
 {
-  "pages": {
-    "rolesPermissions": {
-      "list": {
-        "title": "Roles & Permissions",
-        "subtitle": "Define fine-grained access controls for different user types.",
-        "breadcrumbs": {
-          "users": "Users",
-          "current": "Roles & Permissions"
-        },
-        "addButton": "New Role",
-        "export": "Export",
-        "searchPlaceholder": "Search across all fields...",
-        "table": {
-          "no": "NO",
-          "account": "Account",
-          "role": "Role",
-          "description": "Description",
-          "createdAt": "Created At"
-        },
-        "metrics": {
-          "totalRoles": "Total Roles",
-          "systemRoles": "System Roles",
-          "customRoles": "Custom Roles"
-        },
-        "delete": {
-          "title": "Delete Role",
-          "message": "Are you sure you want to delete role \"{name}\"? This action cannot be undone.",
-          "confirm": "Delete",
-          "cancel": "Cancel"
-        },
-        "toast": {
-          "deleteFailed": "Failed to delete role",
-          "deleteError": "An error occurred while deleting.",
-          "exportSuccess": "Roles exported successfully!",
-          "exportFailed": "Failed to export roles"
-        }
-      },
-      "detail": {
-        "loading": "Loading role data...",
-        "title": {
-          "edit": "Update Role",
-          "create": "Create New Role"
-        },
-        "subtitle": "Define access levels and capabilities for specific accounts.",
-        "buttons": {
-          "cancel": "Cancel",
-          "saving": "Saving...",
-          "updating": "Updating...",
-          "saveRole": "Save Role",
-          "updateRole": "Update Role"
-        },
-        "sections": {
-          "roleInformation": "Role Information",
-          "roleInformationSubtitle": "Basic details about the role and its scope.",
-          "permissionMatrix": "Permission Matrix",
-          "permissionMatrixSubtitle": "Select the resources and actions this role allows."
-        },
-        "fields": {
-          "account": "Account",
-          "selectAccount": "Select Account",
-          "roleName": "Role Name",
-          "roleNamePlaceholder": "e.g. Regional Manager",
-          "description": "Description",
-          "descriptionPlaceholder": "Briefly describe the role's purpose"
-        },
-        "permission": {
-          "resource": "RESOURCE",
-          "read": "READ",
-          "write": "WRITE",
-          "update": "UPDATE",
-          "delete": "DELETE",
-          "export": "EXPORT",
-          "all": "ALL"
-        },
-        "toast": {
-          "fetchRoleFailed": "Failed to fetch role data",
-          "loadRoleFailed": "Failed to load role data",
-          "fillRequired": "Please fill in all required fields",
-          "updatedSuccess": "Role and permissions updated successfully!",
-          "updatePermissionsFailed": "Failed to update permissions",
-          "updateRoleFailed": "Failed to update role",
-          "createdSuccess": "Role created successfully!",
-          "createFailed": "Role creation failure!",
-          "saveFailed": "Failed to save role",
-          "fetchFormsFailed": "Failed to fetch forms",
-          "fetchFormsError": "Something went wrong while fetching forms"
-        }
-      }
-    }
-  }
+"pages": {
+"rolesPermissions": {
+"list": {
+"title": "Roles y Permisos",
+"subtitle": "Define controles de acceso detallados para diferentes tipos de usuarios.",
+"breadcrumbs": {
+"users": "Usuarios",
+"current": "Roles y Permisos"
+},
+"addButton": "Nuevo Rol",
+"export": "Exportar",
+"searchPlaceholder": "Buscar en todos los campos...",
+"table": {
+"no": "Nº",
+"account": "Cuenta",
+"role": "Rol",
+"description": "Descripción",
+"createdAt": "Creado el"
+},
+"metrics": {
+"totalRoles": "Total de Roles",
+"systemRoles": "Roles del Sistema",
+"customRoles": "Roles Personalizados"
+},
+"delete": {
+"title": "Eliminar Rol",
+"message": "¿Seguro que deseas eliminar el rol \"{name}\"? Esta acción no se puede deshacer.",
+"confirm": "Eliminar",
+"cancel": "Cancelar"
+},
+"toast": {
+"deleteFailed": "Error al eliminar el rol",
+"deleteError": "Ocurrió un error al eliminar.",
+"exportSuccess": "¡Roles exportados correctamente!",
+"exportFailed": "Error al exportar roles"
+}
+},
+"detail": {
+"loading": "Cargando datos del rol...",
+"title": {
+"edit": "Actualizar Rol",
+"create": "Crear Nuevo Rol"
+},
+"subtitle": "Define niveles de acceso y capacidades para cuentas específicas.",
+"buttons": {
+"cancel": "Cancelar",
+"saving": "Guardando...",
+"updating": "Actualizando...",
+"saveRole": "Guardar Rol",
+"updateRole": "Actualizar Rol"
+},
+"sections": {
+"roleInformation": "Información del Rol",
+"roleInformationSubtitle": "Detalles básicos sobre el rol y su alcance.",
+"permissionMatrix": "Matriz de Permisos",
+"permissionMatrixSubtitle": "Selecciona los recursos y acciones permitidas para este rol."
+},
+"fields": {
+"account": "Cuenta",
+"selectAccount": "Seleccionar Cuenta",
+"roleName": "Nombre del Rol",
+"roleNamePlaceholder": "ej. Gerente Regional",
+"description": "Descripción",
+"descriptionPlaceholder": "Describe brevemente el propósito del rol"
+},
+"permission": {
+"resource": "RECURSO",
+"read": "LEER",
+"write": "ESCRIBIR",
+"update": "ACTUALIZAR",
+"delete": "ELIMINAR",
+"export": "EXPORTAR",
+"all": "TODOS"
+},
+"toast": {
+"fetchRoleFailed": "Error al obtener datos del rol",
+"loadRoleFailed": "Error al cargar datos del rol",
+"fillRequired": "Por favor completa todos los campos obligatorios",
+"updatedSuccess": "¡Rol y permisos actualizados correctamente!",
+"updatePermissionsFailed": "Error al actualizar permisos",
+"updateRoleFailed": "Error al actualizar el rol",
+"createdSuccess": "¡Rol creado correctamente!",
+"createFailed": "Error al crear el rol",
+"saveFailed": "Error al guardar el rol",
+"fetchFormsFailed": "Error al obtener formularios",
+"fetchFormsError": "Algo salió mal al obtener los formularios"
+}
+}
+}
+}
 }

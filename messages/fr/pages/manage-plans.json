@@ -2,76 +2,76 @@
   "pages": {
     "managePlans": {
       "list": {
-        "title": "Manage Plans",
-        "subtitle": "Design global pricing blueprints for multi-tenant account categories.",
+        "title": "Gérer les plans",
+        "subtitle": "Concevoir des modèles globaux de tarification pour les catégories de comptes multi-locataires.",
         "breadcrumbs": {
-          "billing": "Billing",
-          "current": "Manage Plans"
+          "billing": "Facturation",
+          "current": "Gérer les plans"
         },
-        "addButton": "Create Plan",
-        "searchPlaceholder": "Search across all fields...",
+        "addButton": "Créer un plan",
+        "searchPlaceholder": "Rechercher dans tous les champs...",
         "table": {
-          "no": "NO",
-          "planName": "PLAN NAME",
-          "category": "CATEGORY",
-          "pricing": "PRICING",
-          "status": "STATUS"
+          "no": "N°",
+          "planName": "NOM DU PLAN",
+          "category": "CATÉGORIE",
+          "pricing": "TARIFICATION",
+          "status": "STATUT"
         },
         "toast": {
-          "deleteFailed": "Failed to delete plan",
-          "fetchFailed": "Failed to fetch plans",
-          "genericError": "Something went wrong."
+          "deleteFailed": "Échec de la suppression du plan",
+          "fetchFailed": "Échec de la récupération des plans",
+          "genericError": "Une erreur s'est produite."
         }
       },
       "detail": {
         "title": {
-          "edit": "Edit Plan",
-          "create": "Create New Plan"
+          "edit": "Modifier le plan",
+          "create": "Créer un nouveau plan"
         },
-        "subtitle": "Configure pricing, features, and subscription details.",
+        "subtitle": "Configurer la tarification, les fonctionnalités et les détails d'abonnement.",
         "buttons": {
-          "cancel": "Cancel",
-          "saving": "Saving...",
-          "update": "Update Plan",
-          "create": "Create Plan"
+          "cancel": "Annuler",
+          "saving": "Enregistrement...",
+          "update": "Mettre à jour le plan",
+          "create": "Créer le plan"
         },
         "status": {
-          "loading": "Loading...",
-          "updated": "Plan updated successfully!",
-          "created": "Plan created successfully!",
-          "saveFailed": "Failed to save plan",
-          "saveError": "An error occurred while saving the plan",
-          "dropdownFailed": "Failed to load dropdown data",
-          "planLoadFailed": "Failed to load plan details"
+          "loading": "Chargement...",
+          "updated": "Plan mis à jour avec succès !",
+          "created": "Plan créé avec succès !",
+          "saveFailed": "Échec de l'enregistrement du plan",
+          "saveError": "Une erreur s'est produite lors de l'enregistrement du plan",
+          "dropdownFailed": "Échec du chargement des données de la liste déroulante",
+          "planLoadFailed": "Échec du chargement des détails du plan"
         },
         "sections": {
-          "structuralDefinitions": "Structural Definitions",
-          "structuralDefinitionsSubtitle": "Fundamental identity and tenant-scope attributes.",
-          "financialDefinitionLayer": "Financial Definition Layer",
-          "financialDefinitionLayerSubtitle": "Define setup and recurring billing parameters.",
-          "entitlementModuleMatrix": "Entitlement Module Matrix",
-          "entitlementModuleMatrixSubtitle": "Enable modules and capabilities included in this plan.",
-          "usageAndScalability": "Usage & Scalability Constraints",
-          "usageAndScalabilitySubtitle": "Set operational limits and resource boundaries.",
-          "dedicatedSupport": "Dedicated Support Line",
-          "dedicatedSupportSubtitle": "Define a specific support channel for this plan tier.",
-          "adminGuard": "Admin Guard Settings",
-          "blueprint": "PLAN BLUEPRINT",
-          "blueprintSubtitle": "Live configuration summary."
+          "structuralDefinitions": "Définitions structurelles",
+          "structuralDefinitionsSubtitle": "Identité fondamentale et attributs de portée du locataire.",
+          "financialDefinitionLayer": "Couche de définition financière",
+          "financialDefinitionLayerSubtitle": "Définir les paramètres de configuration et de facturation récurrente.",
+          "entitlementModuleMatrix": "Matrice des modules d'autorisation",
+          "entitlementModuleMatrixSubtitle": "Activer les modules et fonctionnalités inclus dans ce plan.",
+          "usageAndScalability": "Contraintes d'utilisation et de scalabilité",
+          "usageAndScalabilitySubtitle": "Définir les limites opérationnelles et les frontières de ressources.",
+          "dedicatedSupport": "Ligne de support dédiée",
+          "dedicatedSupportSubtitle": "Définir un canal de support spécifique pour ce niveau de plan.",
+          "adminGuard": "Paramètres de protection administrateur",
+          "blueprint": "PLAN DIRECTEUR",
+          "blueprintSubtitle": "Résumé de configuration en direct."
         },
         "labels": {
-          "category": "Category:",
-          "cycle": "Cycle:",
-          "currency": "Currency:",
-          "usersLimit": "Users Limit:",
-          "activeFeatures": "Active Features:",
-          "setupFee": "SETUP FEE",
-          "contractTerm": "CONTRACT TERM",
-          "recurringCharges": "Recurring Charges (Year 2+)",
-          "amc": "AMC:",
-          "platform": "Platform:",
-          "na": "N/A",
-          "unlimited": "Unlimited"
+          "category": "Catégorie :",
+          "cycle": "Cycle :",
+          "currency": "Devise :",
+          "usersLimit": "Limite d'utilisateurs :",
+          "activeFeatures": "Fonctionnalités actives :",
+          "setupFee": "FRAIS D’INSTALLATION",
+          "contractTerm": "DURÉE DU CONTRAT",
+          "recurringCharges": "Frais récurrents (Année 2+)",
+          "amc": "AMC :",
+          "platform": "Plateforme :",
+          "na": "N/D",
+          "unlimited": "Illimité"
         }
       }
     }

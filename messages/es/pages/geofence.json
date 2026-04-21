@@ -1,114 +1,114 @@
 {
-  "pages": {
-    "geofence": {
-      "list": {
-        "noReadPermission": "You do not have permission to view this page.",
-        "title": "Geofence Master",
-        "subtitle": "Manage geofence zones and operational boundaries.",
-        "breadcrumbs": {
-          "fleet": "Fleet",
-          "current": "Geofence Master"
-        },
-        "addButton": "Define Zone",
-        "export": "Export",
-        "loading": "Loading geofences...",
-        "searchPlaceholder": "Search geofence...",
-        "deleteTitle": "Delete Geofence",
-        "deleteMessage": "Are you sure you want to delete \"{name}\"?",
-        "confirmDelete": "Delete",
-        "cancel": "Cancel",
-        "fallback": {
-          "unnamedZone": "Unnamed Zone",
-          "safe": "SAFE"
-        },
-        "table": {
-          "identity": "GEOFENCE IDENTITY",
-          "geometry": "GEOMETRY",
-          "status": "STATUS"
-        },
-        "toast": {
-          "deleted": "Geofence deleted successfully",
-          "deleteFailed": "Failed to delete geofence",
-          "deleteError": "Error deleting geofence",
-          "exportSuccess": "Geofences exported successfully",
-          "exportFailed": "Failed to export geofences"
-        }
-      },
-      "detail": {
-        "loadingDetails": "Loading zone...",
-        "noReadPermission": "You do not have view permission for Geofence Master.",
-        "createTitle": "Create Geofence",
-        "editTitle": "Edit Geofence",
-        "subtitleCreate": "Create new geofence with identity and geometry rules.",
-        "subtitleEdit": "Update geofence identity and operational settings.",
-        "breadcrumbs": {
-          "fleet": "Fleet",
-          "configurations": "Configurations",
-          "routeMaster": "Route Master",
-          "library": "Geofence Library",
-          "create": "Create",
-          "edit": "Edit"
-        },
-        "buttons": {
-          "saving": "Saving...",
-          "create": "Create Geofence",
-          "saveChanges": "Save Changes",
-          "cancel": "Cancel",
-          "pickOnMap": "Pick on Map"
-        },
-        "section": {
-          "identity": "IDENTITY & REGISTRY",
-          "zoneConfig": "ZONE CONFIG"
-        },
-        "fields": {
-          "account": "ACCOUNT",
-          "selectAccount": "Select account",
-          "uniqueCode": "UNIQUE CODE",
-          "displayName": "DISPLAY NAME",
-          "locationCenter": "LOCATION (CENTER)",
-          "latitude": "Latitude",
-          "longitude": "Longitude",
-          "classification": "CLASSIFICATION",
-          "geometryType": "GEOMETRY TYPE",
-          "geometryChangeHint": "Changing geometry type will require you to redraw the shape.",
-          "radius": "RADIUS (M)",
-          "status": "STATUS",
-          "enabled": "Enabled",
-          "disabled": "Disabled",
-          "colorTheme": "COLOR THEME"
-        },
-        "drawing": {
-          "active": "Drawing mode active - click on the map to draw your",
-          "circle": "circle",
-          "polygon": "polygon",
-          "polygonHelp": "Click to add points, double-click to finish.",
-          "circleHelp": "Click center then drag to set radius.",
-          "cancelRedraw": "Cancel redraw",
-          "shapeReady": "Shape ready.",
-          "redraw": "Redraw Shape",
-          "notDrawn": "No shape drawn yet. Click on the map to begin.",
-          "overlay": "Drawing mode - draw your {geometry} on the map"
-        },
-        "fallback": {
-          "newGeofence": "New Geofence"
-        },
-        "toast": {
-          "loadFailed": "Failed to load geofence",
-          "loadError": "Error loading geofence",
-          "noAddPermission": "You do not have add permission for Geofence",
-          "noUpdatePermission": "You do not have update permission for Geofence",
-          "selectAccount": "Please select an account",
-          "codeNameRequired": "Unique code and display name are required",
-          "drawPolygon": "Please draw a polygon on the map before saving",
-          "drawCircle": "Please draw a circle on the map before saving",
-          "finishDrawing": "Please finish drawing your shape on the map before saving",
-          "drawBeforeSave": "Please draw your geofence on the map before saving",
-          "created": "Geofence created successfully",
-          "updated": "Geofence updated successfully",
-          "saveFailed": "Failed to save geofence",
-          "saveError": "Error saving geofence"
-        }
-      }
-    }
-  }
+"pages": {
+"geofence": {
+"list": {
+"noReadPermission": "No tienes permiso para ver esta página.",
+"title": "Maestro de Geocercas",
+"subtitle": "Gestiona zonas de geocercas y límites operativos.",
+"breadcrumbs": {
+"fleet": "Flota",
+"current": "Maestro de Geocercas"
+},
+"addButton": "Definir Zona",
+"export": "Exportar",
+"loading": "Cargando geocercas...",
+"searchPlaceholder": "Buscar geocerca...",
+"deleteTitle": "Eliminar Geocerca",
+"deleteMessage": "¿Seguro que deseas eliminar \"{name}\"?",
+"confirmDelete": "Eliminar",
+"cancel": "Cancelar",
+"fallback": {
+"unnamedZone": "Zona sin nombre",
+"safe": "SEGURO"
+},
+"table": {
+"identity": "IDENTIDAD DE GEOFENCE",
+"geometry": "GEOMETRÍA",
+"status": "ESTADO"
+},
+"toast": {
+"deleted": "Geocerca eliminada correctamente",
+"deleteFailed": "Error al eliminar la geocerca",
+"deleteError": "Error al eliminar la geocerca",
+"exportSuccess": "Geocercas exportadas correctamente",
+"exportFailed": "Error al exportar geocercas"
+}
+},
+"detail": {
+"loadingDetails": "Cargando zona...",
+"noReadPermission": "No tienes permiso para ver Geofence Master.",
+"createTitle": "Crear Geocerca",
+"editTitle": "Editar Geocerca",
+"subtitleCreate": "Crea una nueva geocerca con reglas de identidad y geometría.",
+"subtitleEdit": "Actualiza la identidad y configuración operativa de la geocerca.",
+"breadcrumbs": {
+"fleet": "Flota",
+"configurations": "Configuraciones",
+"routeMaster": "Route Master",
+"library": "Biblioteca de Geocercas",
+"create": "Crear",
+"edit": "Editar"
+},
+"buttons": {
+"saving": "Guardando...",
+"create": "Crear Geocerca",
+"saveChanges": "Guardar Cambios",
+"cancel": "Cancelar",
+"pickOnMap": "Seleccionar en el Mapa"
+},
+"section": {
+"identity": "IDENTIDAD Y REGISTRO",
+"zoneConfig": "CONFIGURACIÓN DE ZONA"
+},
+"fields": {
+"account": "CUENTA",
+"selectAccount": "Seleccionar cuenta",
+"uniqueCode": "CÓDIGO ÚNICO",
+"displayName": "NOMBRE PARA MOSTRAR",
+"locationCenter": "UBICACIÓN (CENTRO)",
+"latitude": "Latitud",
+"longitude": "Longitud",
+"classification": "CLASIFICACIÓN",
+"geometryType": "TIPO DE GEOMETRÍA",
+"geometryChangeHint": "Cambiar el tipo de geometría requerirá redibujar la forma.",
+"radius": "RADIO (M)",
+"status": "ESTADO",
+"enabled": "Habilitado",
+"disabled": "Deshabilitado",
+"colorTheme": "TEMA DE COLOR"
+},
+"drawing": {
+"active": "Modo de dibujo activo - haz clic en el mapa para dibujar tu",
+"circle": "círculo",
+"polygon": "polígono",
+"polygonHelp": "Haz clic para agregar puntos, doble clic para finalizar.",
+"circleHelp": "Haz clic en el centro y arrastra para definir el radio.",
+"cancelRedraw": "Cancelar redibujo",
+"shapeReady": "Forma lista.",
+"redraw": "Redibujar Forma",
+"notDrawn": "Aún no se ha dibujado ninguna forma. Haz clic en el mapa para comenzar.",
+"overlay": "Modo de dibujo - dibuja tu {geometry} en el mapa"
+},
+"fallback": {
+"newGeofence": "Nueva Geocerca"
+},
+"toast": {
+"loadFailed": "Error al cargar la geocerca",
+"loadError": "Error cargando la geocerca",
+"noAddPermission": "No tienes permiso para agregar geocercas",
+"noUpdatePermission": "No tienes permiso para actualizar geocercas",
+"selectAccount": "Por favor selecciona una cuenta",
+"codeNameRequired": "El código único y el nombre son obligatorios",
+"drawPolygon": "Por favor dibuja un polígono en el mapa antes de guardar",
+"drawCircle": "Por favor dibuja un círculo en el mapa antes de guardar",
+"finishDrawing": "Por favor termina de dibujar la forma antes de guardar",
+"drawBeforeSave": "Por favor dibuja la geocerca en el mapa antes de guardar",
+"created": "Geocerca creada correctamente",
+"updated": "Geocerca actualizada correctamente",
+"saveFailed": "Error al guardar la geocerca",
+"saveError": "Error al guardar la geocerca"
+}
+}
+}
+}
 }

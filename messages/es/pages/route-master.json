@@ -1,133 +1,133 @@
 {
-  "pages": {
-    "routeMaster": {
-      "list": {
-        "title": "Route Master",
-        "subtitle": "Configure reusable route templates using geofence points and stops.",
-        "breadcrumbs": {
-          "fleet": "Fleet",
-          "current": "Route Master"
-        },
-        "addButton": "Add Route",
-        "loading": "Loading route masters...",
-        "searchPlaceholder": "Search routes...",
-        "metrics": {
-          "totalRoutes": "TOTAL ROUTES",
-          "activeRoutes": "ACTIVE ROUTES",
-          "inactiveRoutes": "INACTIVE ROUTES"
-        },
-        "filters": {
-          "selectAccount": "Select Account",
-          "selectedAccount": "Selected Account ({id})"
-        },
-        "table": {
-          "no": "NO",
-          "routeName": "ROUTE NAME",
-          "account": "ACCOUNT",
-          "startPoint": "START POINT",
-          "endPoint": "END POINT",
-          "stops": "STOPS",
-          "geofence": "GEOFENCE",
-          "status": "STATUS",
-          "createdOn": "CREATED ON"
-        },
-        "labels": {
-          "yes": "Yes",
-          "no": "No",
-          "active": "Active",
-          "inactive": "Inactive"
-        },
-        "deleteDialog": {
-          "title": "Delete Route",
-          "message": "Are you sure you want to delete \"{name}\"?",
-          "confirm": "Delete",
-          "cancel": "Cancel"
-        },
-        "toast": {
-          "fetchFailed": "Failed to fetch route master list",
-          "deleted": "Route deleted successfully",
-          "deleteFailed": "Failed to delete route",
-          "deleteError": "Error deleting route"
-        }
-      },
-      "detail": {
-        "createTitle": "Create Route",
-        "editTitle": "Edit Route",
-        "subtitle": "Configure route master with geofences and stop points.",
-        "loadingDetails": "Loading route details...",
-        "noReadPermission": "You do not have permission to view this page.",
-        "breadcrumbs": {
-          "fleet": "Fleet",
-          "master": "Route Master",
-          "create": "Create",
-          "edit": "Edit"
-        },
-        "buttons": {
-          "cancel": "Cancel",
-          "saving": "Saving...",
-          "createRoute": "Create Route",
-          "updateRoute": "Update Route",
-          "loadingRoute": "Loading Route...",
-          "viewRoute": "View Route"
-        },
-        "fields": {
-          "account": "Account",
-          "selectAccount": "Select Account",
-          "selectedAccount": "Selected Account ({id})",
-          "routeName": "Route Name",
-          "routeNamePlaceholder": "Enter route name",
-          "geofenceRelated": "Geofence Related",
-          "yes": "Yes",
-          "no": "No",
-          "startPoint": "Start Point",
-          "addGeofence": "Add Geofence",
-          "selectStartGeofence": "Select Start Geofence",
-          "stopLabel": "Stop {number}",
-          "selectStopGeofence": "Select Stop Geofence",
-          "addStop": "Add Stop",
-          "endPoint": "End Point",
-          "selectEndGeofence": "Select End Geofence",
-          "status": "Status",
-          "active": "Active",
-          "inactive": "Inactive",
-          "geofenceFallback": "Geofence {id}"
-        },
-        "section": {
-          "routePreview": "Route Preview",
-          "mapsLoadFailed": "Failed to load Google Maps.",
-          "loadingMap": "Loading map..."
-        },
-        "table": {
-          "startGeofence": "Start Geofence",
-          "endGeofence": "End Geofence",
-          "distance": "Distance (Km)",
-          "time": "Time (Min)",
-          "totalDistance": "Total Distance:",
-          "totalTime": "Total Time:"
-        },
-        "toast": {
-          "notFound": "Route not found",
-          "fetchFailed": "Failed to fetch route details",
-          "geofenceDropdownFailed": "Failed to load geofence dropdown",
-          "mapsNotLoaded": "Google Maps is not loaded yet",
-          "selectStartEndGeofence": "Please select start and end geofence",
-          "selectAtLeastStartEnd": "Please select at least start and end points",
-          "resolveGeofenceFailed": "Failed to resolve geofence {id}",
-          "encodedPathUnavailable": "Could not derive route polyline from map response",
-          "previewFailed": "Failed to preview route",
-          "selectAccount": "Please select account",
-          "enterRouteName": "Please enter route name",
-          "startEndMustDiffer": "Start and end geofence must be different",
-          "selectGeofenceForEachStop": "Please select geofence for each stop",
-          "noUpdatePermission": "You do not have permission to update route",
-          "noAddPermission": "You do not have permission to add route",
-          "routePathMissing": "Route path is missing. Please preview route first.",
-          "updated": "Route updated successfully",
-          "created": "Route created successfully",
-          "saveFailed": "Failed to save route",
-          "saveError": "Error while saving route"
-        }
-      }
-    }
-  }
+"pages": {
+"routeMaster": {
+"list": {
+"title": "Maestro de Rutas",
+"subtitle": "Configura plantillas de rutas reutilizables usando puntos de geocerca y paradas.",
+"breadcrumbs": {
+"fleet": "Flota",
+"current": "Maestro de Rutas"
+},
+"addButton": "Agregar Ruta",
+"loading": "Cargando rutas...",
+"searchPlaceholder": "Buscar rutas...",
+"metrics": {
+"totalRoutes": "TOTAL DE RUTAS",
+"activeRoutes": "RUTAS ACTIVAS",
+"inactiveRoutes": "RUTAS INACTIVAS"
+},
+"filters": {
+"selectAccount": "Seleccionar Cuenta",
+"selectedAccount": "Cuenta Seleccionada ({id})"
+},
+"table": {
+"no": "Nº",
+"routeName": "NOMBRE DE RUTA",
+"account": "CUENTA",
+"startPoint": "PUNTO INICIAL",
+"endPoint": "PUNTO FINAL",
+"stops": "PARADAS",
+"geofence": "GEOFENCE",
+"status": "ESTADO",
+"createdOn": "CREADO EL"
+},
+"labels": {
+"yes": "Sí",
+"no": "No",
+"active": "Activo",
+"inactive": "Inactivo"
+},
+"deleteDialog": {
+"title": "Eliminar Ruta",
+"message": "¿Seguro que deseas eliminar \"{name}\"?",
+"confirm": "Eliminar",
+"cancel": "Cancelar"
+},
+"toast": {
+"fetchFailed": "Error al obtener la lista de rutas",
+"deleted": "Ruta eliminada correctamente",
+"deleteFailed": "Error al eliminar la ruta",
+"deleteError": "Error al eliminar la ruta"
+}
+},
+"detail": {
+"createTitle": "Crear Ruta",
+"editTitle": "Editar Ruta",
+"subtitle": "Configura la ruta con geocercas y puntos de parada.",
+"loadingDetails": "Cargando detalles de la ruta...",
+"noReadPermission": "No tienes permiso para ver esta página.",
+"breadcrumbs": {
+"fleet": "Flota",
+"master": "Maestro de Rutas",
+"create": "Crear",
+"edit": "Editar"
+},
+"buttons": {
+"cancel": "Cancelar",
+"saving": "Guardando...",
+"createRoute": "Crear Ruta",
+"updateRoute": "Actualizar Ruta",
+"loadingRoute": "Cargando Ruta...",
+"viewRoute": "Ver Ruta"
+},
+"fields": {
+"account": "Cuenta",
+"selectAccount": "Seleccionar Cuenta",
+"selectedAccount": "Cuenta Seleccionada ({id})",
+"routeName": "Nombre de Ruta",
+"routeNamePlaceholder": "Ingrese el nombre de la ruta",
+"geofenceRelated": "Relacionado con Geocerca",
+"yes": "Sí",
+"no": "No",
+"startPoint": "Punto Inicial",
+"addGeofence": "Agregar Geocerca",
+"selectStartGeofence": "Seleccionar Geocerca Inicial",
+"stopLabel": "Parada {number}",
+"selectStopGeofence": "Seleccionar Geocerca de Parada",
+"addStop": "Agregar Parada",
+"endPoint": "Punto Final",
+"selectEndGeofence": "Seleccionar Geocerca Final",
+"status": "Estado",
+"active": "Activo",
+"inactive": "Inactivo",
+"geofenceFallback": "Geocerca {id}"
+},
+"section": {
+"routePreview": "Vista Previa de Ruta",
+"mapsLoadFailed": "Error al cargar Google Maps.",
+"loadingMap": "Cargando mapa..."
+},
+"table": {
+"startGeofence": "Geocerca Inicial",
+"endGeofence": "Geocerca Final",
+"distance": "Distancia (Km)",
+"time": "Tiempo (Min)",
+"totalDistance": "Distancia Total:",
+"totalTime": "Tiempo Total:"
+},
+"toast": {
+"notFound": "Ruta no encontrada",
+"fetchFailed": "Error al obtener detalles de la ruta",
+"geofenceDropdownFailed": "Error al cargar el desplegable de geocercas",
+"mapsNotLoaded": "Google Maps aún no está cargado",
+"selectStartEndGeofence": "Por favor selecciona geocerca inicial y final",
+"selectAtLeastStartEnd": "Por favor selecciona al menos puntos inicial y final",
+"resolveGeofenceFailed": "Error al resolver geocerca {id}",
+"encodedPathUnavailable": "No se pudo derivar la ruta desde la respuesta del mapa",
+"previewFailed": "Error al previsualizar la ruta",
+"selectAccount": "Por favor selecciona una cuenta",
+"enterRouteName": "Por favor ingresa el nombre de la ruta",
+"startEndMustDiffer": "La geocerca inicial y final deben ser diferentes",
+"selectGeofenceForEachStop": "Por favor selecciona una geocerca para cada parada",
+"noUpdatePermission": "No tienes permiso para actualizar la ruta",
+"noAddPermission": "No tienes permiso para agregar rutas",
+"routePathMissing": "Falta la ruta. Por favor previsualiza primero.",
+"updated": "Ruta actualizada correctamente",
+"created": "Ruta creada correctamente",
+"saveFailed": "Error al guardar la ruta",
+"saveError": "Error al guardar la ruta"
+}
+}
+}
+}
 }

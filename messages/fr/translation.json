@@ -1,338 +1,160 @@
 {
   "common": {
     "appName": "Agentix",
-    "loading": "Loading...",
-    "save": "Save",
-    "cancel": "Cancel",
-    "create": "Create",
-    "update": "Update",
-    "delete": "Delete"
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "update": "Mettre à jour",
+    "delete": "Supprimer"
   },
   "permissions": {
-    "noRead": "You do not have permission to view this page.",
-    "noWrite": "You do not have permission to create records.",
-    "noUpdate": "You do not have permission to update records.",
-    "noDelete": "You do not have permission to delete records."
+    "noRead": "Vous n'avez pas l'autorisation de voir cette page.",
+    "noWrite": "Vous n'avez pas l'autorisation de créer des enregistrements.",
+    "noUpdate": "Vous n'avez pas l'autorisation de mettre à jour des enregistrements.",
+    "noDelete": "Vous n'avez pas l'autorisation de supprimer des enregistrements."
   },
   "auth": {
     "sessionExpired": {
-      "title": "Session Expired",
-      "message": "Your session has expired or you are unauthorized. Please login again to continue.",
-      "action": "Login Again"
+      "title": "Session expirée",
+      "message": "Votre session a expiré ou vous n'êtes pas autorisé. Veuillez vous reconnecter pour continuer.",
+      "action": "Se reconnecter"
     }
   },
   "pages": {
     "devicemap": {
       "list": {
-        "noReadPermission": "You do not have permission to view this page.",
-        "title": "Vehicle Device Mapping",
-        "subtitle": "Manage mapped devices and assignment health.",
+        "noReadPermission": "Vous n'avez pas l'autorisation de voir cette page.",
+        "title": "Association Véhicule-Appareil",
+        "subtitle": "Gérer les appareils associés et l’état d’affectation.",
         "breadcrumbs": {
-          "fleet": "Fleet",
-          "current": "Vehicle Device Mapping"
+          "fleet": "Flotte",
+          "current": "Association Véhicule-Appareil"
         },
-        "addButton": "Assign Device",
-        "allAccounts": "All Accounts",
-        "loading": "Loading device mappings...",
-        "searchPlaceholder": "Search device maps...",
-        "deleteTitle": "Delete Mapping",
-        "deleteMessage": "Are you sure you want to delete mapping for \"{name}\"?",
-        "confirmDelete": "Delete",
-        "cancel": "Cancel",
+        "addButton": "Assigner un Appareil",
+        "allAccounts": "Tous les Comptes",
+        "loading": "Chargement des associations d’appareils...",
+        "searchPlaceholder": "Rechercher des associations...",
+        "deleteTitle": "Supprimer l’Association",
+        "deleteMessage": "Êtes-vous sûr de vouloir supprimer l'association pour \"{name}\" ?",
+        "confirmDelete": "Supprimer",
+        "cancel": "Annuler",
         "table": {
-          "no": "NO",
-          "vehicle": "VEHICLE",
-          "device": "DEVICE",
-          "status": "STATUS",
-          "assignedOn": "ASSIGNED ON"
+          "no": "N°",
+          "vehicle": "VÉHICULE",
+          "device": "APPAREIL",
+          "status": "STATUT",
+          "assignedOn": "ASSIGNÉ LE"
         },
         "metrics": {
-          "totalAssignments": "TOTAL ASSIGNMENTS",
-          "active": "ACTIVE",
-          "withIssues": "WITH ISSUES"
+          "totalAssignments": "TOTAL DES ASSOCIATIONS",
+          "active": "ACTIF",
+          "withIssues": "AVEC PROBLÈMES"
         },
         "status": {
-          "active": "Active",
-          "inactive": "Inactive"
+          "active": "Actif",
+          "inactive": "Inactif"
         },
         "toast": {
-          "fetchFailed": "Failed to fetch device mappings",
-          "deleted": "Device mapping deleted successfully",
-          "deleteFailed": "Unable to delete device mapping",
-          "deleteError": "Error deleting device mapping"
+          "fetchFailed": "Échec du chargement des associations",
+          "deleted": "Association supprimée avec succès",
+          "deleteFailed": "Impossible de supprimer l’association",
+          "deleteError": "Erreur lors de la suppression"
         }
       },
       "detail": {
-        "loadingDetails": "Loading device map details...",
-        "noReadPermission": "You do not have view permission for Device Mapping.",
-        "createTitle": "Assign Device",
-        "editTitle": "Edit Device Map",
+        "loadingDetails": "Chargement des détails...",
+        "noReadPermission": "Vous n'avez pas l'autorisation de voir l'association des appareils.",
+        "createTitle": "Assigner un Appareil",
+        "editTitle": "Modifier l’Association",
         "section": {
-          "parameters": "Device Assignment Parameters",
-          "editDescription": "Update mapped device details for this vehicle.",
-          "createDescription": "Create a new vehicle-device mapping.",
-          "statusTitle": "Mapping Status",
-          "statusDescription": "Inactive mappings are excluded from active assignments."
+          "parameters": "Paramètres d’Association",
+          "editDescription": "Mettre à jour l’appareil associé à ce véhicule.",
+          "createDescription": "Créer une nouvelle association véhicule-appareil.",
+          "statusTitle": "Statut de l’Association",
+          "statusDescription": "Les associations inactives sont exclues des affectations actives."
         },
         "fields": {
-          "account": "Account",
-          "selectAccount": "Select Account",
-          "vehicle": "Vehicle",
-          "selectVehicle": "Select Vehicle",
-          "deviceType": "Device Type",
-          "selectDeviceType": "Select Device Type",
-          "hardware": "Hardware",
-          "selectHardware": "Select Hardware",
+          "account": "Compte",
+          "selectAccount": "Sélectionner un Compte",
+          "vehicle": "Véhicule",
+          "selectVehicle": "Sélectionner un Véhicule",
+          "deviceType": "Type d’Appareil",
+          "selectDeviceType": "Sélectionner le Type",
+          "hardware": "Matériel",
+          "selectHardware": "Sélectionner le Matériel",
           "sim": "SIM",
-          "selectSim": "Select SIM",
-          "simNumber": "SIM Number",
-          "simNumberPlaceholder": "Enter SIM Number",
-          "installationDate": "Installation Date",
-          "remarks": "Remarks",
-          "remarksPlaceholder": "Add optional notes..."
+          "selectSim": "Sélectionner la SIM",
+          "simNumber": "Numéro SIM",
+          "simNumberPlaceholder": "Entrer le numéro SIM",
+          "installationDate": "Date d’Installation",
+          "remarks": "Remarques",
+          "remarksPlaceholder": "Ajouter des notes..."
         },
         "buttons": {
-          "cancel": "Cancel",
-          "updating": "Updating...",
-          "creating": "Creating...",
-          "update": "Update Mapping",
-          "create": "Create Mapping"
+          "cancel": "Annuler",
+          "updating": "Mise à jour...",
+          "creating": "Création...",
+          "update": "Mettre à jour l’Association",
+          "create": "Créer l’Association"
         },
         "toast": {
-          "dropdownFailed": "Failed to load dropdown data",
-          "notFound": "Device map details not found",
-          "fetchFailed": "Failed to fetch device map details",
-          "noUpdatePermission": "You do not have update permission for Device Mapping",
-          "noAddPermission": "You do not have add permission for Device Mapping",
-          "selectAccount": "Please select account",
-          "selectVehicle": "Please select vehicle",
-          "selectDeviceType": "Please select device type",
-          "selectHardware": "Please select hardware",
-          "updated": "Device map updated successfully!",
-          "created": "Device map created successfully!",
-          "saveFailed": "Save failed",
-          "saveError": "An error occurred while saving device map"
+          "dropdownFailed": "Échec du chargement des listes",
+          "notFound": "Association introuvable",
+          "fetchFailed": "Échec du chargement des détails",
+          "noUpdatePermission": "Vous n'avez pas l'autorisation de modifier",
+          "noAddPermission": "Vous n'avez pas l'autorisation d’ajouter",
+          "selectAccount": "Veuillez sélectionner un compte",
+          "selectVehicle": "Veuillez sélectionner un véhicule",
+          "selectDeviceType": "Veuillez sélectionner un type d’appareil",
+          "selectHardware": "Veuillez sélectionner un matériel",
+          "updated": "Association mise à jour avec succès !",
+          "created": "Association créée avec succès !",
+          "saveFailed": "Échec de l’enregistrement",
+          "saveError": "Erreur lors de l’enregistrement"
         }
       }
     },
     "vehicleGeofence": {
       "list": {
-        "noReadPermission": "You do not have permission to view this page.",
-        "title": "Vehicle Geofence",
-        "subtitle": "Manage vehicle and geofence assignment mappings.",
+        "noReadPermission": "Vous n'avez pas l'autorisation de voir cette page.",
+        "title": "Géorepérage Véhicule",
+        "subtitle": "Gérer les associations véhicule-géorepérage.",
         "breadcrumbs": {
-          "fleet": "Fleet",
-          "current": "Vehicle Geofence"
+          "fleet": "Flotte",
+          "current": "Géorepérage Véhicule"
         },
-        "addButton": "Assign Geofence",
-        "allAccounts": "All Accounts",
-        "loading": "Loading assignments...",
-        "searchPlaceholder": "Search assignments...",
-        "deleteTitle": "Delete Assignment",
-        "deleteMessage": "Are you sure you want to delete assignment for \"{name}\"?",
-        "confirmDelete": "Delete",
-        "cancel": "Cancel",
+        "addButton": "Assigner un Géorepérage",
+        "allAccounts": "Tous les Comptes",
+        "loading": "Chargement des associations...",
+        "searchPlaceholder": "Rechercher...",
+        "deleteTitle": "Supprimer l’Association",
+        "deleteMessage": "Êtes-vous sûr de vouloir supprimer l'association pour \"{name}\" ?",
+        "confirmDelete": "Supprimer",
+        "cancel": "Annuler",
         "table": {
-          "no": "NO",
-          "vehicle": "VEHICLE",
-          "geofence": "GEOFENCE",
-          "geometry": "GEOMETRY",
-          "remarks": "REMARKS",
-          "status": "STATUS",
-          "createdOn": "CREATED ON"
+          "no": "N°",
+          "vehicle": "VÉHICULE",
+          "geofence": "GÉOREPÉRAGE",
+          "geometry": "GÉOMÉTRIE",
+          "remarks": "REMARQUES",
+          "status": "STATUT",
+          "createdOn": "CRÉÉ LE"
         },
         "metrics": {
-          "totalAssignments": "TOTAL ASSIGNMENTS",
-          "active": "ACTIVE",
-          "inactive": "INACTIVE"
+          "totalAssignments": "TOTAL DES ASSOCIATIONS",
+          "active": "ACTIF",
+          "inactive": "INACTIF"
         },
         "status": {
-          "active": "Active",
-          "inactive": "Inactive"
+          "active": "Actif",
+          "inactive": "Inactif"
         },
         "toast": {
-          "fetchFailed": "Failed to fetch vehicle geofence assignments",
-          "deleted": "Assignment deleted successfully",
-          "deleteFailed": "Unable to delete assignment",
-          "deleteError": "Error deleting assignment"
-        }
-      },
-      "detail": {
-        "loadingDetails": "Loading assignment details...",
-        "noReadPermission": "You do not have permission to view this page.",
-        "createTitle": "Create Vehicle Geofence Assignment",
-        "editTitle": "Edit Vehicle Geofence Assignment",
-        "section": {
-          "assignmentParameters": "Assignment Parameters",
-          "editDescription": "Update assignment details for this vehicle geofence mapping.",
-          "createDescription": "Create a new vehicle and geofence assignment.",
-          "statusTitle": "Assignment Status",
-          "statusDescription": "Inactive assignments will be excluded from active mapping operations."
-        },
-        "fields": {
-          "account": "Account",
-          "selectAccount": "Select Account",
-          "vehicle": "Vehicle",
-          "selectVehicle": "Select Vehicle",
-          "geofence": "Geofence",
-          "selectGeofence": "Select Geofence",
-          "remarks": "Remarks",
-          "remarksPlaceholder": "Add remarks..."
-        },
-        "buttons": {
-          "cancel": "Cancel",
-          "updating": "Updating...",
-          "creating": "Creating...",
-          "update": "Update Assignment",
-          "create": "Create Assignment"
-        },
-        "toast": {
-          "loadDropdownFailed": "Failed to load dropdown data",
-          "notFound": "Assignment not found",
-          "fetchFailed": "Failed to fetch assignment details",
-          "noUpdatePermission": "You do not have update permission for Vehicle Geofence",
-          "noAddPermission": "You do not have add permission for Vehicle Geofence",
-          "selectAccount": "Please select account",
-          "selectVehicle": "Please select vehicle",
-          "selectGeofence": "Please select geofence",
-          "updated": "Assignment updated successfully",
-          "created": "Assignment created successfully",
-          "saveFailed": "Failed to save assignment",
-          "saveError": "Error saving assignment"
-        }
-      }
-    },
-    "routeMaster": {
-      "detail": {
-        "loadingDetails": "Loading route details...",
-        "noReadPermission": "You do not have permission to view this page.",
-        "createTitle": "Create Route",
-        "editTitle": "Edit Route",
-        "subtitle": "Configure route stops, preview map path and save route metrics.",
-        "breadcrumbs": {
-          "fleet": "Fleet",
-          "master": "Route Master",
-          "create": "Create",
-          "edit": "Edit"
-        },
-        "buttons": {
-          "saving": "Saving...",
-          "createRoute": "Create Route",
-          "updateRoute": "Update Route",
-          "loadingRoute": "Loading Route...",
-          "viewRoute": "View Route"
-        },
-        "fields": {
-          "account": "ACCOUNT",
-          "selectAccount": "Select account",
-          "selectedAccount": "Selected Account ({id})",
-          "routeName": "ROUTE NAME",
-          "routeNamePlaceholder": "Enter route name",
-          "geofenceRelated": "GEOFENCE RELATED",
-          "yes": "Yes",
-          "no": "No",
-          "startPoint": "START POINT (GEOFENCE)",
-          "addGeofence": "Add Geofence",
-          "selectStartGeofence": "Select start geofence",
-          "stopLabel": "STOP {number}",
-          "selectStopGeofence": "Select stop geofence",
-          "addStop": "Add Stop",
-          "endPoint": "END POINT (GEOFENCE)",
-          "selectEndGeofence": "Select end geofence",
-          "status": "STATUS",
-          "active": "Active",
-          "inactive": "Inactive",
-          "geofenceFallback": "Geofence {id}"
-        },
-        "section": {
-          "routePreview": "Route Preview",
-          "mapsLoadFailed": "Failed to load Google Maps SDK",
-          "loadingMap": "Loading map..."
-        },
-        "table": {
-          "startGeofence": "Start Geofence",
-          "endGeofence": "End Geofence",
-          "distance": "Travel Distance (Kms)",
-          "time": "Travel Time (Min)",
-          "totalDistance": "Total Distance:",
-          "totalTime": "Total Time:"
-        },
-        "toast": {
-          "notFound": "Route not found",
-          "fetchFailed": "Failed to fetch route details",
-          "geofenceDropdownFailed": "Failed to load geofence dropdown",
-          "mapsNotLoaded": "Google Maps SDK is not loaded",
-          "selectStartEndGeofence": "Please select start and end geofence",
-          "selectAtLeastStartEnd": "Please select at least start and end geofence",
-          "resolveGeofenceFailed": "Unable to resolve geofence coordinates for ID {id}",
-          "encodedPathUnavailable": "Google encoded route path not available for selected points",
-          "previewFailed": "Unable to build route preview for selected points",
-          "selectAccount": "Please select account",
-          "enterRouteName": "Please enter route name",
-          "startEndMustDiffer": "Start and end geofence should be different",
-          "selectGeofenceForEachStop": "Please select geofence for each added stop",
-          "noUpdatePermission": "You do not have update permission for Route Master",
-          "noAddPermission": "You do not have add permission for Route Master",
-          "routePathMissing": "Route create blocked: encoded route path is empty. Click View Route and try again.",
-          "created": "Route created successfully",
-          "updated": "Route updated successfully",
-          "saveFailed": "Failed to save route",
-          "saveError": "Error saving route"
-        }
-      }
-    },
-    "vehicles": {
-      "detail": {
-        "loading": {
-          "edit": "Loading vehicle data...",
-          "create": "Preparing form..."
-        },
-        "title": {
-          "edit": "Edit Vehicle",
-          "create": "Provision Vehicle"
-        },
-        "subtitle": {
-          "edit": "Update registry entry for this asset.",
-          "create": "Asset Identification & Registry"
-        },
-        "buttons": {
-          "discard": "Discard",
-          "saving": "Saving...",
-          "update": "Update Registry Entry",
-          "create": "Commit Registry Entry"
-        },
-        "sections": {
-          "identification": "Vehicle Identification",
-          "classification": "Classification",
-          "classificationSubtitle": "Map icon & thresholds are inherited from Type.",
-          "operationalStatus": "Operational Status"
-        },
-        "fields": {
-          "account": "Account",
-          "selectAccount": "Select Account",
-          "registration": "Registration Number",
-          "registrationPlaceholder": "E.G. HR-26-BY-1234",
-          "vin": "VIN / Chassis Number",
-          "vinPlaceholder": "17-Character VIN",
-          "vinHint": "VIN should be exactly 17 characters",
-          "vehicleType": "Vehicle Type",
-          "selectType": "Select Type"
-        },
-        "status": {
-          "title": "Operational lifecycle status",
-          "subtitle": "Determines asset visibility in live tracking hubs.",
-          "active": "ACTIVE",
-          "inactive": "INACTIVE"
-        },
-        "toast": {
-          "notFound": "Vehicle not found",
-          "loadFailed": "Failed to load data",
-          "selectAccount": "Please select an account",
-          "registrationRequired": "Registration number is required",
-          "selectVehicleType": "Please select a vehicle type",
-          "saved": "Vehicle saved successfully!",
-          "operationFailed": "Operation failed",
-          "errorOccurred": "An error occurred"
+          "fetchFailed": "Échec du chargement",
+          "deleted": "Association supprimée avec succès",
+          "deleteFailed": "Impossible de supprimer",
+          "deleteError": "Erreur lors de la suppression"
         }
       }
     }

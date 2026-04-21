@@ -2,74 +2,74 @@
   "pages": {
     "subscriptions": {
       "list": {
-        "title": "Subscriptions",
-        "subtitle": "Real-time monitoring of active licenses and contract adherence.",
+        "title": "Abonnements",
+        "subtitle": "Surveillance en temps réel des licences actives et du respect des contrats.",
         "breadcrumbs": {
-          "billing": "Billing",
-          "current": "Subscriptions"
+          "billing": "Facturation",
+          "current": "Abonnements"
         },
-        "addButton": "Add Subscription",
-        "searchPlaceholder": "Search subscriptions...",
+        "addButton": "Ajouter un abonnement",
+        "searchPlaceholder": "Rechercher des abonnements...",
         "metrics": {
-          "total": "TOTAL SUBSCRIPTIONS",
-          "active": "ACTIVE",
-          "expiringSoon": "EXPIRING SOON",
-          "managedUnits": "MANAGED UNITS"
+          "total": "TOTAL DES ABONNEMENTS",
+          "active": "ACTIFS",
+          "expiringSoon": "EXPIRANT BIENTÔT",
+          "managedUnits": "UNITÉS GÉRÉES"
         },
         "table": {
-          "no": "NO",
-          "account": "ACCOUNT",
-          "planDetails": "PLAN DETAILS",
-          "period": "PERIOD",
-          "status": "STATUS"
+          "no": "N°",
+          "account": "COMPTE",
+          "planDetails": "DÉTAILS DU PLAN",
+          "period": "PÉRIODE",
+          "status": "STATUT"
         },
         "labels": {
-          "start": "Start",
-          "end": "End",
-          "units": "Units",
-          "inactive": "Inactive"
+          "start": "Début",
+          "end": "Fin",
+          "units": "Unités",
+          "inactive": "Inactif"
         },
         "toast": {
-          "fetchFailed": "Failed to fetch subscriptions"
+          "fetchFailed": "Échec de la récupération des abonnements"
         }
       },
       "detail": {
         "title": {
-          "add": "Add Subscription",
-          "edit": "Subscription"
+          "add": "Ajouter un abonnement",
+          "edit": "Abonnement"
         },
-        "subtitle": "Map a billing plan to an account.",
+        "subtitle": "Associer un plan de facturation à un compte.",
         "breadcrumbs": {
-          "billing": "Billing",
-          "current": "Subscriptions"
+          "billing": "Facturation",
+          "current": "Abonnements"
         },
         "fields": {
-          "account": "Account",
+          "account": "Compte",
           "plan": "Plan",
-          "units": "Units",
-          "status": "Status",
-          "startDate": "Start Date",
-          "endDate": "End Date"
+          "units": "Unités",
+          "status": "Statut",
+          "startDate": "Date de début",
+          "endDate": "Date de fin"
         },
         "statuses": {
-          "active": "Active",
-          "inactive": "Inactive",
-          "pending": "Pending"
+          "active": "Actif",
+          "inactive": "Inactif",
+          "pending": "En attente"
         },
         "buttons": {
-          "cancel": "Cancel",
-          "saving": "Saving...",
-          "submit": "Map Subscription"
+          "cancel": "Annuler",
+          "saving": "Enregistrement...",
+          "submit": "Associer l’abonnement"
         },
         "toast": {
-          "editNotEnabled": "Edit subscription is not enabled yet.",
-          "selectAccountPlan": "Please select Account and Plan",
-          "unitsGreaterThanZero": "Units must be greater than 0",
-          "validDates": "Please provide valid start and end dates",
-          "endAfterStart": "End date must be after start date",
-          "mappedSuccess": "Subscription mapped successfully",
-          "mapFailed": "Failed to map subscription",
-          "dropdownFailed": "Failed to load account/plan dropdowns"
+          "editNotEnabled": "La modification de l’abonnement n’est pas encore activée.",
+          "selectAccountPlan": "Veuillez sélectionner un compte et un plan",
+          "unitsGreaterThanZero": "Les unités doivent être supérieures à 0",
+          "validDates": "Veuillez fournir des dates de début et de fin valides",
+          "endAfterStart": "La date de fin doit être postérieure à la date de début",
+          "mappedSuccess": "Abonnement associé avec succès",
+          "mapFailed": "Échec de l’association de l’abonnement",
+          "dropdownFailed": "Échec du chargement des listes déroulantes compte/plan"
         }
       }
     }

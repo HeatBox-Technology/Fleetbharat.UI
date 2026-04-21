@@ -1,155 +1,155 @@
 {
-  "pages": {
-    "tripMaster": {
-      "list": {
-        "title": "Trip Master",
-        "subtitle": "Manage trip schedules and routing templates.",
-        "breadcrumbs": {
-          "fleet": "Fleet",
-          "current": "Trip Master"
-        },
-        "addButton": "Add Trip",
-        "searchPlaceholder": "Search trips...",
-        "metrics": {
-          "totalTrips": "TOTAL TRIPS",
-          "activeTrips": "ACTIVE TRIPS",
-          "inTransit": "IN TRANSIT"
-        },
-        "table": {
-          "no": "NO",
-          "tripName": "TRIP NAME",
-          "route": "ROUTE",
-          "vehicle": "VEHICLE",
-          "driver": "DRIVER",
-          "cycle": "CYCLE",
-          "status": "STATUS",
-          "startTime": "START TIME"
-        },
-        "labels": {
-          "cycle": {
-            "weekly": "Weekly",
-            "monthly": "Monthly",
-            "oneOff": "One-Off"
-          },
-          "status": {
-            "active": "Active",
-            "pending": "Pending",
-            "inTransit": "In Transit",
-            "completed": "Completed"
-          }
-        },
-        "deleteDialog": {
-          "title": "Delete Trip Plan",
-          "message": "Are you sure you want to delete {name}?",
-          "confirm": "Delete",
-          "cancel": "Cancel"
-        }
-      },
-      "detail": {
-        "title": "MISSION ARCHITECT",
-        "subtitle": "Trip Master Configuration",
-        "breadcrumbs": {
-          "fleet": "Fleet",
-          "master": "Trip Master",
-          "create": "Create",
-          "edit": "Edit"
-        },
-        "buttons": {
-          "discard": "Discard",
-          "cancel": "Cancel",
-          "deployMission": "DEPLOY MISSION",
-          "remove": "Remove",
-          "prev": "Previous",
-          "next": "Next",
-          "addStop": "Add Stop",
-          "addNumber": "Add Number",
-          "deploying": "Deploying...",
-          "deployMasterMission": "DEPLOY MASTER MISSION"
-        },
-        "sections": {
-          "missionIdentity": "MISSION IDENTITY",
-          "fleetStrategy": "FLEET STRATEGY",
-          "tripCycleTimeline": "TRIP CYCLE & TIMELINE",
-          "timelineRoute": "TIMELINE & ROUTE",
-          "notifications": "NOTIFICATIONS",
-          "liveMapPreview": "LIVE MAP PREVIEW",
-          "missionSummary": "MISSION SUMMARY"
-        },
-        "fields": {
-          "tripName": "TRIP NAME",
-          "tripNamePlaceholder": "e.g. Metro Daily Supply",
-          "assignedOperator": "ASSIGNED OPERATOR",
-          "selectDriver": "Select driver",
-          "account": "ACCOUNT",
-          "selectAccount": "Select account",
-          "vehicle": "VEHICLE",
-          "selectVehicle": "Select vehicle",
-          "vehicleType": "VEHICLE TYPE",
-          "selectVehicleType": "Select vehicle type",
-          "consignee": "CONSIGNEE",
-          "consigneePlaceholder": "e.g. Sharma Traders",
-          "vehicleAssignment": "VEHICLE ASSIGNMENT",
-          "vehicleTypePageInfo": "Vehicle types page {page}/{total}",
-          "noVehicleTypes": "No vehicle types found",
-          "tripType": "TRIP TYPE",
-          "weeklyRotation": "WEEKLY ROTATION",
-          "departureEtd": "DEPARTURE ETD",
-          "expectedArrival": "EXPECTED ARRIVAL",
-          "selectMasterPipeline": "SELECT MASTER PIPELINE",
-          "selectSourceGeofence": "Select source geofence",
-          "selectDestinationGeofence": "Select destination geofence",
-          "selectStopGeofence": "Select stop geofence",
-          "customRouteName": "CUSTOM ROUTE NAME",
-          "customRoutePlaceholder": "Enter custom route",
-          "sourcePlaceholder": "Enter source location",
-          "destinationPlaceholder": "Enter destination location",
-          "stopPlaceholder": "Enter stop location"
-        },
-        "notifications": {
-          "enableOtp": "Enable OTP Notification",
-          "otpHelp": "Add multiple mobile numbers below when OTP is enabled.",
-          "mobilePlaceholder": "Enter mobile number",
-          "removeNumberAria": "Remove number"
-        },
-        "summary": {
-          "trip": "Trip",
-          "driver": "Driver",
-          "account": "Account",
-          "vehicle": "Vehicle",
-          "assignment": "Assignment",
-          "vehicleType": "Vehicle Type",
-          "cycle": "Cycle",
-          "routeMode": "Route Mode",
-          "route": "Route"
-        },
-        "vehicleClass": {
-          "truck": "Truck",
-          "truckSub": "Freight Titan",
-          "traveller": "Traveller",
-          "travellerSub": "Transit Crew Van",
-          "bus": "Bus",
-          "busSub": "Shuttle Prime"
-        },
-        "scheduling": {
-          "masterRoute": "Master Route",
-          "fixedPath": "Fixed Path",
-          "weekly": "Weekly",
-          "repeatingCycle": "Repeating Cycle",
-          "customRoute": "Custom Route",
-          "onDemand": "On Demand",
-          "oneOff": "One-Off",
-          "scheduled": "Scheduled"
-        },
-        "labels": {
-          "weeklyCycle": "Weekly Cycle",
-          "customRoute": "Custom Route",
-          "oneOffScheduled": "One-off Scheduled",
-          "defaultMapQuery": "Delhi",
-          "sourceLocation": "SOURCE LOCATION",
-          "destinationLocation": "DESTINATION LOCATION",
-          "stop": "STOP {number}"
-        }
-      }
-    }
-  }
+"pages": {
+"tripMaster": {
+"list": {
+"title": "Maestro de Viajes",
+"subtitle": "Gestiona horarios de viajes y plantillas de rutas.",
+"breadcrumbs": {
+"fleet": "Flota",
+"current": "Maestro de Viajes"
+},
+"addButton": "Agregar Viaje",
+"searchPlaceholder": "Buscar viajes...",
+"metrics": {
+"totalTrips": "TOTAL DE VIAJES",
+"activeTrips": "VIAJES ACTIVOS",
+"inTransit": "EN TRÁNSITO"
+},
+"table": {
+"no": "Nº",
+"tripName": "NOMBRE DEL VIAJE",
+"route": "RUTA",
+"vehicle": "VEHÍCULO",
+"driver": "CONDUCTOR",
+"cycle": "CICLO",
+"status": "ESTADO",
+"startTime": "HORA DE INICIO"
+},
+"labels": {
+"cycle": {
+"weekly": "Semanal",
+"monthly": "Mensual",
+"oneOff": "Único"
+},
+"status": {
+"active": "Activo",
+"pending": "Pendiente",
+"inTransit": "En tránsito",
+"completed": "Completado"
+}
+},
+"deleteDialog": {
+"title": "Eliminar Plan de Viaje",
+"message": "¿Seguro que deseas eliminar {name}?",
+"confirm": "Eliminar",
+"cancel": "Cancelar"
+}
+},
+"detail": {
+"title": "ARQUITECTO DE MISIÓN",
+"subtitle": "Configuración del Maestro de Viajes",
+"breadcrumbs": {
+"fleet": "Flota",
+"master": "Maestro de Viajes",
+"create": "Crear",
+"edit": "Editar"
+},
+"buttons": {
+"discard": "Descartar",
+"cancel": "Cancelar",
+"deployMission": "DESPLEGAR MISIÓN",
+"remove": "Eliminar",
+"prev": "Anterior",
+"next": "Siguiente",
+"addStop": "Agregar Parada",
+"addNumber": "Agregar Número",
+"deploying": "Desplegando...",
+"deployMasterMission": "DESPLEGAR MISIÓN MAESTRA"
+},
+"sections": {
+"missionIdentity": "IDENTIDAD DE MISIÓN",
+"fleetStrategy": "ESTRATEGIA DE FLOTA",
+"tripCycleTimeline": "CICLO DE VIAJE Y CRONOGRAMA",
+"timelineRoute": "CRONOGRAMA Y RUTA",
+"notifications": "NOTIFICACIONES",
+"liveMapPreview": "VISTA PREVIA DEL MAPA EN VIVO",
+"missionSummary": "RESUMEN DE MISIÓN"
+},
+"fields": {
+"tripName": "NOMBRE DEL VIAJE",
+"tripNamePlaceholder": "ej. Suministro Diario Metro",
+"assignedOperator": "OPERADOR ASIGNADO",
+"selectDriver": "Seleccionar conductor",
+"account": "CUENTA",
+"selectAccount": "Seleccionar cuenta",
+"vehicle": "VEHÍCULO",
+"selectVehicle": "Seleccionar vehículo",
+"vehicleType": "TIPO DE VEHÍCULO",
+"selectVehicleType": "Seleccionar tipo de vehículo",
+"consignee": "CONSIGNATARIO",
+"consigneePlaceholder": "ej. Sharma Traders",
+"vehicleAssignment": "ASIGNACIÓN DE VEHÍCULO",
+"vehicleTypePageInfo": "Página de tipos de vehículo {page}/{total}",
+"noVehicleTypes": "No se encontraron tipos de vehículo",
+"tripType": "TIPO DE VIAJE",
+"weeklyRotation": "ROTACIÓN SEMANAL",
+"departureEtd": "SALIDA ETD",
+"expectedArrival": "LLEGADA ESPERADA",
+"selectMasterPipeline": "SELECCIONAR RUTA MAESTRA",
+"selectSourceGeofence": "Seleccionar geocerca origen",
+"selectDestinationGeofence": "Seleccionar geocerca destino",
+"selectStopGeofence": "Seleccionar geocerca parada",
+"customRouteName": "NOMBRE DE RUTA PERSONALIZADA",
+"customRoutePlaceholder": "Ingresar ruta personalizada",
+"sourcePlaceholder": "Ingresar ubicación origen",
+"destinationPlaceholder": "Ingresar ubicación destino",
+"stopPlaceholder": "Ingresar ubicación de parada"
+},
+"notifications": {
+"enableOtp": "Habilitar notificación OTP",
+"otpHelp": "Agrega múltiples números móviles cuando OTP esté habilitado.",
+"mobilePlaceholder": "Ingresar número móvil",
+"removeNumberAria": "Eliminar número"
+},
+"summary": {
+"trip": "Viaje",
+"driver": "Conductor",
+"account": "Cuenta",
+"vehicle": "Vehículo",
+"assignment": "Asignación",
+"vehicleType": "Tipo de Vehículo",
+"cycle": "Ciclo",
+"routeMode": "Modo de Ruta",
+"route": "Ruta"
+},
+"vehicleClass": {
+"truck": "Camión",
+"truckSub": "Titán de Carga",
+"traveller": "Transportador",
+"travellerSub": "Furgoneta de Tripulación",
+"bus": "Autobús",
+"busSub": "Shuttle Prime"
+},
+"scheduling": {
+"masterRoute": "Ruta Maestra",
+"fixedPath": "Ruta Fija",
+"weekly": "Semanal",
+"repeatingCycle": "Ciclo Repetitivo",
+"customRoute": "Ruta Personalizada",
+"onDemand": "Bajo Demanda",
+"oneOff": "Único",
+"scheduled": "Programado"
+},
+"labels": {
+"weeklyCycle": "Ciclo Semanal",
+"customRoute": "Ruta Personalizada",
+"oneOffScheduled": "Programado Único",
+"defaultMapQuery": "Delhi",
+"sourceLocation": "UBICACIÓN ORIGEN",
+"destinationLocation": "UBICACIÓN DESTINO",
+"stop": "PARADA {number}"
+}
+}
+}
+}
 }

@@ -1,106 +1,106 @@
 {
-  "pages": {
-    "formmaster": {
-      "list": {
-        "title": "Form Master",
-        "subtitle": "Manage application forms, modules, routes, and visibility.",
-        "breadcrumbs": {
-          "configurations": "Configurations",
-          "current": "Form Master"
-        },
-        "addButton": "Add Form",
-        "loading": "Loading forms...",
-        "searchPlaceholder": "Search forms by name, code, or module...",
-        "table": {
-          "no": "NO",
-          "formCode": "FORM CODE",
-          "formName": "FORM NAME",
-          "module": "MODULE",
-          "pageUrl": "PAGE URL",
-          "status": "STATUS"
-        },
-        "status": {
-          "active": "Active",
-          "inactive": "Inactive"
-        },
-        "delete": {
-          "title": "Delete Form",
-          "message": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
-          "confirm": "Delete",
-          "cancel": "Cancel"
-        },
-        "toast": {
-          "fetchFailed": "Failed to fetch forms",
-          "deleted": "Form deleted successfully",
-          "deleteFailed": "Failed to delete form"
-        }
-      },
-      "detail": {
-        "loading": "Loading form details...",
-        "title": {
-          "edit": "Edit Form",
-          "create": "Create New Form"
-        },
-        "section": {
-          "title": "Form Information",
-          "subtitle": "Configure form code, route, module, and visibility options."
-        },
-        "fields": {
-          "formCode": "Form Code",
-          "formCodePlaceholder": "e.g. USER-001",
-          "formName": "Form Name",
-          "formNamePlaceholder": "e.g. Roles & Permissions",
-          "moduleName": "Module Name",
-          "moduleNamePlaceholder": "e.g. User-Management",
-          "pageUrl": "Page URL",
-          "pageUrlPlaceholder": "e.g. /users/roles-permissions",
-          "iconName": "Icon Name",
-          "iconNamePlaceholder": "e.g. Shield",
-          "sortOrder": "Sort Order",
-          "sortOrderPlaceholder": "0",
-          "formModuleId": "Form Module Id",
-          "formModuleIdPlaceholder": "0",
-          "filterConfigJson": "Filter Config JSON",
-          "filterConfigJsonPlaceholder": "e.g. JSON object string"
-        },
-        "toggles": {
-          "isMenu": {
-            "title": "Is Menu",
-            "description": "Enable to include this form in menu."
-          },
-          "isBulk": {
-            "title": "Is Bulk Upload",
-            "description": "Enable if this form supports bulk upload."
-          },
-          "isVisible": {
-            "title": "Is Visible",
-            "description": "Toggle form visibility in UI layers."
-          },
-          "isActive": {
-            "title": "Is Active",
-            "description": "Inactive form will be treated as disabled."
-          }
-        },
-        "buttons": {
-          "cancel": "Cancel",
-          "creating": "Creating...",
-          "updating": "Updating...",
-          "create": "Create Form",
-          "update": "Update Form"
-        },
-        "toast": {
-          "fetchFailed": "Failed to fetch form",
-          "fetchDetailsFailed": "Failed to fetch form details",
-          "formCodeRequired": "Form code is required",
-          "formNameRequired": "Form name is required",
-          "moduleNameRequired": "Module name is required",
-          "pageUrlRequired": "Page URL is required",
-          "filterConfigInvalid": "Filter Config JSON must be valid JSON",
-          "created": "Form created successfully",
-          "updated": "Form updated successfully",
-          "saveFailed": "Failed to save form"
-        }
-      }
-    }
-  }
+"pages": {
+"formmaster": {
+"list": {
+"title": "Maestro de Formularios",
+"subtitle": "Gestiona formularios de la aplicación, módulos, rutas y visibilidad.",
+"breadcrumbs": {
+"configurations": "Configuraciones",
+"current": "Maestro de Formularios"
+},
+"addButton": "Agregar Formulario",
+"loading": "Cargando formularios...",
+"searchPlaceholder": "Buscar formularios por nombre, código o módulo...",
+"table": {
+"no": "Nº",
+"formCode": "CÓDIGO DEL FORMULARIO",
+"formName": "NOMBRE DEL FORMULARIO",
+"module": "MÓDULO",
+"pageUrl": "URL DE PÁGINA",
+"status": "ESTADO"
+},
+"status": {
+"active": "Activo",
+"inactive": "Inactivo"
+},
+"delete": {
+"title": "Eliminar Formulario",
+"message": "¿Seguro que deseas eliminar \"{name}\"? Esta acción no se puede deshacer.",
+"confirm": "Eliminar",
+"cancel": "Cancelar"
+},
+"toast": {
+"fetchFailed": "Error al obtener formularios",
+"deleted": "Formulario eliminado correctamente",
+"deleteFailed": "Error al eliminar el formulario"
+}
+},
+"detail": {
+"loading": "Cargando detalles del formulario...",
+"title": {
+"edit": "Editar Formulario",
+"create": "Crear Nuevo Formulario"
+},
+"section": {
+"title": "Información del Formulario",
+"subtitle": "Configura el código del formulario, ruta, módulo y opciones de visibilidad."
+},
+"fields": {
+"formCode": "Código del Formulario",
+"formCodePlaceholder": "ej. USER-001",
+"formName": "Nombre del Formulario",
+"formNamePlaceholder": "ej. Roles y Permisos",
+"moduleName": "Nombre del Módulo",
+"moduleNamePlaceholder": "ej. Gestión de Usuarios",
+"pageUrl": "URL de Página",
+"pageUrlPlaceholder": "ej. /users/roles-permissions",
+"iconName": "Nombre del Icono",
+"iconNamePlaceholder": "ej. Shield",
+"sortOrder": "Orden",
+"sortOrderPlaceholder": "0",
+"formModuleId": "ID del Módulo del Formulario",
+"formModuleIdPlaceholder": "0",
+"filterConfigJson": "Configuración de Filtro JSON",
+"filterConfigJsonPlaceholder": "ej. cadena de objeto JSON"
+},
+"toggles": {
+"isMenu": {
+"title": "Es Menú",
+"description": "Habilita para incluir este formulario en el menú."
+},
+"isBulk": {
+"title": "Carga Masiva",
+"description": "Habilita si este formulario admite carga masiva."
+},
+"isVisible": {
+"title": "Es Visible",
+"description": "Alterna la visibilidad del formulario en la UI."
+},
+"isActive": {
+"title": "Está Activo",
+"description": "Un formulario inactivo se tratará como deshabilitado."
+}
+},
+"buttons": {
+"cancel": "Cancelar",
+"creating": "Creando...",
+"updating": "Actualizando...",
+"create": "Crear Formulario",
+"update": "Actualizar Formulario"
+},
+"toast": {
+"fetchFailed": "Error al obtener el formulario",
+"fetchDetailsFailed": "Error al obtener detalles del formulario",
+"formCodeRequired": "El código del formulario es obligatorio",
+"formNameRequired": "El nombre del formulario es obligatorio",
+"moduleNameRequired": "El nombre del módulo es obligatorio",
+"pageUrlRequired": "La URL de la página es obligatoria",
+"filterConfigInvalid": "El JSON de configuración de filtro debe ser válido",
+"created": "Formulario creado correctamente",
+"updated": "Formulario actualizado correctamente",
+"saveFailed": "Error al guardar el formulario"
+}
+}
+}
+}
 }

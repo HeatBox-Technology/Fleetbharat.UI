@@ -1,114 +1,114 @@
 {
-  "pages": {
-    "devices": {
-      "list": {
-        "title": "Device",
-        "subtitle": "Full traceability of device identity, connectivity, and provisioning status.",
-        "breadcrumbs": {
-          "fleet": "Fleet",
-          "current": "Device"
-        },
-        "addButton": "Add Device",
-        "export": "Export",
-        "fields": {
-          "selectAccount": "Select Account"
-        },
-        "table": {
-          "deviceIdentity": "Device Identity",
-          "category": "Category",
-          "type": "Type",
-          "status": "Status",
-          "lastUpdated": "Last Updated"
-        },
-        "status": {
-          "active": "ACTIVE",
-          "inactive": "INACTIVE",
-          "inService": "IN SERVICE",
-          "outOfService": "OUT OF SERVICE"
-        },
-        "metrics": {
-          "totalDevices": "Total Devices",
-          "inService": "In Service",
-          "outOfService": "Out of Service"
-        },
-        "fallback": {
-          "defaultCategory": "GPS",
-          "defaultType": "Tracker",
-          "notAvailable": "N/A"
-        },
-        "loading": "Loading devices...",
-        "searchPlaceholder": "Search devices...",
-        "deleteTitle": "Remove Device",
-        "deleteMessage": "Are you sure you want to remove device \"{device}\" from the registry? This action cannot be undone.",
-        "confirmDelete": "Remove",
-        "cancel": "Cancel",
-        "toast": {
-          "loadError": "An error occurred while loading devices",
-          "removed": "Device removed successfully",
-          "deleteFailed": "Failed to delete device.",
-          "deleteError": "An error occurred while deleting.",
-          "exportSuccess": "Devices exported successfully!",
-          "exportFailed": "Failed to export devices"
-        }
-      },
-      "detail": {
-        "loading": {
-          "edit": "Loading device data...",
-          "create": "Preparing form..."
-        },
-        "title": {
-          "edit": "Edit Device",
-          "create": "Provision Device"
-        },
-        "subtitle": {
-          "edit": "Update registry entry for this device.",
-          "create": "Global Asset Correlation & Device Registry"
-        },
-        "buttons": {
-          "discard": "Discard",
-          "saving": "Saving...",
-          "update": "Update Registry Entry",
-          "create": "Commit Registry Entry"
-        },
-        "sections": {
-          "accountContext": "Account Context",
-          "accountContextSubtitle": "Select the account this device belongs to.",
-          "identityLifecycle": "Identity & Lifecycle",
-          "identityLifecycleSubtitle": "Hardware identification and classification details.",
-          "preview": "Device Identity Preview",
-          "previewSubtitle": "Auto-generated from the fields above."
-        },
-        "fields": {
-          "account": "Account",
-          "selectAccount": "Select Account",
-          "manufacturer": "Device Manufacturer",
-          "selectManufacturer": "Select Device Manufacturer",
-          "deviceType": "Device Type",
-          "selectDeviceType": "Select Device Type",
-          "deviceNo": "Device No.",
-          "deviceNoPlaceholder": "e.g. DEV-001",
-          "serial": "IMEI / Serial",
-          "serialPlaceholder": "Hardware Identity Code"
-        },
-        "preview": {
-          "deviceType": "Device Type",
-          "manufacturer": "Device Manufacturer",
-          "deviceNo": "Device No.",
-          "serial": "IMEI / Serial",
-          "empty": "—"
-        },
-        "toast": {
-          "loadFailed": "Failed to load device data",
-          "selectAccount": "Please select an account",
-          "selectManufacturer": "Please select a device manufacturer",
-          "selectDeviceType": "Please select a device type",
-          "serialRequired": "IMEI / Serial number is required",
-          "serialNumericOnly": "IMEI / Serial number must contain digits only",
-          "saved": "Device saved successfully",
-          "operationFailed": "Operation failed",
-          "errorOccurred": "An error occurred"
-        }
-      }
-    }
-  }
+"pages": {
+"devices": {
+"list": {
+"title": "Dispositivo",
+"subtitle": "Trazabilidad completa de la identidad del dispositivo, conectividad y estado de aprovisionamiento.",
+"breadcrumbs": {
+"fleet": "Flota",
+"current": "Dispositivo"
+},
+"addButton": "Agregar Dispositivo",
+"export": "Exportar",
+"fields": {
+"selectAccount": "Seleccionar Cuenta"
+},
+"table": {
+"deviceIdentity": "Identidad del Dispositivo",
+"category": "Categoría",
+"type": "Tipo",
+"status": "Estado",
+"lastUpdated": "Última Actualización"
+},
+"status": {
+"active": "ACTIVO",
+"inactive": "INACTIVO",
+"inService": "EN SERVICIO",
+"outOfService": "FUERA DE SERVICIO"
+},
+"metrics": {
+"totalDevices": "Total de Dispositivos",
+"inService": "En Servicio",
+"outOfService": "Fuera de Servicio"
+},
+"fallback": {
+"defaultCategory": "GPS",
+"defaultType": "Rastreador",
+"notAvailable": "N/D"
+},
+"loading": "Cargando dispositivos...",
+"searchPlaceholder": "Buscar dispositivos...",
+"deleteTitle": "Eliminar Dispositivo",
+"deleteMessage": "¿Seguro que deseas eliminar el dispositivo \"{device}\" del registro? Esta acción no se puede deshacer.",
+"confirmDelete": "Eliminar",
+"cancel": "Cancelar",
+"toast": {
+"loadError": "Ocurrió un error al cargar los dispositivos",
+"removed": "Dispositivo eliminado correctamente",
+"deleteFailed": "Error al eliminar el dispositivo.",
+"deleteError": "Ocurrió un error al eliminar.",
+"exportSuccess": "¡Dispositivos exportados correctamente!",
+"exportFailed": "Error al exportar dispositivos"
+}
+},
+"detail": {
+"loading": {
+"edit": "Cargando datos del dispositivo...",
+"create": "Preparando formulario..."
+},
+"title": {
+"edit": "Editar Dispositivo",
+"create": "Aprovisionar Dispositivo"
+},
+"subtitle": {
+"edit": "Actualiza la entrada del registro para este dispositivo.",
+"create": "Correlación Global de Activos y Registro de Dispositivos"
+},
+"buttons": {
+"discard": "Descartar",
+"saving": "Guardando...",
+"update": "Actualizar Entrada del Registro",
+"create": "Guardar Entrada del Registro"
+},
+"sections": {
+"accountContext": "Contexto de Cuenta",
+"accountContextSubtitle": "Selecciona la cuenta a la que pertenece este dispositivo.",
+"identityLifecycle": "Identidad y Ciclo de Vida",
+"identityLifecycleSubtitle": "Detalles de identificación y clasificación del hardware.",
+"preview": "Vista Previa de Identidad del Dispositivo",
+"previewSubtitle": "Generado automáticamente a partir de los campos anteriores."
+},
+"fields": {
+"account": "Cuenta",
+"selectAccount": "Seleccionar Cuenta",
+"manufacturer": "Fabricante del Dispositivo",
+"selectManufacturer": "Seleccionar Fabricante del Dispositivo",
+"deviceType": "Tipo de Dispositivo",
+"selectDeviceType": "Seleccionar Tipo de Dispositivo",
+"deviceNo": "N.º de Dispositivo",
+"deviceNoPlaceholder": "ej. DEV-001",
+"serial": "IMEI / Serie",
+"serialPlaceholder": "Código de Identidad del Hardware"
+},
+"preview": {
+"deviceType": "Tipo de Dispositivo",
+"manufacturer": "Fabricante del Dispositivo",
+"deviceNo": "N.º de Dispositivo",
+"serial": "IMEI / Serie",
+"empty": "—"
+},
+"toast": {
+"loadFailed": "Error al cargar los datos del dispositivo",
+"selectAccount": "Por favor selecciona una cuenta",
+"selectManufacturer": "Por favor selecciona un fabricante de dispositivo",
+"selectDeviceType": "Por favor selecciona un tipo de dispositivo",
+"serialRequired": "El número IMEI / Serie es obligatorio",
+"serialNumericOnly": "El número IMEI / Serie debe contener solo dígitos",
+"saved": "Dispositivo guardado correctamente",
+"operationFailed": "Operación fallida",
+"errorOccurred": "Ocurrió un error"
+}
+}
+}
+}
 }

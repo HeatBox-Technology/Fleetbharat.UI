@@ -1,77 +1,77 @@
 {
-  "pages": {
-    "categories": {
-      "list": {
-        "title": "Categories",
-        "subtitle": "Manage identities, taxonomies, and global parameters.",
-        "breadcrumbs": {
-          "accounts": "Accounts",
-          "current": "Categories"
-        },
-        "addButton": "Add Category",
-        "loading": "Loading categories...",
-        "searchPlaceholder": "Search categories...",
-        "table": {
-          "id": "ID",
-          "label": "LABEL",
-          "description": "DESCRIPTION",
-          "status": "STATUS",
-          "createdAt": "CREATED AT"
-        },
-        "status": {
-          "active": "Active",
-          "inactive": "Inactive"
-        },
-        "delete": {
-          "title": "Delete Category",
-          "message": "Are you sure you want to delete the category \"{label}\"? This action cannot be undone.",
-          "confirm": "Delete",
-          "cancel": "Cancel"
-        },
-        "toast": {
-          "deleted": "Category deleted successfully!",
-          "deleteFailed": "Failed to delete: {message}",
-          "deleteError": "Error deleting category"
-        }
-      },
-      "detail": {
-        "loading": "Loading category data...",
-        "title": {
-          "edit": "Edit Classification",
-          "create": "New Classification"
-        },
-        "section": {
-          "title": "Taxonomy Parameters",
-          "subtitleEdit": "Update the grouping for account management and pricing.",
-          "subtitleCreate": "Create a new grouping for account management and pricing."
-        },
-        "fields": {
-          "labelName": "Label Name",
-          "labelPlaceholder": "e.g. Platinum Partner",
-          "description": "Description",
-          "descriptionPlaceholder": "Define the purpose and scope of this account category..."
-        },
-        "status": {
-          "title": "Category Status",
-          "subtitle": "Inactive categories cannot be assigned to new accounts."
-        },
-        "buttons": {
-          "cancel": "Cancel",
-          "updating": "Updating...",
-          "creating": "Creating...",
-          "update": "Update Category",
-          "create": "Create Category"
-        },
-        "toast": {
-          "fetchFailed": "Failed to fetch category data",
-          "fetchError": "Error loading category data",
-          "labelRequired": "Please enter a label name",
-          "updated": "Category updated successfully!",
-          "created": "Category created successfully!",
-          "saveFailed": "Failed: {message}",
-          "saveError": "An error occurred while saving the category"
-        }
-      }
-    }
-  }
+"pages": {
+"categories": {
+"list": {
+"title": "Categorías",
+"subtitle": "Gestiona identidades, taxonomías y parámetros globales.",
+"breadcrumbs": {
+"accounts": "Cuentas",
+"current": "Categorías"
+},
+"addButton": "Agregar Categoría",
+"loading": "Cargando categorías...",
+"searchPlaceholder": "Buscar categorías...",
+"table": {
+"id": "ID",
+"label": "ETIQUETA",
+"description": "DESCRIPCIÓN",
+"status": "ESTADO",
+"createdAt": "CREADO EL"
+},
+"status": {
+"active": "Activo",
+"inactive": "Inactivo"
+},
+"delete": {
+"title": "Eliminar Categoría",
+"message": "¿Seguro que deseas eliminar la categoría \"{label}\"? Esta acción no se puede deshacer.",
+"confirm": "Eliminar",
+"cancel": "Cancelar"
+},
+"toast": {
+"deleted": "¡Categoría eliminada correctamente!",
+"deleteFailed": "Error al eliminar: {message}",
+"deleteError": "Error al eliminar la categoría"
+}
+},
+"detail": {
+"loading": "Cargando datos de la categoría...",
+"title": {
+"edit": "Editar Clasificación",
+"create": "Nueva Clasificación"
+},
+"section": {
+"title": "Parámetros de Taxonomía",
+"subtitleEdit": "Actualiza la agrupación para la gestión de cuentas y precios.",
+"subtitleCreate": "Crea una nueva agrupación para la gestión de cuentas y precios."
+},
+"fields": {
+"labelName": "Nombre de la Etiqueta",
+"labelPlaceholder": "p. ej. Socio Platino",
+"description": "Descripción",
+"descriptionPlaceholder": "Define el propósito y alcance de esta categoría de cuenta..."
+},
+"status": {
+"title": "Estado de la Categoría",
+"subtitle": "Las categorías inactivas no pueden asignarse a nuevas cuentas."
+},
+"buttons": {
+"cancel": "Cancelar",
+"updating": "Actualizando...",
+"creating": "Creando...",
+"update": "Actualizar Categoría",
+"create": "Crear Categoría"
+},
+"toast": {
+"fetchFailed": "Error al obtener datos de la categoría",
+"fetchError": "Error al cargar datos de la categoría",
+"labelRequired": "Por favor ingresa un nombre de etiqueta",
+"updated": "¡Categoría actualizada correctamente!",
+"created": "¡Categoría creada correctamente!",
+"saveFailed": "Error: {message}",
+"saveError": "Ocurrió un error al guardar la categoría"
+}
+}
+}
+}
 }
