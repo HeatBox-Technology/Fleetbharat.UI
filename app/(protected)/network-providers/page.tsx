@@ -1,18 +1,33 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import CommonTable from "@/components/CommonTable";
-import ActionLoader from "@/components/ActionLoader";
-import PageHeader from "@/components/PageHeader";
-import { MetricCard } from "@/components/CommonCard";
-import ConfirmationDialog from "@/components/ConfirmationDialog";
-import { useTheme } from "@/context/ThemeContext";
-import { deleteAccount, getAccounts } from "@/services/accountService";
-import { AccountData, FormRights } from "@/interfaces/account.interface";
-import { Building2, CheckCircle, Clock, XCircle, MapPin, Database, ShieldCheck, CircleAlert } from "lucide-react";
-import { toast } from "react-toastify";
+import { CircleAlert, Database, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { getUserRoleData } from "@/services/commonServie";
+import type React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
+import { MetricCard } from "@/components/CommonCard";
+import CommonTable from "@/components/CommonTable";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
+import PageHeader from "@/components/PageHeader";
+import { useTheme } from "@/context/ThemeContext";
+import type { FormRights } from "@/interfaces/account.interface";
+import type {
+  NetworkProvider,
+} from "@/interfaces/networkProvider.interface";
+import {
+  deleteNetworkProvider,
+  getNetworkProviders,
+  updateNetworkProviderStatus,
+} from "@/services/networkProviderService";
+
+interface NetworkProviderRow {
+  id: number;
+  code: string;
+  name: string;
+  status: boolean;
+  lastUpdated: string;
+}
 
 const NetworkProviders: React.FC = () => {
   const { isDark } = useTheme();
@@ -23,19 +38,18 @@ const NetworkProviders: React.FC = () => {
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
   const [loading, setLoading] = useState(true);
   const [totalRecords, setTotalRecords] = useState(0);
-  const [accountsRight, setAccountRights] = useState<FormRights | null>(null);
+  const [networkProvidersRight, setNetworkProvidersRight] =
+    useState<FormRights | null>(null);
 
   // Confirmation dialog state
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [accountToDelete, setAccountToDelete] = useState<AccountData | null>(
-    null,
-  );
+  const [providerToDelete, setProviderToDelete] =
+    useState<NetworkProviderRow | null>(null);
 
   const [cardCounts, setCardCounts] = useState({
     total: 0,
-    active: 0,
-    pending: 0,
-    inactive: 0,
+    enabled: 0,
+    disabled: 0,
   });
 
   const columns = [
@@ -64,33 +78,43 @@ const NetworkProviders: React.FC = () => {
 
   ];
 
-  const [data, setData] = useState<AccountData[]>([]);
+  const [data, setData] = useState<NetworkProviderRow[]>([]);
 
-  const handleEdit = (row: AccountData) => {
-    router.push(`/network-providers/${row.accountId}`);
+  const handleEdit = (row: NetworkProviderRow) => {
+    router.push(`/network-providers/${row.id}`);
   };
 
   // Show confirmation dialog instead of deleting directly
-  const handleDelete = (row: AccountData) => {
-    setAccountToDelete(row);
+  const handleDelete = (row: NetworkProviderRow) => {
+    setProviderToDelete(row);
     setIsDeleteDialogOpen(true);
+  };
+
+  const handleStatusToggle = async (row: NetworkProviderRow) => {
+    const response = await updateNetworkProviderStatus(row.id, !row.status);
+    if (response && (response.success || [200, 204].includes(response.statusCode))) {
+      toast.success(response.message || "Status updated successfully.");
+      getNetworkProvidersList();
+    } else {
+      toast.error(response?.message || "Failed to update status.");
+    }
   };
 
   // Actual delete operation after confirmation
   const confirmDelete = async () => {
-    if (!accountToDelete) return;
+    if (!providerToDelete) return;
 
-    const response = await deleteAccount(accountToDelete.accountId);
-    if (response && response.statusCode === 200) {
+    const response = await deleteNetworkProvider(providerToDelete.id);
+    if (response && (response.success || [200, 204].includes(response.statusCode))) {
       toast.success(response.message);
       if (pageNo > 1) setPageNo(1);
-      else getAccountsList();
+      else getNetworkProvidersList();
     } else {
       toast.error(response.message);
     }
 
     // Reset state
-    setAccountToDelete(null);
+    setProviderToDelete(null);
   };
 
   const handlePageChange = (page: number) => {
@@ -102,26 +126,43 @@ const NetworkProviders: React.FC = () => {
     setPageNo(1);
   };
 
-  async function getAccountsList() {
+  const getNetworkProvidersList = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await getAccounts(pageNo, pageSize, debouncedQuery);
+      const response = await getNetworkProviders(pageNo, pageSize, debouncedQuery);
 
-      if (response && response.statusCode === 200) {
-        const pageData = response.data.pageData;
-        setData(pageData.items);
-        setTotalRecords(pageData.totalRecords);
-        setCardCounts(response.data.cardCounts);
+      if (response && (response.success || response.statusCode === 200)) {
+        const listData = response?.data?.providers || {};
+        const items: NetworkProvider[] = Array.isArray(listData?.items)
+          ? (listData.items as NetworkProvider[])
+          : [];
+
+        const mappedRows: NetworkProviderRow[] = items.map((item) => ({
+          id: Number(item.id || 0),
+          code: item.code || "-",
+          name: item.displayName || "-",
+          status: Boolean(item.isEnabled),
+          lastUpdated: item.updatedAt || item.createdAt || "",
+        }));
+
+        setData(mappedRows);
+        setTotalRecords(Number(listData?.totalCount || mappedRows.length));
+        setCardCounts({
+          total: Number(response?.data?.summary?.totalEntities || 0),
+          enabled: Number(response?.data?.summary?.enabled || 0),
+          disabled: Number(response?.data?.summary?.disabled || 0),
+        });
       } else {
-        toast.error(response?.message ?? "Failed to load accounts");
+        toast.error(response?.message ?? "Failed to load network providers");
       }
     } finally {
       setLoading(false);
     }
-  }
+  }, [pageNo, pageSize, debouncedQuery]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
+      setPageNo(1);
       setDebouncedQuery(searchQuery);
     }, 500);
 
@@ -129,8 +170,8 @@ const NetworkProviders: React.FC = () => {
   }, [searchQuery]);
 
   useEffect(() => {
-    getAccountsList();
-  }, [pageNo, pageSize, debouncedQuery]);
+    getNetworkProvidersList();
+  }, [getNetworkProvidersList]);
 
   useEffect(() => {
     function getPermissionsList() {
@@ -142,13 +183,15 @@ const NetworkProviders: React.FC = () => {
         if (storedPermissions) {
           const parsedPermissions = JSON.parse(storedPermissions);
           const rights = parsedPermissions.find(
-            (val: { formName: string }) => val.formName === "Account List",
+            (val: { formName?: string; pageUrl?: string }) =>
+              val.formName?.toLowerCase().includes("network provider") ||
+              val.pageUrl === "/network-providers",
           );
 
           if (rights) {
-            setAccountRights(rights);
+            setNetworkProvidersRight(rights);
           } else {
-            console.warn('No matching rights found for "Account List".');
+            console.warn('No matching rights found for "Network Providers".');
           }
         } else {
           console.warn("No permissions found in localStorage.");
@@ -175,7 +218,7 @@ const NetworkProviders: React.FC = () => {
             showButton={true}
             buttonText="Add New Network Provider"
             buttonRoute="/network-providers/0"
-            showWriteButton={accountsRight?.canWrite || false}
+            showWriteButton={networkProvidersRight?.canWrite || false}
           />
         </div>
 
@@ -192,7 +235,7 @@ const NetworkProviders: React.FC = () => {
           <MetricCard
             icon={ShieldCheck}
             label="STATUS: ENABLED"
-            value={cardCounts.active}
+            value={cardCounts.enabled}
             iconBgColor="bg-green-100 dark:bg-green-900/30"
             iconColor="text-green-600 dark:text-green-400"
             isDark={isDark}
@@ -200,7 +243,7 @@ const NetworkProviders: React.FC = () => {
           <MetricCard
             icon={CircleAlert}
             label="STATUS: DISABLED"
-            value={cardCounts.pending}
+            value={cardCounts.disabled}
             iconBgColor="bg-red-100 dark:bg-red-900/30"
             iconColor="text-red-600 dark:text-red-400"
             isDark={isDark}
@@ -215,6 +258,7 @@ const NetworkProviders: React.FC = () => {
             data={data}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onStatusToggle={handleStatusToggle}
             showActions={true}
             searchPlaceholder="Search..."
             rowsPerPageOptions={[2, 4, 5, 10, 25, 50, 100]}
@@ -234,11 +278,11 @@ const NetworkProviders: React.FC = () => {
           isOpen={isDeleteDialogOpen}
           onClose={() => {
             setIsDeleteDialogOpen(false);
-            setAccountToDelete(null);
+            setProviderToDelete(null);
           }}
           onConfirm={confirmDelete}
           title="Delete Network Provider"
-          message={`Are you sure you want to delete "${accountToDelete?.instance}"? This action cannot be undone.`}
+          message={`Are you sure you want to delete "${providerToDelete?.name}"? This action cannot be undone.`}
           confirmText="Delete"
           cancelText="Cancel"
           type="danger"
@@ -249,4 +293,4 @@ const NetworkProviders: React.FC = () => {
   );
 };
 
-export default NetworkProviders;
+export default NetworkProviders;

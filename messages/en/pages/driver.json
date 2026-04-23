@@ -2,7 +2,7 @@
   "pages": {
     "driver": {
       "list": {
-        "title": "Personnel Registry",
+        "title": "Driver Registry",
         "subtitle": "Register and manage drivers",
         "breadcrumbs": {
           "fleet": "Fleet",

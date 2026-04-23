@@ -1,19 +1,27 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Card } from "@/components/CommonCard";
-import ActionLoader from "@/components/ActionLoader";
-import { useTheme } from "@/context/ThemeContext";
-import { useColor } from "@/context/ColorContext";
-import { useRouter, useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import type React from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
+import { Card } from "@/components/CommonCard";
+import { useColor } from "@/context/ColorContext";
+import { useTheme } from "@/context/ThemeContext";
+import {
+  getNetworkProviderById,
+  postNetworkProvider,
+  updateNetworkProvider,
+  updateNetworkProviderStatus,
+} from "@/services/networkProviderService";
+import type {
+  NetworkProviderFormData,
+} from "@/interfaces/networkProvider.interface";
 
-// Define the shape of Network Provider data
-interface NetworkProviderFormData {
-  code: string;
-  displayName: string;
-  description: string;
-  isEnabled: boolean;
+interface NetworkProviderServiceResponse {
+  success?: boolean;
+  statusCode?: number;
+  message?: string;
 }
 
 const NetworkProviderForm: React.FC = () => {
@@ -21,9 +29,8 @@ const NetworkProviderForm: React.FC = () => {
   const { selectedColor } = useColor();
   const router = useRouter();
   const params = useParams();
-  
-  // Determine if we are creating or editing
-  const isEditMode = params.id !== "0";
+  const providerId = Number(params.id);
+  const isEditMode = providerId > 0;
 
   const [formData, setFormData] = useState<NetworkProviderFormData>({
     code: "",
@@ -31,17 +38,46 @@ const NetworkProviderForm: React.FC = () => {
     description: "",
     isEnabled: true,
   });
+  const [initialFormData, setInitialFormData] =
+    useState<NetworkProviderFormData | null>(null);
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(false);
 
   useEffect(() => {
     if (isEditMode) {
-      setFetchingData(true);
-      // Logic to fetch existing Network Provider data goes here
-      console.log("Fetching details for Network Provider ID:", params.id);
-      setFetchingData(false);
+      (async () => {
+        try {
+          setFetchingData(true);
+          const response = await getNetworkProviderById(providerId);
+          const provider =
+            response?.data?.provider ||
+            response?.data?.item ||
+            response?.data ||
+            response?.provider ||
+            null;
+
+          if (!provider || typeof provider !== "object") {
+            toast.error(response?.message || "Failed to load network provider details.");
+            return;
+          }
+
+          const normalizedData: NetworkProviderFormData = {
+            code: provider.code || "",
+            displayName: provider.displayName || "",
+            description: provider.description || "",
+            isEnabled: provider.isEnabled ?? true,
+          };
+
+          setFormData(normalizedData);
+          setInitialFormData(normalizedData);
+        } catch (_error) {
+          toast.error("Failed to load network provider details.");
+        } finally {
+          setFetchingData(false);
+        }
+      })();
     }
-  }, [isEditMode, params.id]);
+  }, [isEditMode, providerId]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -57,22 +93,59 @@ const NetworkProviderForm: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    // Basic Validation
-    if (!formData.code || !formData.displayName) {
-      toast.error("Code and Display Name are required!");
+    const payload: NetworkProviderFormData = {
+      ...formData,
+      code: formData.code.trim(),
+      displayName: formData.displayName.trim(),
+      description: formData.description.trim(),
+    };
+
+    if (!payload.code || !payload.displayName) {
+      toast.error("Code and Display Name are required.");
       return;
     }
 
     try {
       setLoading(true);
-      console.log("Submitting Network Provider Entry:", formData);
-      
-      // Call your specific service here:
-      // const response = await saveNetworkProvider(formData);
-      
-      toast.success("Network Provider entry committed successfully!");
-      router.push("/network-providers");
-    } catch (error) {
+      let response: NetworkProviderServiceResponse | null = null;
+
+      if (isEditMode) {
+        const hasDetailsChanged =
+          initialFormData !== null &&
+          (payload.code !== initialFormData.code ||
+            payload.displayName !== initialFormData.displayName ||
+            payload.description !== initialFormData.description);
+        const hasStatusChanged =
+          initialFormData !== null &&
+          payload.isEnabled !== initialFormData.isEnabled;
+
+        if (!hasDetailsChanged && hasStatusChanged) {
+          response = await updateNetworkProviderStatus(providerId, payload.isEnabled);
+        } else {
+          response = await updateNetworkProvider(providerId, payload);
+        }
+      } else {
+        response = await postNetworkProvider(payload);
+      }
+
+      if (
+        response?.success ||
+        response?.statusCode === 200 ||
+        response?.statusCode === 201 ||
+        response?.statusCode === 204
+      ) {
+        toast.success(
+          response?.message ||
+            (isEditMode
+              ? "Network provider updated successfully!"
+              : "Network provider entry committed successfully!"),
+        );
+        router.push("/network-providers");
+        return;
+      }
+
+      toast.error(response?.message || "Failed to save network provider.");
+    } catch (_error) {
       toast.error("An error occurred while saving the record.");
     } finally {
       setLoading(false);
@@ -117,15 +190,21 @@ const NetworkProviderForm: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 {/* Code Field */}
                 <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                  <label
+                    htmlFor="network-provider-code"
+                    className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                  >
                     Code <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="network-provider-code"
                     type="text"
                     name="code"
                     value={formData.code}
                     onChange={handleInputChange}
                     placeholder="e.g. NET-VOD"
+                    required
+                    aria-required="true"
                     className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
                       isDark ? "bg-gray-800 border-gray-700 text-foreground" : "bg-white border-gray-300 text-gray-900"
                     } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
@@ -134,15 +213,21 @@ const NetworkProviderForm: React.FC = () => {
 
                 {/* Display Name Field */}
                 <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                  <label
+                    htmlFor="network-provider-display-name"
+                    className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                  >
                     Display Name <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="network-provider-display-name"
                     type="text"
                     name="displayName"
                     value={formData.displayName}
                     onChange={handleInputChange}
                     placeholder="e.g. Vodafone"
+                    required
+                    aria-required="true"
                     className={`w-full px-4 py-2.5 rounded-lg border transition-colors ${
                       isDark ? "bg-gray-800 border-gray-700 text-foreground" : "bg-white border-gray-300 text-gray-900"
                     } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
@@ -152,10 +237,14 @@ const NetworkProviderForm: React.FC = () => {
 
               {/* Description Field */}
               <div className="w-full">
-                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                <label
+                  htmlFor="network-provider-description"
+                  className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                >
                   Description
                 </label>
                 <textarea
+                  id="network-provider-description"
                   name="description"
                   rows={4}
                   value={formData.description}
@@ -226,4 +315,4 @@ const NetworkProviderForm: React.FC = () => {
   );
 };
 
-export default NetworkProviderForm;
+export default NetworkProviderForm;

@@ -8,6 +8,7 @@ import {
   Briefcase,
   ChevronDown,
   Cog,
+  CpuIcon,
   CreditCard,
   FileText,
   GitBranch,
@@ -32,6 +33,8 @@ import {
   Truck,
   User,
   UserCheck,
+  UserLockIcon,
+  UserRoundPen,
   Users,
   X,
 } from "lucide-react";
@@ -438,7 +441,7 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
             {
               id: "drivers",
               label: "Driver",
-              icon: Truck,
+              icon: UserRoundPen,
               path: "/driver",
             },
             {
@@ -479,6 +482,12 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
               label: "Vehicle Geofence",
               icon: Link2,
               path: "/vehicle-geofence",
+            },
+              {
+              id: "driver-assignments",
+              label: "Driver Assignments",
+              icon: UserLockIcon,
+              path: "/driver-assignment",
             },
           ],
         },
@@ -629,6 +638,12 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
               label: "Device Categories",
               icon: List,
               path: "/device-categories",
+            },
+            {
+              id: "device-model",
+              label: "Device Model",
+              icon: CpuIcon,
+              path: "/device-model",
             },
             {
               id: "network-providers",
