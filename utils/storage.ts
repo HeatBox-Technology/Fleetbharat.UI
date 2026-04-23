@@ -27,6 +27,20 @@ export const getStoredUserId = (): string => {
   }
 };
 
+export const getStoredUserData = (): { accountId: number; userId: string } => {
+  if (typeof window === "undefined") return { accountId: 0, userId: "" };
+
+  try {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    return {
+      accountId: Number(user?.accountId || user?.AccountId || 0),
+      userId: String(user?.userId || user?.UserId || "").trim(),
+    };
+  } catch {
+    return { accountId: 0, userId: "" };
+  }
+};
+
 export const persistSelectedAccountId = (accountId: number) => {
   if (typeof window === "undefined") return;
   const resolved = Number(accountId || 0);

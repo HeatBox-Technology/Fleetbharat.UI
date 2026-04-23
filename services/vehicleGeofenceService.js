@@ -1,4 +1,5 @@
 import api from "./apiService";
+import { getStoredUserData } from "@/utils/storage";
 
 /**
  * @param {{ page?: number; pageSize?: number; accountId?: number; search?: string }} options
@@ -31,9 +32,50 @@ export const getVehicleGeofenceById = async (id) => {
   return res.data;
 };
 
+/**
+ * Build payload for creation with user data
+ * Automatically includes createdBy (accountId) and createdByUserId
+ */
+const buildCreatePayload = (payload) => {
+  const { accountId: storedAccountId, userId: storedUserId } = getStoredUserData();
+
+  return {
+    accountId: Number(payload?.accountId || storedAccountId || 0),
+    vehicleIds: Array.isArray(payload?.vehicleIds) ? payload.vehicleIds : [],
+    geofenceIds: Array.isArray(payload?.geofenceIds) ? payload.geofenceIds : [],
+    remarks: String(payload?.remarks || ""),
+    createdBy: Number(payload?.createdBy || storedAccountId || 0),
+    createdByUserId: String(payload?.createdByUserId || storedUserId || ""),
+  };
+};
+
+/**
+ * Build payload for update with user data
+ * Automatically includes updatedBy (accountId) and updatedByUserId
+ */
+const buildUpdatePayload = (payload) => {
+  const { accountId: storedAccountId, userId: storedUserId } = getStoredUserData();
+
+  const built = {
+    vehicleIds: Array.isArray(payload?.vehicleIds) ? payload.vehicleIds : [],
+    geofenceIds: Array.isArray(payload?.geofenceIds) ? payload.geofenceIds : [],
+    remarks: String(payload?.remarks || ""),
+    updatedBy: Number(payload?.updatedBy || storedAccountId || 0),
+    updatedByUserId: String(payload?.updatedByUserId || storedUserId || ""),
+  };
+
+  // Include isActive if it exists in payload
+  if (payload?.hasOwnProperty("isActive")) {
+    built.isActive = Boolean(payload.isActive);
+  }
+
+  return built;
+};
+
 export const saveVehicleGeofence = async (payload) => {
   try {
-    const res = await api.post(`/api/vehicle-geofence`, payload);
+    const builtPayload = buildCreatePayload(payload);
+    const res = await api.post(`/api/vehicle-geofence`, builtPayload);
     return res.data;
   } catch (error) {
     return (
@@ -49,7 +91,8 @@ export const saveVehicleGeofence = async (payload) => {
 
 export const updateVehicleGeofence = async (id, payload) => {
   try {
-    const res = await api.put(`/api/vehicle-geofence/${id}`, payload);
+    const builtPayload = buildUpdatePayload(payload);
+    const res = await api.put(`/api/vehicle-geofence/${id}`, builtPayload);
     return res.data;
   } catch (error) {
     return (

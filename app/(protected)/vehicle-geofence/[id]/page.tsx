@@ -35,7 +35,7 @@ interface DropdownOption {
 interface VehicleGeofenceFormData {
   accountId: number;
   vehicleIds: number[];
-  geofenceId: number;
+  geofenceIds: number[];
   remarks: string;
   isActive: boolean;
 }
@@ -65,7 +65,7 @@ const AddEditVehicleGeofence: React.FC = () => {
   const [formData, setFormData] = useState<VehicleGeofenceFormData>({
     accountId: 0,
     vehicleIds: [],
-    geofenceId: 0,
+    geofenceIds: [],
     remarks: "",
     isActive: true,
   });
@@ -160,7 +160,7 @@ const AddEditVehicleGeofence: React.FC = () => {
       setFormData({
         accountId: Number(data.accountId || 0),
         vehicleIds: Array.isArray(data.vehicleIds) ? data.vehicleIds : [Number(data.vehicleId || 0)],
-        geofenceId: Number(data.geofenceId || 0),
+        geofenceIds: Array.isArray(data.geofenceIds) ? data.geofenceIds : [Number(data.geofenceId || 0)],
         remarks: String(data.remarks || ""),
         isActive: Boolean(data.isActive),
       });
@@ -236,30 +236,26 @@ const AddEditVehicleGeofence: React.FC = () => {
 
     if (!formData.accountId) return toast.error(t("toast.selectAccount"));
     if (!formData.vehicleIds.length) return toast.error(t("toast.selectVehicle"));
-    if (!formData.geofenceId) return toast.error(t("toast.selectGeofence"));
-
-    const { userId } = getUserData();
+    if (!formData.geofenceIds.length) return toast.error(t("toast.selectGeofence"));
 
     try {
       setLoading(true);
-      let response;
+      let response:any;
 
       if (isEditMode) {
         const payload = {
           vehicleIds: formData.vehicleIds,
-          geofenceId: Number(formData.geofenceId),
+          geofenceIds: formData.geofenceIds,
           remarks: String(formData.remarks || ""),
           isActive: Boolean(formData.isActive),
-          updatedBy: Number(userId || 0),
         };
         response = await updateVehicleGeofence(assignmentId, payload);
       } else {
         const payload = {
           accountId: Number(formData.accountId),
           vehicleIds: formData.vehicleIds,
-          geofenceId: Number(formData.geofenceId),
+          geofenceIds: formData.geofenceIds,
           remarks: String(formData.remarks || ""),
-          createdBy: Number(userId || 0),
         };
         response = await saveVehicleGeofence(payload);
       }
@@ -277,7 +273,7 @@ const AddEditVehicleGeofence: React.FC = () => {
             vehicleId: Number(formData.vehicleIds[0]),
             vehicleNo: getVehicleLabelById(formData.vehicleIds[0]),
             deviceNo: resolvedDeviceNo,
-            geofenceId: Number(formData.geofenceId),
+            geofenceId: Number(formData.geofenceIds[0]),
           });
         } catch (javaError: any) {
           console.error("Error syncing vehicle geofence to Java:", javaError);
@@ -434,6 +430,7 @@ const AddEditVehicleGeofence: React.FC = () => {
                     }))
                   }
                   isDisabled={loading}
+                  name="All Vehicles"
                   placeholder={t("fields.selectVehicle")}
                 />
               </div>
@@ -442,20 +439,21 @@ const AddEditVehicleGeofence: React.FC = () => {
                 <label className="block text-sm font-semibold text-foreground mb-2">
                   {t("fields.geofence")} <span className="text-red-500">*</span>
                 </label>
-                <SearchableDropdown
+                <MultiSelect
                   options={geofenceOptions}
                   value={
-                    geofenceOptions.find(
-                      (option) => Number(option.value) === Number(formData.geofenceId),
+                    geofenceOptions.filter(
+                      (option) => formData.geofenceIds.includes(Number(option.value))
                     ) || null
                   }
                   onChange={(option) =>
                     setFormData((prev) => ({
                       ...prev,
-                      geofenceId: Number(option?.value || 0),
+                      geofenceIds: Array.isArray(option) ? option.map((o) => Number(o.value)) : [Number(option?.value || 0)],
                     }))
                   }
                   isDisabled={loading}
+                  name="All Geofences"
                   placeholder={t("fields.selectGeofence")}
                   isDark={isDark}
                   noOptionsMessage={t("fields.selectGeofence")}
