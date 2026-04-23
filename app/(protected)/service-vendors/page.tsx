@@ -1,18 +1,30 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import CommonTable from "@/components/CommonTable";
 import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
 import { MetricCard } from "@/components/CommonCard";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useTheme } from "@/context/ThemeContext";
-import { deleteAccount, getAccounts } from "@/services/accountService";
-import { AccountData, FormRights } from "@/interfaces/account.interface";
-import { Building2, CheckCircle, Clock, XCircle, MapPin, Database, ShieldCheck, CircleAlert } from "lucide-react";
+import { Database, ShieldCheck, CircleAlert } from "lucide-react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { getUserRoleData } from "@/services/commonServie";
+// Import Service Vendor Services
+import { 
+  getServiceVendors, 
+  deleteServiceVendor, 
+  updateServiceVendorStatus 
+} from "@/services/serviceVendorService";
+import { FormRights } from "@/interfaces/account.interface";
+
+interface ServiceVendorRow {
+  id: number;
+  code: string;
+  name: string;
+  status: boolean;
+  lastUpdated: string;
+}
 
 const ServiceVendors: React.FC = () => {
   const { isDark } = useTheme();
@@ -23,150 +35,106 @@ const ServiceVendors: React.FC = () => {
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
   const [loading, setLoading] = useState(true);
   const [totalRecords, setTotalRecords] = useState(0);
-  const [accountsRight, setAccountRights] = useState<FormRights | null>(null);
+  const [rights, setRights] = useState<FormRights | null>(null);
 
-  // Confirmation dialog state
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [accountToDelete, setAccountToDelete] = useState<AccountData | null>(
-    null,
-  );
+  const [itemToDelete, setItemToDelete] = useState<ServiceVendorRow | null>(null);
 
   const [cardCounts, setCardCounts] = useState({
     total: 0,
-    active: 0,
-    pending: 0,
-    inactive: 0,
+    enabled: 0,
+    disabled: 0,
   });
 
   const columns = [
-    {
-      key: "code",
-      label: "CODE",
-      type: "icon-text" as const,
-      visible: true,
-    },
-    {
-      key: "name",
-      label: "NAME",
-      visible: true,
-    },
-    {
-      key: "status",
-      label: "STATUS",
-      type: "badge" as const,
-      visible: true,
-    },
-     {
-      key: "lastUpdated",
-      label: "LAST UPDATED",
-      visible: true,
-    },
-
+    { key: "code", label: "CODE", type: "icon-text" as const, visible: true },
+    { key: "name", label: "NAME", visible: true },
+    { key: "status", label: "STATUS", type: "badge" as const, visible: true },
+    { key: "lastUpdated", label: "LAST UPDATED", visible: true },
   ];
 
-  const [data, setData] = useState<AccountData[]>([]);
+  const [data, setData] = useState<ServiceVendorRow[]>([]);
 
-  const handleEdit = (row: AccountData) => {
-    router.push(`/service-vendors/${row.accountId}`);
+  const handleEdit = (row: ServiceVendorRow) => {
+    router.push(`/service-vendors/${row.id}`);
   };
 
-  // Show confirmation dialog instead of deleting directly
-  const handleDelete = (row: AccountData) => {
-    setAccountToDelete(row);
+  const handleDelete = (row: ServiceVendorRow) => {
+    setItemToDelete(row);
     setIsDeleteDialogOpen(true);
   };
 
-  // Actual delete operation after confirmation
-  const confirmDelete = async () => {
-    if (!accountToDelete) return;
-
-    const response = await deleteAccount(accountToDelete.accountId);
-    if (response && response.statusCode === 200) {
-      toast.success(response.message);
-      if (pageNo > 1) setPageNo(1);
-      else getAccountsList();
+  const handleStatusToggle = async (row: ServiceVendorRow) => {
+    const res = await updateServiceVendorStatus(row.id, !row.status);
+    if (res.success || res.statusCode === 200) {
+      toast.success(res.message || "Status updated");
+      getVendorsList();
     } else {
-      toast.error(response.message);
+      toast.error(res.message || "Update failed");
     }
-
-    // Reset state
-    setAccountToDelete(null);
   };
 
-  const handlePageChange = (page: number) => {
-    setPageNo(page);
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    const response = await deleteServiceVendor(itemToDelete.id);
+    if (response.success || response.statusCode === 200) {
+      toast.success(response.message || "Deleted successfully");
+      setPageNo(1);
+      getVendorsList();
+    } else {
+      toast.error(response.message || "Delete failed");
+    }
+    setIsDeleteDialogOpen(false);
   };
 
-  const handlePageSizeChange = (size: number) => {
-    setPageSize(size);
-    setPageNo(1);
-  };
-
-  async function getAccountsList() {
+  const getVendorsList = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await getAccounts(pageNo, pageSize, debouncedQuery);
+      const response = await getServiceVendors(pageNo, pageSize, debouncedQuery);
 
-      if (response && response.statusCode === 200) {
-        const pageData = response.data.pageData;
-        setData(pageData.items);
-        setTotalRecords(pageData.totalRecords);
-        setCardCounts(response.data.cardCounts);
-      } else {
-        toast.error(response?.message ?? "Failed to load accounts");
+      if (response.success || response.statusCode === 200) {
+        const items = response.data?.vendors?.items || [];
+        const mappedData = items.map((i: any) => ({
+          id: i.id,
+          code: i.code,
+          name: i.displayName,
+          status: i.isEnabled,
+          lastUpdated: i.updatedAt || i.createdAt,
+        }));
+        setData(mappedData);
+        setTotalRecords(response.data?.vendors?.totalRecords || 0);
+        setCardCounts({
+          total: response.data?.summary?.totalEntities || 0,
+          enabled: response.data?.summary?.enabled || 0,
+          disabled: response.data?.summary?.disabled || 0,
+        });
       }
     } finally {
       setLoading(false);
     }
-  }
+  }, [pageNo, pageSize, debouncedQuery]);
 
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedQuery(searchQuery);
-    }, 500);
-
+    const handler = setTimeout(() => setDebouncedQuery(searchQuery), 500);
     return () => clearTimeout(handler);
   }, [searchQuery]);
 
   useEffect(() => {
-    getAccountsList();
-  }, [pageNo, pageSize, debouncedQuery]);
+    getVendorsList();
+  }, [getVendorsList]);
 
   useEffect(() => {
-    function getPermissionsList() {
-      if (typeof window === "undefined") return;
-
-      try {
-        const storedPermissions = localStorage.getItem("permissions");
-
-        if (storedPermissions) {
-          const parsedPermissions = JSON.parse(storedPermissions);
-          const rights = parsedPermissions.find(
-            (val: { formName: string }) => val.formName === "Account List",
-          );
-
-          if (rights) {
-            setAccountRights(rights);
-          } else {
-            console.warn('No matching rights found for "Account List".');
-          }
-        } else {
-          console.warn("No permissions found in localStorage.");
-        }
-      } catch (error) {
-        console.error("Error fetching permissions from localStorage:", error);
-      }
+    const stored = localStorage.getItem("permissions");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      const found = parsed.find((v: any) => v.formName?.toLowerCase().includes("service vendor"));
+      if (found) setRights(found);
     }
-
-    getPermissionsList();
   }, []);
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
-      <div
-        className={`min-h-screen ${isDark ? "bg-background" : ""} p-2 sm:p-0 md:p-2`}
-      >
-        {/* Page Header */}
+      <div className={`min-h-screen ${isDark ? "bg-background" : ""} p-2 sm:p-0 md:p-2`}>
         <div className="mb-4 sm:mb-6">
           <PageHeader
             title="Service Vendors"
@@ -175,39 +143,25 @@ const ServiceVendors: React.FC = () => {
             showButton={true}
             buttonText="Add New Service Vendor"
             buttonRoute="/service-vendors/0"
-            showWriteButton={accountsRight?.canWrite || false}
+            showWriteButton={rights?.canWrite || true}
           />
         </div>
 
-        {/* Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <MetricCard
-            icon={Database}
-            label="TOTAL ENITIES"
-            value={cardCounts.total}
-            iconBgColor="bg-purple-100 dark:bg-purple-900/30"
-            iconColor="text-purple-600 dark:text-purple-400"
-            isDark={isDark}
+            icon={Database} label="TOTAL ENITIES" value={cardCounts.total} isDark={isDark}
+            iconBgColor="bg-purple-100 dark:bg-purple-900/30" iconColor="text-purple-600 dark:text-purple-400"
           />
           <MetricCard
-            icon={ShieldCheck}
-            label="STATUS: ENABLED"
-            value={cardCounts.active}
-            iconBgColor="bg-green-100 dark:bg-green-900/30"
-            iconColor="text-green-600 dark:text-green-400"
-            isDark={isDark}
+            icon={ShieldCheck} label="STATUS: ENABLED" value={cardCounts.enabled} isDark={isDark}
+            iconBgColor="bg-green-100 dark:bg-green-900/30" iconColor="text-green-600 dark:text-green-400"
           />
           <MetricCard
-            icon={CircleAlert}
-            label="STATUS: DISABLED"
-            value={cardCounts.pending}
-            iconBgColor="bg-red-100 dark:bg-red-900/30"
-            iconColor="text-red-600 dark:text-red-400"
-            isDark={isDark}
+            icon={CircleAlert} label="STATUS: DISABLED" value={cardCounts.disabled} isDark={isDark}
+            iconBgColor="bg-red-100 dark:bg-red-900/30" iconColor="text-red-600 dark:text-red-400"
           />
         </div>
 
-        {/* Table Section */}
         <div className="w-full">
           <ActionLoader isVisible={loading} text="Loading service vendors..." />
           <CommonTable
@@ -215,30 +169,24 @@ const ServiceVendors: React.FC = () => {
             data={data}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onStatusToggle={handleStatusToggle}
             showActions={true}
-            searchPlaceholder="Search..."
-            rowsPerPageOptions={[2, 4, 5, 10, 25, 50, 100]}
-            defaultRowsPerPage={10}
             pageNo={pageNo}
             pageSize={pageSize}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
+            onPageChange={setPageNo}
+            onPageSizeChange={(s) => {setPageSize(s); setPageNo(1);}}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             totalRecords={totalRecords}
           />
         </div>
 
-        {/* Confirmation Dialog */}
         <ConfirmationDialog
           isOpen={isDeleteDialogOpen}
-          onClose={() => {
-            setIsDeleteDialogOpen(false);
-            setAccountToDelete(null);
-          }}
+          onClose={() => setIsDeleteDialogOpen(false)}
           onConfirm={confirmDelete}
           title="Delete Service Vendor"
-          message={`Are you sure you want to delete "${accountToDelete?.instance}"? This action cannot be undone.`}
+          message={`Are you sure you want to delete "${itemToDelete?.name}"?`}
           confirmText="Delete"
           cancelText="Cancel"
           type="danger"
@@ -249,4 +197,4 @@ const ServiceVendors: React.FC = () => {
   );
 };
 
-export default ServiceVendors;
+export default ServiceVendors;
