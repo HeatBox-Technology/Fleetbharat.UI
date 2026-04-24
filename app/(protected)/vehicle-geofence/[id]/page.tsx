@@ -446,7 +446,7 @@ const AddEditVehicleGeofence: React.FC = () => {
                       (option) => formData.geofenceIds.includes(Number(option.value))
                     ) || null
                   }
-                  onChange={(option) =>
+                  onChange={(option : any) =>
                     setFormData((prev) => ({
                       ...prev,
                       geofenceIds: Array.isArray(option) ? option.map((o) => Number(o.value)) : [Number(option?.value || 0)],
@@ -455,8 +455,6 @@ const AddEditVehicleGeofence: React.FC = () => {
                   isDisabled={loading}
                   name="All Geofences"
                   placeholder={t("fields.selectGeofence")}
-                  isDark={isDark}
-                  noOptionsMessage={t("fields.selectGeofence")}
                 />
               </div>
             </div>
