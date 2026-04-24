@@ -232,6 +232,13 @@ const ProvisionVehicle: React.FC = () => {
       toast.error(t("toast.registrationRequired"));
       return;
     }
+  if (
+  formData.vinNumber.trim() &&
+  formData.vinNumber.trim().length !== 17
+) {
+  toast.error(t("toast.invalidVin"));
+  return;
+}
     if (!formData.vehicleTypeId || formData.vehicleTypeId === 0) {
       toast.error(t("toast.selectVehicleType"));
       return;
@@ -243,8 +250,8 @@ const ProvisionVehicle: React.FC = () => {
       const payload = {
         ...(isEditMode && { id: Number(id) }),
         accountId: Number(formData.accountId),
-        vehicleNumber: normalizeRegistrationNumber(formData.registrationNumber),
-        vinOrChassisNumber: normalizeVin(formData.vinNumber) || "",
+        vehicleNumber: normalizeRegistrationNumber(formData.registrationNumber.trim()),
+        vinOrChassisNumber: normalizeVin(formData.vinNumber.trim()) || "",
         vehicleTypeId: Number(formData.vehicleTypeId),
         status: formData.status ? "Active" : "Inactive",
         ...(isEditMode
@@ -417,7 +424,7 @@ const ProvisionVehicle: React.FC = () => {
                     onChange={handleChange}
                     placeholder={t("fields.registrationPlaceholder")}
                     className={inputClass()}
-                    maxLength={17}
+                    maxLength={20}
                     style={{ letterSpacing: "0.05em" }}
                   />
                 </div>
@@ -433,6 +440,12 @@ const ProvisionVehicle: React.FC = () => {
                     maxLength={17}
                     className={inputClass()}
                   />
+                  {formData.vinNumber &&
+  formData.vinNumber.length !== 17 && (
+    <p className="text-xs text-amber-500 mt-1">
+      {t("fields.vinHint")} ({formData.vinNumber.length}/17)
+    </p>
+  )}
                 </div>
 
                 {/* <div>
