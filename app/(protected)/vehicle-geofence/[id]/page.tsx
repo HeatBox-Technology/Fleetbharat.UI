@@ -268,13 +268,13 @@ const AddEditVehicleGeofence: React.FC = () => {
             vehicleNo: getVehicleLabelById(formData.vehicleIds[0]),
           });
 
-          await syncVehicleGeofenceToJava({
-            accountId: Number(formData.accountId),
-            vehicleId: Number(formData.vehicleIds[0]),
-            vehicleNo: getVehicleLabelById(formData.vehicleIds[0]),
-            deviceNo: resolvedDeviceNo,
-            geofenceId: Number(formData.geofenceIds[0]),
-          });
+          // await syncVehicleGeofenceToJava({
+          //   accountId: Number(formData.accountId),
+          //   vehicleId: Number(formData.vehicleIds[0]),
+          //   vehicleNo: getVehicleLabelById(formData.vehicleIds[0]),
+          //   deviceNo: resolvedDeviceNo,
+          //   geofenceId: Number(formData.geofenceIds[0]),
+          // });
         } catch (javaError: any) {
           console.error("Error syncing vehicle geofence to Java:", javaError);
           toast.warning(

@@ -208,13 +208,13 @@ const VehicleGeofencePage: React.FC = () => {
     if (!selectedRow) return;
 
     try {
-      await deleteVehicleGeofenceFromJava({
-        accountId: Number(selectedRow.accountId || selectedAccountId || 0),
-        vehicleId: Number(selectedRow.vehicleId || 0),
-        vehicleNo: String(selectedRow.vehicleNo || ""),
-        deviceNo: String(selectedRow.deviceNo || ""),
-        geofenceId: Number(selectedRow.geofenceId || 0),
-      });
+      // await deleteVehicleGeofenceFromJava({
+      //   accountId: Number(selectedRow.accountId || selectedAccountId || 0),
+      //   vehicleId: Number(selectedRow.vehicleId || 0),
+      //   vehicleNo: String(selectedRow.vehicleNo || ""),
+      //   deviceNo: String(selectedRow.deviceNo || ""),
+      //   geofenceId: Number(selectedRow.geofenceId || 0),
+      // });
 
       const response = await deleteVehicleGeofence(selectedRow.id);
       if (response?.success || response?.statusCode === 200) {

@@ -608,21 +608,23 @@ const NewConfiguration: React.FC = () => {
                         {t("fields.defaultLanguage")}
                       </label>
                       <SearchableDropdown
-                        options={languageOptions}
-                        value={
-                          languageOptions.find(
-                            (option) => option.value === formData.defaultLanguage,
-                          ) || null
-                        }
-                        onChange={(option) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            defaultLanguage: String(option?.value || "en"),
-                          }))
-                        }
-                        isDark={isDark}
-                        noOptionsMessage={t("fields.defaultLanguage")}
-                      />
+                          options={languageOptions.filter(
+                            (option) => !additionalLanguages.includes(option.value)
+                          )}
+                          value={
+                            languageOptions.find(
+                              (option) => option.value === formData.defaultLanguage,
+                            ) || null
+                          }
+                          onChange={(option) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              defaultLanguage: String(option?.value || "en"),
+                            }))
+                          }
+                          isDark={isDark}
+                          noOptionsMessage={t("fields.defaultLanguage")}
+                        />
                     </div>
 
                     <button
@@ -651,7 +653,11 @@ const NewConfiguration: React.FC = () => {
                           })}
                         </label>
                         <SearchableDropdown
-                          options={languageOptions}
+                          options={languageOptions.filter(
+                            (option) =>
+                              option.value !== formData.defaultLanguage &&
+                              !additionalLanguages.some((l, i) => l === option.value && i !== index)
+                          )}
                           value={
                             languageOptions.find(
                               (option) => option.value === lang,
