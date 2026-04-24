@@ -74,7 +74,7 @@
           "registrationHint": "Use letters and digits only; separators may be space, hyphen, slash, or dot",
           "vin": "VIN / Chassis Number",
           "vinPlaceholder": "17-Character VIN",
-          "vinHint": "VIN must be exactly 17 characters using A-H, J-N, P, R-Z and digits only",
+          "vinHint": "VIN must be exactly 17 characters",
           "vehicleType": "Vehicle Type",
           "selectType": "Select Type"
         },
