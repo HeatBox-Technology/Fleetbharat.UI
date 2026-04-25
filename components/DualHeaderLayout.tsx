@@ -58,10 +58,13 @@ import type {
   SidebarClasses,
   SidebarSection,
 } from "@/interfaces/navbar.interface";
+import { getConfigurationByAccountId } from "@/services/configurationService";
 import {
   filterMenuByPermissions,
   getUserRoleData,
 } from "@/services/commonServie";
+import { getAccountLanguageOptions } from "@/utils/accountConfiguration";
+import { getStoredAccountId } from "@/utils/storage";
 import { applyWhiteLabelColors } from "@/utils/themeUtils";
 import { getInitials } from "@/utils/utils";
 import { useColor } from "../context/ColorContext";
@@ -118,6 +121,9 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
   const [brandLogoUrl, setBrandLogoUrl] = useState<string>("");
   const [isBrandLogoError, setIsBrandLogoError] = useState(false);
   const [locale, setLocale] = useState(activeLocale);
+  const [languageOptions, setLanguageOptions] = useState<
+    Array<{ value: string; label: string }>
+  >(getAccountLanguageOptions());
   const [globalSearchInput, setGlobalSearchInput] = useState<string>("");
   const [globalSearchQuery, setGlobalSearchQuery] = useState<string>("");
   const sidebarScrollRef = useRef<HTMLElement | null>(null);
@@ -140,6 +146,23 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     setLocale(activeLocale);
   }, [activeLocale]);
+
+  useEffect(() => {
+    const hasSelectedLocale = languageOptions.some(
+      (option) => option.value === locale,
+    );
+    if (hasSelectedLocale) return;
+
+    const fallbackLocale = languageOptions[0]?.value;
+    if (!fallbackLocale) return;
+
+    setLocale(fallbackLocale);
+    Cookies.set("locale", fallbackLocale, {
+      expires: 365,
+      path: "/",
+      sameSite: "lax",
+    });
+  }, [languageOptions, locale]);
 
   useEffect(() => {
     const debounceTimer = window.setTimeout(() => {
@@ -255,6 +278,47 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
       setIsBrandLogoError(false);
     }
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchAccountLanguages = async () => {
+      const accountId = getStoredAccountId(user?.accountId);
+      if (accountId <= 0) {
+        if (isMounted) {
+          setLanguageOptions(getAccountLanguageOptions());
+        }
+        return;
+      }
+
+      try {
+        const response = await getConfigurationByAccountId(accountId);
+        const nextOptions = getAccountLanguageOptions(response?.data);
+        if (isMounted) {
+          setLanguageOptions(nextOptions);
+        }
+      } catch (error) {
+        console.error("Error fetching account languages:", error);
+        if (isMounted) {
+          setLanguageOptions(getAccountLanguageOptions());
+        }
+      }
+    };
+
+    void fetchAccountLanguages();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user?.accountId]);
+
+  const selectedLocale = useMemo(() => {
+    if (languageOptions.some((option) => option.value === locale)) {
+      return locale;
+    }
+
+    return languageOptions[0]?.value || activeLocale;
+  }, [activeLocale, languageOptions, locale]);
 
   // Detect mobile screen size
   useEffect(() => {
@@ -988,7 +1052,7 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
               <div className="hidden md:flex items-center gap-2">
                 <Globe className="w-4 h-4 text-inherit" />
                 <select
-                  value={locale}
+                  value={selectedLocale}
                   onChange={(e) => handleLocaleChange(e.target.value)}
                   className={`text-sm border rounded-lg px-2 py-1.5 focus:outline-none ${
                     isDark
@@ -997,8 +1061,11 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                   }`}
                   aria-label="Select language"
                 >
-                  <option value="en">English</option>
-                  <option value="hi">Hindi</option>
+                  {languageOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -1177,7 +1244,7 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
             <div className="hidden md:flex items-center gap-2">
               <Globe className={`w-4 h-4 ${headerIconColor}`} />
               <select
-                value={locale}
+                value={selectedLocale}
                 onChange={(e) => handleLocaleChange(e.target.value)}
                 className={`text-sm border rounded-lg px-2 py-1.5 focus:outline-none ${
                   isDark
@@ -1186,13 +1253,11 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                 }`}
                 aria-label="Select language"
               >
-                <option value="en">English</option>
-                <option value="hi">Hindi</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-                <option value="te">Telugu</option>
-                <option value="ta">Tamil</option>
-                <option value="kn">Kannada</option>
+                {languageOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </div>
 

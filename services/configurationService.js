@@ -1,3 +1,4 @@
+import { getStoredAccountId } from "@/utils/storage";
 import api from "./apiService";
 
 // ✅ Get Configurations (List with pagination)
@@ -16,6 +17,12 @@ export const getConfigurations = async (page = 1, pageSize = 10, search = "") =>
 // ✅ Get Configuration By ID
 export const getConfigurationById = async (id) => {
   const res = await api.get(`/api/account-configurations/${id}`);
+  return res.data;
+};
+
+export const getConfigurationByAccountId = async (accountId) => {
+  const resolvedAccountId = getStoredAccountId(accountId);
+  const res = await api.get(`/api/account-configurations/${resolvedAccountId}`);
   return res.data;
 };
 
