@@ -74,7 +74,7 @@
           "registrationHint": "Use letters and digits only; separators may be space, hyphen, slash, or dot",
           "vin": "VIN / Chassis Number",
           "vinPlaceholder": "17-Character VIN",
-          "vinHint": "VIN must be exactly 17 characters using A-H, J-N, P, R-Z and digits only",
+          "vinHint": "VIN must be exactly 17 characters",
           "vehicleType": "Vehicle Type",
           "selectType": "Select Type"
         },
@@ -90,7 +90,7 @@
           "selectAccount": "Please select an account",
           "registrationRequired": "Registration number is required",
           "invalidRegistration": "Registration number may contain only letters, digits, spaces, hyphens, slashes, or dots",
-          "invalidVin": "VIN must be exactly 17 characters and cannot contain I, O, Q, spaces, or symbols",
+          "invalidVin": "VIN must be exactly 17 characters",
           "selectVehicleType": "Please select a vehicle type",
           "saved": "Vehicle saved successfully!",
           "operationFailed": "Operation failed",

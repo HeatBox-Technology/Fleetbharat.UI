@@ -84,20 +84,9 @@ const ProvisionVehicle: React.FC = () => {
   const labelClass = `block text-xs font-semibold uppercase tracking-wider mb-1.5 ${
     isDark ? "text-gray-400" : "text-gray-500"
   }`;
-  const normalizeRegistrationNumber = (value: string) =>
-    value
-      .toUpperCase()
-      .replace(/[^A-Z0-9 ./-]/g, "")
-      .replace(/\s+/g, " ")
-      .trimStart()
-      .slice(0, 20);
-  const normalizeVin = (value: string) =>
-    value
-      .toUpperCase()
-      .replace(/[^A-Z0-9]/g, "")
-      .replace(/[IOQ]/g, "")
-      .slice(0, 17);
-  const registrationNumberRegex = /^(?=.{1,20}$)[A-Z0-9]+(?:[ ./-][A-Z0-9]+)*$/;
+  const normalizeRegistrationNumber = (value: string) => value.slice(0, 20);
+
+  const normalizeVin = (value: string) => value.slice(0, 17);
 
   // ── Load reference data ────────────────────────────────────────────────
   useEffect(() => {
@@ -243,21 +232,13 @@ const ProvisionVehicle: React.FC = () => {
       toast.error(t("toast.registrationRequired"));
       return;
     }
-    if (
-      !registrationNumberRegex.test(
-        normalizeRegistrationNumber(formData.registrationNumber.trim()),
-      )
-    ) {
-      toast.error(t("toast.invalidRegistration"));
-      return;
-    }
-    if (
-      formData.vinNumber.trim() &&
-      !/^[A-HJ-NPR-Z0-9]{17}$/.test(formData.vinNumber.trim())
-    ) {
-      toast.error(t("toast.invalidVin"));
-      return;
-    }
+  if (
+  formData.vinNumber.trim() &&
+  formData.vinNumber.trim().length !== 17
+) {
+  toast.error(t("toast.invalidVin"));
+  return;
+}
     if (!formData.vehicleTypeId || formData.vehicleTypeId === 0) {
       toast.error(t("toast.selectVehicleType"));
       return;
@@ -269,9 +250,7 @@ const ProvisionVehicle: React.FC = () => {
       const payload = {
         ...(isEditMode && { id: Number(id) }),
         accountId: Number(formData.accountId),
-        vehicleNumber: normalizeRegistrationNumber(
-          formData.registrationNumber.trim(),
-        ),
+        vehicleNumber: normalizeRegistrationNumber(formData.registrationNumber.trim()),
         vinOrChassisNumber: normalizeVin(formData.vinNumber.trim()) || "",
         vehicleTypeId: Number(formData.vehicleTypeId),
         status: formData.status ? "Active" : "Inactive",
@@ -444,16 +423,10 @@ const ProvisionVehicle: React.FC = () => {
                     value={formData.registrationNumber}
                     onChange={handleChange}
                     placeholder={t("fields.registrationPlaceholder")}
-                    className={inputClass("uppercase")}
+                    className={inputClass()}
                     maxLength={20}
                     style={{ letterSpacing: "0.05em" }}
                   />
-                  {formData.registrationNumber &&
-                    !registrationNumberRegex.test(formData.registrationNumber) && (
-                      <p className="text-xs text-amber-500 mt-1">
-                        {t("fields.registrationHint")}
-                      </p>
-                    )}
                 </div>
 
                 <div>
@@ -465,14 +438,14 @@ const ProvisionVehicle: React.FC = () => {
                     onChange={handleChange}
                     placeholder={t("fields.vinPlaceholder")}
                     maxLength={17}
-                    className={inputClass("uppercase")}
+                    className={inputClass()}
                   />
                   {formData.vinNumber &&
-                    !/^[A-HJ-NPR-Z0-9]{17}$/.test(formData.vinNumber) && (
-                      <p className="text-xs text-amber-500 mt-1">
-                        {t("fields.vinHint")} ({formData.vinNumber.length}/17)
-                      </p>
-                    )}
+  formData.vinNumber.length !== 17 && (
+    <p className="text-xs text-amber-500 mt-1">
+      {t("fields.vinHint")} ({formData.vinNumber.length}/17)
+    </p>
+  )}
                 </div>
 
                 {/* <div>
