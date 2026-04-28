@@ -123,7 +123,9 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
   const [locale, setLocale] = useState(activeLocale);
   const [languageOptions, setLanguageOptions] = useState<
     Array<{ value: string; label: string }>
-  >(getAccountLanguageOptions());
+  >(() => getAccountLanguageOptions({ defaultLanguage: activeLocale }));
+  const [hasResolvedAccountLanguages, setHasResolvedAccountLanguages] =
+    useState(false);
   const [globalSearchInput, setGlobalSearchInput] = useState<string>("");
   const [globalSearchQuery, setGlobalSearchQuery] = useState<string>("");
   const sidebarScrollRef = useRef<HTMLElement | null>(null);
@@ -146,23 +148,6 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     setLocale(activeLocale);
   }, [activeLocale]);
-
-  useEffect(() => {
-    const hasSelectedLocale = languageOptions.some(
-      (option) => option.value === locale,
-    );
-    if (hasSelectedLocale) return;
-
-    const fallbackLocale = languageOptions[0]?.value;
-    if (!fallbackLocale) return;
-
-    setLocale(fallbackLocale);
-    Cookies.set("locale", fallbackLocale, {
-      expires: 365,
-      path: "/",
-      sameSite: "lax",
-    });
-  }, [languageOptions, locale]);
 
   useEffect(() => {
     const debounceTimer = window.setTimeout(() => {
@@ -283,10 +268,15 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
     let isMounted = true;
 
     const fetchAccountLanguages = async () => {
+      if (isMounted) {
+        setHasResolvedAccountLanguages(false);
+      }
+
       const accountId = getStoredAccountId(user?.accountId);
       if (accountId <= 0) {
         if (isMounted) {
           setLanguageOptions(getAccountLanguageOptions());
+          setHasResolvedAccountLanguages(true);
         }
         return;
       }
@@ -296,11 +286,13 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
         const nextOptions = getAccountLanguageOptions(response?.data);
         if (isMounted) {
           setLanguageOptions(nextOptions);
+          setHasResolvedAccountLanguages(true);
         }
       } catch (error) {
         console.error("Error fetching account languages:", error);
         if (isMounted) {
           setLanguageOptions(getAccountLanguageOptions());
+          setHasResolvedAccountLanguages(true);
         }
       }
     };
@@ -311,6 +303,20 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
       isMounted = false;
     };
   }, [user?.accountId]);
+
+  useEffect(() => {
+    if (!hasResolvedAccountLanguages) return;
+
+    const hasSelectedLocale = languageOptions.some(
+      (option) => option.value === activeLocale,
+    );
+    if (hasSelectedLocale) return;
+
+    const fallbackLocale = languageOptions[0]?.value;
+    if (!fallbackLocale || fallbackLocale === activeLocale) return;
+
+    handleLocaleChange(fallbackLocale);
+  }, [activeLocale, hasResolvedAccountLanguages, languageOptions]);
 
   const selectedLocale = useMemo(() => {
     if (languageOptions.some((option) => option.value === locale)) {

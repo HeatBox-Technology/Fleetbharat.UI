@@ -1,0 +1,144 @@
+{
+  "pages": {
+    "dynamicFormBuilder": {
+      "list": {
+        "title": "Dynamic Form Builder",
+        "subtitle": "Create and manage account-scoped dynamic form schemas.",
+        "breadcrumbs": {
+          "platformTools": "Platform & Tools",
+          "current": "Dynamic Form Builder"
+        },
+        "buttons": {
+          "create": "Create Builder"
+        },
+        "loading": "Loading dynamic form builders...",
+        "cards": {
+          "total": "Total Builders",
+          "active": "Active On Page",
+          "draft": "Draft",
+          "inactive": "Inactive On Page"
+        },
+        "filters": {
+          "form": "Filter By Form",
+          "allForms": "All forms",
+          "noForms": "No forms found",
+          "accountScope": "Account Scope",
+          "accountId": "Account ID {id}",
+          "noAccount": "No account selected"
+        },
+        "table": {
+          "no": "NO",
+          "formCode": "FORM CODE",
+          "formTitle": "FORM TITLE",
+          "baseForm": "BASE FORM",
+          "account": "ACCOUNT",
+          "project": "PROJECT",
+          "status": "STATUS"
+        },
+        "searchPlaceholder": "Search by title or form code...",
+        "delete": {
+          "title": "Delete Dynamic Form",
+          "message": "Are you sure you want to delete \"{name}\"?",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        },
+        "toast": {
+          "loadFormsFailed": "Unable to load forms",
+          "loadBuildersFailed": "Unable to load dynamic form builders",
+          "missingUser": "Logged-in user identifier is missing",
+          "deleteSuccess": "Dynamic form deleted successfully",
+          "deleteFailed": "Unable to delete dynamic form"
+        }
+      },
+      "detail": {
+        "title": {
+          "create": "Create Dynamic Form Builder",
+          "edit": "Edit Dynamic Form Builder"
+        },
+        "subtitle": "Build and save account-scoped form schemas with API-backed persistence.",
+        "breadcrumbs": {
+          "platformTools": "Platform & Tools",
+          "current": "Dynamic Form Builder",
+          "create": "Create",
+          "edit": "Edit"
+        },
+        "buttons": {
+          "save": "Save Builder",
+          "update": "Update Builder",
+          "saving": "Saving..."
+        },
+        "loading": {
+          "page": "Loading dynamic form details...",
+          "creating": "Creating builder...",
+          "updating": "Updating builder..."
+        },
+        "fields": {
+          "account": "Account",
+          "selectAccount": "Select account",
+          "baseForm": "Base Form",
+          "selectForm": "Select form",
+          "project": "Project",
+          "formTitle": "Form Title",
+          "formTitlePlaceholder": "Enter form title",
+          "formCode": "Form Code",
+          "formCodePlaceholder": "Auto generated if blank",
+          "layout": "Layout",
+          "singleColumn": "Single Column",
+          "twoColumn": "Two Column",
+          "description": "Description",
+          "descriptionPlaceholder": "Enter description",
+          "active": "Active"
+        },
+        "actions": {
+          "showJson": "Show JSON",
+          "hideJson": "Hide JSON",
+          "copyJson": "Copy JSON",
+          "preview": "Preview"
+        },
+        "sections": {
+          "formElements": "Form Elements",
+          "formPreview": "Form Preview",
+          "properties": "Properties"
+        },
+        "controls": {
+          "text": "Text Input",
+          "email": "Email Input",
+          "number": "Number Input",
+          "date": "Date Picker",
+          "textarea": "Text Area",
+          "select": "Dropdown",
+          "checkbox": "Checkbox"
+        },
+        "preview": {
+          "edit": "Edit"
+        },
+        "properties": {
+          "empty": "Select any field from preview to edit properties.",
+          "label": "Label",
+          "placeholder": "Placeholder",
+          "options": "Options",
+          "optionsPlaceholder": "Owned, Leased",
+          "optionsHelp": "Separate options with commas.",
+          "maxLength": "Max Length",
+          "required": "Required"
+        },
+        "toast": {
+          "loadAccountsFailed": "Unable to load accounts",
+          "loadFormsFailed": "Unable to load forms",
+          "notFound": "Dynamic form builder not found",
+          "loadDetailsFailed": "Unable to load dynamic form details",
+          "copied": "Builder JSON copied",
+          "copyFailed": "Unable to copy JSON",
+          "accountRequired": "Account is required",
+          "missingUser": "Logged-in user identifier is missing",
+          "baseFormRequired": "Base form is required",
+          "formTitleRequired": "Form title is required",
+          "fieldRequired": "Add at least one field in form preview",
+          "created": "Dynamic form builder created successfully",
+          "updated": "Dynamic form builder updated successfully",
+          "saveFailed": "Unable to save dynamic form builder"
+        }
+      }
+    }
+  }
+}

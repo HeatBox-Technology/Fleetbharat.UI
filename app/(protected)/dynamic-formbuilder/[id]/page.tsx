@@ -16,51 +16,42 @@ import {
   Trash2,
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import ActionLoader from "@/components/ActionLoader";
 import PageHeader from "@/components/PageHeader";
+import SearchableDropdown, {
+  type SearchableOption,
+} from "@/components/SearchableDropdown";
 import { useColor } from "@/context/ColorContext";
 import { useTheme } from "@/context/ThemeContext";
-
-const DYNAMIC_FORMS_STORAGE_KEY = "mock_dynamic_form_builders";
-
-type BuilderFieldType =
-  | "text"
-  | "email"
-  | "number"
-  | "date"
-  | "textarea"
-  | "select"
-  | "checkbox";
-
-interface BuilderField {
-  id: string;
-  type: BuilderFieldType;
-  label: string;
-  placeholder: string;
-  required: boolean;
-}
+import type {
+  DynamicBuilderField,
+  DynamicBuilderFieldType,
+  DynamicBuilderOption,
+  DynamicFormSchema,
+  FormBuilderPayload,
+} from "@/interfaces/formBuilder.interface";
+import type { FormMasterItem } from "@/interfaces/form.interface";
+import type { Account } from "@/interfaces/vehicle.interface";
+import { getAllAccounts } from "@/services/commonServie";
+import {
+  createFormBuilder,
+  getFormBuilderById,
+  updateFormBuilder,
+} from "@/services/formBuilderService";
+import { getAllForms } from "@/services/formService";
+import { getStoredAccountId, getStoredUserId } from "@/utils/storage";
 
 interface AccountInfo {
-  accountId: string;
+  accountId: number;
   accountName: string;
 }
 
-interface StaticDynamicFormItem {
-  formId: number;
-  formCode: string;
-  formName: string;
-  moduleName: string;
-  pageUrl: string;
-  isActive: boolean;
-  filterConfigJson: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 const controls: Array<{
-  type: BuilderFieldType;
+  type: DynamicBuilderFieldType;
   label: string;
   placeholder: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -102,47 +93,163 @@ const controls: Array<{
 const createId = () =>
   `fld_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
 
-const readStoredForms = (): StaticDynamicFormItem[] => {
-  if (typeof window === "undefined") return [];
+const createDefaultField = (
+  label = "Registration No.",
+  placeholder = "Enter registration no.",
+): DynamicBuilderField => ({
+  id: createId(),
+  type: "text",
+  label,
+  placeholder,
+  required: true,
+  options: [],
+  validations: {},
+});
+
+const normalizeField = (
+  field: Partial<DynamicBuilderField> = {},
+  index = 0,
+): DynamicBuilderField => ({
+  id: String(field.id || createId()),
+  type: (field.type as DynamicBuilderFieldType) || "text",
+  label: String(field.label || `Field ${index + 1}`),
+  placeholder: String(field.placeholder || ""),
+  required: Boolean(field.required),
+  order: Number(field.order || index + 1),
+  options: Array.isArray(field.options)
+    ? field.options.map((option) => ({
+        label: String(option?.label || option?.value || ""),
+        value: String(option?.value || option?.label || ""),
+      }))
+    : [],
+  validations:
+    field.validations && typeof field.validations === "object"
+      ? {
+          maxLength: Number(field.validations.maxLength || 0) || undefined,
+        }
+      : {},
+});
+
+const parseSchema = (rawData?: string): DynamicFormSchema => {
+  if (!rawData) {
+    return {
+      layout: "single-column",
+      fields: [createDefaultField()],
+    };
+  }
+
   try {
-    const raw = localStorage.getItem(DYNAMIC_FORMS_STORAGE_KEY) || "[]";
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as StaticDynamicFormItem[]) : [];
+    const parsed = JSON.parse(rawData) as Partial<DynamicFormSchema>;
+    const fields = Array.isArray(parsed?.fields)
+      ? parsed.fields.map((field, index) => normalizeField(field, index))
+      : [createDefaultField()];
+
+    return {
+      layout: parsed?.layout === "two-column" ? "two-column" : "single-column",
+      fields,
+    };
   } catch {
-    return [];
+    return {
+      layout: "single-column",
+      fields: [createDefaultField()],
+    };
   }
 };
+
+const parseSelectOptionsInput = (value: string): DynamicBuilderOption[] =>
+  value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .map((item) => ({ label: item, value: item.toLowerCase().replace(/\s+/g, "_") }));
 
 const DynamicFormBuilderDetailPage: React.FC = () => {
   const { isDark } = useTheme();
   const { selectedColor } = useColor();
+  const t = useTranslations("pages.dynamicFormBuilder.detail");
   const router = useRouter();
   const params = useParams();
   const id = Number(params?.id || 0);
   const isEditMode = id > 0;
 
   const [accountInfo, setAccountInfo] = useState<AccountInfo>({
-    accountId: "",
+    accountId: 0,
     accountName: "",
   });
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [loadingAccounts, setLoadingAccounts] = useState(false);
+  const [formOptions, setFormOptions] = useState<SearchableOption[]>([]);
+  const [selectedFormOption, setSelectedFormOption] =
+    useState<SearchableOption | null>(null);
+  const [formLookup, setFormLookup] = useState<Record<number, FormMasterItem>>({});
+  const [loadingForms, setLoadingForms] = useState(false);
   const [formCode, setFormCode] = useState("");
   const [isActive, setIsActive] = useState(true);
   const [formTitle, setFormTitle] = useState("");
   const [formDescription, setFormDescription] = useState("");
-  const [layoutMode, setLayoutMode] = useState<"single" | "two">("single");
-  const [fields, setFields] = useState<BuilderField[]>([
-    {
-      id: createId(),
-      type: "text",
-      label: "Registration No.",
-      placeholder: "Enter registration no.",
-      required: true,
-    },
+  const [layoutMode, setLayoutMode] = useState<"single-column" | "two-column">(
+    "single-column",
+  );
+  const [fields, setFields] = useState<DynamicBuilderField[]>([
+    createDefaultField(),
   ]);
   const [selectedFieldId, setSelectedFieldId] = useState<string>("");
   const [fetchingData, setFetchingData] = useState(false);
   const [saving, setSaving] = useState(false);
   const [showJson, setShowJson] = useState(false);
+
+  const localizedControls = useMemo(
+    () => [
+      {
+        type: "text" as const,
+        label: t("controls.text"),
+        placeholder: "Enter text...",
+        icon: TextCursorInput,
+      },
+      {
+        type: "email" as const,
+        label: t("controls.email"),
+        placeholder: "Enter email...",
+        icon: Mail,
+      },
+      {
+        type: "number" as const,
+        label: t("controls.number"),
+        placeholder: "Enter number...",
+        icon: Hash,
+      },
+      {
+        type: "date" as const,
+        label: t("controls.date"),
+        placeholder: "",
+        icon: CalendarDays,
+      },
+      {
+        type: "textarea" as const,
+        label: t("controls.textarea"),
+        placeholder: "Enter details...",
+        icon: AlignLeft,
+      },
+      {
+        type: "select" as const,
+        label: t("controls.select"),
+        placeholder: "Select option...",
+        icon: ChevronDown,
+      },
+      {
+        type: "checkbox" as const,
+        label: t("controls.checkbox"),
+        placeholder: "",
+        icon: CheckSquare,
+      },
+    ],
+    [t],
+  );
+
+  const accountOptions = accounts.map((account) => ({
+    value: Number(account.id),
+    label: account.value,
+  }));
 
   useEffect(() => {
     if (!selectedFieldId && fields.length) {
@@ -155,114 +262,242 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       setAccountInfo({
-        accountId: String(user?.accountId || ""),
+        accountId: getStoredAccountId(user?.accountId),
         accountName: String(
-          user?.accountName || user?.fullName || "Current Account",
+          user?.accountName || user?.fullName || `Account ${getStoredAccountId()}`,
         ),
       });
     } catch {
-      setAccountInfo({ accountId: "", accountName: "Current Account" });
+      setAccountInfo({
+        accountId: getStoredAccountId(),
+        accountName: `Account ${getStoredAccountId()}`,
+      });
     }
   }, []);
 
   useEffect(() => {
-    if (!isEditMode) return;
+    const loadAccounts = async () => {
+      try {
+        setLoadingAccounts(true);
+        const response = await getAllAccounts();
+        if (!(response?.statusCode === 200) || !Array.isArray(response?.data)) {
+          toast.error(response?.message || "Unable to load accounts");
+          return;
+        }
 
-    setFetchingData(true);
-    const item = readStoredForms().find((form) => form.formId === id);
-    if (!item) {
-      toast.error("Dynamic form not found in static data");
-      router.push("/dynamic-formbuilder");
-      return;
-    }
+        const accountList = response.data as Account[];
+        setAccounts(accountList);
 
-    setFormCode(item.formCode);
-    setFormTitle(item.formName);
-    setIsActive(Boolean(item.isActive));
+        setAccountInfo((prev) => {
+          const loggedInAccountId = getStoredAccountId(prev.accountId);
+          const matchedAccount = accountList.find(
+            (account) => Number(account.id) === loggedInAccountId,
+          );
 
-    try {
-      const parsed = JSON.parse(item.filterConfigJson) as {
-        accountId?: string | number;
-        accountName?: string;
-        formDescription?: string;
-        layoutMode?: "single" | "two";
-        fields?: BuilderField[];
-      };
+          if (isEditMode && prev.accountId > 0) {
+            const selectedAccount = accountList.find(
+              (account) => Number(account.id) === Number(prev.accountId),
+            );
 
-      if (parsed.accountId || parsed.accountName) {
-        setAccountInfo((prev) => ({
-          accountId: String(parsed.accountId || prev.accountId || ""),
-          accountName: String(parsed.accountName || prev.accountName || ""),
-        }));
+            return {
+              accountId: prev.accountId,
+              accountName: String(
+                selectedAccount?.value || prev.accountName || matchedAccount?.value || "",
+              ),
+            };
+          }
+
+          return {
+            accountId: matchedAccount
+              ? Number(matchedAccount.id)
+              : Number(accountList[0]?.id || prev.accountId || 0),
+            accountName: String(
+              matchedAccount?.value ||
+                accountList[0]?.value ||
+                prev.accountName ||
+                "",
+            ),
+          };
+        });
+      } catch {
+        toast.error(t("toast.loadAccountsFailed"));
+      } finally {
+        setLoadingAccounts(false);
       }
-      setFormDescription(String(parsed.formDescription || ""));
-      if (parsed.layoutMode === "single" || parsed.layoutMode === "two") {
-        setLayoutMode(parsed.layoutMode);
-      }
-      if (Array.isArray(parsed.fields) && parsed.fields.length) {
-        setFields(
-          parsed.fields.map((field) => ({
-            ...field,
-            id: field.id || createId(),
+    };
+
+    void loadAccounts();
+  }, [isEditMode, t]);
+
+  useEffect(() => {
+    const loadForms = async () => {
+      try {
+        setLoadingForms(true);
+        const response = await getAllForms(1, 500, "");
+        if (!(response?.success || response?.statusCode === 200)) {
+          toast.error(response?.message || t("toast.loadFormsFailed"));
+          return;
+        }
+
+        const items = Array.isArray(response?.data?.items)
+          ? (response.data.items as FormMasterItem[])
+          : [];
+
+        setFormLookup(
+          items.reduce<Record<number, FormMasterItem>>((acc, item) => {
+            acc[Number(item.formId)] = item;
+            return acc;
+          }, {}),
+        );
+        setFormOptions(
+          items.map((item) => ({
+            label: String(item.formName || item.formCode || `Form ${item.formId}`),
+            value: Number(item.formId || 0),
+            description: String(item.formCode || ""),
           })),
         );
+      } catch {
+        toast.error(t("toast.loadFormsFailed"));
+      } finally {
+        setLoadingForms(false);
       }
-    } catch {
-      // keep defaults
-    } finally {
-      setFetchingData(false);
+    };
+
+    void loadForms();
+  }, [t]);
+
+  useEffect(() => {
+    if (!isEditMode) return;
+
+    const loadBuilder = async () => {
+      try {
+        setFetchingData(true);
+        const response = await getFormBuilderById(id);
+
+        if (!(response?.success || response?.statusCode === 200) || !response?.data) {
+          toast.error(response?.message || t("toast.notFound"));
+          router.push("/dynamic-formbuilder");
+          return;
+        }
+
+        const item = response.data;
+        const schema = parseSchema(item.rawData);
+
+        setFormCode(String(item.formCode || ""));
+        setFormTitle(String(item.formTitle || item.formName || ""));
+        setFormDescription(String(item.description || ""));
+        setIsActive(Boolean(item.isActive));
+        setLayoutMode(schema.layout);
+        setFields(schema.fields.length ? schema.fields : [createDefaultField()]);
+        setSelectedFieldId(schema.fields[0]?.id || "");
+
+        if (Number(item.accountId || 0) > 0 || item.accountName) {
+          setAccountInfo((prev) => ({
+            accountId: Number(item.accountId || prev.accountId || 0),
+            accountName: String(item.accountName || prev.accountName || ""),
+          }));
+        }
+
+        if (Number(item.fkFormId || 0) > 0) {
+          setSelectedFormOption({
+            label: String(item.formName || item.formTitle || `Form ${item.fkFormId}`),
+            value: Number(item.fkFormId),
+            description: String(item.formCode || ""),
+          });
+        }
+      } catch {
+        toast.error(t("toast.loadDetailsFailed"));
+        router.push("/dynamic-formbuilder");
+      } finally {
+        setFetchingData(false);
+      }
+    };
+
+    void loadBuilder();
+  }, [id, isEditMode, router, t]);
+
+  useEffect(() => {
+    if (!selectedFormOption || formOptions.length === 0) return;
+
+    const matched = formOptions.find(
+      (option) => Number(option.value) === Number(selectedFormOption.value),
+    );
+    if (matched && matched.label !== selectedFormOption.label) {
+      setSelectedFormOption(matched);
     }
-  }, [id, isEditMode, router]);
+  }, [formOptions, selectedFormOption]);
 
   const selectedField = useMemo(
     () => fields.find((field) => field.id === selectedFieldId),
     [fields, selectedFieldId],
   );
 
+  const selectedBaseForm = useMemo(
+    () => formLookup[Number(selectedFormOption?.value || 0)],
+    [formLookup, selectedFormOption],
+  );
+
   const schemaPreview = useMemo(
     () =>
       JSON.stringify(
         {
-          version: "1.0.0",
-          accountId: accountInfo.accountId,
-          accountName: accountInfo.accountName,
-          formTitle,
-          formDescription,
-          layoutMode,
-          fields,
+          layout: layoutMode,
+          fields: fields.map((field, index) => ({
+            id: field.id,
+            type: field.type,
+            label: field.label,
+            placeholder: field.placeholder,
+            required: field.required,
+            order: index + 1,
+            ...(field.type === "select" && field.options?.length
+              ? { options: field.options }
+              : {}),
+            ...(field.validations?.maxLength
+              ? { validations: { maxLength: field.validations.maxLength } }
+              : {}),
+          })),
         },
         null,
         2,
       ),
-    [accountInfo, fields, formDescription, formTitle, layoutMode],
+    [fields, layoutMode],
   );
 
-  const addField = (type: BuilderFieldType) => {
-    const control = controls.find((item) => item.type === type);
+  const addField = (type: DynamicBuilderFieldType) => {
+    const control = localizedControls.find((item) => item.type === type);
     if (!control) return;
-    const nextField: BuilderField = {
+
+    const nextField: DynamicBuilderField = {
       id: createId(),
       type,
       label: control.label,
       placeholder: control.placeholder,
       required: false,
+      options: type === "select" ? [] : [],
+      validations: {},
     };
+
     setFields((prev) => [...prev, nextField]);
     setSelectedFieldId(nextField.id);
   };
 
-  const updateSelectedField = (patch: Partial<BuilderField>) => {
+  const updateSelectedField = (patch: Partial<DynamicBuilderField>) => {
     if (!selectedField) return;
     setFields((prev) =>
       prev.map((field) =>
-        field.id === selectedField.id ? { ...field, ...patch } : field,
+        field.id === selectedField.id
+          ? {
+              ...field,
+              ...patch,
+            }
+          : field,
       ),
     );
   };
 
   const deleteField = (fieldId: string) => {
     const next = fields.filter((field) => field.id !== fieldId);
-    setFields(next);
+    setFields(next.length > 0 ? next : [createDefaultField()]);
     setSelectedFieldId(next[0]?.id || "");
   };
 
@@ -272,6 +507,7 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
     const targetIndex =
       direction === "up" ? currentIndex - 1 : currentIndex + 1;
     if (targetIndex < 0 || targetIndex >= fields.length) return;
+
     const reordered = [...fields];
     const [moved] = reordered.splice(currentIndex, 1);
     reordered.splice(targetIndex, 0, moved);
@@ -281,98 +517,118 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
   const handleCopyJson = async () => {
     try {
       await navigator.clipboard.writeText(schemaPreview);
-      toast.success("Builder JSON copied");
+      toast.success(t("toast.copied"));
     } catch {
-      toast.error("Unable to copy JSON");
+      toast.error(t("toast.copyFailed"));
     }
   };
 
   const handleSubmit = async () => {
+    const actorUserId = getStoredUserId();
+    const resolvedAccountId = getStoredAccountId(accountInfo.accountId);
+
+    if (resolvedAccountId <= 0) {
+      toast.error(t("toast.accountRequired"));
+      return;
+    }
+    if (!actorUserId) {
+      toast.error(t("toast.missingUser"));
+      return;
+    }
+    if (!selectedFormOption) {
+      toast.error(t("toast.baseFormRequired"));
+      return;
+    }
     if (!formTitle.trim()) {
-      toast.error("Form title is required");
+      toast.error(t("toast.formTitleRequired"));
       return;
     }
     if (fields.length === 0) {
-      toast.error("Add at least one field in form preview");
+      toast.error(t("toast.fieldRequired"));
       return;
     }
 
-    setSaving(true);
-    const now = new Date().toISOString();
-    const stored = readStoredForms();
-    const nextId =
-      stored.length > 0
-        ? Math.max(...stored.map((item) => item.formId)) + 1
-        : 1;
-
-    const payload: StaticDynamicFormItem = {
-      formId: isEditMode ? id : nextId,
+    const payload: FormBuilderPayload = {
+      accountId: resolvedAccountId,
+      fkFormId: Number(selectedFormOption.value),
+      formTitle: formTitle.trim(),
       formCode:
         formCode.trim() || `DFB-${Date.now().toString(36).toUpperCase()}`,
-      formName: formTitle.trim(),
-      moduleName: "Platform Tools",
-      pageUrl: "/dynamic-formbuilder",
+      description: formDescription.trim(),
+      rawData: schemaPreview,
       isActive,
-      filterConfigJson: schemaPreview,
-      createdAt: isEditMode
-        ? stored.find((item) => item.formId === id)?.createdAt || now
-        : now,
-      updatedAt: now,
+      projectName: String(selectedBaseForm?.moduleName || "Fleet"),
+      accountName: String(accountInfo.accountName || `Account ${resolvedAccountId}`),
+      formName: String(
+        selectedBaseForm?.formName || selectedFormOption.label || formTitle.trim(),
+      ),
+      ...(isEditMode
+        ? { updatedByUser: actorUserId }
+        : { createdByUser: actorUserId }),
     };
 
-    const nextData = isEditMode
-      ? stored.map((item) => (item.formId === id ? payload : item))
-      : [...stored, payload];
+    try {
+      setSaving(true);
+      const response = isEditMode
+        ? await updateFormBuilder(id, payload)
+        : await createFormBuilder(payload);
 
-    localStorage.setItem(DYNAMIC_FORMS_STORAGE_KEY, JSON.stringify(nextData));
-    toast.success(
-      isEditMode
-        ? "Dynamic form builder updated (static)"
-        : "Dynamic form builder created (static)",
-    );
-    setSaving(false);
-    router.push("/dynamic-formbuilder");
+      if (response?.success || response?.statusCode === 200) {
+        toast.success(
+          response?.message ||
+            (isEditMode
+              ? t("toast.updated")
+              : t("toast.created")),
+        );
+        router.push("/dynamic-formbuilder");
+      } else {
+        toast.error(response?.message || t("toast.saveFailed"));
+      }
+    } catch {
+      toast.error(t("toast.saveFailed"));
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (fetchingData) {
     return (
       <div className={`${isDark ? "dark" : ""}`}>
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <p className="text-foreground">Loading dynamic form details...</p>
-        </div>
+        <ActionLoader isVisible={true} text={t("loading.page")} />
+        <div className="min-h-screen bg-background" />
       </div>
     );
   }
 
   return (
     <div className={`${isDark ? "dark" : ""} mt-10`}>
+      <ActionLoader
+        isVisible={saving}
+        text={isEditMode ? t("loading.updating") : t("loading.creating")}
+      />
       <div
         className={`min-h-screen ${isDark ? "bg-background" : ""} p-2 sm:p-4`}
       >
         <PageHeader
-          title={
-            isEditMode
-              ? "Edit Dynamic Form Builder (Static)"
-              : "Create Dynamic Form Builder (Static)"
-          }
-          subtitle="Static mode: data is saved in browser localStorage."
+          title={isEditMode ? t("title.edit") : t("title.create")}
+          subtitle={t("subtitle")}
           breadcrumbs={[
-            { label: "Platform & Tools" },
-            { label: "Dynamic Form Builder", href: "/dynamic-formbuilder" },
-            { label: isEditMode ? "Edit" : "Create" },
+            { label: t("breadcrumbs.platformTools") },
+            { label: t("breadcrumbs.current"), href: "/dynamic-formbuilder" },
+            { label: isEditMode ? t("breadcrumbs.edit") : t("breadcrumbs.create") },
           ]}
           showButton
           buttonText={
             saving
-              ? "Saving..."
+              ? t("buttons.saving")
               : isEditMode
-                ? "Update Builder"
-                : "Save Builder"
+                ? t("buttons.update")
+                : t("buttons.save")
           }
           onButtonClick={handleSubmit}
-           showExportButton={false}
-            showFilterButton={false}
-            showBulkUpload={false}
+          showExportButton={false}
+          showFilterButton={false}
+          showBulkUpload={false}
         />
 
         <div
@@ -382,15 +638,51 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
         >
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div>
+              <label className="block text-sm font-semibold mb-2 text-foreground">
+                {t("fields.account")} <span className="text-red-500">*</span>
+              </label>
+              <SearchableDropdown
+                options={accountOptions}
+                value={
+                  accountOptions.find(
+                    (option) => Number(option.value) === Number(accountInfo.accountId),
+                  ) || null
+                }
+                onChange={(option) =>
+                  setAccountInfo({
+                    accountId: Number(option?.value || 0),
+                    accountName: String(option?.label || ""),
+                  })
+                }
+                placeholder={t("fields.selectAccount")}
+                isLoading={loadingAccounts}
+                isDark={isDark}
+                noOptionsMessage={t("fields.selectAccount")}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold mb-2 text-foreground">
+                {t("fields.baseForm")} <span className="text-red-500">*</span>
+              </label>
+              <SearchableDropdown
+                options={formOptions}
+                value={selectedFormOption}
+                onChange={setSelectedFormOption}
+                placeholder={t("fields.selectForm")}
+                isLoading={loadingForms}
+                noOptionsMessage={t("fields.selectForm")}
+              />
+            </div>
+            <div>
               <label
-                htmlFor="account-name"
+                htmlFor="project-name"
                 className="block text-sm font-semibold mb-2 text-foreground"
               >
-                Account
+                {t("fields.project")}
               </label>
               <input
-                id="account-name"
-                value={accountInfo.accountName}
+                id="project-name"
+                value={selectedBaseForm?.moduleName || "Fleet"}
                 readOnly
                 className={`w-full px-4 py-2.5 rounded-lg border ${
                   isDark
@@ -404,13 +696,13 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
                 htmlFor="form-title"
                 className="block text-sm font-semibold mb-2 text-foreground"
               >
-                Form Title
+                {t("fields.formTitle")} <span className="text-red-500">*</span>
               </label>
               <input
                 id="form-title"
                 value={formTitle}
                 onChange={(e) => setFormTitle(e.target.value)}
-                placeholder="Enter form title"
+                placeholder={t("fields.formTitlePlaceholder")}
                 className={`w-full px-4 py-2.5 rounded-lg border ${
                   isDark
                     ? "bg-gray-800 border-gray-700 text-foreground placeholder-gray-500"
@@ -423,13 +715,13 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
                 htmlFor="form-code"
                 className="block text-sm font-semibold mb-2 text-foreground"
               >
-                Form Code
+                {t("fields.formCode")}
               </label>
               <input
                 id="form-code"
                 value={formCode}
                 onChange={(e) => setFormCode(e.target.value)}
-                placeholder="Auto generated if blank"
+                placeholder={t("fields.formCodePlaceholder")}
                 className={`w-full px-4 py-2.5 rounded-lg border ${
                   isDark
                     ? "bg-gray-800 border-gray-700 text-foreground placeholder-gray-500"
@@ -439,59 +731,59 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
             </div>
             <div>
               <p className="block text-sm font-semibold mb-2 text-foreground">
-                Layout
+                {t("fields.layout")}
               </p>
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={() => setLayoutMode("single")}
+                  onClick={() => setLayoutMode("single-column")}
                   className={`px-3 py-2 rounded-lg text-sm font-medium border ${
-                    layoutMode === "single"
+                    layoutMode === "single-column"
                       ? "text-white"
                       : isDark
                         ? "text-gray-300 border-gray-700"
                         : "text-gray-700 border-gray-300"
                   }`}
                   style={
-                    layoutMode === "single"
+                    layoutMode === "single-column"
                       ? { backgroundColor: selectedColor }
                       : {}
                   }
                 >
-                  Single Column
+                  {t("fields.singleColumn")}
                 </button>
                 <button
                   type="button"
-                  onClick={() => setLayoutMode("two")}
+                  onClick={() => setLayoutMode("two-column")}
                   className={`px-3 py-2 rounded-lg text-sm font-medium border ${
-                    layoutMode === "two"
+                    layoutMode === "two-column"
                       ? "text-white"
                       : isDark
                         ? "text-gray-300 border-gray-700"
                         : "text-gray-700 border-gray-300"
                   }`}
                   style={
-                    layoutMode === "two"
+                    layoutMode === "two-column"
                       ? { backgroundColor: selectedColor }
                       : {}
                   }
                 >
-                  Two Column
+                  {t("fields.twoColumn")}
                 </button>
               </div>
             </div>
-            <div>
+            <div className="lg:col-span-2">
               <label
                 htmlFor="form-description"
                 className="block text-sm font-semibold mb-2 text-foreground"
               >
-                Form Description
+                {t("fields.description")}
               </label>
               <input
                 id="form-description"
                 value={formDescription}
                 onChange={(e) => setFormDescription(e.target.value)}
-                placeholder="Enter description"
+                placeholder={t("fields.descriptionPlaceholder")}
                 className={`w-full px-4 py-2.5 rounded-lg border ${
                   isDark
                     ? "bg-gray-800 border-gray-700 text-foreground placeholder-gray-500"
@@ -506,7 +798,7 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
                   checked={isActive}
                   onChange={(e) => setIsActive(e.target.checked)}
                 />
-                Active
+                {t("fields.active")}
               </label>
             </div>
           </div>
@@ -522,7 +814,7 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
               type="button"
             >
               <SquarePen className="w-4 h-4 inline mr-2" />
-              {showJson ? "Hide JSON" : "Show JSON"}
+              {showJson ? t("actions.hideJson") : t("actions.showJson")}
             </button>
             <button
               onClick={handleCopyJson}
@@ -531,7 +823,7 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
               type="button"
             >
               <Copy className="w-4 h-4 inline mr-2" />
-              Copy JSON
+              {t("actions.copyJson")}
             </button>
             <button
               onClick={() => setShowJson(true)}
@@ -543,7 +835,7 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
               type="button"
             >
               <Eye className="w-4 h-4 inline mr-2" />
-              Preview
+              {t("actions.preview")}
             </button>
           </div>
 
@@ -567,10 +859,10 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
             }`}
           >
             <div className="p-4 border-b border-border">
-              <h3 className="font-bold text-foreground">Form Elements</h3>
+              <h3 className="font-bold text-foreground">{t("sections.formElements")}</h3>
             </div>
             <div className="p-4 space-y-2">
-              {controls.map((control) => {
+              {localizedControls.map((control) => {
                 const Icon = control.icon;
                 return (
                   <button
@@ -598,9 +890,13 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
             }`}
           >
             <div className="p-4 border-b border-border">
-              <h3 className="font-bold text-foreground">Form Preview</h3>
+              <h3 className="font-bold text-foreground">{t("sections.formPreview")}</h3>
             </div>
-            <div className="p-4 space-y-3">
+            <div
+              className={`p-4 grid gap-3 ${
+                layoutMode === "two-column" ? "md:grid-cols-2" : "grid-cols-1"
+              }`}
+            >
               {fields.map((field, index) => {
                 const isSelected = selectedFieldId === field.id;
                 return (
@@ -632,7 +928,7 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
                           onClick={() => setSelectedFieldId(field.id)}
                           className="px-2 rounded border border-gray-400/40 text-xs"
                         >
-                          Edit
+                          {t("preview.edit")}
                         </button>
                         <button
                           type="button"
@@ -678,7 +974,9 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
                         }`}
                       >
                         <option>
-                          {field.placeholder || "Select option..."}
+                          {field.options?.[0]?.label ||
+                            field.placeholder ||
+                            "Select option..."}
                         </option>
                       </select>
                     ) : field.type === "checkbox" ? (
@@ -691,6 +989,7 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
                         disabled
                         type={field.type}
                         placeholder={field.placeholder}
+                        maxLength={field.validations?.maxLength}
                         className={`w-full px-3 py-2 rounded-lg border ${
                           isDark
                             ? "bg-gray-800 border-gray-700 text-gray-300 placeholder-gray-500"
@@ -710,12 +1009,12 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
             }`}
           >
             <div className="p-4 border-b border-border">
-              <h3 className="font-bold text-foreground">Properties</h3>
+              <h3 className="font-bold text-foreground">{t("sections.properties")}</h3>
             </div>
             <div className="p-4">
               {!selectedField ? (
                 <p className={isDark ? "text-gray-400" : "text-gray-500"}>
-                  Select any field from preview to edit properties.
+                  {t("properties.empty")}
                 </p>
               ) : (
                 <div className="space-y-4">
@@ -724,7 +1023,7 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
                       htmlFor="selected-field-label"
                       className="block text-sm font-medium mb-1 text-foreground"
                     >
-                      Label
+                      {t("properties.label")}
                     </label>
                     <input
                       id="selected-field-label"
@@ -746,13 +1045,76 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
                         htmlFor="selected-field-placeholder"
                         className="block text-sm font-medium mb-1 text-foreground"
                       >
-                        Placeholder
+                        {t("properties.placeholder")}
                       </label>
                       <input
                         id="selected-field-placeholder"
                         value={selectedField.placeholder}
                         onChange={(e) =>
                           updateSelectedField({ placeholder: e.target.value })
+                        }
+                        className={`w-full px-3 py-2 rounded-lg border ${
+                          isDark
+                            ? "bg-gray-800 border-gray-700 text-foreground"
+                            : "bg-white border-gray-300 text-gray-900"
+                        }`}
+                      />
+                    </div>
+                  )}
+
+                  {selectedField.type === "select" && (
+                    <div>
+                      <label
+                        htmlFor="selected-field-options"
+                        className="block text-sm font-medium mb-1 text-foreground"
+                      >
+                        {t("properties.options")}
+                      </label>
+                      <textarea
+                        id="selected-field-options"
+                        value={(selectedField.options || [])
+                          .map((option) => option.label)
+                          .join(", ")}
+                        onChange={(e) =>
+                          updateSelectedField({
+                            options: parseSelectOptionsInput(e.target.value),
+                          })
+                        }
+                        placeholder={t("properties.optionsPlaceholder")}
+                        className={`w-full px-3 py-2 rounded-lg border min-h-24 ${
+                          isDark
+                            ? "bg-gray-800 border-gray-700 text-foreground placeholder-gray-500"
+                            : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
+                        }`}
+                      />
+                      <p className="text-xs mt-1 text-gray-500">
+                        {t("properties.optionsHelp")}
+                      </p>
+                    </div>
+                  )}
+
+                  {(selectedField.type === "text" ||
+                    selectedField.type === "email" ||
+                    selectedField.type === "textarea") && (
+                    <div>
+                      <label
+                        htmlFor="selected-field-max-length"
+                        className="block text-sm font-medium mb-1 text-foreground"
+                      >
+                        {t("properties.maxLength")}
+                      </label>
+                      <input
+                        id="selected-field-max-length"
+                        type="number"
+                        min={0}
+                        value={selectedField.validations?.maxLength || ""}
+                        onChange={(e) =>
+                          updateSelectedField({
+                            validations: {
+                              ...selectedField.validations,
+                              maxLength: Number(e.target.value || 0) || undefined,
+                            },
+                          })
                         }
                         className={`w-full px-3 py-2 rounded-lg border ${
                           isDark
@@ -771,7 +1133,7 @@ const DynamicFormBuilderDetailPage: React.FC = () => {
                         updateSelectedField({ required: e.target.checked })
                       }
                     />
-                    Required
+                    {t("properties.required")}
                   </label>
                 </div>
               )}
