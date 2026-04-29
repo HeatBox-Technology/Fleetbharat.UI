@@ -49,9 +49,9 @@ jobs:
       - name: Deploy to Server
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }} # ✅ FIXED
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.FB_HOST }}
+          username: ${{ secrets.FB_USER }} # ✅ FIXED
+          key: ${{ secrets.FB_SSH_KEY }}
           script: |
             set -e
 
