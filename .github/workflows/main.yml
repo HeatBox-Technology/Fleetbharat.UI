@@ -70,6 +70,9 @@ jobs:
               exit 1
             fi
 
+            echo "Login DockerHub on server..."
+            echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
             echo "🧹 Cleanup docker cache..."
             docker system prune -af || true
             docker volume prune -f || true
