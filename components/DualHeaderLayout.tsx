@@ -58,6 +58,7 @@ import type {
   SidebarClasses,
   SidebarSection,
 } from "@/interfaces/navbar.interface";
+import NotificationCenter from "@/components/NotificationCenter";
 import { getConfigurationByAccountId } from "@/services/configurationService";
 import {
   filterMenuByPermissions,
@@ -1075,13 +1076,10 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
                 </select>
               </div>
 
-              {/* Notification */}
-              <button
-                className={`relative p-2 ${headerClasses.hoverBg} rounded-lg`}
-              >
-                <Bell className={`w-5 h-5 ${headerClasses.textSecondary}`} />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
+              <NotificationCenter
+                buttonClassName={`p-2 ${headerClasses.hoverBg} rounded-lg`}
+                iconClassName={`w-5 h-5 ${headerClasses.textSecondary}`}
+              />
 
               {/* User Avatar */}
               <button
@@ -1267,11 +1265,10 @@ const DualHeaderLayout: React.FC<{ children: React.ReactNode }> = ({
               </select>
             </div>
 
-            {/* Notification */}
-            <button className={`relative p-2 ${headerHoverBg} rounded-lg`}>
-              <Bell className={`w-5 h-5 ${headerIconColor}`} />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            <NotificationCenter
+              buttonClassName={`p-2 ${headerHoverBg} rounded-lg`}
+              iconClassName={`w-5 h-5 ${headerIconColor}`}
+            />
 
             {/* User Avatar */}
             <div className="relative">

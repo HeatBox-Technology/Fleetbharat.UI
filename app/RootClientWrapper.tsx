@@ -7,6 +7,7 @@ import { ColorProvider } from "@/context/ColorContext";
 import { AuthProvider } from "@/context/AuthContext";
 import ToastProvider from "@/providers/ToastProvider";
 import AutoLocaleText from "@/providers/AutoLocaleText";
+import { AlertsProvider } from "@/providers/AlertsProvider";
 import { applyWhiteLabelColors } from "@/utils/themeUtils";
 import SessionExpiredModal from "@/components/SessionExpiredModal";
 import { SESSION_EXPIRED_EVENT } from "@/services/apiService";
@@ -50,13 +51,15 @@ export default function RootClientWrapper({
       <ThemeProvider>
         <LayoutProvider>
           <ColorProvider>
-            <AutoLocaleText />
-            {children}
-            <ToastProvider />
-            <SessionExpiredModal
-              isOpen={showSessionExpired}
-              onAcknowledge={handleSessionAcknowledge}
-            />
+            <AlertsProvider>
+              <AutoLocaleText />
+              {children}
+              <ToastProvider />
+              <SessionExpiredModal
+                isOpen={showSessionExpired}
+                onAcknowledge={handleSessionAcknowledge}
+              />
+            </AlertsProvider>
           </ColorProvider>
         </LayoutProvider>
       </ThemeProvider>
